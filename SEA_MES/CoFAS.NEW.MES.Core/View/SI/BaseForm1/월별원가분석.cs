@@ -54,7 +54,18 @@ ORDER BY [YEAR] , [MONTH]";
                     {
                         foreach (DataColumn item in _DataTable.Columns)
                         {
-                            fpMain.Sheets[0].SetValue(i, item.ColumnName, _DataTable.Rows[i][item.ColumnName]);
+                            if (item.ColumnName == "작업시간")
+                            {
+                                //fpMain.Sheets[0].SetValue(i, item.ColumnName, _DataTable.Rows[i][item.ColumnName]);
+                                Double totalSeconds = Convert.ToDouble(_DataTable.Rows[i][item.ColumnName].ToString());
+                                TimeSpan timeSpan = TimeSpan.FromSeconds(totalSeconds);
+
+                                // TimeSpan을 사용하여 시간, 분, 초 형식으로 설정
+                                fpMain.Sheets[0].SetValue(i, item.ColumnName, $"{timeSpan.Hours}시간 {timeSpan.Minutes}분 {timeSpan.Seconds}초");
+                            }
+                            else {
+                                fpMain.Sheets[0].SetValue(i, item.ColumnName, _DataTable.Rows[i][item.ColumnName]);
+                            }
 
 
                         }
