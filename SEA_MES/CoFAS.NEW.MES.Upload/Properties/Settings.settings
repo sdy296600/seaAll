@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CoFAS.NEW.MES.Upload.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="UPDATETYPE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tapex_Monitoring</Value>
+    </Setting>
+    <Setting Name="Server_IP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">db3.coever.co.kr</Value>
+    </Setting>
+    <Setting Name="Database_Name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Hansol_Auto_Update</Value>
+    </Setting>
+    <Setting Name="Uid" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sa</Value>
+    </Setting>
+    <Setting Name="Pwd" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Codb89897788@$^</Value>
+    </Setting>
+    <Setting Name="Program_Name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Coever_Monitoring</Value>
+    </Setting>
+    <Setting Name="Version" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2020-01-01</Value>
+    </Setting>
+    <Setting Name="Program_TYPE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WMS</Value>
+    </Setting>
+    <Setting Name="SelectedPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

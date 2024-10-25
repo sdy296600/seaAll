@@ -1,0 +1,1178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{061209AC-93A7-4E36-A01C-002C6F8D756A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CoFAS.NEW.MES.Monitoring</RootNamespace>
+    <AssemblyName>CoFAS.NEW.MES.Monitoring</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Hansolicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Charts.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.Charts.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraBars.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.XtraCharts.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v17.2.UI, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.XtraCharts.v17.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v17.2.Wizard, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.XtraCharts.v17.2.Wizard.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Excel, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Spread, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data">
+      <HintPath>..\CoFAS.NEW.MES.Core\bin\Debug\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Database\DBClass.cs" />
+    <Compile Include="Database\DataGridViewUtil.cs" />
+    <Compile Include="Monitoring\이앤아이비\압출설비현황3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\압출설비현황3.Designer.cs">
+      <DependentUpon>압출설비현황3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\압출설비현황2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\압출설비현황2.Designer.cs">
+      <DependentUpon>압출설비현황2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\압출설비현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\압출설비현황.Designer.cs">
+      <DependentUpon>압출설비현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\사출설비현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이앤아이비\사출설비현황.Designer.cs">
+      <DependentUpon>사출설비현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이튼\생산진형현황2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이튼\생산진형현황2.Designer.cs">
+      <DependentUpon>생산진형현황2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이튼\생산진형현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이튼\생산진형현황.Designer.cs">
+      <DependentUpon>생산진형현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이튼\설비가동현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이튼\설비가동현황.Designer.cs">
+      <DependentUpon>설비가동현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이튼\설비별불량현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이튼\설비별불량현황.Designer.cs">
+      <DependentUpon>설비별불량현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_사출타이틀.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_사출타이틀.Designer.cs">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비_사출타이틀.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_압출타이틀.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_압출타이틀.Designer.cs">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비_압출타이틀.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_압출.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_압출.Designer.cs">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비_압출.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비.Designer.cs">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\달성율_그래프.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\달성율_그래프.Designer.cs">
+      <DependentUpon>달성율_그래프.cs</DependentUpon>
+    </Compile>
+    <Compile Include="이앤아이비.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="이앤아이비.Designer.cs">
+      <DependentUpon>이앤아이비.cs</DependentUpon>
+    </Compile>
+    <Compile Include="이튼.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="이튼.Designer.cs">
+      <DependentUpon>이튼.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\대성금형\대성금형2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\대성금형\대성금형2.Designer.cs">
+      <DependentUpon>대성금형2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\대성금형\대성금형1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\대성금형\대성금형1.Designer.cs">
+      <DependentUpon>대성금형1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\ucCorechipsWorkStatus.Designer.cs">
+      <DependentUpon>ucCorechipsWorkStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="대성.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="대성.Designer.cs">
+      <DependentUpon>대성.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitoring\이튼\작업조건현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitoring\이튼\작업조건현황.Designer.cs">
+      <DependentUpon>작업조건현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MY_UserControl\_uc_Date.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MY_UserControl\_uc_Date.Designer.cs">
+      <DependentUpon>_uc_Date.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Monitoring\이앤아이비\압출설비현황3.resx">
+      <DependentUpon>압출설비현황3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이앤아이비\압출설비현황2.resx">
+      <DependentUpon>압출설비현황2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이앤아이비\압출설비현황.resx">
+      <DependentUpon>압출설비현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이앤아이비\사출설비현황.resx">
+      <DependentUpon>사출설비현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이튼\생산진형현황2.resx">
+      <DependentUpon>생산진형현황2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이튼\생산진형현황.resx">
+      <DependentUpon>생산진형현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이튼\설비가동현황.resx">
+      <DependentUpon>설비가동현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이튼\설비별불량현황.resx">
+      <DependentUpon>설비별불량현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_사출타이틀.resx">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비_사출타이틀.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_압출타이틀.resx">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비_압출타이틀.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비_압출.resx">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비_압출.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\ucCorechipsWorkStatus_이앤아이비.resx">
+      <DependentUpon>ucCorechipsWorkStatus_이앤아이비.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\달성율_그래프.resx">
+      <DependentUpon>달성율_그래프.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="이앤아이비.resx">
+      <DependentUpon>이앤아이비.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="이튼.resx">
+      <DependentUpon>이튼.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\대성금형\대성금형2.resx">
+      <DependentUpon>대성금형2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\대성금형\대성금형1.resx">
+      <DependentUpon>대성금형1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\ucCorechipsWorkStatus.resx">
+      <DependentUpon>ucCorechipsWorkStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="대성.resx">
+      <DependentUpon>대성.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitoring\이튼\작업조건현황.resx">
+      <DependentUpon>작업조건현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MY_UserControl\_uc_Date.resx">
+      <DependentUpon>_uc_Date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\10_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\10_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\11_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\11_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\12_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\12_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\13_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\13_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\13_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\36_list.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\36-2maintanence.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\160g.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\11111.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\a1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\a2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alterbtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\assemble_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\assemble_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\assemble_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\assembler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\assembler2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ATG_In.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ATG_Out.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\back1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\back-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BarcodeSample.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlack_C.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlack_L.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlack_R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlue_C.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlue_L.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBlue_R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRed_C.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRed_L.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRed_R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRR_C.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRR_L.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRR_R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buffer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buffer_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buffer_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buffer_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle %281%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clinic-history.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cnc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\context16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\context32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D_input.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\D9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %282%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %283%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\discription.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\discription_w.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EmpList.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\endbtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FaaSLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FaaSLogo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\factory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\firstState.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\forward1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\handler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heat_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heat_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heat_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ic-error%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ic-msg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ic-msg%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ic-msg%402x1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon16_allAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon16_back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon20_calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon32_pc_icoVer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_gcode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_list_alert_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_list_alert_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_mainScreen_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_mainScreen_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_productInfo_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_productInfo_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_settingMuchine_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_settingMuchine_off-14.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_settingMuchine_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon36_settingMuchine_on-09.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon42_printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\if_pending-wait-time-revise-unfinish_3209435.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\img90_factory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\in_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\in_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\in_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\input_b 256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\input_b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\input_w.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inspect_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inspect_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inspect_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inspecter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\keep_b 256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\keep_B.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\keep_W.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\left1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\left-arrow %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\left-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LightYellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\list.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on_badline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on_d_bad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on_month.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainScreen_on_stackbar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\message.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\message1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mixkit-game-show-buzz-in-3090.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\move_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\move_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\move_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MY_AUTO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\my_right-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MY_STOP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\myleft-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-1 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-1 %281%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-1 %281%292.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-2 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-2 %281%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-2 %281%292.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-3 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-3 %281%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-4 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-4 %281%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-5 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-5 %281%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-6 %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-6 %282%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-21.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-22.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-71.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-81.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\number-91.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\out_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\out_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\out_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plancalendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\polishy_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\polishy_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\polishy_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\print_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\print_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\print_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\product_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\product_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\product_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\productInfo_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_complete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_complete1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_complete111.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_ing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_ing1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_pause1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready_pause1111.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ready1_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\resume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\robotArm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\robotArm2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\savebtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\schuduler_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\schuduler_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\setting1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settingMuchine_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Side_7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\skyblue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\standby.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\time_off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\time_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\underline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\underline_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\underline_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\vapor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellow2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zero.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zero1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\[24]menu-06-leaktest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_input.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dll\" />
+    <Folder Include="Popup\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoFAS.NEW.MES.Core\CoFAS.NEW.MES.Core.csproj">
+      <Project>{65E4CB53-26BF-4814-A219-B023E0F3D381}</Project>
+      <Name>CoFAS.NEW.MES.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Hansolicon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

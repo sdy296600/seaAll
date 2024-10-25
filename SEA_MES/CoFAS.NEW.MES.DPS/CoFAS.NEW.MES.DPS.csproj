@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{726D0537-7334-48A9-9929-E7CA8BAB905B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CoFAS.NEW.MES.DPS</RootNamespace>
+    <AssemblyName>CoFAS.NEW.MES.DPS</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Andon_dps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Andon_dps.designer.cs">
+      <DependentUpon>Andon_dps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoFAS\CoFAS_DB_Manager.cs" />
+    <Compile Include="CoFAS\CoFAS_WebUtilManager.cs" />
+    <Compile Include="CoFAS\Label_Print_Utility.cs" />
+    <Compile Include="CoFAS\CoFAS_SocketServer.cs" />
+    <Compile Include="CoFAS\CoFAS_SocketClient.cs" />
+    <Compile Include="CoFAS\CoFAS_Log.cs" />
+    <Compile Include="CoFAS\modbusTCP.cs" />
+    <Compile Include="Check_API_DPS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check_API_DPS.Designer.cs">
+      <DependentUpon>Check_API_DPS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoFAS\MY_Core.cs" />
+    <Compile Include="frm_OPC_List.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_OPC_List.Designer.cs">
+      <DependentUpon>frm_OPC_List.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LabelPrinter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LabelPrinter.Designer.cs">
+      <DependentUpon>LabelPrinter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MQTT_DPS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MQTT_DPS.Designer.cs">
+      <DependentUpon>MQTT_DPS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TCP_IP_dps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TCP_IP_dps.Designer.cs">
+      <DependentUpon>TCP_IP_dps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OPC_UA_dps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OPC_UA_dps.Designer.cs">
+      <DependentUpon>OPC_UA_dps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Andon_dps.resx">
+      <DependentUpon>Andon_dps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Check_API_DPS.resx">
+      <DependentUpon>Check_API_DPS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OPC_List.resx">
+      <DependentUpon>frm_OPC_List.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MQTT_DPS.resx">
+      <DependentUpon>MQTT_DPS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TCP_IP_dps.resx">
+      <DependentUpon>TCP_IP_dps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OPC_UA_dps.resx">
+      <DependentUpon>OPC_UA_dps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoFAS.NEW.MES.Core\CoFAS.NEW.MES.Core.csproj">
+      <Project>{65E4CB53-26BF-4814-A219-B023E0F3D381}</Project>
+      <Name>CoFAS.NEW.MES.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="M2Mqtt">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="Opc.UaFx.Client">
+      <Version>2.12.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLL\M2Mqtt.Net.dll" />
+    <Content Include="logo.ico" />
+    <Content Include="DLL\MySql.Data.dll" />
+    <None Include="Resources\Ok.png" />
+    <None Include="Resources\Ng.png" />
+    <None Include="Resources\barcodeimage.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,51 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CoFAS.NEW.MES.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="account" Type="System.String" Scope="User">
+      <Value Profile="(Default)">219220</Value>
+    </Setting>
+    <Setting Name="accountSave" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Y</Value>
+    </Setting>
+    <Setting Name="serverName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HS_MES</Value>
+    </Setting>
+    <Setting Name="serverIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.10.10.180,1433</Value>
+    </Setting>
+    <Setting Name="serverId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MesConnection</Value>
+    </Setting>
+    <Setting Name="serverPw" Type="System.String" Scope="User">
+      <Value Profile="(Default)">8$dJ@-!W3b-35</Value>
+    </Setting>
+    <Setting Name="ftpIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">db3.coever.co.kr</Value>
+    </Setting>
+    <Setting Name="ftpPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">8500</Value>
+    </Setting>
+    <Setting Name="ftpId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ftpadmin</Value>
+    </Setting>
+    <Setting Name="ftpPw" Type="System.String" Scope="User">
+      <Value Profile="(Default)">coever1!</Value>
+    </Setting>
+    <Setting Name="testServerName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HS_MES</Value>
+    </Setting>
+    <Setting Name="connection" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Test</Value>
+    </Setting>
+    <Setting Name="testServerIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.10.10.180</Value>
+    </Setting>
+    <Setting Name="testServerId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">hansol_mes</Value>
+    </Setting>
+    <Setting Name="testServerPw" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Hansol123!@#</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3489FD44-C717-495F-9F17-45449D163635}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CoFAS.NEW.MES</RootNamespace>
+    <AssemblyName>CoFAS.NEW.MES</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Hansolicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.Data.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.Utils.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.XtraBars.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\DevExpress.XtraEditors.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="MyUpDate, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\MyUpDate.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPwChange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPwChange.Designer.cs">
+      <DependentUpon>frmPwChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSetting.designer.cs">
+      <DependentUpon>frmSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettingPw.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettingPw.Designer.cs">
+      <DependentUpon>frmSettingPw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPwChange.resx">
+      <DependentUpon>frmPwChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSetting.resx">
+      <DependentUpon>frmSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettingPw.resx">
+      <DependentUpon>frmSettingPw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="MES_양식_PACKING LIST.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MES_양식_Profoma_Invoice_해외.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MES_양식_거래명세서%28국내%29.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MES_출하요청서_양식.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MES_포장요청서_양식.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="업체명_출고요청서.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="월별원가분석.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="작업지시명세서.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\business.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add-file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addfile_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BarcodeSample.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel_32x321.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle-of-two-clockwise-arrows-rotation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cogwheel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cogwheel1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\deletelist2_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\diskette.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\diskette1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\export_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exportfile_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folderpanel_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hansol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\module_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\more.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\more1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\None.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\opendoc_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\other_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\padlock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\padlock1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\password.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\password_w.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\print_32x321.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save_32x322.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\setting11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBacode1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingBarcode4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logotype03.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user_w.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UserID.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoom_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\setting1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logotype031.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\이앤아이비LOGO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\이앤아이비LOGO-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoFAS.NEW.MES.Core\CoFAS.NEW.MES.Core.csproj">
+      <Project>{65e4cb53-26bf-4814-a219-b023e0f3d381}</Project>
+      <Name>CoFAS.NEW.MES.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-04-reset%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-04-reset%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-05-save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-08-export%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-09-print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-09-print%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-09-print%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-04-reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-01-home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-01-home%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-01-home%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-02-new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-02-new%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-02-new%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-03-search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-03-search%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-03-search%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-05-save%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-06-del.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-06-del%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-06-del%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-07-import.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-07-import%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-07-import%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-08-export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-08-export%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-ic-topbtn-05-save%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_edit.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_edit-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_edit-removebg-preview1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FontAwesome.Sharp">
+      <Version>6.1.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Hansolicon.ico" />
+    <None Include="Resources\sea_logo.png" />
+    <None Include="Resources\settings.png" />
+    <None Include="Resources\import.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\add2.png" />
+    <None Include="Resources\search.png" />
+    <None Include="Resources\print.png" />
+    <None Include="Resources\password_b.png" />
+    <None Include="Resources\arrow_forward.png" />
+    <None Include="Resources\arrow_back.png" />
+    <None Include="Resources\close.png" />
+    <None Include="Resources\home.png" />
+    <None Include="Resources\export.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\change.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\user_b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExcelList\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

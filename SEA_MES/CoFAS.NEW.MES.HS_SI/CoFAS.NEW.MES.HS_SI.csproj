@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FA74828B-4F50-4EFC-8E5F-BB336C5A51EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CoFAS.NEW.MES.HS_SI</RootNamespace>
+    <AssemblyName>CoFAS.NEW.MES.HS_SI</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457" />
+    <Reference Include="FarPoint.Win.Spread, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CoFAS.NEW.MES.Core\Dll\FarPoint.Win.Spread.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Business\AuthInformation_Business.cs" />
+    <Compile Include="Business\MenuInformation_Business.cs" />
+    <Compile Include="Business\SystemLog_Business.cs" />
+    <Compile Include="Business\UserInformation_Business.cs" />
+    <Compile Include="Entity\AuthInformation_Entity.cs" />
+    <Compile Include="Entity\MenuInformation_Entity.cs" />
+    <Compile Include="Entity\SystemLog_Entity.cs" />
+    <Compile Include="Entity\UserInformation_Entity.cs" />
+    <Compile Include="Popup\AuthInformation_P10.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\AuthInformation_P10.Designer.cs">
+      <DependentUpon>AuthInformation_P10.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\MenuInformation_P10.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\MenuInformation_P10.Designer.cs">
+      <DependentUpon>MenuInformation_P10.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider\AuthInformation_Provider.cs" />
+    <Compile Include="Provider\MenuInformation_Provider.cs" />
+    <Compile Include="Provider\SystemLog_Provider.cs" />
+    <Compile Include="Provider\UserInformation_Provider.cs" />
+    <Compile Include="View\AuthInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AuthInformation.Designer.cs">
+      <DependentUpon>AuthInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common_Code.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Common_Code.Designer.cs">
+      <DependentUpon>Common_Code.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MenuInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MenuInformation.Designer.cs">
+      <DependentUpon>MenuInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SystemLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SystemLog.Designer.cs">
+      <DependentUpon>SystemLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\UserInformation.Designer.cs">
+      <DependentUpon>UserInformation.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoFAS.NEW.MES.Core\CoFAS.NEW.MES.Core.csproj">
+      <Project>{65e4cb53-26bf-4814-a219-b023e0f3d381}</Project>
+      <Name>CoFAS.NEW.MES.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Popup\AuthInformation_P10.resx">
+      <DependentUpon>AuthInformation_P10.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\MenuInformation_P10.resx">
+      <DependentUpon>MenuInformation_P10.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="View\AuthInformation.resx">
+      <DependentUpon>AuthInformation.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Common_Code.resx">
+      <DependentUpon>Common_Code.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MenuInformation.resx">
+      <DependentUpon>MenuInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SystemLog.resx">
+      <DependentUpon>SystemLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\UserInformation.resx">
+      <DependentUpon>UserInformation.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\CoFAS.NEW.MES\bin\Debug"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,1750 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{65E4CB53-26BF-4814-A219-B023E0F3D381}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CoFAS.NEW.MES.Core</RootNamespace>
+    <AssemblyName>CoFAS.NEW.MES.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Hansolicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Charts.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Charts.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Dashboard.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v17.2.Win, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Dashboard.v17.2.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Data.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.DataAccess.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v17.2.UI, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.DataAccess.v17.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Map.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Map.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Office.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Office.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Pdf.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.PivotGrid.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.PivotGrid.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Printing.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.RichEdit.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v17.2.Export, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.RichEdit.v17.2.Export.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Sparkline.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Sparkline.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Spreadsheet.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Spreadsheet.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.TreeMap.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.TreeMap.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Utils.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v17.2.UI, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Utils.v17.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.Xpo.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraBars.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraCharts.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v17.2.UI, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraCharts.v17.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v17.2.Wizard, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraCharts.v17.2.Wizard.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraEditors.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraGauges.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v17.2.Presets, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraGauges.v17.2.Presets.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v17.2.Win, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraGauges.v17.2.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraGrid.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraLayout.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraMap.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraMap.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraNavBar.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPivotGrid.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraPivotGrid.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraPrinting.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraReports.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraRichEdit.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v17.2.Extensions, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraRichEdit.v17.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraScheduler.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraScheduler.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraSpreadsheet.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraSpreadsheet.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraTreeList.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\DevExpress.XtraTreeMap.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.CalcEngine, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.CalcEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.Excel, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.PDF, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.PDF.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.PluginCalendar.WinForms, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.PluginCalendar.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.Win, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.Win.Chart, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.Win.Chart.dll</HintPath>
+    </Reference>
+    <Reference Include="FarPoint.Win.Spread, Version=5.0.3514.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FarPoint.Win.Spread.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseForm\CustomMsg.cs" />
+    <Compile Include="BaseForm\frmBaseNone.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseForm\frmBaseNone.Designer.cs">
+      <DependentUpon>frmBaseNone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BaseForm\frmMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseForm\frmMessageBox.Designer.cs">
+      <DependentUpon>frmMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BaseForm\frmMessageBoxYN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseForm\frmMessageBoxYN.Designer.cs">
+      <DependentUpon>frmMessageBoxYN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BaseForm\frmMessageBox_Link.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseForm\frmMessageBox_Link.Designer.cs">
+      <DependentUpon>frmMessageBox_Link.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BaseForm\IForm.cs" />
+    <Compile Include="BaseForm\IMainForm.cs" />
+    <Compile Include="BaseForm\MainFormButtonSetting.cs" />
+    <Compile Include="Business\Common_Code_Business.cs" />
+    <Compile Include="Business\SI_Business.cs" />
+    <Compile Include="Business\CoreBusiness.cs" />
+    <Compile Include="Business\CalendarBusiness.cs" />
+    <Compile Include="Business\LoginBusiness.cs" />
+    <Compile Include="Entity\Common_Code_Entity.cs" />
+    <Compile Include="Entity\CoreEntity.cs" />
+    <Compile Include="Entity\LoginEntity.cs" />
+    <Compile Include="Entity\CalendarEntity.cs" />
+    <Compile Include="Function\CodeSelect.cs" />
+    <Compile Include="Function\Coever_Download_Update.cs" />
+    <Compile Include="Function\CoFAS_Label.cs" />
+    <Compile Include="Function\CoFAS_Serial.cs" />
+    <Compile Include="Function\CoFAS_XML.cs" />
+    <Compile Include="Function\ConfigrationManager.cs" />
+    <Compile Include="Function\ConfigurationManager.cs" />
+    <Compile Include="Function\ControlManager.cs" />
+    <Compile Include="Function\ConvertManager.cs" />
+    <Compile Include="Function\DBManager.cs" />
+    <Compile Include="Function\DevExpressManager.cs" />
+    <Compile Include="Function\EntityManager.cs" />
+    <Compile Include="Function\ExceptionManager.cs" />
+    <Compile Include="Function\FpSpreadManager.cs" />
+    <Compile Include="Function\Loading.cs" />
+    <Compile Include="Function\Core.cs" />
+    <Compile Include="Function\SHA256Encryption.cs" />
+    <Compile Include="Function\SystemLog.cs" />
+    <Compile Include="Function\utility.cs" />
+    <Compile Include="Popup\BaseCalendarPopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BaseCalendarPopupBox.Designer.cs">
+      <DependentUpon>BaseCalendarPopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\BaseBomPopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BaseBomPopupBox.Designer.cs">
+      <DependentUpon>BaseBomPopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\BaseFilePopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BaseFilePopupBox.Designer.cs">
+      <DependentUpon>BaseFilePopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\BaseForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\BaseForm2.Designer.cs">
+      <DependentUpon>BaseForm2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\압출조건현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\압출조건현황.Designer.cs">
+      <DependentUpon>압출조건현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\입고이력조회_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\입고이력조회_PopupBox.Designer.cs">
+      <DependentUpon>입고이력조회_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\출고이력조회_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\출고이력조회_PopupBox.Designer.cs">
+      <DependentUpon>출고이력조회_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\초중종검사결과등록_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\초중종검사결과등록_PopupBox.Designer.cs">
+      <DependentUpon>초중종검사결과등록_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\치수등록_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\치수등록_PopupBox.Designer.cs">
+      <DependentUpon>치수등록_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\xTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="User_Control\xTableLayoutPanel.Designer.cs">
+      <DependentUpon>xTableLayoutPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\_uc_Clock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\_uc_Clock.Designer.cs">
+      <DependentUpon>_uc_Clock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm2.Designer.cs">
+      <DependentUpon>DoubleBaseForm2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm3.designer.cs">
+      <DependentUpon>DoubleBaseForm3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm4.designer.cs">
+      <DependentUpon>DoubleBaseForm4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\주조로트조회.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\주조로트조회.Designer.cs">
+      <DependentUpon>주조로트조회.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\사출조건현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\사출조건현황.Designer.cs">
+      <DependentUpon>사출조건현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\발주입고.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\발주입고.Designer.cs">
+      <DependentUpon>발주입고.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\재고대비소요현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\재고대비소요현황.Designer.cs">
+      <DependentUpon>재고대비소요현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재발주현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재발주현황.Designer.cs">
+      <DependentUpon>자재발주현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\재고조정출고.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\재고조정출고.Designer.cs">
+      <DependentUpon>재고조정출고.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\BOM관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\BOM관리.Designer.cs">
+      <DependentUpon>BOM관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품초중종기준_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품초중종기준_PopupBox.Designer.cs">
+      <DependentUpon>제품초중종기준_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\견본출고등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\견본출고등록.Designer.cs">
+      <DependentUpon>견본출고등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\생산계획대비작업지시.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\생산계획대비작업지시.Designer.cs">
+      <DependentUpon>생산계획대비작업지시.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\생산계획등록_단독.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\생산계획등록_단독.Designer.cs">
+      <DependentUpon>생산계획등록_단독.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\작업실적.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\작업실적.Designer.cs">
+      <DependentUpon>작업실적.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\수주대비생산계획등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\수주대비생산계획등록.Designer.cs">
+      <DependentUpon>수주대비생산계획등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\작업실적_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\작업실적_PopupBox.Designer.cs">
+      <DependentUpon>작업실적_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\수불관리\수불현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\수불관리\수불현황.Designer.cs">
+      <DependentUpon>수불현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\견본요청.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\견본요청.Designer.cs">
+      <DependentUpon>견본요청.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\클레임등록_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\클레임등록_PopupBox.Designer.cs">
+      <DependentUpon>클레임등록_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재입고대기.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재입고대기.Designer.cs">
+      <DependentUpon>자재입고대기.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재입고현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재입고현황.Designer.cs">
+      <DependentUpon>자재입고현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재출고현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\자재출고현황.Designer.cs">
+      <DependentUpon>자재출고현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\외주작업지시_반입.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\외주작업지시_반입.Designer.cs">
+      <DependentUpon>외주작업지시_반입.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\외주작업지시_반출.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\외주작업지시_반출.Designer.cs">
+      <DependentUpon>외주작업지시_반출.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\LabelPrintImagePopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\LabelPrintImagePopup.Designer.cs">
+      <DependentUpon>LabelPrintImagePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\BaseMonthCalendarPopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BaseMonthCalendarPopupBox.Designer.cs">
+      <DependentUpon>BaseMonthCalendarPopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\BaseImagePopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BaseImagePopupBox.Designer.cs">
+      <DependentUpon>BaseImagePopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\BasePopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BasePopupBox.Designer.cs">
+      <DependentUpon>BasePopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\BaseFormSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\BaseFormSetting.Designer.cs">
+      <DependentUpon>BaseFormSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\FindSpread.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\FindSpread.Designer.cs">
+      <DependentUpon>FindSpread.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\frmScheduler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\frmScheduler.Designer.cs">
+      <DependentUpon>frmScheduler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\frmPopupSum.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\frmPopupSum.Designer.cs">
+      <DependentUpon>frmPopupSum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\수주관리_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\수주관리_PopupBox.Designer.cs">
+      <DependentUpon>수주관리_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\WaitForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popup\WaitForm.Designer.cs">
+      <DependentUpon>WaitForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider\Common_Code_Provider.cs" />
+    <Compile Include="Provider\SI_Provider.cs" />
+    <Compile Include="Provider\CoreProvider.cs" />
+    <Compile Include="Provider\CalendarProvider.cs" />
+    <Compile Include="Provider\LoginProvider.cs" />
+    <Compile Include="User_Control\Base_FromtoDateTime.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Base_FromtoDateTime.Designer.cs">
+      <DependentUpon>Base_FromtoDateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Base_ComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Base_ComboBox.Designer.cs">
+      <DependentUpon>Base_ComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Base_Searchbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Base_Searchbox.Designer.cs">
+      <DependentUpon>Base_Searchbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\FromtoDateTime.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\FromtoDateTime.Designer.cs">
+      <DependentUpon>FromtoDateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Order_Scheduler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Order_Scheduler.Designer.cs">
+      <DependentUpon>Order_Scheduler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Scheduler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Scheduler.Designer.cs">
+      <DependentUpon>Scheduler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Label_Scheduler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Label_Scheduler.Designer.cs">
+      <DependentUpon>Label_Scheduler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Sub_Scheduler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Sub_Scheduler.Designer.cs">
+      <DependentUpon>Sub_Scheduler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\Base_textbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\Base_textbox.Designer.cs">
+      <DependentUpon>Base_textbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\ucDateEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\ucDateEdit.Designer.cs">
+      <DependentUpon>ucDateEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\ucTextEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\ucTextEdit.Designer.cs">
+      <DependentUpon>ucTextEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\xFpSpread.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="User_Control\xFpSpread.Designer.cs">
+      <DependentUpon>xFpSpread.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\_LookupEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\_LookupEdit.Designer.cs">
+      <DependentUpon>_LookupEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User_Control\_xComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User_Control\_xComboBox.Designer.cs">
+      <DependentUpon>_xComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\ChartBaseForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\ChartBaseForm1.Designer.cs">
+      <DependentUpon>ChartBaseForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm5.Designer.cs">
+      <DependentUpon>DoubleBaseForm5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\TripleBaseForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\TripleBaseForm2.Designer.cs">
+      <DependentUpon>TripleBaseForm2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\TripleBaseForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\TripleBaseForm1.Designer.cs">
+      <DependentUpon>TripleBaseForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\INSPECTION_STOCK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\INSPECTION_STOCK.Designer.cs">
+      <DependentUpon>INSPECTION_STOCK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\외주작업지시등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\외주작업지시등록.Designer.cs">
+      <DependentUpon>외주작업지시등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\재고조정입고.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\재고조정입고.Designer.cs">
+      <DependentUpon>재고조정입고.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\작업지시등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\작업지시등록.Designer.cs">
+      <DependentUpon>작업지시등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\소모품재고.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\소모품재고.Designer.cs">
+      <DependentUpon>소모품재고.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\SalesReport현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\SalesReport현황.Designer.cs">
+      <DependentUpon>SalesReport현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\월별원가분석.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\월별원가분석.Designer.cs">
+      <DependentUpon>월별원가분석.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\작업지시명세.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\작업지시명세.Designer.cs">
+      <DependentUpon>작업지시명세.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\주조원가현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\주조원가현황.Designer.cs">
+      <DependentUpon>주조원가현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\잉곳사용량현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\잉곳사용량현황.Designer.cs">
+      <DependentUpon>잉곳사용량현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\수주등록현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\수주등록현황.Designer.cs">
+      <DependentUpon>수주등록현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품스펙_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품스펙_PopupBox.Designer.cs">
+      <DependentUpon>제품스펙_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\견본출고지시.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\견본출고지시.Designer.cs">
+      <DependentUpon>견본출고지시.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\토크렌치성적서.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\토크렌치성적서.Designer.cs">
+      <DependentUpon>토크렌치성적서.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\계측기이력관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\계측기이력관리.Designer.cs">
+      <DependentUpon>계측기이력관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\제품초중종검사.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\제품초중종검사.Designer.cs">
+      <DependentUpon>제품초중종검사.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\검사결과등록_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\검사결과등록_PopupBox.Designer.cs">
+      <DependentUpon>검사결과등록_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\생산계획등록_이튼.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\생산계획등록_이튼.Designer.cs">
+      <DependentUpon>생산계획등록_이튼.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\발주관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\자재관리\발주관리.Designer.cs">
+      <DependentUpon>발주관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\반품관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\반품관리.Designer.cs">
+      <DependentUpon>반품관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\DoubleBaseForm1\제품수주출고.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\DoubleBaseForm1\제품수주출고.Designer.cs">
+      <DependentUpon>제품수주출고.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\ORDER_OUT_EXPORT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\ORDER_OUT_EXPORT.Designer.cs">
+      <DependentUpon>ORDER_OUT_EXPORT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\ORDER_PLAN_REGISTER.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\ORDER_PLAN_REGISTER.Designer.cs">
+      <DependentUpon>ORDER_PLAN_REGISTER.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\계획대비작업지시.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\생산관리\계획대비작업지시.Designer.cs">
+      <DependentUpon>계획대비작업지시.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\OUTSOURCING_INSTRUCT_REGISTER.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\OUTSOURCING_INSTRUCT_REGISTER.Designer.cs">
+      <DependentUpon>OUTSOURCING_INSTRUCT_REGISTER.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\클레임관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\클레임관리.Designer.cs">
+      <DependentUpon>클레임관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\원재료관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\원재료관리.Designer.cs">
+      <DependentUpon>원재료관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\설비종합효율.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\설비종합효율.Designer.cs">
+      <DependentUpon>설비종합효율.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCT_SHIPMENT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCT_SHIPMENT.Designer.cs">
+      <DependentUpon>PRODUCT_SHIPMENT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_PLAN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_PLAN.Designer.cs">
+      <DependentUpon>PRODUCTION_PLAN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\MENU_INFORMATION.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\MENU_INFORMATION.Designer.cs">
+      <DependentUpon>MENU_INFORMATION.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\Common_Code2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\Common_Code2.Designer.cs">
+      <DependentUpon>Common_Code2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\CHANGE_MANAGEMENT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\CHANGE_MANAGEMENT.Designer.cs">
+      <DependentUpon>CHANGE_MANAGEMENT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_ALL_STATUS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_ALL_STATUS.Designer.cs">
+      <DependentUpon>EQUIPMENT_ALL_STATUS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\PROCESS_NG_STATUS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\PROCESS_NG_STATUS.Designer.cs">
+      <DependentUpon>PROCESS_NG_STATUS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\LOT_QUALITY_INSPECTION.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\LOT_QUALITY_INSPECTION.Designer.cs">
+      <DependentUpon>LOT_QUALITY_INSPECTION.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_OPERATION_STATUS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_OPERATION_STATUS.Designer.cs">
+      <DependentUpon>EQUIPMENT_OPERATION_STATUS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\KPI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\KPI.Designer.cs">
+      <DependentUpon>KPI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\WORKING_CONDITIONS_STATUS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\WORKING_CONDITIONS_STATUS.Designer.cs">
+      <DependentUpon>WORKING_CONDITIONS_STATUS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\WORK_CAPA.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\WORK_CAPA.Designer.cs">
+      <DependentUpon>WORK_CAPA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\WORKING_CONDITIONS_STATUS2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\WORKING_CONDITIONS_STATUS2.Designer.cs">
+      <DependentUpon>WORKING_CONDITIONS_STATUS2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_PROGRESS_STATUS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_PROGRESS_STATUS.Designer.cs">
+      <DependentUpon>PRODUCTION_PROGRESS_STATUS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_STOP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_STOP.Designer.cs">
+      <DependentUpon>EQUIPMENT_STOP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_INSPECTION_RECORD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_INSPECTION_RECORD.Designer.cs">
+      <DependentUpon>EQUIPMENT_INSPECTION_RECORD.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\수주관리.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\영업관리\수주관리.Designer.cs">
+      <DependentUpon>수주관리.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_INSPECTION.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\EQUIPMENT_INSPECTION.Designer.cs">
+      <DependentUpon>EQUIPMENT_INSPECTION.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_RESULT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_RESULT.Designer.cs">
+      <DependentUpon>PRODUCTION_RESULT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_INSTRUCT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\PRODUCTION_INSTRUCT.Designer.cs">
+      <DependentUpon>PRODUCTION_INSTRUCT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\Monthly_Schedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\Monthly_Schedule.Designer.cs">
+      <DependentUpon>Monthly_Schedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\DoubleBaseForm1.Designer.cs">
+      <DependentUpon>DoubleBaseForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\base\BaseForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\base\BaseForm1.Designer.cs">
+      <DependentUpon>BaseForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품출고현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품출고현황.Designer.cs">
+      <DependentUpon>제품출고현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품입고현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품입고현황.Designer.cs">
+      <DependentUpon>제품입고현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품입고대기.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\제품관리\제품입고대기.Designer.cs">
+      <DependentUpon>제품입고대기.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\제품출고지시.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\제품출고지시.Designer.cs">
+      <DependentUpon>제품출고지시.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\제품출고등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\제품출고등록.Designer.cs">
+      <DependentUpon>제품출고등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\포장등록_PopupBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\출고관리\포장등록_PopupBox.Designer.cs">
+      <DependentUpon>포장등록_PopupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\수입검사등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이앤아이비\품질관리\수입검사등록.Designer.cs">
+      <DependentUpon>수입검사등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\TPC실적현황.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\TPC실적현황.Designer.cs">
+      <DependentUpon>TPC실적현황.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\작업표준서등록.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\작업표준서등록.Designer.cs">
+      <DependentUpon>작업표준서등록.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\이튼\작업지시등록_이튼.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\이튼\작업지시등록_이튼.Designer.cs">
+      <DependentUpon>작업지시등록_이튼.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="BaseForm\frmBaseNone.resx">
+      <DependentUpon>frmBaseNone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseForm\frmMessageBox.resx">
+      <DependentUpon>frmMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseForm\frmMessageBoxYN.resx">
+      <DependentUpon>frmMessageBoxYN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseForm\frmMessageBox_Link.resx">
+      <DependentUpon>frmMessageBox_Link.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BaseCalendarPopupBox.resx">
+      <DependentUpon>BaseCalendarPopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BaseBomPopupBox.resx">
+      <DependentUpon>BaseBomPopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BaseFilePopupBox.resx">
+      <DependentUpon>BaseFilePopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\BaseForm2.resx">
+      <DependentUpon>BaseForm2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\압출조건현황.resx">
+      <DependentUpon>압출조건현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\입고이력조회_PopupBox.resx">
+      <DependentUpon>입고이력조회_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\출고이력조회_PopupBox.resx">
+      <DependentUpon>출고이력조회_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\초중종검사결과등록_PopupBox.resx">
+      <DependentUpon>초중종검사결과등록_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\치수등록_PopupBox.resx">
+      <DependentUpon>치수등록_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\xTableLayoutPanel.resx">
+      <DependentUpon>xTableLayoutPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\_uc_clock.resx">
+      <DependentUpon>_uc_Clock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\DoubleBaseForm2.resx">
+      <DependentUpon>DoubleBaseForm2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\DoubleBaseForm3.resx">
+      <DependentUpon>DoubleBaseForm3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\DoubleBaseForm4.resx">
+      <DependentUpon>DoubleBaseForm4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\주조로트조회.resx">
+      <DependentUpon>주조로트조회.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\사출조건현황.resx">
+      <DependentUpon>사출조건현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\발주입고.resx">
+      <DependentUpon>발주입고.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\재고대비소요현황.resx">
+      <DependentUpon>재고대비소요현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\자재발주현황.resx">
+      <DependentUpon>자재발주현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\재고조정출고.resx">
+      <DependentUpon>재고조정출고.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\BOM관리.resx">
+      <DependentUpon>BOM관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\제품초중종기준_PopupBox.resx">
+      <DependentUpon>제품초중종기준_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\출고관리\견본출고등록.resx">
+      <DependentUpon>견본출고등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\생산계획대비작업지시.resx">
+      <DependentUpon>생산계획대비작업지시.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\생산계획등록_단독.resx">
+      <DependentUpon>생산계획등록_단독.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\작업실적.resx">
+      <DependentUpon>작업실적.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\수주대비생산계획등록.resx">
+      <DependentUpon>수주대비생산계획등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\작업실적_PopupBox.resx">
+      <DependentUpon>작업실적_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\견본요청.resx">
+      <DependentUpon>견본요청.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\클레임등록_PopupBox.resx">
+      <DependentUpon>클레임등록_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\수불관리\수불현황.resx">
+      <DependentUpon>수불현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\자재입고대기.resx">
+      <DependentUpon>자재입고대기.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\자재입고현황.resx">
+      <DependentUpon>자재입고현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\자재출고현황.resx">
+      <DependentUpon>자재출고현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\외주작업지시_반입.resx">
+      <DependentUpon>외주작업지시_반입.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\외주작업지시_반출.resx">
+      <DependentUpon>외주작업지시_반출.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\LabelPrintImagePopup.resx">
+      <DependentUpon>LabelPrintImagePopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BaseMonthCalendarPopupBox.resx">
+      <DependentUpon>BaseMonthCalendarPopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BaseImagePopupBox.resx">
+      <DependentUpon>BaseImagePopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BasePopupBox.resx">
+      <DependentUpon>BasePopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\BaseFormSetting.resx">
+      <DependentUpon>BaseFormSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\FindSpread.resx">
+      <DependentUpon>FindSpread.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\frmScheduler.resx">
+      <DependentUpon>frmScheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\frmPopupSum.resx">
+      <DependentUpon>frmPopupSum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\수주관리_PopupBox.resx">
+      <DependentUpon>수주관리_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\WaitForm.resx">
+      <DependentUpon>WaitForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="User_Control\Base_FromtoDateTime.resx">
+      <DependentUpon>Base_FromtoDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Base_ComboBox.resx">
+      <DependentUpon>Base_ComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Base_Searchbox.resx">
+      <DependentUpon>Base_Searchbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Base_textbox.resx">
+      <DependentUpon>Base_textbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\FromtoDateTime.resx">
+      <DependentUpon>FromtoDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Order_Scheduler.resx">
+      <DependentUpon>Order_Scheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Scheduler.resx">
+      <DependentUpon>Scheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Label_Scheduler.resx">
+      <DependentUpon>Label_Scheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\Sub_Scheduler.resx">
+      <DependentUpon>Sub_Scheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\ucDateEdit.resx">
+      <DependentUpon>ucDateEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\ucTextEdit.resx">
+      <DependentUpon>ucTextEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\xFpSpread.resx">
+      <DependentUpon>xFpSpread.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\_LookupEdit.resx">
+      <DependentUpon>_LookupEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User_Control\_xComboBox.resx">
+      <DependentUpon>_xComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\ChartBaseForm1.resx">
+      <DependentUpon>ChartBaseForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\DoubleBaseForm5.resx">
+      <DependentUpon>DoubleBaseForm5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\TripleBaseForm2.resx">
+      <DependentUpon>TripleBaseForm2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\TripleBaseForm1.resx">
+      <DependentUpon>TripleBaseForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\INSPECTION_STOCK.resx">
+      <DependentUpon>INSPECTION_STOCK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\외주작업지시등록.resx">
+      <DependentUpon>외주작업지시등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\재고조정입고.resx">
+      <DependentUpon>재고조정입고.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\작업지시등록.resx">
+      <DependentUpon>작업지시등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\소모품재고.resx">
+      <DependentUpon>소모품재고.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\SalesReport현황.resx">
+      <DependentUpon>SalesReport현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\월별원가분석.resx">
+      <DependentUpon>월별원가분석.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\작업지시명세.resx">
+      <DependentUpon>작업지시명세.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\주조원가현황.resx">
+      <DependentUpon>주조원가현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\잉곳사용량현황.resx">
+      <DependentUpon>잉곳사용량현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\수주등록현황.resx">
+      <DependentUpon>수주등록현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\제품스펙_PopupBox.resx">
+      <DependentUpon>제품스펙_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\출고관리\견본출고지시.resx">
+      <DependentUpon>견본출고지시.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\토크렌치성적서.resx">
+      <DependentUpon>토크렌치성적서.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\계측기이력관리.resx">
+      <DependentUpon>계측기이력관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\제품초중종검사.resx">
+      <DependentUpon>제품초중종검사.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\검사결과등록_PopupBox.resx">
+      <DependentUpon>검사결과등록_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\생산계획등록_이튼.resx">
+      <DependentUpon>생산계획등록_이튼.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\자재관리\발주관리.resx">
+      <DependentUpon>발주관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\반품관리.resx">
+      <DependentUpon>반품관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\DoubleBaseForm1\제품수주출고.resx">
+      <DependentUpon>제품수주출고.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\ORDER_OUT_EXPORT.resx">
+      <DependentUpon>ORDER_OUT_EXPORT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\ORDER_PLAN_REGISTER.resx">
+      <DependentUpon>ORDER_PLAN_REGISTER.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\생산관리\계획대비작업지시.resx">
+      <DependentUpon>계획대비작업지시.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\OUTSOURCING_INSTRUCT_REGISTER.resx">
+      <DependentUpon>OUTSOURCING_INSTRUCT_REGISTER.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\클레임관리.resx">
+      <DependentUpon>클레임관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\원재료관리.resx">
+      <DependentUpon>원재료관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\설비종합효율.resx">
+      <DependentUpon>설비종합효율.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\PRODUCT_SHIPMENT.resx">
+      <DependentUpon>PRODUCT_SHIPMENT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\PRODUCTION_PLAN.resx">
+      <DependentUpon>PRODUCTION_PLAN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\MENU_INFORMATION.resx">
+      <DependentUpon>MENU_INFORMATION.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\Common_Code2.resx">
+      <DependentUpon>Common_Code2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\CHANGE_MANAGEMENT.resx">
+      <DependentUpon>CHANGE_MANAGEMENT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\EQUIPMENT_ALL_STATUS.resx">
+      <DependentUpon>EQUIPMENT_ALL_STATUS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\PROCESS_NG_STATUS.resx">
+      <DependentUpon>PROCESS_NG_STATUS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\LOT_QUALITY_INSPECTION.resx">
+      <DependentUpon>LOT_QUALITY_INSPECTION.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\EQUIPMENT_OPERATION_STATUS.resx">
+      <DependentUpon>EQUIPMENT_OPERATION_STATUS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\KPI.resx">
+      <DependentUpon>KPI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\WORKING_CONDITIONS_STATUS.resx">
+      <DependentUpon>WORKING_CONDITIONS_STATUS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\WORK_CAPA.resx">
+      <DependentUpon>WORK_CAPA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\WORKING_CONDITIONS_STATUS2.resx">
+      <DependentUpon>WORKING_CONDITIONS_STATUS2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\PRODUCTION_PROGRESS_STATUS.resx">
+      <DependentUpon>PRODUCTION_PROGRESS_STATUS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\EQUIPMENT_STOP.resx">
+      <DependentUpon>EQUIPMENT_STOP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\EQUIPMENT_INSPECTION_RECORD.resx">
+      <DependentUpon>EQUIPMENT_INSPECTION_RECORD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\영업관리\수주관리.resx">
+      <DependentUpon>수주관리.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\EQUIPMENT_INSPECTION.resx">
+      <DependentUpon>EQUIPMENT_INSPECTION.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\PRODUCTION_RESULT.resx">
+      <DependentUpon>PRODUCTION_RESULT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\PRODUCTION_INSTRUCT.resx">
+      <DependentUpon>PRODUCTION_INSTRUCT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\Monthly_Schedule.resx">
+      <DependentUpon>Monthly_Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\DoubleBaseForm1.resx">
+      <DependentUpon>DoubleBaseForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\base\BaseForm1.resx">
+      <DependentUpon>BaseForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\제품출고현황.resx">
+      <DependentUpon>제품출고현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\제품입고현황.resx">
+      <DependentUpon>제품입고현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\제품관리\제품입고대기.resx">
+      <DependentUpon>제품입고대기.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\출고관리\제품출고지시.resx">
+      <DependentUpon>제품출고지시.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\출고관리\제품출고등록.resx">
+      <DependentUpon>제품출고등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\출고관리\포장등록_PopupBox.resx">
+      <DependentUpon>포장등록_PopupBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이앤아이비\품질관리\수입검사등록.resx">
+      <DependentUpon>수입검사등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\TPC실적현황.resx">
+      <DependentUpon>TPC실적현황.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\작업표준서등록.resx">
+      <DependentUpon>작업표준서등록.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\이튼\작업지시등록_이튼.resx">
+      <DependentUpon>작업지시등록_이튼.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\CoFAS.WMS.Core.dll" />
+    <Content Include="bin\Debug\CoFAS.WMS.Core.pdb" />
+    <Content Include="bin\Debug\DevExpress.Charts.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.CodeParser.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.Dashboard.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Dashboard.v17.2.Win.dll" />
+    <Content Include="bin\Debug\DevExpress.Data.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.DataAccess.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.DataAccess.v17.2.UI.dll" />
+    <Content Include="bin\Debug\DevExpress.Diagram.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Diagram.v17.2.Core.xml" />
+    <Content Include="bin\Debug\DevExpress.Images.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.Map.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Office.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Pdf.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.PivotGrid.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Printing.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.RichEdit.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.RichEdit.v17.2.Export.dll" />
+    <Content Include="bin\Debug\DevExpress.Sparkline.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Spreadsheet.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.TreeMap.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.Utils.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.Utils.v17.2.UI.dll" />
+    <Content Include="bin\Debug\DevExpress.Xpo.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraBars.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraCharts.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraCharts.v17.2.UI.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraCharts.v17.2.Wizard.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraDiagram.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraDiagram.v17.2.xml" />
+    <Content Include="bin\Debug\DevExpress.XtraEditors.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraGauges.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraGauges.v17.2.Presets.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraGauges.v17.2.Win.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraGrid.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraLayout.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraMap.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraNavBar.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraPivotGrid.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraPrinting.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraReports.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraRichEdit.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraRichEdit.v17.2.Extensions.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraScheduler.v17.2.Core.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraScheduler.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraTreeList.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraTreeMap.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraVerticalGrid.v17.2.dll" />
+    <Content Include="bin\Debug\DevExpress.XtraVerticalGrid.v17.2.xml" />
+    <Content Include="bin\Debug\de\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Debug\de\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Debug\es\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Debug\es\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Debug\FarPoint.CalcEngine.dll" />
+    <Content Include="bin\Debug\FarPoint.Excel.dll" />
+    <Content Include="bin\Debug\FarPoint.PDF.dll" />
+    <Content Include="bin\Debug\FarPoint.PluginCalendar.WinForms.dll" />
+    <Content Include="bin\Debug\FarPoint.Win.Chart.dll" />
+    <Content Include="bin\Debug\FarPoint.Win.dll" />
+    <Content Include="bin\Debug\FarPoint.Win.Spread.dll" />
+    <Content Include="bin\Debug\ja\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Debug\ja\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Debug\MySql.Data.dll" />
+    <Content Include="bin\Debug\MyUpDate.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\ru\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Debug\ru\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Release\CoFAS.WMS.Core.dll" />
+    <Content Include="bin\Release\CoFAS.WMS.Core.pdb" />
+    <Content Include="bin\Release\DevExpress.Charts.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.CodeParser.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.Dashboard.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Dashboard.v17.2.Win.dll" />
+    <Content Include="bin\Release\DevExpress.Data.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.DataAccess.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.DataAccess.v17.2.UI.dll" />
+    <Content Include="bin\Release\DevExpress.Diagram.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Diagram.v17.2.Core.xml" />
+    <Content Include="bin\Release\DevExpress.Images.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.Map.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Office.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Pdf.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.PivotGrid.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Printing.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.RichEdit.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.RichEdit.v17.2.Export.dll" />
+    <Content Include="bin\Release\DevExpress.Sparkline.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Spreadsheet.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.TreeMap.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Utils.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.Utils.v17.2.UI.dll" />
+    <Content Include="bin\Release\DevExpress.Xpo.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraBars.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraCharts.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraCharts.v17.2.UI.dll" />
+    <Content Include="bin\Release\DevExpress.XtraCharts.v17.2.Wizard.dll" />
+    <Content Include="bin\Release\DevExpress.XtraDiagram.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraDiagram.v17.2.xml" />
+    <Content Include="bin\Release\DevExpress.XtraEditors.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraGauges.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.XtraGauges.v17.2.Presets.dll" />
+    <Content Include="bin\Release\DevExpress.XtraGauges.v17.2.Win.dll" />
+    <Content Include="bin\Release\DevExpress.XtraGrid.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraLayout.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraMap.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraNavBar.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraPivotGrid.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraPrinting.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraReports.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraRichEdit.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraRichEdit.v17.2.Extensions.dll" />
+    <Content Include="bin\Release\DevExpress.XtraScheduler.v17.2.Core.dll" />
+    <Content Include="bin\Release\DevExpress.XtraScheduler.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraTreeList.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraTreeMap.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraVerticalGrid.v17.2.dll" />
+    <Content Include="bin\Release\DevExpress.XtraVerticalGrid.v17.2.xml" />
+    <Content Include="bin\Release\de\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Release\de\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Release\es\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Release\es\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Release\FarPoint.CalcEngine.dll" />
+    <Content Include="bin\Release\FarPoint.Excel.dll" />
+    <Content Include="bin\Release\FarPoint.PDF.dll" />
+    <Content Include="bin\Release\FarPoint.PluginCalendar.WinForms.dll" />
+    <Content Include="bin\Release\FarPoint.Win.Chart.dll" />
+    <Content Include="bin\Release\FarPoint.Win.dll" />
+    <Content Include="bin\Release\FarPoint.Win.Spread.dll" />
+    <Content Include="bin\Release\ja\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Release\ja\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="bin\Release\MySql.Data.dll" />
+    <Content Include="bin\Release\MyUpDate.dll" />
+    <Content Include="bin\Release\Newtonsoft.Json.dll" />
+    <Content Include="bin\Release\ru\DevExpress.Diagram.v17.2.Core.resources.dll" />
+    <Content Include="bin\Release\ru\DevExpress.XtraVerticalGrid.v17.2.resources.dll" />
+    <Content Include="Dll\DevExpress.Charts.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Dashboard.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Dashboard.v17.2.Win.dll" />
+    <Content Include="Dll\DevExpress.Data.v17.2.dll" />
+    <Content Include="Dll\DevExpress.DataAccess.v17.2.dll" />
+    <Content Include="Dll\DevExpress.DataAccess.v17.2.UI.dll" />
+    <Content Include="Dll\DevExpress.Map.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Office.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Pdf.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.PivotGrid.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Printing.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.RichEdit.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.RichEdit.v17.2.Export.dll" />
+    <Content Include="Dll\DevExpress.Sparkline.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Spreadsheet.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.TreeMap.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.Utils.v17.2.dll" />
+    <Content Include="Dll\DevExpress.Utils.v17.2.UI.dll" />
+    <Content Include="Dll\DevExpress.Xpo.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraBars.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraCharts.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraCharts.v17.2.UI.dll" />
+    <Content Include="Dll\DevExpress.XtraCharts.v17.2.Wizard.dll" />
+    <Content Include="Dll\DevExpress.XtraEditors.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraGauges.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.XtraGauges.v17.2.Presets.dll" />
+    <Content Include="Dll\DevExpress.XtraGauges.v17.2.Win.dll" />
+    <Content Include="Dll\DevExpress.XtraGrid.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraLayout.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraMap.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraNavBar.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraPivotGrid.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraPrinting.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraReports.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraRichEdit.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraRichEdit.v17.2.Extensions.dll" />
+    <Content Include="Dll\DevExpress.XtraScheduler.v17.2.Core.dll" />
+    <Content Include="Dll\DevExpress.XtraScheduler.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraSpreadsheet.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraTreeList.v17.2.dll" />
+    <Content Include="Dll\DevExpress.XtraTreeMap.v17.2.dll" />
+    <Content Include="Dll\FarPoint.CalcEngine.dll" />
+    <Content Include="Dll\FarPoint.Excel.dll" />
+    <Content Include="Dll\FarPoint.PDF.dll" />
+    <Content Include="Dll\FarPoint.PluginCalendar.WinForms.dll" />
+    <Content Include="Dll\FarPoint.Win.Chart.dll" />
+    <Content Include="Dll\FarPoint.Win.dll" />
+    <Content Include="Dll\FarPoint.Win.Spread.dll" />
+    <Content Include="Dll\MySql.Data.dll" />
+    <Content Include="Dll\MyUpDate.dll" />
+    <Content Include="Dll\Newtonsoft.Json.dll" />
+    <Content Include="Hansolicon.ico" />
+    <None Include="Resources\add.png" />
+    <Content Include="Resources\alignhorizontalbottom_16x16.png" />
+    <Content Include="Resources\alignhorizontalcenter_16x16.png" />
+    <Content Include="Resources\alignhorizontaltop_16x16.png" />
+    <Content Include="Resources\apply_32x32.png" />
+    <None Include="Resources\arrow_back.png" />
+    <None Include="Resources\arrow_forward.png" />
+    <Content Include="Resources\article_16x16.png" />
+    <Content Include="Resources\article_16x161.png" />
+    <None Include="Resources\bom.png" />
+    <Content Include="Resources\bopermission_32x32.png" />
+    <Content Include="Resources\btn_spread_blank_01.png" />
+    <Content Include="Resources\btn_spread_check_01.png" />
+    <Content Include="Resources\btn_spread_choice_01.png" />
+    <Content Include="Resources\btn_spread_error_01.png" />
+    <Content Include="Resources\btn_spread_find_01.gif" />
+    <Content Include="Resources\btn_Spread_Find_02.jpg" />
+    <Content Include="Resources\btn_Spread_Find_03.gif" />
+    <Content Include="Resources\btn_Spread_Find_03.png" />
+    <Content Include="Resources\btn_Spread_Find_04.png" />
+    <Content Include="Resources\btn_spread_find_08.png" />
+    <Content Include="Resources\btn_spread_ng_01.png" />
+    <Content Include="Resources\btn_spread_ok_01.png" />
+    <Content Include="Resources\btn_spread_select_01.png" />
+    <Content Include="Resources\btn_spread_unselect_01.png" />
+    <Content Include="Resources\calculator16.png" />
+    <None Include="Resources\change.png" />
+    <None Include="Resources\close.png" />
+    <Content Include="Resources\close_16x16.png" />
+    <Content Include="Resources\close_16x162.png" />
+    <Content Include="Resources\close_32x32.png" />
+    <Content Include="Resources\copy16.png" />
+    <Content Include="Resources\customizegrid_16x16.png" />
+    <Content Include="Resources\Default.png" />
+    <None Include="Resources\delete.png" />
+    <Content Include="Resources\Excel_16.png" />
+    <None Include="Resources\export.png" />
+    <Content Include="Resources\filter_16.png" />
+    <Content Include="Resources\find.png" />
+    <Content Include="Resources\hide.png" />
+    <None Include="Resources\home.png" />
+    <Content Include="Resources\Image1.bmp" />
+    <Content Include="Resources\image_16x16.png" />
+    <Content Include="Resources\Ng.png" />
+    <Content Include="Resources\None.png" />
+    <Content Include="Resources\Ok.png" />
+    <Content Include="Resources\paneloff_16x16.png" />
+    <None Include="Resources\password_b.png" />
+    <Content Include="Resources\Pin1_16.png" />
+    <Content Include="Resources\Pin2_ 16.png" />
+    <None Include="Resources\print.png" />
+    <Content Include="Resources\refresh_16x16.png" />
+    <None Include="Resources\save.png" />
+    <Content Include="Resources\saveto_16x16.png" />
+    <Content Include="Resources\save_16x16.png" />
+    <None Include="Resources\search.png" />
+    <None Include="Resources\settings.png" />
+    <Content Include="Resources\Standby.png" />
+    <Content Include="Resources\task_16x16.png" />
+    <Content Include="Resources\timg11.gif" />
+    <Content Include="Resources\trash_16x16.png" />
+    <Content Include="Resources\trash_16x161.png" />
+    <None Include="Resources\user_b.png" />
+    <Content Include="Resources\zoom_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="obj\" />
+    <Folder Include="Print\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Office.Interop.Excel">
+      <Version>15.0.4795.1001</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\CoFAS.NEW.MES\bin\Debug"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

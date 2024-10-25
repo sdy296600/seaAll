@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{69C9C5C7-0F62-493B-8EE3-93A4F3354068}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CoFAS.NEW.MES.Download</RootNamespace>
+    <AssemblyName>CoFAS.NEW.MES.Download</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>update.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Crc32.cs" />
+    <Compile Include="Form\FormDownload.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload.Designer.cs">
+      <DependentUpon>FormDownload.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_ENIB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_ENIB.Designer.cs">
+      <DependentUpon>FormDownload_ENIB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_세아_MES.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_세아_MES.Designer.cs">
+      <DependentUpon>FormDownload_세아_MES.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_세아_간판POP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_세아_간판POP.Designer.cs">
+      <DependentUpon>FormDownload_세아_간판POP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_세아_POP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_세아_POP.Designer.cs">
+      <DependentUpon>FormDownload_세아_POP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_Eaton.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_Eaton.Designer.cs">
+      <DependentUpon>FormDownload_Eaton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_Hansol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_Hansol.Designer.cs">
+      <DependentUpon>FormDownload_Hansol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormDownload_Tapex.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormDownload_Tapex.Designer.cs">
+      <DependentUpon>FormDownload_Tapex.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form\FormDownload.resx">
+      <DependentUpon>FormDownload.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_ENIB.resx">
+      <DependentUpon>FormDownload_ENIB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_세아_MES.resx">
+      <DependentUpon>FormDownload_세아_MES.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_세아_간판POP.resx">
+      <DependentUpon>FormDownload_세아_간판POP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_세아_POP.resx">
+      <DependentUpon>FormDownload_세아_POP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_Eaton.resx">
+      <DependentUpon>FormDownload_Eaton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_Hansol.resx">
+      <DependentUpon>FormDownload_Hansol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormDownload_Tapex.resx">
+      <DependentUpon>FormDownload_Tapex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_edit-removebg-preview.png" />
+    <None Include="Resources\adm_logo-removebg-preview.png" />
+    <None Include="Resources\이앤아이비LOGO.png" />
+    <None Include="Resources\tapex_logo.png" />
+    <None Include="Resources\logo.png" />
+    <Content Include="Hansolicon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="update.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

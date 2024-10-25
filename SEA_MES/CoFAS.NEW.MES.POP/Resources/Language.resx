@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="_btLoginCancel" xml:space="preserve">
+    <value>취소</value>
+    <comment>취소 버튼</comment>
+  </data>
+  <data name="_btLoginOk" xml:space="preserve">
+    <value>로그인</value>
+    <comment>로그인 버튼</comment>
+  </data>
+  <data name="_btLoginSetting" xml:space="preserve">
+    <value>설정</value>
+    <comment>설정 버튼</comment>
+  </data>
+  <data name="_btSettingExit" xml:space="preserve">
+    <value>닫기</value>
+    <comment>닫기</comment>
+  </data>
+  <data name="_btSettingSave" xml:space="preserve">
+    <value>저장</value>
+    <comment>저장</comment>
+  </data>
+  <data name="_ckSettingUserIDSave" xml:space="preserve">
+    <value>계정 저장</value>
+    <comment>계정 저장</comment>
+  </data>
+  <data name="_ckUserIDSave" xml:space="preserve">
+    <value>계정 저장</value>
+    <comment>계정 저장</comment>
+  </data>
+  <data name="_lbLoginHeader" xml:space="preserve">
+    <value>시스템 로그인</value>
+    <comment>시스템 명칭</comment>
+  </data>
+  <data name="_lbSettingHeader" xml:space="preserve">
+    <value>시스템 설정</value>
+    <comment>시스템 설정</comment>
+  </data>
+  <data name="_lciAccount" xml:space="preserve">
+    <value>계정</value>
+    <comment>접속 아이디</comment>
+  </data>
+  <data name="_lciPassword" xml:space="preserve">
+    <value>비밀번호</value>
+    <comment>접속 비밀번호</comment>
+  </data>
+  <data name="_lciSettingCorpCode" xml:space="preserve">
+    <value>회사코드</value>
+    <comment>회사코드</comment>
+  </data>
+  <data name="_lciSettingDBID" xml:space="preserve">
+    <value>디비 아이디</value>
+    <comment>디비 아이디</comment>
+  </data>
+  <data name="_lciSettingDBName" xml:space="preserve">
+    <value>디비 이름</value>
+    <comment>디비 이름</comment>
+  </data>
+  <data name="_lciSettingDBType" xml:space="preserve">
+    <value>디비 타입</value>
+    <comment>디비 타입</comment>
+  </data>
+  <data name="_lciSettingFont" xml:space="preserve">
+    <value>폰트 설정</value>
+    <comment>폰트 설정</comment>
+  </data>
+  <data name="_lciSettingFTPID" xml:space="preserve">
+    <value>FTP ID</value>
+    <comment>FTP ID</comment>
+  </data>
+  <data name="_lciSettingFTPSERVERIP" xml:space="preserve">
+    <value>FTP SERVER IP</value>
+    <comment>FTP SERVER IP</comment>
+  </data>
+  <data name="_lciSettingLanguage" xml:space="preserve">
+    <value>언어변환</value>
+    <comment>언어변환</comment>
+  </data>
+  <data name="_lciSettingServerIP" xml:space="preserve">
+    <value>서버 아이피</value>
+    <comment>서버 아이피</comment>
+  </data>
+  <data name="_lciSettingUserID" xml:space="preserve">
+    <value>계정</value>
+    <comment>아이디</comment>
+  </data>
+  <data name="_lciSettingUserIDSave" xml:space="preserve">
+    <value>계정 저장</value>
+    <comment>계정 저장</comment>
+  </data>
+  <data name="_msgBookMark" xml:space="preserve">
+    <value>즐겨찾기</value>
+    <comment>즐겨찾기</comment>
+  </data>
+  <data name="_msgBookMarkAdd" xml:space="preserve">
+    <value>즐겨찾기 추가</value>
+    <comment>즐겨찾기 추가</comment>
+  </data>
+  <data name="_msgBookMarkAddMessage" xml:space="preserve">
+    <value>즐겨찾기에 추가 되었습니다.</value>
+    <comment>즐겨찾기에 추가 되었습니다.</comment>
+  </data>
+  <data name="_msgBookMarkDelete" xml:space="preserve">
+    <value>즐겨찾기 삭제</value>
+    <comment>즐겨찾기 삭제</comment>
+  </data>
+  <data name="_msgBookMarkDeleteMessage" xml:space="preserve">
+    <value>즐겨찾기에 삭제 되었습니다.</value>
+    <comment>즐겨찾기에 삭제 되었습니다.</comment>
+  </data>
+  <data name="_msgBookMarkMessage" xml:space="preserve">
+    <value>등록된 메뉴 입니다.</value>
+    <comment>등록된 메뉴 입니다.</comment>
+  </data>
+  <data name="_msgLoginMessage" xml:space="preserve">
+    <value>잘못된 계정정보 입니다.</value>
+    <comment>잘못된 계정정보 입니다.</comment>
+  </data>
+  <data name="_msgMessage" xml:space="preserve">
+    <value>메세지</value>
+    <comment>메세지</comment>
+  </data>
+  <data name="_msgNotice" xml:space="preserve">
+    <value>알림</value>
+    <comment>알림</comment>
+  </data>
+  <data name="_msgSystemClose" xml:space="preserve">
+    <value>프로그램을 종료 하시겠습니까?</value>
+    <comment>프로그램을 종료 하시겠습니까?</comment>
+  </data>
+</root>

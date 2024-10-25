@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CoFAS.NEW.MES.Core.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="crtfcKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">$5$API$30O2h1Buf.Z8M8BYobf6SLPqzVFF1BoDqaaCTzxv2gC</Value>
+    </Setting>
+    <Setting Name="language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">KO</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
