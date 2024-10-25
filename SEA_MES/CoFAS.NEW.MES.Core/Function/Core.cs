@@ -97,7 +97,7 @@ namespace CoFAS.NEW.MES.Core.Function
                 if (pCodeType != "")
                 {
                     // DB자료 갖고오기
-                    DataTable pDataTable = new CoreBusiness().Spread_ComboBox(pCodeType, pCodeName,"");
+                    DataTable pDataTable = new CoreBusiness().Spread_ComboBox(pCodeType, pCodeName, "");
 
                     if (pDataTable != null & pDataTable.Rows.Count != 0)
                     {
@@ -844,7 +844,7 @@ namespace CoFAS.NEW.MES.Core.Function
                     {
                         if (pfpSpread.Sheets[0].Columns[e.Column].CellType.GetType() == typeof(CheckBoxCellType))
                         {
-                            CheckBoxCell_Yn yn = pfpSpread.checkBoxCell_YNs.Find(x=>x.Cell_Name == pfpSpread.Sheets[0].ColumnHeader.Columns[e.Column].Label);
+                            CheckBoxCell_Yn yn = pfpSpread.checkBoxCell_YNs.Find(x => x.Cell_Name == pfpSpread.Sheets[0].ColumnHeader.Columns[e.Column].Label);
 
                             if (yn == null)
                             {
@@ -1072,7 +1072,7 @@ namespace CoFAS.NEW.MES.Core.Function
                     if (pfpSpread.Sheets[0].Columns[e.Column].CellType.GetType() == typeof(ImageCellType))
                     {
                         //FILE_NAME
-                        object str = pfpSpread.Sheets[0].GetValue(e.Row,e.Column);
+                        object str = pfpSpread.Sheets[0].GetValue(e.Row, e.Column);
 
 
 
@@ -2158,9 +2158,9 @@ namespace CoFAS.NEW.MES.Core.Function
                 if (pfpSpread.Sheets[0].Columns[e.Column].CellType.GetType() == typeof(FileButtonCellType))
                 {
 
-                    byte[] str =  pfpSpread.Sheets[0].GetValue(e.Row,e.Column) as byte[];
-                    string file_name = pfpSpread.Sheets[0].GetValue(e.Row,"FILE_NAME").ToString();
-                    BaseFilePopupBox baseFilePopupBox = new BaseFilePopupBox(str,file_name);
+                    byte[] str = pfpSpread.Sheets[0].GetValue(e.Row, e.Column) as byte[];
+                    string file_name = pfpSpread.Sheets[0].GetValue(e.Row, "FILE_NAME").ToString();
+                    BaseFilePopupBox baseFilePopupBox = new BaseFilePopupBox(str, file_name);
                     if (baseFilePopupBox.ShowDialog() == DialogResult.OK)
                     {
                         pfpSpread.Sheets[0].SetValue(e.Row, pfpSpread.Sheets[0].Columns[e.Column].Tag.ToString(), baseFilePopupBox._File);
@@ -3042,26 +3042,26 @@ namespace CoFAS.NEW.MES.Core.Function
                     //if (pfpSpread.Sheets[0].GetValue(e.Row, "ID").ToString() != "0" &&
                     //    pfpSpread.Sheets[0].GetValue(e.Row, "ID").ToString() != "")
                     //{
-                        if (pfpSpread != null && pfpSpread.Sheets[0].Columns[e.Column].CellType != null)
+                    if (pfpSpread != null && pfpSpread.Sheets[0].Columns[e.Column].CellType != null)
+                    {
+                        if (pfpSpread.Sheets[0].Columns[e.Column].CellType.GetType() == typeof(ButtonCellType))
                         {
-                            if (pfpSpread.Sheets[0].Columns[e.Column].CellType.GetType() == typeof(ButtonCellType))
+
+                            if (pfpSpread.Sheets[0].Columns[e.Column].Tag.ToString() == "출고이력조회")
                             {
-
-                                if (pfpSpread.Sheets[0].Columns[e.Column].Tag.ToString() == "출고이력조회")
-                                {
                                 출고이력조회_PopupBox basePopupBox = new 출고이력조회_PopupBox(pfpSpread.Sheets[0].GetValue(e.Row, "A.STOCK_MST_ID").ToString(), pfpSpread._user_account, pfpSpread.Sheets[0].GetValue(e.Row, "A.ORDER_DETAIL_ID").ToString());
-                                    if (basePopupBox.ShowDialog() == DialogResult.OK)
-                                    {
-                                        //pfpSpread.Sheets[0].SetValue(e.Row, e.Column, baseImagePopupBox._Image);
-                                        //pfpSpread._ChangeEvent(pfpSpread, new ChangeEventArgs(null, e.Row, e.Column));
-                                    }
-                                }
-                                if (pfpSpread.Sheets[0].Columns[e.Column].Tag.ToString() == "")
+                                if (basePopupBox.ShowDialog() == DialogResult.OK)
                                 {
-
+                                    //pfpSpread.Sheets[0].SetValue(e.Row, e.Column, baseImagePopupBox._Image);
+                                    //pfpSpread._ChangeEvent(pfpSpread, new ChangeEventArgs(null, e.Row, e.Column));
                                 }
                             }
+                            if (pfpSpread.Sheets[0].Columns[e.Column].Tag.ToString() == "")
+                            {
+
+                            }
                         }
+                    }
                     //}
                 }
 
@@ -3904,7 +3904,11 @@ SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
 
   FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
+  INNER JOIN (SELECT RESOURCE_NO , LOT_NO,     
+  CASE 
+        WHEN SUM(QTY_COMPLETE) = 0 THEN 1 
+        ELSE SUM(QTY_COMPLETE) 
+    END AS QTY_COMPLETE ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
   ON A.RESOURCE_NO = J.RESOURCE_NO
   AND A.LOT_NO = J.LOT_NO
 
@@ -3955,7 +3959,10 @@ SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
 
   FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
+  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, CASE 
+        WHEN SUM(QTY_COMPLETE) = 0 THEN 1 
+        ELSE SUM(QTY_COMPLETE) 
+    END AS QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
   ON A.RESOURCE_NO = J.RESOURCE_NO
   AND A.LOT_NO = J.LOT_NO
 
@@ -4021,47 +4028,19 @@ ORDER BY
                         sheet.Cells[5, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()); //품번
                         sheet.Cells[6, 3].SetValueFromText(order_mst_NAME); //품명
                         sheet.Cells[7, 3].SetValueFromText(_DataTable.Rows[i]["순서"].ToString() == "31" ? _DataTable.Rows[i]["구분"].ToString() : ""); //원재료
-                        sheet.Cells[7, 6].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
-                        sheet.Cells[7, 7].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "2월").ToString()); //2월
-                        sheet.Cells[7, 8].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "3월").ToString()); //3월
-                        sheet.Cells[7, 9].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "4월").ToString()); //4월
+                        for (int num = 1; num <= 12; num++)
+                        {
+                            sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
+                            sheet.Cells[11, num + 5].SetValueFromText(_DataTable.Rows[2][$"{num}월"].ToString()); //3월 성능가동률
+                            sheet.Cells[12, num + 5].SetValueFromText(_DataTable.Rows[3][$"{num}월"].ToString()); //3월 직접노무비
+                            sheet.Cells[14, num + 5].SetValueFromText(_DataTable.Rows[5][$"{num}월"].ToString()); //3월 종합가동률
+                            sheet.Cells[15, num + 5].SetValueFromText(_DataTable.Rows[6][$"{num}월"].ToString()); //3월 설비감상비
+                            sheet.Cells[16, num + 5].SetValueFromText(_DataTable.Rows[7][$"{num}월"].ToString()); //3월 건물감상비
+                            sheet.Cells[17, num + 5].SetValueFromText(_DataTable.Rows[8][$"{num}월"].ToString()); //3월 수선비
+                            sheet.Cells[18, num + 5].SetValueFromText(_DataTable.Rows[9][$"{num}월"].ToString()); //3월 전력비
+                            sheet.Cells[19, num + 5].SetValueFromText(_DataTable.Rows[10][$"{num}월"].ToString()); //3월 간접경비
+                        }
 
-                        sheet.Cells[7, 10].SetValueFromText(_DataTable.Rows[11]["5월"].ToString()); //5월 재료비
-                        sheet.Cells[11, 10].SetValueFromText(_DataTable.Rows[2]["5월"].ToString()); //5월 성능가동률
-                        sheet.Cells[12, 10].SetValueFromText(_DataTable.Rows[3]["5월"].ToString()); //5월 직접노무비
-                        sheet.Cells[13, 10].SetValueFromText(_DataTable.Rows[4]["5월"].ToString()); //5월 간접노무비
-                        sheet.Cells[14, 10].SetValueFromText(_DataTable.Rows[5]["5월"].ToString()); //5월 종합가동률
-                        sheet.Cells[15, 10].SetValueFromText(_DataTable.Rows[6]["5월"].ToString()); //5월 설비감상비
-                        sheet.Cells[16, 10].SetValueFromText(_DataTable.Rows[7]["5월"].ToString()); //5월 건물감상비
-                        sheet.Cells[17, 10].SetValueFromText(_DataTable.Rows[8]["5월"].ToString()); //5월 수선비
-                        sheet.Cells[18, 10].SetValueFromText(_DataTable.Rows[9]["5월"].ToString()); //5월 전력비
-                        sheet.Cells[19, 10].SetValueFromText(_DataTable.Rows[10]["5월"].ToString()); //5월 간접경비
-                        sheet.Cells[7, 11].SetValueFromText(_DataTable.Rows[11]["6월"].ToString()); //6월 재료비
-                        sheet.Cells[11, 11].SetValueFromText(_DataTable.Rows[2]["6월"].ToString()); //6월 성능가동률
-                        sheet.Cells[12, 11].SetValueFromText(_DataTable.Rows[3]["6월"].ToString()); //6월 직접노무비
-                        sheet.Cells[13, 11].SetValueFromText(_DataTable.Rows[4]["6월"].ToString()); //6월 간접노무비
-                        sheet.Cells[14, 11].SetValueFromText(_DataTable.Rows[5]["6월"].ToString()); //6월 종합가동률
-                        sheet.Cells[15, 11].SetValueFromText(_DataTable.Rows[6]["6월"].ToString()); //6월 설비감상비
-                        sheet.Cells[16, 11].SetValueFromText(_DataTable.Rows[7]["6월"].ToString()); //6월 건물감상비
-                        sheet.Cells[17, 11].SetValueFromText(_DataTable.Rows[8]["6월"].ToString()); //6월 수선비
-                        sheet.Cells[18, 11].SetValueFromText(_DataTable.Rows[9]["6월"].ToString()); //6월 전력비
-                        sheet.Cells[19, 11].SetValueFromText(_DataTable.Rows[10]["7월"].ToString()); //7월 간접경비
-                        sheet.Cells[7, 12].SetValueFromText(_DataTable.Rows[11]["7월"].ToString()); //7월 재료비
-                        sheet.Cells[11, 12].SetValueFromText(_DataTable.Rows[2]["7월"].ToString()); //7월 성능가동률
-                        sheet.Cells[12, 12].SetValueFromText(_DataTable.Rows[3]["7월"].ToString()); //7월 직접노무비
-                        sheet.Cells[13, 12].SetValueFromText(_DataTable.Rows[4]["7월"].ToString()); //7월 간접노무비
-                        sheet.Cells[14, 12].SetValueFromText(_DataTable.Rows[5]["7월"].ToString()); //7월 종합가동률
-                        sheet.Cells[15, 12].SetValueFromText(_DataTable.Rows[6]["7월"].ToString()); //7월 설비감상비
-                        sheet.Cells[16, 12].SetValueFromText(_DataTable.Rows[7]["7월"].ToString()); //7월 건물감상비
-                        sheet.Cells[17, 12].SetValueFromText(_DataTable.Rows[8]["7월"].ToString()); //7월 수선비
-                        sheet.Cells[18, 12].SetValueFromText(_DataTable.Rows[9]["7월"].ToString()); //7월 전력비
-                        sheet.Cells[19, 12].SetValueFromText(_DataTable.Rows[10]["7월"].ToString()); //7월 간접경비
-
-                        sheet.Cells[7, 13].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "8월").ToString()); //8월
-                        sheet.Cells[7, 14].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "9월").ToString()); //9월
-                        sheet.Cells[7, 15].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "10월").ToString()); //10월
-                        sheet.Cells[7, 16].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "11월").ToString()); //11월
-                        sheet.Cells[7, 17].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "12월").ToString()); //12월
                         sheet.Cells[7, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "평균").ToString()); //평균
                         sheet.Cells[7, 19].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "비고").ToString()); //비고
 
@@ -4214,7 +4193,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                                 {
                                     if (pfpSpread.Sheets[0].GetValue(e.Row, i) != null)
                                     {
-                                        string STOCK_MST_ID =  pfpSpread.Sheets[0].GetValue(e.Row, i).ToString();
+                                        string STOCK_MST_ID = pfpSpread.Sheets[0].GetValue(e.Row, i).ToString();
 
                                         BaseBomPopupBox baseBomPopupBox = new BaseBomPopupBox(STOCK_MST_ID);
                                         baseBomPopupBox.Show();
@@ -4521,12 +4500,12 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                 pfpSpread.Update();
             }
         }
-    
 
 
-    #endregion ○스프레드 이벤트
 
-    private static void CoreInitializeControl(DataTable dt, Panel panel, MenuSettingEntity _MenuSettingEntity)
+        #endregion ○스프레드 이벤트
+
+        private static void CoreInitializeControl(DataTable dt, Panel panel, MenuSettingEntity _MenuSettingEntity)
         {
             try
             {
@@ -4574,7 +4553,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                                     all_yn = false;
                                 }
 
-                                Base_ComboBox base_ComboBox = new Base_ComboBox(dt.Rows[i],all_yn);
+                                Base_ComboBox base_ComboBox = new Base_ComboBox(dt.Rows[i], all_yn);
                                 base_ComboBox.Name = dt.Rows[i]["COLUMNKEY"].ToString();
                                 base_ComboBox.SearchName = dt.Rows[i]["HEADERNAME"].ToString();
                                 if (x + w >= panel.Size.Width)
@@ -4645,7 +4624,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                     }
                     else
                     {
-                        int cou =0;
+                        int cou = 0;
 
                         if (panel.Controls.Count <= 5)
                         {
@@ -4776,7 +4755,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
         {
             try
             {
-              
+
                 for (int x = 0; x < fpMain.Sheets[0].RowCount; x++)
                 {
                     if (fpMain.Sheets[0].RowHeader.Cells[x, 0].Text == "합계")
@@ -4811,7 +4790,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                         {
                             if (fpMain.Sheets[0].Columns[i].CellType.GetType().ToString().Contains("NumberCellType"))
                             {
-                                decimal sum  = 0;
+                                decimal sum = 0;
 
                                 for (int x = 0; x < fpMain.Sheets[0].RowCount; x++)
                                 {
@@ -4819,7 +4798,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                                     {
                                         if (fpMain.Sheets[0].GetValue(x, i) != null)
                                         {
-                                            decimal sum1 =0;
+                                            decimal sum1 = 0;
                                             if (decimal.TryParse(fpMain.Sheets[0].GetValue(x, i).ToString(), out sum1))
                                             {
                                                 sum += Convert.ToDecimal(fpMain.Sheets[0].GetValue(x, i));
@@ -4916,7 +4895,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                         {
                             if (fpMain.Sheets[0].Columns[i].CellType.GetType().ToString().Contains("NumberCellType"))
                             {
-                                decimal sum  = 0;
+                                decimal sum = 0;
 
                                 for (int x = 0; x < fpMain.Sheets[0].RowCount; x++)
                                 {
@@ -4999,9 +4978,9 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
 
                                     if (fpMain.Sheets[0].GetValue(r, c) != null)
                                     {
-                                        decimal dec  = 0;
+                                        decimal dec = 0;
                                         if (!decimal.TryParse(fpMain.Sheets[0].GetValue(r, c).ToString(), out dec))
-                                        {              
+                                        {
                                             if (dec > 0)
                                             {
                                                 CustomMsg.ShowMessage($"입력 값이 잘못입력 되었습니다. {fpMain.Sheets[0].Columns[c].Label} 행{r + 1} , 열{y}");
@@ -5251,7 +5230,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                                     spread.Sheets[0].Rows[i].BackColor = Color.LightBlue;
                                     for (int x = 0; x < spread.Sheets[0].ColumnCount; x++)
                                     {
-                                        if(spread.Sheets[0].Columns[x].CellType.GetType() == null)
+                                        if (spread.Sheets[0].Columns[x].CellType.GetType() == null)
                                         {
                                             return;
                                         }
@@ -5297,7 +5276,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                                  from Code_Mst
                                 where 1=1
                                   and code_Type IN('SD03', 'SD04') 
-                                  and use_yn = 'Y'" ;
+                                  and use_yn = 'Y'";
 
                 DataTable _DataTable = new CoreBusiness().SELECT(sql);
 
@@ -5440,7 +5419,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
             {
                 BOMNode bOMNode = new BOMNode(
                                          _DataTable.Rows[i]["파트코드"].ToString()
-                        ,Convert.ToInt32(_DataTable.Rows[i]["level"])
+                        , Convert.ToInt32(_DataTable.Rows[i]["level"])
 
                         );
                 bOMNode.상위 = _DataTable.Rows[i]["STOCK_MST_ID"].ToString();
@@ -5455,7 +5434,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                 list.Add(bOMNode);
             }
 
-            BOMNode bom = list.Find(x=> x.Quantity ==0 );
+            BOMNode bom = list.Find(x => x.Quantity == 0);
 
             BOM_SET(list, bom);
 

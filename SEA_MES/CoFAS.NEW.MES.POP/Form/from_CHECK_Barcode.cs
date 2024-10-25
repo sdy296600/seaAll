@@ -51,7 +51,7 @@ namespace CoFAS.NEW.MES.POP
         public string _LOT = string.Empty;
 
         public string _p실적 = string.Empty;
-        
+
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace CoFAS.NEW.MES.POP
 
         public from_CHECK_Barcode()
         {
-          
+
             InitializeComponent();
 
             Load += new EventHandler(Form_Load);
@@ -76,7 +76,7 @@ namespace CoFAS.NEW.MES.POP
             try
             {
 
-                DataTable pDataTable1 =  new CoreBusiness().BASE_MENU_SETTING_R10(this.Name,fpMain,"");
+                DataTable pDataTable1 = new CoreBusiness().BASE_MENU_SETTING_R10(this.Name, fpMain, "");
 
                 if (pDataTable1 != null)
                 {
@@ -97,7 +97,7 @@ namespace CoFAS.NEW.MES.POP
                                 and RESOURCE_NO         = '{_품번}'
                                 and LOT_NO              = '{_LOT}'
                                 and WORK_PERFORMANCE_ID = '{_p실적}' ";
-                DataTable dt2 =  new CoreBusiness().SELECT(sql);
+                DataTable dt2 = new CoreBusiness().SELECT(sql);
 
 
                 Set_Spread_Date(fpMain, dt2);
@@ -153,7 +153,7 @@ namespace CoFAS.NEW.MES.POP
         public string _bar;
         private void button1_Click(object sender, EventArgs e)
         {
-            if(ucTextEdit1.Text  == "")
+            if (ucTextEdit1.Text == "")
             {
                 CustomMsg.ShowMessage("입력된 바코드정보가 없습니다.");
                 return;
@@ -162,7 +162,7 @@ namespace CoFAS.NEW.MES.POP
 
 
             if (bar.Length != 0)
-            { 
+            {
                 string sql = $@"SELECT [resource_no]
                                         ,[resource_used]
                                         ,[qty_per]
@@ -172,8 +172,8 @@ namespace CoFAS.NEW.MES.POP
                                     where resource_no = '{_품번}' AND resource_used ='{bar[0]}'";
 
                 DataTable dt = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql);
-              
-                if(dt.Rows.Count == 0)
+
+                if (dt.Rows.Count == 0)
                 {
                     ucTextEdit1.Text = "";
                     CustomMsg.ShowMessage("일치 하지 않은 원재료 입니다.");
@@ -184,7 +184,7 @@ namespace CoFAS.NEW.MES.POP
 
                     ucTextEdit1.Enabled = false;
                 }
-              
+
 
 
             }
@@ -198,7 +198,7 @@ namespace CoFAS.NEW.MES.POP
                             FROM [dbo].[SERIAL_SETTING]
                             WHERE WINDOW_CODE = '로드셀'";
 
-            DataTable dt =  new CoreBusiness().SELECT(sql);
+            DataTable dt = new CoreBusiness().SELECT(sql);
 
             _로드셀 = new Barcode_Class(dt.Rows[0][0].ToString());
             if (_로드셀 != null)
@@ -225,7 +225,7 @@ namespace CoFAS.NEW.MES.POP
                     //MessageBox.Show(msg);
                     string msg = e.ReadMsg.Trim();
 
-                    string [] msgs = msg.Split(' ');
+                    string[] msgs = msg.Split(' ');
 
                     decimal wt = 0;
                     decimal ck = 0;
@@ -269,11 +269,6 @@ namespace CoFAS.NEW.MES.POP
                 CustomMsg.ShowMessage("입력된 바코드 정보가 없습니다.");
                 return;
             }
-            //if (_중량.Text == "-")
-            //{
-            //    CustomMsg.ShowMessage("입력된 중량 정보가 없습니다.");
-            //    return;
-            //}
 
             string sql = $@"INSERT INTO [dbo].[IN_BARCODE] 
                                     ([WORK_PERFORMANCE_ID]
@@ -314,7 +309,7 @@ namespace CoFAS.NEW.MES.POP
                                     ,'0'
                                     ,GETDATE());";
 
-            DataTable dt1 =  new CoreBusiness().SELECT(sql);
+            DataTable dt1 = new CoreBusiness().SELECT(sql);
 
 
             sql = $@"select * 
@@ -323,7 +318,7 @@ namespace CoFAS.NEW.MES.POP
                      and RESOURCE_NO              = '{_품번}'
                      and LOT_NO                   = '{_LOT}'
                      and WORK_PERFORMANCE_ID      = '{_p실적}'";
-            DataTable dt2 =  new CoreBusiness().SELECT(sql);
+            DataTable dt2 = new CoreBusiness().SELECT(sql);
 
 
             Set_Spread_Date(fpMain, dt2);
@@ -333,17 +328,6 @@ namespace CoFAS.NEW.MES.POP
             //_bar = ucTextEdit1.Text;
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }
-
-        private void _중량_Click(object sender, EventArgs e)
-        {
-            using (from_키패드 popup = new from_키패드())
-            {
-                if (popup.ShowDialog() == DialogResult.OK)
-                {
-                    //_중량.Text = popup._code;
-                }
-            }
         }
     }
 }
