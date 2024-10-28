@@ -24,8 +24,8 @@ namespace CoFAS.NEW.MES.Upload
         //public static string sqlcon = "Server=222.113.146.82,11433;Database=Hansol_Auto_Update;UID=sa;PWD=coever1191!;";
         //이튼
 
-        public static string sqlcon = "Server = 172.22.4.11,60901; Database = HS_MES; UID = MesConnection; PWD=8$dJ@-!W3b-35;";
-        //public static string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
+        //public static string sqlcon = "Server = 172.22.4.11,60901; Database = HS_MES; UID = MesConnection; PWD=8$dJ@-!W3b-35;";
+        public static string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
         //public static string sqlcon = "Server= 127.0.0.1;" +
         //                    "Database= HS_MES;" +
         //                    "UID= sa;" +
