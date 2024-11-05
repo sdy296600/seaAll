@@ -115,7 +115,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Category = '{list[21]}' THEN VALUE END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[22]}' THEN VALUE END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[23]}' THEN VALUE END), 0) AS VACUUM,
-                                MAX(TIMESTAMP) AS TIMESTAMP
+                                TIMESTAMP AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -177,7 +177,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Category = '{list[21]}' THEN VALUE END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[22]}' THEN VALUE END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[23]}' THEN VALUE END), 0) AS VACUUM,
-                                MAX(TIMESTAMP) AS TIMESTAMP
+                                TIMESTAMP AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -238,7 +238,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Category = '{list[21]}' THEN VALUE END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[22]}' THEN VALUE END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[23]}' THEN VALUE END), 0) AS VACUUM,
-                                MAX(TIMESTAMP) AS TIMESTAMP
+                                TIMESTAMP AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -299,7 +299,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Category = '{list[21]}' THEN VALUE END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[22]}' THEN VALUE END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[23]}' THEN VALUE END), 0) AS VACUUM,
-                                MAX(TIMESTAMP) AS TIMESTAMP
+                                TIMESTAMP AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -360,7 +360,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Category = '{list[21]}' THEN VALUE END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[22]}' THEN VALUE END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Category = '{list[23]}' THEN VALUE END), 0) AS VACUUM,
-                                MAX(TIMESTAMP) AS TIMESTAMP
+                                TIMESTAMP AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -428,7 +428,7 @@ namespace CoFAS.NEW.MES.Core
                 }
                 category = sb.ToString();
                 string sql1 = $@" timeseriesdata WHERE Timestamp >= '2024-11-01 00:00:00' AND Timestamp <= '2024-11-01 23:59:59' 
-                                AND Category in ('DCM_21_TAG_D6900_Ruled','DCM_21_TAG_D6902_Ruled','DCM_21_TAG_D6904_Ruled','DCM_21_TAG_D6906_Ruled','DCM_21_TAG_D6908','DCM_21_TAG_D6910','DCM_21_TAG_D6912_Ruled','DCM_21_TAG_D6914','DCM_21_TAG_D6916','DCM_21_TAG_D6918','DCM_21_TAG_D6920_Ruled','DCM_21_TAG_D6936_Ruled','DCM_21_TAG_D6938_Ruled','DCM_21_TAG_D6940_Ruled','DCM_21_TAG_D6942_Ruled','DCM_21_TAG_D6944_Ruled','DCM_21_TAG_D6946_Ruled','DCM_21_TAG_D6948_Ruled','DCM_21_TAG_D6950_Ruled','DCM_21_TAG_D6952_Ruled','LS_21_DW816','LS_21_DW817','LS_21_DW818','LS_21_DW819')
+                                AND Category in ({category})
                                 GROUP BY TIMESTAMP
                                 ORDER BY TIMESTAMP
                                ;";
