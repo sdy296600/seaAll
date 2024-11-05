@@ -30,6 +30,7 @@ namespace CoFAS.NEW.MES.Core.Provider
         {
             try
             {
+                
                 IDataParameter[] pIDataParameter = null;
 
                 switch (_pDBManager.DBManagerType.ToString())

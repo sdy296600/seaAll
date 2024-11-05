@@ -74,7 +74,26 @@ namespace CoFAS.NEW.MES.Core
             }
 
         }
+        public void OnlyUseOneBox()
+        {
+            // 마지막 두 개의 열 삭제
+            int columnsToRemove = 2;
+            int totalColumns = tableLayoutPanel1.ColumnCount;
 
-
+            for (int i = 0; i < columnsToRemove; i++)
+            {
+                if (totalColumns > 0)
+                {
+                    // 마지막 열을 삭제
+                    tableLayoutPanel1.ColumnStyles.RemoveAt(totalColumns - 1); // 열 스타일 삭제
+                    tableLayoutPanel1.Controls.OfType<Control>()
+                        .Where(c => tableLayoutPanel1.GetColumn(c) == totalColumns - 1)
+                        .ToList()
+                        .ForEach(c => tableLayoutPanel1.Controls.Remove(c)); // 컨트롤 삭제
+                    tableLayoutPanel1.ColumnCount--; // 열 수 감소
+                    totalColumns--; // 총 열 수 업데이트
+                }
+            }
+        }
     }
 }

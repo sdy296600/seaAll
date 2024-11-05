@@ -107,8 +107,10 @@ namespace CoFAS.NEW.MES.Core.Function
         {
             try
             {
+                
                 DataSet ds = new DataSet();
                 MySqlDataAdapter adp = new MySqlDataAdapter(query, conn);
+                adp.SelectCommand.CommandTimeout = 120; // 예: 60초로 설정
                 adp.Fill(ds);
                 return ds;
             }

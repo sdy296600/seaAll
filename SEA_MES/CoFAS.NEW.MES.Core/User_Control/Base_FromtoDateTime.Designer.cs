@@ -31,8 +31,8 @@ namespace CoFAS.NEW.MES.Core
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Control_Name = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.dtp_Start = new CoFAS.NEW.MES.Core.ucDateEdit();
+            this.label1 = new System.Windows.Forms.Label();
             this.dtp_End = new CoFAS.NEW.MES.Core.ucDateEdit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -54,6 +54,7 @@ namespace CoFAS.NEW.MES.Core
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(300, 26);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -72,6 +73,20 @@ namespace CoFAS.NEW.MES.Core
             this.Control_Name.Text = "label1";
             this.Control_Name.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // dtp_Start
+            // 
+            this.dtp_Start.Appearance.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
+            this.dtp_Start.Appearance.Options.UseFont = true;
+            this.dtp_Start.DateEdit_Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.dtp_Start.DateTime = new System.DateTime(2024, 9, 3, 9, 31, 21, 578);
+            this.dtp_Start.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dtp_Start.Location = new System.Drawing.Point(100, 0);
+            this.dtp_Start.Margin = new System.Windows.Forms.Padding(0);
+            this.dtp_Start.Name = "dtp_Start";
+            this.dtp_Start.ReadOnly = false;
+            this.dtp_Start.Size = new System.Drawing.Size(92, 26);
+            this.dtp_Start.TabIndex = 4;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -86,20 +101,6 @@ namespace CoFAS.NEW.MES.Core
             this.label1.TabIndex = 3;
             this.label1.Text = "~";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // dtp_Start
-            // 
-            this.dtp_Start.Appearance.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
-            this.dtp_Start.Appearance.Options.UseFont = true;
-            this.dtp_Start.DateEdit_Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.dtp_Start.DateTime = new System.DateTime(2024, 9, 3, 9, 31, 21, 578);
-            this.dtp_Start.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtp_Start.Location = new System.Drawing.Point(100, 0);
-            this.dtp_Start.Margin = new System.Windows.Forms.Padding(0);
-            this.dtp_Start.Name = "dtp_Start";
-            this.dtp_Start.ReadOnly = false;
-            this.dtp_Start.Size = new System.Drawing.Size(92, 26);
-            this.dtp_Start.TabIndex = 4;
             // 
             // dtp_End
             // 
@@ -134,8 +135,8 @@ namespace CoFAS.NEW.MES.Core
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label Control_Name;
-        private System.Windows.Forms.Label label1;
         private ucDateEdit dtp_Start;
+        private System.Windows.Forms.Label label1;
         private ucDateEdit dtp_End;
     }
 }
