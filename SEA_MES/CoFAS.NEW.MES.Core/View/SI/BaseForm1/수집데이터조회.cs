@@ -427,7 +427,7 @@ namespace CoFAS.NEW.MES.Core
                         break;
                 }
                 category = sb.ToString();
-                string sql1 = $@" timeseriesdata WHERE Timestamp >= '2024-11-01 00:00:00' AND Timestamp <= '2024-11-01 23:59:59' 
+                string sql1 = $@" timeseriesdata WHERE Timestamp >= '{startTime} 00:00:00' AND Timestamp <= '{startTime} 23:59:59' 
                                 AND Category in ({category})
                                 GROUP BY TIMESTAMP
                                 ORDER BY TIMESTAMP
