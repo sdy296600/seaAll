@@ -115,7 +115,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Cd = '{list[21]}' THEN Vl END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[22]}' THEN Vl END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[23]}' THEN Vl END), 0) AS VACUUM,
-                                Tm AS TIMESTAMP
+                                DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s') AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -177,7 +177,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Cd = '{list[21]}' THEN Vl END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[22]}' THEN Vl END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[23]}' THEN Vl END), 0) AS VACUUM,
-                                Tm AS TIMESTAMP
+                                DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s') AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -238,7 +238,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Cd = '{list[21]}' THEN Vl END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[22]}' THEN Vl END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[23]}' THEN Vl END), 0) AS VACUUM,
-                                Tm AS TIMESTAMP
+                                DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s') AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -299,7 +299,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Cd = '{list[21]}' THEN Vl END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[22]}' THEN Vl END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[23]}' THEN Vl END), 0) AS VACUUM,
-                                Tm AS TIMESTAMP
+                                DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s') AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -360,7 +360,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Cd = '{list[21]}' THEN Vl END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[22]}' THEN Vl END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[23]}' THEN Vl END), 0) AS VACUUM,
-                                Tm AS TIMESTAMP
+                                DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s') AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -421,7 +421,7 @@ namespace CoFAS.NEW.MES.Core
                                 COALESCE(MAX(CASE WHEN Cd = '{list[21]}' THEN Vl END), 0) AS A_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[22]}' THEN Vl END), 0) AS B_POLLUTION_DEGREE,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[23]}' THEN Vl END), 0) AS VACUUM,
-                                Tm AS TIMESTAMP
+                                DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s') AS TIMESTAMP
                             FROM 
                             ";
                         break;
@@ -429,8 +429,8 @@ namespace CoFAS.NEW.MES.Core
                 category = sb.ToString();
                 string sql1 = $@" data_collection WHERE Tm >= '{startTime} 00:00:00' AND Tm <= '{startTime} 23:59:59' 
                                 AND Cd in ({category})
-                                GROUP BY Tm
-                                ORDER BY Tm
+                                GROUP BY DATE_FORMAT(Tm, '%Y-%m-%d %H:%i:%s')
+                                ORDER BY TIMESTAMP
                                ;";
 
             
