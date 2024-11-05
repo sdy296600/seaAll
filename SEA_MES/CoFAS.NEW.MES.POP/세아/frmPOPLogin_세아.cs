@@ -52,7 +52,7 @@ namespace CoFAS.NEW.MES.POP
         public frmPOPLogin_세아()
         {
 
-            InitializeComponent();
+             InitializeComponent();
           
             _MY = utility.My_Settings_Get();
             Load += new EventHandler(Form_Load);

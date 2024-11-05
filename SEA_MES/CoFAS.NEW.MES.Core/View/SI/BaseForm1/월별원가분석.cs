@@ -23,13 +23,15 @@ namespace CoFAS.NEW.MES.Core
                 string str = $@"
 SELECT 
      
-      A.[RESOURCE_NO] AS 품번,
-     C.[DESCRIPTION] AS 품명,
-       YEAR(A.ORDER_DATE) AS [YEAR],
-        MONTH(ORDER_DATE) AS [MONTH],
-      A.[QTY_COMPLETE] AS 완료수량
-     ,A.[IN_PER] AS 투입인원
-     ,A.[WORK_TIME] AS 작업시간
+      A.[RESOURCE_NO] AS 품번
+     , C.[DESCRIPTION] AS 품명
+     , YEAR(A.ORDER_DATE) AS [YEAR]
+     , MONTH(A.ORDER_DATE) AS [MONTH]
+     , A.[QTY_COMPLETE] AS 완료수량
+     , A.[START_TIME] AS 생산일자
+     , A.[SHIFT] AS 주/야 구분
+     , A.[IN_PER] AS 투입인원
+     , A.[WORK_TIME] AS 작업시간
     
   FROM [HS_MES].[dbo].[WORK_PERFORMANCE] AS A
 

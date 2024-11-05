@@ -469,11 +469,11 @@ namespace CalculateForSea
             }
             else if (topic.Contains("P_Active")) //유효전력
             {
-                model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)); //Unit값 곱하면 현재 측정값
+                model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
             }
             else if (topic.Contains("P_ReActive")) //무효전력
             {
-                model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)); //Unit값 곱하면 현재 측정값
+                model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
             }
             //else if (topic.Contains("P_Active") && !topic.Contains("Ruled")) //유효전력
             //{
@@ -556,8 +556,9 @@ namespace CalculateForSea
 
             WriteLog($"{model.NowShotKW}");
 
+            
             // 사용량 계산
-            double monthConversion = model.Consumption_K;
+            double monthConversion = P * 30;
             var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             double unitPower = model.Totalcnt != 0 ? model.NowShotKW / model.Totalcnt : 0;
             // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
@@ -777,7 +778,7 @@ namespace CalculateForSea
                                             sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
                                             sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
                                             sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI - models[i].NowShotKW).ToString("F2"));
+                                            sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
                                             sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
                                             sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
                                             sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
@@ -1494,9 +1495,10 @@ namespace CalculateForSea
                         }
                     }
                 }
-                for (int i = 0; i < gridModels.Count; i++)
+                           //0; 0 < 5; 1++
+                for (int i = 0; i < gridModels.Count -1; i++)
                 {
-                    if (gridModels[i].Count > 0)
+                    if (gridModels[i].Count > 0 && gridModels[i] != null)
                     {
                         try
                         {

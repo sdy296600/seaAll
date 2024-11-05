@@ -49,6 +49,7 @@ namespace CoFAS.NEW.MES.POP
         }
         #endregion
 
+
         #region ○ 폼 이동
 
         private const int WM_NCLBUTTONDOWN = 0xA1;
@@ -241,8 +242,8 @@ namespace CoFAS.NEW.MES.POP
         private void print(원재료간판라벨 라벨)
         {
             //string printerName = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
-            string printerName = "ZDesigner GT800 (EPL)"; // 프린터 이름으로 변경하세요
-            //string printerName = "ZDesigner GT800 (EPL) (1 복사)";
+            //string printerName = "ZDesigner GT800 (EPL)"; // 프린터 이름으로 변경하세요
+            string printerName = "ZDesigner ZD230-203dpi ZPL";
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 
