@@ -378,13 +378,14 @@ namespace CoFAS.NEW.MES.POP
                 _pLOT = fpMain.Sheets[0].GetValue(e.Row, "LOT").ToString().Trim();
                 _p호기 = fpMain.Sheets[0].GetValue(e.Row, "WORKCENTER").ToString().Trim();
                 run(_p품번, _pLOT, _p호기);
+
                 fpMain.ActiveSheet.SetActiveCell(e.Row, e.Column);
                 fpMain.ShowActiveCell(FarPoint.Win.Spread.VerticalPosition.Center, FarPoint.Win.Spread.HorizontalPosition.Center);
                 fpMain._SelectionChangedEvent(fpMain, null);
             }
             catch (Exception _Exception)
             {
-                //CustomMsg.ShowExceptionMessage(_Exception.ToString(), "Error", MessageBoxButtons.OK);
+                CustomMsg.ShowExceptionMessage(_Exception.ToString(), "Error", MessageBoxButtons.OK);
             }
         }
         public void run(string _p품번, string _pLOT, string _p호기) 
@@ -392,13 +393,13 @@ namespace CoFAS.NEW.MES.POP
 
             _p실적 = string.Empty;
 
-            string sql = $@"SELECT *
+            string selDtl = $@"SELECT *
                                  FROM[dbo].[WORK_PERFORMANCE]
                                  where 1 = 1
                                  AND LOT_NO = '{_pLOT}'
                                  AND RESOURCE_NO ='{_p품번}'";
 
-            DataTable pDataTable = new CoreBusiness().SELECT(sql);
+            DataTable pDataTable = new CoreBusiness().SELECT(selDtl);
 
             fpSub.Sheets[0].Rows.Count = 0;
 
@@ -429,9 +430,9 @@ namespace CoFAS.NEW.MES.POP
                 Core.Function.Core._AddItemSUM(fpSub);
                 fpSub.Sheets[0].Visible = true;
 
-
             }
 
+            //생산 실적 정보 초기화
             _p작업인원 = "1";
 
             _품번.Text = "-";
@@ -465,10 +466,9 @@ namespace CoFAS.NEW.MES.POP
             lblPlcDef.Text = "0"; //plc불량
             _lbl_실적불량.Text = "0";
 
-            //그리드 합계 행 추가   
-            //Core.Function.Core._AddItemSUM(fpMain);
-
         }
+
+
         public virtual void fpSub_CellClick(object sender, CellClickEventArgs e)
         {
             try
@@ -487,14 +487,12 @@ namespace CoFAS.NEW.MES.POP
                     }
                 }
 
-
                 _lbl_총생산량.Text = "0";
                 _lbl_양품.Text = "0";
                 _lbl_예열타.Text = "0";
                 _lbl_간판발행.Text = "0";
                 lblPlcDef.Text = "0";
                 _미포장수량.Text = "0";
-                _총미포장.Text = "0";
 
                 _품번.Text = fpMain.Sheets[0].GetValue(row, "RESOURCE_NO ".Trim()).ToString().Trim();
                 _품목명.Text = fpMain.Sheets[0].GetValue(row, "DESCRIPTION ".Trim()).ToString().Trim();
@@ -505,6 +503,7 @@ namespace CoFAS.NEW.MES.POP
                 _지시수량.Text = Convert.ToInt32(fpMain.Sheets[0].GetValue(row, "ORDER_QTY    ".Trim())).ToString("N0");
                 _로드셀중량.Text = "0";
 
+                // 작업실적 dtl 조회 [WORK_PERFORMANCE]
                 string sql = $@"SELECT [ID]
                            ,[ORDER_NO]
                            ,[RESOURCE_NO]
@@ -528,13 +527,8 @@ namespace CoFAS.NEW.MES.POP
   　　　　　　　　　　 and ID = '{_p실적}'";
 
                 DataTable pDataTable4 = new CoreBusiness().SELECT(sql);
-                sql = $@"SELECT(
-                            SELECT ISNULL(SUM(P_QTY),0)  AS 포장수량
-                                FROM [dbo].[PRODUCT_BARCODE] 
-                                WHERE 1=1 AND RESOURCE_NO = '{_p품번}'
-                                AND LOT_NO = '{_pLOT}')";
 
-                DataTable pDataTable10 = new CoreBusiness().SELECT(sql);
+
                 if (pDataTable4.Rows.Count != 0)
                 {
 
@@ -542,42 +536,58 @@ namespace CoFAS.NEW.MES.POP
                                      ifnull(WORK_WARMUPCNT,0) as WORK_WARMUPCNT
                                     ,ifnull(WORK_ERRCOUNT,0)  as WORK_ERRCOUNT
                                     ,ifnull(WORK_OKCNT,0)     as WORK_OKCNT
-                                    ,ifnull((WORK_ERRCOUNT+WORK_OKCNT),0) AS all_Qty
+                                    ,ifnull((WORK_ERRCOUNT+ WORK_OKCNT),0) AS all_Qty
                                FROM work_performance
                               where RESOURCE_NO = '{_p품번}' AND LOT_NO ='{_pLOT}' AND WORK_PERFORMANCE_ID = '{_p실적}'";
 
                     DataTable pDataTable5 = new MY_DBClass().SELECT_DataTable(sql1);
 
-                    sql1 = $@"SELECT 
+                    if (pDataTable5.Rows.Count != 0)
+                    {
+                        _lbl_총생산량.Text = pDataTable5.Rows[0]["all_Qty"].ToString();
+                        //PLC 데이터 양품 수량에 실적불량 차감 
+                        _lbl_양품.Text = pDataTable5.Rows[0]["WORK_OKCNT"].ToString();
+                        _lbl_예열타.Text = pDataTable5.Rows[0]["WORK_WARMUPCNT"].ToString();
+                        lblPlcDef.Text = pDataTable5.Rows[0]["WORK_ERRCOUNT"].ToString();
+                        int qty = Convert.ToInt32(_lbl_양품.Text);
+                        //미포장수량에 실적 불량 차감
+                        int waitPackQty = qty - Convert.ToInt32(_lbl_예열타.Text) - Convert.ToInt32(_lbl_실적불량.Text);
+
+                        if (waitPackQty - qty > 0 )
+                        {
+                            _미포장수량.Text = _lbl_양품.Text;
+                        }
+
+                        // 품목/lot별 포장수량 조회 [PRODUCT_BARCODE]
+                        sql = $@"SELECT(
+                            SELECT ISNULL(SUM(P_QTY),0)  AS 포장수량
+                                FROM [dbo].[PRODUCT_BARCODE] 
+                                WHERE 1=1 AND RESOURCE_NO = '{_p품번}'
+                                AND LOT_NO = '{_pLOT}')";
+
+                        DataTable pDataTable10 = new CoreBusiness().SELECT(sql);
+
+
+                        sql1 = $@"SELECT 
                                     SUM(ifnull(WORK_OKCNT,0))     as WORK_OKCNT
                                FROM work_performance
                               where RESOURCE_NO = '{_p품번}' AND LOT_NO ='{_pLOT}'";
 
-                    DataTable pDataTable11 = new MY_DBClass().SELECT_DataTable(sql1);
-                    if (pDataTable5.Rows.Count != 0)
-                    {
-                        _lbl_총생산량.Text = pDataTable5.Rows[0]["all_Qty"].ToString();
-                        _lbl_양품.Text = pDataTable5.Rows[0]["WORK_OKCNT"].ToString();
-                        _lbl_예열타.Text = pDataTable5.Rows[0]["WORK_WARMUPCNT"].ToString();
-                        lblPlcDef.Text = pDataTable5.Rows[0]["WORK_ERRCOUNT"].ToString();
-                        _lbl_실적불량.Text = fpSub2.Sheets[0].RowCount.ToString();
-                        _미포장수량.Text = _lbl_양품.Text;
+                        DataTable pDataTable11 = new MY_DBClass().SELECT_DataTable(sql1);
 
                         if (pDataTable10.Rows.Count != 0 && pDataTable11.Rows.Count != 0)
                         {
-                            double data1 = 0;
-                            double data2 = 0;
-                            if (!double.TryParse(pDataTable11.Rows[0]["WORK_OKCNT"].ToString(), out data1))
+                            int workOkcnt = 0;
+                            int packQty = 0;
+                            if (!int.TryParse(pDataTable11.Rows[0]["WORK_OKCNT"].ToString(), out workOkcnt))
                             {
-                                data1 = 0;
+                                workOkcnt = 0;
                             };
-                            if (!double.TryParse(pDataTable10.Rows[0]["COLUMN1"].ToString(), out data2))
+                            if (!int.TryParse(pDataTable10.Rows[0]["포장수량"].ToString(), out packQty))
                             {
-                                data2 = 0;
+                                packQty = 0;
                             };
-                            double 미포장수량 = data1 - data2;
-                            _총미포장.Text = 미포장수량.ToString();
-
+                            _총미포장.Text = Convert.ToString(workOkcnt - packQty);
                         }
                     }
                     else
@@ -632,7 +642,7 @@ namespace CoFAS.NEW.MES.POP
                     _포장수량.Text = pDataTable6.Rows[0]["포장수량       ".Trim()].ToString();
                     _간판발행수.Text = pDataTable6.Rows[0]["간판발행수    ".Trim()].ToString();
                     //lblPlcDef.Text = pDataTable6.Rows[0]["간판발행수    ".Trim()].ToString();
-                    _미포장수량.Text = (Convert.ToInt32(_lbl_양품.Text) - Convert.ToInt32(_포장수량.Text)).ToString();
+                    //_미포장수량.Text = (Convert.ToInt32(_lbl_양품.Text) - Convert.ToInt32(_포장수량.Text)).ToString();
 
                     sql = $@"SELECT ISNULL(SUM(WEIGHT),0) AS 중량,TYPE
                                FROM [dbo].[IN_BARCODE]      
@@ -806,6 +816,8 @@ namespace CoFAS.NEW.MES.POP
         private void set_Data()
         {
 
+            _lbl_실적불량.Text = "0";
+            _총미포장.Text = "0";
             string sql = $@"SELECT *
                                  FROM[dbo].[BAD_PERFORMANCE]
                                  where 1 = 1
@@ -887,8 +899,6 @@ namespace CoFAS.NEW.MES.POP
             }
         }
 
-        #endregion
-
         private void lblClose_Click(object sender, EventArgs e)
         {
             if (CustomMsg.ShowMessage("프로그램을 종료 하시겠습니까?", "확인", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -897,6 +907,8 @@ namespace CoFAS.NEW.MES.POP
                 Application.Exit();
             }
         }
+        #endregion
+
 
         #endregion
 
@@ -1017,7 +1029,6 @@ namespace CoFAS.NEW.MES.POP
 
                         }
 
-
                         for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
                         {
                             if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
@@ -1083,15 +1094,7 @@ namespace CoFAS.NEW.MES.POP
                 this.간판_Click(_p실적,e);
             }
         }
-        private void 저장_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty && _pLOT != string.Empty)
-            {
 
-
-            }
-
-        }
         private void 시작_Click(object sender, EventArgs e)
         {
             if (_p품번 != string.Empty && _pLOT != string.Empty)
@@ -1224,6 +1227,80 @@ namespace CoFAS.NEW.MES.POP
 
             }
         }
+        //private void 정지_Click(object sender, EventArgs e)
+        //{
+        //    if (_p실적 != string.Empty)
+        //    {
+        //        int row = 0;
+        //        for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+        //        {
+        //            if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString() == _p실적)
+        //            {
+        //                row = i;
+        //                if (fpSub.Sheets[0].GetValue(i, "END_TIME    ".Trim()).ToString() != "")
+        //                {
+        //                    CustomMsg.ShowMessage("종료된 작업 실적 입니다.");
+        //                    return;
+        //                }
+        //            }
+        //        }
+
+        //        DateTime startTime = _시작.DateTime;
+        //        DateTime endTime = _종료.DateTime;
+
+        //        // 두 날짜/시간 사이의 시간 차이 계산
+        //        TimeSpan difference = endTime - startTime;
+
+        //        string sql = $@"UPDATE [dbo].[WORK_PERFORMANCE]
+        //                          SET 
+        //                              [QTY_COMPLETE] = '{0}'
+        //                             ,[WORK_TIME]    = '{difference.TotalSeconds}'
+        //                             ,[END_TIME]     = '{_종료.DateTime.ToString("yyyy-MM-dd HH:mm:ss")}'
+        //                        WHERE ID = '{_p실적}'";
+        //        DataTable _DataTable = new CoreBusiness().SELECT(sql);
+
+        //        DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_BadPerformance_A10(
+        //             DateTime.Now.ToString("yyyyMMdd")
+        //            , fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()
+        //            , "Y"
+        //            , _lbl_양품.Text
+        //            , "T"
+        //            , fpSub.Sheets[0].GetValue(row, "ORDER_NO    ".Trim()).ToString()
+        //            , fpSub.Sheets[0].GetValue(row, "LOT_NO    ".Trim()).ToString()
+        //            , "ADMIN"
+        //            , "ADMIN"
+        //            );
+
+        //        sql = $@"UPDATE work_performance
+        //                 SET END_TIME = '{startTime.ToString("yyyy-MM-dd HH:mm:ss")}'
+        //                    ,IS_WORKING = '비가동'
+        //                 WHERE 1 = 1
+        //                 AND RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'
+        //                 AND LOT_NO = '{fpSub.Sheets[0].GetValue(row, "LOT_NO    ".Trim()).ToString()}'";
+
+        //        new MY_DBClass().SELECT_DataTable(sql);
+
+        //        CustomMsg.ShowMessage("저장 되었습니다.");
+
+        //        for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
+        //        {
+        //            if (fpMain.Sheets[0].GetValue(i, "RESOURCE_NO   ".Trim()).ToString().Trim() == _p품번 &&
+        //                fpMain.Sheets[0].GetValue(i, "LOT           ".Trim()).ToString().Trim() == _pLOT)
+        //            {
+        //                fpMain_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+        //            }
+        //        }
+
+        //        for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+        //        {
+        //            if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
+        //            {
+
+        //                fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+        //            }
+        //        }
+        //    }
+        //}
         private void 완료_Click(object sender, EventArgs e)
         {
             if (_p실적 != string.Empty)
@@ -1431,7 +1508,7 @@ namespace CoFAS.NEW.MES.POP
 
 
                     using (출탕 from = new 출탕(_UserEntity
-                          , _용탕투입중량.Text
+                         , _용탕투입중량.Text
                          , _로드셀중량.Text
                          , pDataTable9.Rows[0]["resource_used"].ToString()
                          , pDataTable9.Rows[0]["resource_used"].ToString())
@@ -1465,27 +1542,7 @@ namespace CoFAS.NEW.MES.POP
 
             }
         }
-        private void btn_COM설정_Click(object sender, EventArgs e)
-        {
-            //BaseFormSetting baseFormSetting = new BaseFormSetting(this.Name,"admin");
-
-            //baseFormSetting.Show();
-
-        }
-        private void _로드셀중량_Click(object sender, EventArgs e)
-        {
-            using (from_키패드 popup = new from_키패드())
-            {
-                if (popup.ShowDialog() == DialogResult.OK)
-                {
-                    ReadEventArgs readEvent = new ReadEventArgs();
-                    readEvent.ReadMsg = popup._code;
-                    _로드셀_BarCode(null, readEvent);
-
-                }
-
-            }
-        }
+       
         private void btn_불량실적_Click(object sender, EventArgs e)
         {
             if (_p품번 != string.Empty &&
@@ -1522,79 +1579,13 @@ namespace CoFAS.NEW.MES.POP
 
 
         }
-        private void 정지_Click(object sender, EventArgs e)
+       
+        private void btn_COM설정_Click(object sender, EventArgs e)
         {
-            if (_p실적 != string.Empty)
-            {
-                int row = 0;
-                for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
-                {
-                    if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString() == _p실적)
-                    {
-                        row = i;
-                        if (fpSub.Sheets[0].GetValue(i, "END_TIME    ".Trim()).ToString() != "")
-                        {
-                            CustomMsg.ShowMessage("종료된 작업 실적 입니다.");
-                            return;
-                        }
-                    }
-                }
+            BaseFormSetting baseFormSetting = new BaseFormSetting(this.Name, "admin");
 
-                DateTime startTime = _시작.DateTime;
-                DateTime endTime = _종료.DateTime;
+            baseFormSetting.Show();
 
-                // 두 날짜/시간 사이의 시간 차이 계산
-                TimeSpan difference = endTime - startTime;
-
-                string sql =$@"UPDATE [dbo].[WORK_PERFORMANCE]
-                                  SET 
-                                      [QTY_COMPLETE] = '{0}'
-                                     ,[WORK_TIME]    = '{difference.TotalSeconds}'
-                                     ,[END_TIME]     = '{_종료.DateTime.ToString("yyyy-MM-dd HH:mm:ss")}'
-                                WHERE ID = '{_p실적}'";
-                DataTable _DataTable = new CoreBusiness().SELECT(sql);
-
-                DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_BadPerformance_A10(
-                     DateTime.Now.ToString("yyyyMMdd")
-                    ,fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()
-                    ,"Y"
-                    ,_lbl_양품.Text
-                    ,"T"
-                    ,fpSub.Sheets[0].GetValue(row, "ORDER_NO    ".Trim()).ToString()
-                    ,fpSub.Sheets[0].GetValue(row, "LOT_NO    ".Trim()).ToString()
-                    ,"ADMIN"
-                    ,"ADMIN"
-                    );
-
-                sql = $@"UPDATE work_performance
-                         SET END_TIME = '{startTime.ToString("yyyy-MM-dd HH:mm:ss")}'
-                            ,IS_WORKING = '비가동'
-                         WHERE 1 = 1
-                         AND RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'
-                         AND LOT_NO = '{fpSub.Sheets[0].GetValue(row, "LOT_NO    ".Trim()).ToString()}'";
-
-                new MY_DBClass().SELECT_DataTable(sql);
-
-                CustomMsg.ShowMessage("저장 되었습니다.");
-
-                for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
-                {
-                    if (fpMain.Sheets[0].GetValue(i, "RESOURCE_NO   ".Trim()).ToString().Trim() == _p품번 &&
-                        fpMain.Sheets[0].GetValue(i, "LOT           ".Trim()).ToString().Trim() == _pLOT)
-                    {
-                        fpMain_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                    }
-                }
-
-                for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
-                {
-                    if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
-                    {
-
-                        fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                    }
-                }
-            }
         }
 
     }

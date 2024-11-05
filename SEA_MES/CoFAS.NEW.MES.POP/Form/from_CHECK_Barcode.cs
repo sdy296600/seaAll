@@ -287,27 +287,8 @@ namespace CoFAS.NEW.MES.POP
                                     ,'{_품번}'
                                     ,'{_LOT}'
                                     ,'{ucTextEdit1.Text}'
-                                    ,'{ucTextEdit1.Text.Split('|')[2]}'
-                                    ,GETDATE());                 
-                             INSERT INTO [dbo].[IN_BARCODE]
-                                    ([WORK_PERFORMANCE_ID]
-                                    ,[TYPE]
-                                    ,[DATE]
-                                    ,[RESOURCE_NO]
-                                    ,[LOT_NO]
-                                    ,[BARCODE_NO]
-                                    ,[WEIGHT]
-                                    ,[REG_DATE])
-                              VALUES
-                                    (
-                                    {_p실적}
-                                    ,'로드셀'
-                                    ,GETDATE()
-                                    ,'{_품번}'
-                                    ,'{_LOT}'
-                                    ,'{ucTextEdit1.Text}'
                                     ,'0'
-                                    ,GETDATE());";
+                                    ,GETDATE());     ";            
 
             DataTable dt1 = new CoreBusiness().SELECT(sql);
 

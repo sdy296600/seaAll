@@ -611,15 +611,10 @@ namespace CoFAS.NEW.MES.POP
             // 
             // _로드셀중량
             // 
-            this._로드셀중량.AutoSize = true;
-            this._로드셀중량.Dock = System.Windows.Forms.DockStyle.Fill;
             this._로드셀중량.Location = new System.Drawing.Point(407, 88);
             this._로드셀중량.Name = "_로드셀중량";
-            this._로드셀중량.Size = new System.Drawing.Size(168, 28);
-            this._로드셀중량.TabIndex = 4;
-            this._로드셀중량.Text = "0";
-            this._로드셀중량.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this._로드셀중량.Click += new System.EventHandler(this._로드셀중량_Click);
+            this._로드셀중량.Size = new System.Drawing.Size(100, 23);
+            this._로드셀중량.TabIndex = 21;
             // 
             // _지시수량
             // 
@@ -1279,7 +1274,7 @@ namespace CoFAS.NEW.MES.POP
             this.정지.TabIndex = 2;
             this.정지.Text = "정지";
             this.정지.UseVisualStyleBackColor = false;
-            this.정지.Click += new System.EventHandler(this.정지_Click);
+            this.정지.Click += new System.EventHandler(this.완료_Click);
             // 
             // 완료
             // 
@@ -1318,7 +1313,6 @@ namespace CoFAS.NEW.MES.POP
             this.저장.Text = "저장";
             this.저장.UseVisualStyleBackColor = false;
             this.저장.Visible = false;
-            this.저장.Click += new System.EventHandler(this.저장_Click);
             // 
             // 간판
             // 

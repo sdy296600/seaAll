@@ -48,6 +48,8 @@ namespace CoFAS.NEW.MES.Core
 
         MenuSettingEntity _MenuSettingEntity = null;
         xFpSpread _xFpSpread = null;
+
+        public string V { get; }
         #endregion
 
 
@@ -63,6 +65,12 @@ namespace CoFAS.NEW.MES.Core
             InitializeComponent();
 
             Load += new EventHandler(Form_Load);
+        }
+
+        public BaseFormSetting(string name, string v)
+        {
+            Name = name;
+            V = v;
         }
 
         #endregion
