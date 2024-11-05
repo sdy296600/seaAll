@@ -95,6 +95,8 @@ namespace CoFAS.NEW.MES.POP
 
         public string _p실적 = string.Empty;
 
+        public string _p작업인원 = string.Empty;
+
         Barcode_Class _로드셀 = null;
 
 
@@ -134,15 +136,11 @@ namespace CoFAS.NEW.MES.POP
                     foreach (DataColumn item in dt.Columns)
                     {
                         xFpSpread.Sheets[0].SetValue(i, item.ColumnName, dt.Rows[i][item.ColumnName]);
-
-
                     }
-
-
                 }
+
                 //Core.Function.Core._AddItemSUM(fpMain);
                 xFpSpread.Sheets[0].Visible = true;
-
 
             }
         }
@@ -172,7 +170,7 @@ namespace CoFAS.NEW.MES.POP
                 }
                 if (pDataTable3 != null && pDataTable3.Rows.Count != 0)
                 {
-                    CoFAS.NEW.MES.Core.Function.Core.initializeSpread(pDataTable3, fpSub2, this.Name, _UserEntity.user_account);
+                    Core.Function.Core.initializeSpread(pDataTable3, fpSub2, this.Name, _UserEntity.user_account);
                 }
                 if (pDataTable4 != null && pDataTable4.Rows.Count != 0)
                 {
@@ -186,12 +184,10 @@ namespace CoFAS.NEW.MES.POP
                 _시작._pDateEdit.Font = new Font(_UserEntity.FONT_TYPE, _UserEntity.FONT_SIZE - 5, FontStyle.Bold);
                 _종료._pDateEdit.Font = new Font(_UserEntity.FONT_TYPE, _UserEntity.FONT_SIZE - 5, FontStyle.Bold);
                 _미포장수량.Font = new Font(_UserEntity.FONT_TYPE, _UserEntity.FONT_SIZE - 5, FontStyle.Bold);
-                txt_작업인원.Font = new Font(_UserEntity.FONT_TYPE, _UserEntity.FONT_SIZE - 5, FontStyle.Bold);
 
                 _작업일자._pDateEdit.BackColor = Color.Yellow;
                 _시작._pDateEdit.BackColor = Color.Yellow;
                 _종료._pDateEdit.BackColor = Color.Yellow;
-                txt_작업인원.BackColor = Color.Yellow;
 
                 _작업일자._pDateEdit.Properties.Mask.EditMask = "yyyy-MM-dd";
                 _작업일자._pDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
@@ -200,7 +196,7 @@ namespace CoFAS.NEW.MES.POP
                 _종료._pDateEdit.Properties.Mask.EditMask = "yyyy-MM-dd HH:mm:ss";
                 _종료._pDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
 
-                this.fpMain.CellClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpMain_CellClick);
+                this.fpMain.CellClick += new CellClickEventHandler(this.fpMain_CellClick);
 
                 _로드셀_Open();
 
@@ -213,7 +209,7 @@ namespace CoFAS.NEW.MES.POP
                     {
                         if (item.Name == "C.WORKCENTER")
                         {
-                            CoFAS.NEW.MES.Core.Base_ComboBox ComboBox = item as CoFAS.NEW.MES.Core.Base_ComboBox;
+                            Base_ComboBox ComboBox = item as Base_ComboBox;
 
                             ComboBox._SearchCom.ValueChanged += _ComboBox_EditValueChanged;
                         }
@@ -430,16 +426,20 @@ namespace CoFAS.NEW.MES.POP
                         }
                     }
                 }
-                //Core.Function.Core._AddItemSUM(fpSub);
+                Core.Function.Core._AddItemSUM(fpSub);
                 fpSub.Sheets[0].Visible = true;
 
 
             }
 
+            _p작업인원 = "1";
+
             _품번.Text = "-";
             _품목명.Text = "-";
-
+            _상태.Text = "-";
             _LOT.Text = "-";
+            _용탕투입중량.Text = "0";
+            _양품사용중량.Text = "0";
             _로드셀중량.Text = "0";
 
             _작업일자.DateTime = DateTime.Now;
@@ -451,42 +451,30 @@ namespace CoFAS.NEW.MES.POP
             _포장수량.Text = "0";
             _미포장수량.Text = "0";
             _총미포장.Text = "0";
-
-            txt_작업인원.Text = "0";
-
-            _간판발행수.Text = "-";
-            _lbl_간판발행.Text = "-";
-            _교대조.Text = "-";
+            _간판발행수.Text = "0";
 
             _작업코드.Text = "-";
+            _교대조.Text = "-";
             _금형.Text = "-"; ;
-
-            _상태.Text = "-";
+            _CAV.Text = "0";
 
             _lbl_총생산량.Text = "0";
-
-            _양품사용중량.Text = "0";
-            _CAV.Text = "0";
             _lbl_양품.Text = "0";
             _lbl_예열타.Text = "0";
-            _lbl_불량.Text = "0";
-
-            _포장수량.Text = "0";
-            _간판발행수.Text = "0";
             _lbl_간판발행.Text = "0";
-            _용탕투입중량.Text = "0";
-            _미포장수량.Text = "0";
+            lblPlcDef.Text = "0"; //plc불량
+            _lbl_실적불량.Text = "0";
 
             //그리드 합계 행 추가   
             //Core.Function.Core._AddItemSUM(fpMain);
 
-           
         }
         public virtual void fpSub_CellClick(object sender, CellClickEventArgs e)
         {
             try
             {
                 _p실적 = fpSub.Sheets[0].GetValue(e.Row, "ID    ".Trim()).ToString();
+
                 set_Data();
 
                 int row = 0;
@@ -499,13 +487,12 @@ namespace CoFAS.NEW.MES.POP
                     }
                 }
 
-                //그리드 합계 행 추가   
-                Core.Function.Core._AddItemSUM(fpSub);
 
                 _lbl_총생산량.Text = "0";
                 _lbl_양품.Text = "0";
                 _lbl_예열타.Text = "0";
-                _lbl_불량.Text = "0";
+                _lbl_간판발행.Text = "0";
+                lblPlcDef.Text = "0";
                 _미포장수량.Text = "0";
                 _총미포장.Text = "0";
 
@@ -572,8 +559,10 @@ namespace CoFAS.NEW.MES.POP
                         _lbl_총생산량.Text = pDataTable5.Rows[0]["all_Qty"].ToString();
                         _lbl_양품.Text = pDataTable5.Rows[0]["WORK_OKCNT"].ToString();
                         _lbl_예열타.Text = pDataTable5.Rows[0]["WORK_WARMUPCNT"].ToString();
-                        _lbl_불량.Text = pDataTable5.Rows[0]["WORK_ERRCOUNT"].ToString();
+                        lblPlcDef.Text = pDataTable5.Rows[0]["WORK_ERRCOUNT"].ToString();
+                        _lbl_실적불량.Text = fpSub2.Sheets[0].RowCount.ToString();
                         _미포장수량.Text = _lbl_양품.Text;
+
                         if (pDataTable10.Rows.Count != 0 && pDataTable11.Rows.Count != 0)
                         {
                             double data1 = 0;
@@ -596,18 +585,17 @@ namespace CoFAS.NEW.MES.POP
                         _lbl_총생산량.Text = "0";
                         _lbl_양품.Text = "0";
                         _lbl_예열타.Text = "0";
-                        _lbl_불량.Text = "0";
+                        lblPlcDef.Text = "0";
+                        _lbl_실적불량.Text = "0";
                         _미포장수량.Text = "0";
                     }
                 }
-
-
 
                 _교대조.Text = "주간";
 
                 _작업코드.Text = "정상작업";
 
-                txt_작업인원.Text = pDataTable4.Rows[0]["IN_PER"].ToString();
+                _p작업인원 = pDataTable4.Rows[0]["IN_PER"].ToString();
 
                 _상태.Text = fpMain.Sheets[0].GetValue(row, "DEAMND_STATUS    ".Trim()).ToString();
 
@@ -643,7 +631,7 @@ namespace CoFAS.NEW.MES.POP
 
                     _포장수량.Text = pDataTable6.Rows[0]["포장수량       ".Trim()].ToString();
                     _간판발행수.Text = pDataTable6.Rows[0]["간판발행수    ".Trim()].ToString();
-                    _lbl_간판발행.Text = pDataTable6.Rows[0]["간판발행수    ".Trim()].ToString();
+                    //lblPlcDef.Text = pDataTable6.Rows[0]["간판발행수    ".Trim()].ToString();
                     _미포장수량.Text = (Convert.ToInt32(_lbl_양품.Text) - Convert.ToInt32(_포장수량.Text)).ToString();
 
                     sql = $@"SELECT ISNULL(SUM(WEIGHT),0) AS 중량,TYPE
@@ -771,6 +759,7 @@ namespace CoFAS.NEW.MES.POP
                                     }
                                     if (pDataTable8.Rows[x]["TYPE"].ToString() == "Gete")
                                     {
+                                        //
                                         추가중량 += Convert.ToDecimal(pDataTable8.Rows[x]["VALUE"]);
                                     }
                                     if (pDataTable8.Rows[x]["TYPE"].ToString() == "Scrap")
@@ -802,7 +791,7 @@ namespace CoFAS.NEW.MES.POP
 
 
                 }
-
+                
                 fpSub.ActiveSheet.SetActiveCell(e.Row, e.Column);
 
                 fpSub.ShowActiveCell(FarPoint.Win.Spread.VerticalPosition.Center, FarPoint.Win.Spread.HorizontalPosition.Center);
@@ -834,14 +823,21 @@ namespace CoFAS.NEW.MES.POP
 
                 fpSub2.Sheets[0].Rows.Count = pDataTable2.Rows.Count;
 
+                int badQtySum = 0;
+
                 for (int i = 0; i < pDataTable2.Rows.Count; i++)
                 {
                     foreach (DataColumn item in pDataTable2.Columns)
                     {
                         fpSub2.Sheets[0].SetValue(i, item.ColumnName, pDataTable2.Rows[i][item.ColumnName]);
                     }
+
+                    badQtySum += Convert.ToInt32(pDataTable2.Rows[i]["BAD_QTY"]);
                 }
-                //MyCore._AddItemSUM(fpMain, "admin");
+                _lbl_실적불량.Text = Convert.ToString(badQtySum);
+                //그리드 합계 행 추가   
+                Core.Function.Core._AddItemSUM(fpSub2);
+                
                 fpSub2.Sheets[0].Visible = true;
             }
             sql = $@"SELECT *
@@ -873,7 +869,6 @@ namespace CoFAS.NEW.MES.POP
 
                 fpSub3.Sheets[0].Visible = true;
             }
-
 
         }
 
@@ -1159,7 +1154,7 @@ namespace CoFAS.NEW.MES.POP
                 , dateTime.ToString("yyyy-MM-dd HH:mm:ss")
                 , "admin"
                 , dateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                , txt_작업인원.Text);
+                , _p작업인원);
 
                 string id = dt.Rows[0]["ID"].ToString();
 
@@ -1261,7 +1256,7 @@ namespace CoFAS.NEW.MES.POP
                     return;
                 }
 
-                String comQty = (Convert.ToInt32(_간판발행수.Text) * Convert.ToInt32(_포장수량.Text)).ToString();
+                String comQty = (Convert.ToInt32(_간판발행수.Text) * Convert.ToInt32(_포장수량.Text)).ToString(); //완료수량
                 DateTime startTime = _시작.DateTime;
                 DateTime endTime = _종료.DateTime;
 
@@ -1515,6 +1510,7 @@ namespace CoFAS.NEW.MES.POP
                         {
 
                             fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+
                         }
                     }
                 }
@@ -1600,36 +1596,7 @@ namespace CoFAS.NEW.MES.POP
                 }
             }
         }
-        private void txt_작업인원_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty &&
-              _pLOT != string.Empty &&
-             _p실적 != string.Empty)
-            {
-                using (from_키패드 popup = new from_키패드())
-                {
-                    if (popup.ShowDialog() == DialogResult.OK)
-                    {
 
-                        string sql  = $@"UPDATE [dbo].[WORK_PERFORMANCE]
-                                        SET [IN_PER] = {popup._code}
-                                       WHERE ID = '{_p실적}'";
-
-                        DataTable dt = new CoreBusiness().SELECT(sql);
-
-                        txt_작업인원.Text = popup._code;
-                    }
-                }
-
-
-
-            }
-        }
     }
 }
-
-
-
-
-
 
