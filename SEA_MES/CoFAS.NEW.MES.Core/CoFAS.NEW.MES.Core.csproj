@@ -305,13 +305,17 @@
     <Compile Include="Function\ConfigurationManager.cs" />
     <Compile Include="Function\ControlManager.cs" />
     <Compile Include="Function\ConvertManager.cs" />
+    <Compile Include="Function\DataBase_Class.cs" />
     <Compile Include="Function\DBManager.cs" />
     <Compile Include="Function\DevExpressManager.cs" />
     <Compile Include="Function\EntityManager.cs" />
     <Compile Include="Function\ExceptionManager.cs" />
     <Compile Include="Function\FpSpreadManager.cs" />
+    <Compile Include="Function\IDataBase.cs" />
     <Compile Include="Function\Loading.cs" />
     <Compile Include="Function\Core.cs" />
+    <Compile Include="Function\MY_DB.cs" />
+    <Compile Include="Function\MS_DB.cs" />
     <Compile Include="Function\SHA256Encryption.cs" />
     <Compile Include="Function\SystemLog.cs" />
     <Compile Include="Function\utility.cs" />
@@ -338,6 +342,12 @@
     </Compile>
     <Compile Include="View\base\BaseForm2.Designer.cs">
       <DependentUpon>BaseForm2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\주조실적조회.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\주조실적조회.Designer.cs">
+      <DependentUpon>주조실적조회.cs</DependentUpon>
     </Compile>
     <Compile Include="View\이앤아이비\생산관리\압출조건현황.cs">
       <SubType>Form</SubType>
@@ -1095,6 +1105,9 @@
     <EmbeddedResource Include="View\base\BaseForm2.resx">
       <DependentUpon>BaseForm2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\주조실적조회.resx">
+      <DependentUpon>주조실적조회.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\이앤아이비\생산관리\압출조건현황.resx">
       <DependentUpon>압출조건현황.cs</DependentUpon>
     </EmbeddedResource>
@@ -1741,6 +1754,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1001</Version>
+    </PackageReference>
+    <PackageReference Include="MySqlConnector">
+      <Version>2.3.7</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
