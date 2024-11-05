@@ -1,4 +1,5 @@
 ﻿using CoFAS.NEW.MES.Core.Function;
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using System;
 using System.Data;
@@ -187,6 +188,25 @@ namespace CoFAS.NEW.MES.Core
             }
         }
         #endregion
+        public void DeleteItemByIndex(int index)
+        {
+            try
+            {
+                DataTable dt = _pLookUpEdit.Properties.DataSource as DataTable;
+                dt.Rows.RemoveAt(index);
+                _pLookUpEdit.Properties.DataSource = dt;
+            }
+            catch (Exception pException)
+            {
+                throw new ExceptionManager
+             (
+                 this,
+                 "DeleteItemByIndex(int index)",
+                 pException
+             );
+
+            }
+        }
 
         #region 값 추가하기 - AddValue(DataTable _DataTable, int iRowCount, int iItemIndex, string strInitCaption)
 
@@ -406,7 +426,7 @@ namespace CoFAS.NEW.MES.Core
                 );
             }
         }
-
+     
         
     }
 
