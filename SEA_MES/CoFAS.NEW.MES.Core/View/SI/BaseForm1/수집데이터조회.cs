@@ -396,7 +396,7 @@ namespace CoFAS.NEW.MES.Core
                         sb.Remove(sb.Length - 1, 1);
 
                         sql2 = $@"SELECT 
-                                '21호 주조기' AS MACHINE_NO,
+                                '25호 주조기' AS MACHINE_NO,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[0]}' THEN Vl END), 0) AS V1,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[1]}' THEN Vl END), 0) AS V2,
                                 COALESCE(MAX(CASE WHEN Cd = '{list[2]}' THEN Vl END), 0) AS V3,
