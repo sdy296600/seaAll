@@ -86,11 +86,11 @@ namespace CoFAS.NEW.MES.POP
             this.label24 = new System.Windows.Forms.Label();
             this._CAV = new System.Windows.Forms.Label();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.label19 = new System.Windows.Forms.Label();
             this.lblPlcDef = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this._lbl_총생산량 = new System.Windows.Forms.Label();
@@ -934,11 +934,11 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel7.Controls.Add(this.label19, 3, 0);
             this.tableLayoutPanel7.Controls.Add(this.lblPlcDef, 4, 1);
             this.tableLayoutPanel7.Controls.Add(this.label15, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.label16, 1, 0);
             this.tableLayoutPanel7.Controls.Add(this.label17, 2, 0);
-            this.tableLayoutPanel7.Controls.Add(this.label19, 3, 0);
             this.tableLayoutPanel7.Controls.Add(this.label20, 4, 0);
             this.tableLayoutPanel7.Controls.Add(this.label21, 5, 0);
             this.tableLayoutPanel7.Controls.Add(this._lbl_총생산량, 0, 1);
@@ -954,6 +954,18 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.Size = new System.Drawing.Size(579, 74);
             this.tableLayoutPanel7.TabIndex = 2;
+            // 
+            // label19
+            // 
+            this.label19.AllowDrop = true;
+            this.label19.AutoSize = true;
+            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label19.Location = new System.Drawing.Point(293, 2);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(88, 34);
+            this.label19.TabIndex = 13;
+            this.label19.Text = "간판발행";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblPlcDef
             // 
@@ -1000,17 +1012,6 @@ namespace CoFAS.NEW.MES.POP
             this.label17.TabIndex = 2;
             this.label17.Text = "예열타";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label19.Location = new System.Drawing.Point(293, 2);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(88, 34);
-            this.label19.TabIndex = 3;
-            this.label19.Text = "간판발행";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label20
             // 
@@ -1502,7 +1503,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label _lbl_총생산량;
@@ -1551,5 +1551,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label _교대조;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label lblPlcDef;
+        private System.Windows.Forms.Label label19;
     }
 }

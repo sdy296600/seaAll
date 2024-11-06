@@ -126,16 +126,10 @@ namespace CoFAS.NEW.MES.POP
                     foreach (DataColumn item in dt.Columns)
                     {
                         xFpSpread.Sheets[0].SetValue(i, item.ColumnName, dt.Rows[i][item.ColumnName]);
-
-
                     }
-
-
                 }
                 Core.Function.Core._AddItemSUM(fpMain);
                 xFpSpread.Sheets[0].Visible = true;
-
-
             }
         }
 
@@ -143,14 +137,13 @@ namespace CoFAS.NEW.MES.POP
         {
             this.Close();
         }
-
-
-
-
-
         #endregion
+
+
         Barcode_Class _로드셀 = null;
         public string _bar;
+
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (ucTextEdit1.Text == "")
@@ -184,12 +177,9 @@ namespace CoFAS.NEW.MES.POP
 
                     ucTextEdit1.Enabled = false;
                 }
-
-
-
             }
-
         }
+
 
         private void _로드셀_Open()
         {
