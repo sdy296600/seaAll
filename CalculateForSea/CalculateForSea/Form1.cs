@@ -770,10 +770,11 @@ namespace CalculateForSea
                                         sqlconn.Open();
                                         using (SqlCommand sqlcmd = new SqlCommand())
                                         {
-
+                                            // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
                                             sqlcmd.Connection = sqlconn;
                                             sqlcmd.CommandType = CommandType.StoredProcedure;
-                                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
+                                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
+                                            sqlcmd.Parameters.AddWithValue("@DATE", $"{ds.Tables[i].Rows[0]["DATE"]}");
                                             sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
                                             sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
                                             sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
@@ -1072,7 +1073,6 @@ namespace CalculateForSea
                                 $", work_warmupcnt = IFNULL((                                                       " +
                                 $"                        SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))           "+
                                 $"                            FROM data_collection       A                                        "+
-                                $"                                , work_performance      B                                       "+
                                 $"                            WHERE A.Tm > (SELECT START_TIME FROM work_performance               "+
                                 $"                                                                                                "+
                                 $"                            WHERE                                                               "+
@@ -1083,7 +1083,6 @@ namespace CalculateForSea
                                 $"                                                                                                "+
                                 $"                                        ORDER BY ID DESC LIMIT 1                                "+
                                 $"                                    )                                                           "+
-                                $"                            AND B.MACHINE_NO = 'WCI_D{20+i}'                                    "+
                                 $"                            AND A.CD = 'DCM_{20+i}_TAG_D3706'                                   "+
                                 $"                        ),0)                                                                    "+
                                 $"where end_time = start_time                                                                    "+                                 

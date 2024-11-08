@@ -183,17 +183,12 @@ namespace CoFAS.NEW.MES.POP
                     return;
                 }
 
-                //if (포장수량 > int.Parse(lbl_양품수량.Text))
-                //{
-                //    return;
-                //}
-
                 string msg = $"라벨 출력 하시겠습니까?";
                 if (CustomMsg.ShowMessage(msg, "확인", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
 
 
-                    DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_ProductBarcode_A10(
+                DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_ProductBarcode_A10(
                 lbl_품번.Text
                ,""
                ,_pLOT
@@ -201,7 +196,7 @@ namespace CoFAS.NEW.MES.POP
                ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                ,""
-               ,포장수량.ToString()
+               , txt_포장수량.Text.ToString()
                ,txt_비고.Text.ToString()
                ,_UserEntity.user_account
                ,_p실적

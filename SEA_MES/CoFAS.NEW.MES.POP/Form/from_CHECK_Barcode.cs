@@ -195,7 +195,7 @@ namespace CoFAS.NEW.MES.POP
             {
                 if (_로드셀._port.IsOpen) //연결
                 {
-                    //_로드셀.Readed += _로드셀_BarCode;
+                    _로드셀.Readed += _로드셀_BarCode;
                 }
             }
         }

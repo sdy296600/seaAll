@@ -341,6 +341,7 @@ namespace CoFAS.NEW.MES.POP
                             DataTable dt =  new CoreBusiness().SELECT(sql);
                             Set_Spread_Date(fpSub3, dt);
                         }
+                        _로드셀_Open();
                     }
                 }));
             }
@@ -962,7 +963,7 @@ namespace CoFAS.NEW.MES.POP
                         popup._p실적 = _p실적;
                         popup.ShowDialog();
 
-                        for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                        for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
                         {
                             if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString().Trim() == _p실적)
                             {
@@ -1010,9 +1011,7 @@ namespace CoFAS.NEW.MES.POP
                 {
                     if (popup.ShowDialog() == DialogResult.OK)
 
-                    // 마지막 행을 비활성화
-                    fpSub.Sheets[0].Rows[fpSub.Sheets[0].RowCount - 1].Locked = true;
-                    for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                    for (int i = 0; i < fpSub.Sheets[0].RowCount-1; i++)
                     {
                         if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
                         {
@@ -1032,7 +1031,7 @@ namespace CoFAS.NEW.MES.POP
             {
 
                 bool ck = true;
-                for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                for (int i = 0; i < fpSub.Sheets[0].RowCount-1; i++)
                 {
                     if (fpSub.Sheets[0].GetValue(i, "END_TIME   ".Trim()).ToString().Trim() == "")
                     {
@@ -1081,7 +1080,7 @@ namespace CoFAS.NEW.MES.POP
                 , _교대조.Text
                 , _작업코드.Text
                 , comQty
-                , "0"
+                , "1"
                 , _시작.DateTime.ToString("yyyy-MM-dd HH:mm:ss")
                 , null
                 , "admin"
@@ -1144,8 +1143,7 @@ namespace CoFAS.NEW.MES.POP
                 }
 
                 // 마지막 행을 비활성화
-                fpSub.Sheets[0].Rows[fpSub.Sheets[0].RowCount - 1].Locked = true;
-                for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                for (int i = 0; i < fpSub.Sheets[0].RowCount-1; i++)
                 {
                     if (fpSub.Sheets[0].GetValue(i, "END_TIME           ".Trim()).ToString().Trim() == "")
                     {
@@ -1238,7 +1236,7 @@ namespace CoFAS.NEW.MES.POP
             if (_p실적 != string.Empty)
             {
                 int row = 0;
-                for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
                 {
                     if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString() == _p실적)
                     {
@@ -1383,8 +1381,7 @@ namespace CoFAS.NEW.MES.POP
                 }
 
                 // 마지막 행을 비활성화
-                fpSub.Sheets[0].Rows[fpSub.Sheets[0].RowCount - 1].Locked = true;
-                for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
                 {
                     if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
                     {
@@ -1407,8 +1404,7 @@ namespace CoFAS.NEW.MES.POP
                     from.ShowDialog();
 
                     // 마지막 행을 비활성화
-                    fpSub.Sheets[0].Rows[fpSub.Sheets[0].RowCount - 1].Locked = true;
-                    for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                    for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
                     {
                         if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
                         {
@@ -1459,12 +1455,11 @@ namespace CoFAS.NEW.MES.POP
 
 
 
-                        for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                        // 마지막 행을 비활성화
+                        for (int i = 0; i < fpSub.Sheets[0].RowCount-1; i++)
                         {
                             if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
                             {
-                                // 마지막 행을 비활성화
-                                fpSub.Sheets[0].Rows[fpSub.Sheets[0].RowCount - 1].Locked = true;
                                 fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
                             }
                         }
@@ -1496,7 +1491,7 @@ namespace CoFAS.NEW.MES.POP
 
 
 
-                    for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                    for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
                     {
                         if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
                         {
