@@ -340,8 +340,16 @@ namespace CoFAS.NEW.MES.POP
 
                             DataTable dt =  new CoreBusiness().SELECT(sql);
                             Set_Spread_Date(fpSub3, dt);
+
+                            for (int i = 0; i < fpSub.Sheets[0].RowCount; i++)
+                            {
+                                if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
+                                {
+
+                                    fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                                }
+                            }
                         }
-                        _로드셀_Open();
                     }
                 }));
             }
@@ -524,17 +532,15 @@ namespace CoFAS.NEW.MES.POP
                 //총 미포장 수량 
                 if (dtAllPackQty.Rows.Count != 0 && dtAllOkcnt.Rows.Count != 0)
                 {
-                    int workOkcnt = 0;
-                    int packQty = 0;
-                    if (!int.TryParse(dtAllOkcnt.Rows[0]["WORK_OKCNT"].ToString(), out workOkcnt))
-                    {
-                        workOkcnt = 0;
-                    };
-                    if (!int.TryParse(dtAllPackQty.Rows[0]["포장수량"].ToString(), out packQty))
+                    int workOkcnt = Convert.ToInt32(dtAllOkcnt.Rows[0]["WORK_OKCNT"].ToString());
+                    int packQty = Convert.ToInt32(dtAllOkcnt.Rows[0]["포장수량"].ToString());
+                    if (workOkcnt - packQty <= 0)
                     {
                         packQty = 0;
                     };
+                    
                     _총미포장.Text = Convert.ToString(workOkcnt - packQty);
+                    
                 }
 
                 // 작업실적 dtl 조회 [WORK_PERFORMANCE]

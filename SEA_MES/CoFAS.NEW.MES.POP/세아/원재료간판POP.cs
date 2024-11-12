@@ -1,8 +1,10 @@
-﻿using CoFAS.NEW.MES.Core;
+﻿
+using CoFAS.NEW.MES.Core;
 using CoFAS.NEW.MES.Core.Business;
 using CoFAS.NEW.MES.Core.Entity;
 using CoFAS.NEW.MES.Core.Function;
 using CoFAS.NEW.MES.POP.Function;
+using FarPoint.Excel;
 using System;
 using System.Data;
 using System.Drawing;
@@ -48,7 +50,6 @@ namespace CoFAS.NEW.MES.POP
             }
         }
         #endregion
-
 
         #region ○ 폼 이동
 
@@ -123,7 +124,7 @@ namespace CoFAS.NEW.MES.POP
             {
 
                 _품목콤보.AddValue(new CoreBusiness().Spread_ComboBox("RESOURCE_품목", "", ""), 0, 0, "", true);
-               // _고객사.AddValue(new CoreBusiness().Spread_ComboBox("세아_거래처", "", ""), 0, 0, "", true);
+                // _고객사.AddValue(new CoreBusiness().Spread_ComboBox("세아_거래처", "", ""), 0, 0, "", true);
                 _품목콤보.ValueChanged += _품목콤보_EditValueChanged;
 
                 txt_총중량.Font = new Font("맑은 고딕", 15, FontStyle.Bold);
@@ -133,7 +134,7 @@ namespace CoFAS.NEW.MES.POP
                 _품목콤보.Font = new Font("맑은 고딕", 15, FontStyle.Bold);
                 _고객사.Font = new Font("맑은 고딕", 15, FontStyle.Bold);
 
-                DataTable pDataTable1 =  new CoreBusiness().BASE_MENU_SETTING_R10(this.Name,fpMain,"MATERIAL_BARCODE");
+                DataTable pDataTable1 = new CoreBusiness().BASE_MENU_SETTING_R10(this.Name, fpMain, "MATERIAL_BARCODE");
 
                 if (pDataTable1 != null && pDataTable1.Rows.Count != 0)
                 {
@@ -173,77 +174,94 @@ namespace CoFAS.NEW.MES.POP
 
         private void button4_Click(object sender, EventArgs e)
         {
-
-
-            int 총중량 = 0;
-            int 번들수 = 0;
-   
-            if (_품목콤보.GetValue() == "")
-            {
-                CustomMsg.ShowMessage("품목명을 확인해 주세요.");
-                return;
-            }
-            if (_고객사.GetValue()  =="")
-            {
-                CustomMsg.ShowMessage("고객사를 확인해 주세요.");
-                return;
-            }
-
-            if (!int.TryParse(txt_총중량.Text, out 총중량))
-            {
-                CustomMsg.ShowMessage("총중량을 확인해 주세요.");
-                return;
-            }
-            if (!int.TryParse(txt_번들수.Text, out 번들수))
-            {
-                CustomMsg.ShowMessage("번들수을 확인해 주세요.");
-                return;
-            }
-
-            string msg = $"{번들수} 개 출력 하시겠습니까?";
-            if (CustomMsg.ShowMessage(msg, "확인", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            try
             {
 
+                int 총중량 = 0;
+                int 번들수 = 0;
 
-                DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_MaterialBarcode_A10(
-                 _품목콤보.Text
-                ,_고객사.GetValue()
-                ,txt_총중량.Text
-                ,txt_번들수.Text
-                ,txt_lot.Text
-                ,txt_비고.Text
-                );
-                //return;
-                if (dt != null)
+                string getLotNo = $@"SELECT A.LOT_NO                        
+                                       FROM dbo.MATERIAL_BARCODE A
+                                      INNER JOIN [sea_mfg].[dbo].[address] B ON A.VENDOR_NO = B.address_key
+                                      WHERE A.LOT_NO = '{txt_lot.Text.ToString()}'
+                                       ";
+
+                DataTable dtLotNo = new MS_DBClass(utility.My_Settings_Get()).SELECT2(getLotNo);
+
+                if (dtLotNo.Rows.Count > 0 || dtLotNo.Rows.Count == null)
+                {
+                    CustomMsg.ShowMessage("이미 등록된 LOT번호가 있습니다.");
+                    return;
+                }
+
+                if (_품목콤보.GetValue() == "")
+                {
+                    CustomMsg.ShowMessage("품목명을 확인해 주세요.");
+                    return;
+                }
+
+                if (_고객사.GetValue() == "")
+                {
+                    CustomMsg.ShowMessage("고객사를 확인해 주세요.");
+                    return;
+                }
+
+                if (!int.TryParse(txt_총중량.Text, out 총중량))
+                {
+                    CustomMsg.ShowMessage("총중량을 확인해 주세요.");
+                    return;
+                }
+                if (!int.TryParse(txt_번들수.Text, out 번들수))
+                {
+                    CustomMsg.ShowMessage("번들수을 확인해 주세요.");
+                    return;
+                }
+
+                string msg = $"{번들수} 개 출력 하시겠습니까?";
+                if (CustomMsg.ShowMessage(msg, "확인", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
 
-                    foreach (DataRow item in dt.Rows)
+                    DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_MaterialBarcode_A10(
+                     _품목콤보.Text
+                    , _고객사.GetValue().ToString()
+                    , Convert.ToDecimal(txt_총중량.Text)
+                    , Convert.ToInt32(txt_번들수.Text)//SplitQty (중량 분할)
+                    , txt_lot.Text
+                    , txt_비고.Text
+                    );
+
+                    if (dt != null)
                     {
-                        원재료간판라벨 라벨 = new 원재료간판라벨();
+                        foreach (DataRow item in dt.Rows)
+                        {
+                            원재료간판라벨 라벨 = new 원재료간판라벨();
 
-                        라벨.ResourceNo   = item["ResourceNo  ".Trim()].ToString();
-                        라벨.Vendor_No    = item["name        ".Trim()].ToString();
-                        라벨.BarcodeCount = item["BarcodeCount".Trim()].ToString();
-                        라벨.LOT_NO       = item["LOT_NO      ".Trim()].ToString();
-                        라벨.COMMENT      = item["COMMENT     ".Trim()].ToString();
-                        라벨.LabelNo      = item["LabelNo     ".Trim()].ToString();
-                        라벨.BarcodeNo    = item["BarcodeNo   ".Trim()].ToString();
+                            라벨.ResourceNo = item["ResourceNo  ".Trim()].ToString();
+                            라벨.Vendor_No = item["name        ".Trim()].ToString();
+                            라벨.BarcodeCount = item["BarcodeCount".Trim()].ToString();
+                            라벨.LOT_NO = item["LOT_NO      ".Trim()].ToString();
+                            라벨.COMMENT = item["COMMENT     ".Trim()].ToString();
+                            라벨.LabelNo = item["LabelNo     ".Trim()].ToString();
+                            라벨.BarcodeNo = item["BarcodeNo   ".Trim()].ToString();
 
-                        print(라벨);
-
+                            print(라벨);
+                        }
+                        CustomMsg.ShowMessage("바코드 출력이 완료되었습니다.");
+                        조회버튼_Click(sender, e);
                     }
-
-
                 }
             }
-
+            catch (Exception ex)
+            {
+                CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
+            }
         }
 
         private void print(원재료간판라벨 라벨)
         {
+            string printerName = "ZDesigner ZD230-203dpi ZPL";
             //string printerName = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
-            string printerName = "ZDesigner GT800 (EPL)"; // 프린터 이름으로 변경하세요
-            //string printerName = "ZDesigner GT-203dpi ZPL";
+            //string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 
@@ -270,7 +288,6 @@ namespace CoFAS.NEW.MES.POP
                             ^FS^FO335,180^ADN,36,20^FDKg
                             ^FS^FO400,180^A1N,36,20^FD발행일
                             ^FS^FO600,180^A1N,36,20^FD{DateTime.Now.ToString("yyyy-MM-dd")}
-
                             ^FS^FO600,40^A1N,36,20^FD{라벨.LabelNo}
                          
 
@@ -285,14 +302,13 @@ namespace CoFAS.NEW.MES.POP
                 printQueue.Purge();
 
                 RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-
-                RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                //RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                //_lblMessage.Text = $"ZPL 명령 전송 중 오류 발생: {ex.Message}";
+                //MessageBox.Show(ex.Message);
+                CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
             }
         }
 
@@ -346,18 +362,18 @@ namespace CoFAS.NEW.MES.POP
             try
             {
                 for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
-                {    
+                {
                     if (fpMain.Sheets[0].GetValue(i, "CK".Trim()).ToString() == "True")
                     {
                         원재료간판라벨 라벨 = new 원재료간판라벨();
 
-                        라벨.ResourceNo   = fpMain.Sheets[0].GetValue(i, "RESOURCE_NO  ".Trim()).ToString();
-                        라벨.Vendor_No    = fpMain.Sheets[0].GetValue(i, "VENDOR_NO    ".Trim()).ToString();
+                        라벨.ResourceNo = fpMain.Sheets[0].GetValue(i, "RESOURCE_NO  ".Trim()).ToString();
+                        라벨.Vendor_No = fpMain.Sheets[0].GetValue(i, "VENDOR_NO    ".Trim()).ToString();
                         라벨.BarcodeCount = fpMain.Sheets[0].GetValue(i, "SPLIT_QTY    ".Trim()).ToString();
-                        라벨.LOT_NO       = fpMain.Sheets[0].GetValue(i, "LOT_NO       ".Trim()).ToString();
-                        라벨.COMMENT      = fpMain.Sheets[0].GetValue(i, "COMMENT      ".Trim()).ToString();
-                        라벨.BarcodeNo    = fpMain.Sheets[0].GetValue(i, "BARCODE_NO   ".Trim()).ToString();
-                        라벨.LabelNo      = fpMain.Sheets[0].GetValue(i, "BARCODE_NO   ".Trim()).ToString().Substring(라벨.BarcodeNo.Length - 3, 3);
+                        라벨.LOT_NO = fpMain.Sheets[0].GetValue(i, "LOT_NO       ".Trim()).ToString();
+                        라벨.COMMENT = fpMain.Sheets[0].GetValue(i, "COMMENT      ".Trim()).ToString();
+                        라벨.BarcodeNo = fpMain.Sheets[0].GetValue(i, "BARCODE_NO   ".Trim()).ToString();
+                        라벨.LabelNo = fpMain.Sheets[0].GetValue(i, "BARCODE_NO   ".Trim()).ToString().Substring(라벨.BarcodeNo.Length - 3, 3);
                         print(라벨);
                     }
                 }
@@ -400,7 +416,7 @@ namespace CoFAS.NEW.MES.POP
 
                             ^FS^BY2,3,50^FT 80, 350
                             ^BCN,40,N,N,Y^FD{""}^FS^XZ";
-                           
+
             Bitmap bmp = new CoFAS_Label().WebImageView(urlstring); // 이미지 가져오기
 
             pictureBox1.Image = bmp; // 이미지 적용
@@ -422,8 +438,3 @@ namespace CoFAS.NEW.MES.POP
         public string BarcodeNo { get; set; }
     }
 }
-
-
-
-
-

@@ -160,10 +160,6 @@ namespace CoFAS.NEW.MES.POP
       
         #endregion
 
-
-
-     
-
         private void lblClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -187,20 +183,20 @@ namespace CoFAS.NEW.MES.POP
                 if (CustomMsg.ShowMessage(msg, "확인", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
 
-
-                DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_ProductBarcode_A10(
-                lbl_품번.Text
-               ,""
-               ,_pLOT
-               ,"주조"
-               ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-               ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-               ,""
-               , txt_포장수량.Text.ToString()
-               ,txt_비고.Text.ToString()
-               ,_UserEntity.user_account
-               ,_p실적
-                );
+                    DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_ProductBarcode_A10(
+                    lbl_품번.Text
+                   ,""
+                   ,_pLOT
+                   ,"주조"
+                   ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                   ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                   ,""
+                   , txt_포장수량.Text.ToString()
+                   ,txt_비고.Text.ToString()
+                   ,_UserEntity.user_account
+                   ,_p실적
+                    );
+                        
                     if (dt.Rows.Count != 0)
                     {
 
@@ -218,14 +214,13 @@ namespace CoFAS.NEW.MES.POP
                             라벨.RESOURCE_NO  =  item["RESOURCE_NO ".Trim()].ToString();
                             라벨.BARCODE_NO   =  item["BARCODE_NO   ".Trim()].ToString();
                             print(라벨);
-                            
                         }
 
                         string sql = $@"SELECT                       
-                          ISNULL(SUM(ISNULL(P_QTY,0)),0) AS P_QTY
-                           FROM [HS_MES].[dbo].[PRODUCT_BARCODE]
-                           WHERE 1=1 
-                         AND WORK_PERFORMANCE_ID = {_p실적}";
+                            ISNULL(SUM(ISNULL(P_QTY,0)),0) AS P_QTY
+                            FROM [HS_MES].[dbo].[PRODUCT_BARCODE]
+                            WHERE 1=1 
+                            AND WORK_PERFORMANCE_ID = {_p실적}";
 
                         /// INNER JOIN [sea_mfg].[dbo].[address] B ON A.VENDOR_NO = B.address_key";
                         //WHERE BARCODE_DATE >= '{DateTime.Now.ToString("yyyy-MM-dd")}'";
@@ -233,16 +228,16 @@ namespace CoFAS.NEW.MES.POP
                         DataTable dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql);
 
                         sql = $@"UPDATE [dbo].[WORK_PERFORMANCE]
-                                  SET 
-                                      [QTY_COMPLETE] = '{dt2.Rows[0]["P_QTY"].ToString()}'
-                                     ,[UP_DATE]  = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}'
+                                    SET 
+                                        [QTY_COMPLETE] = '{dt2.Rows[0]["P_QTY"].ToString()}'
+                                        ,[UP_DATE]  = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}'
                                 WHERE ID = '{_p실적}'";
                         DataTable _DataTable = new CoreBusiness().SELECT(sql);
 
+                        button5_Click(sender, e);       
+                        }
                     }
-                }
             }
-
             catch (Exception err)
             {
 
@@ -384,106 +379,60 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(공정이동표 라벨)
         {
-            string printerName = "ZDesigner GT800 (EPL)"; // 프린터 이름으로 변경하세요
+            string printerName = "ZDesigner ZD230-203dpi ZPL";
+            //string printerName = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
+            //string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
-
-            //            zplCommand = $@"^XA
-            //^SEE:UHANGUL.DAT^FS
-            //^CW1,E:KFONT3.FNT^CI26^FS
-
-
-            //^FO30,30^GB730,360,3^FS
-
-            //^FO170,30^GB3,360,3^FS
-            //^FO400,30^GB3,60,3^FS
-            //^FO500,30^GB3,60,3^FS
-
-            //^FO30,90^GB730,3,3^FS
-            //^FO30,150^GB730,3,3^FS
-            //^FO30,210^GB730,3,3^FS
-            //^FO30,270^GB730,3,3^FS
-            //^FO30,330^GB470,3,3^FS
-
-            //^FO400,150^GB3,120,3^FS
-            //^FO500,150^GB3,240,3^FS
-
-            // ^FO50,50^A1N,36,16^FD고객사^FS
-            // ^FO50,110^A1N,36,16^FD품명^FS
-            // ^FO50,170^A1N,36,16^FD생산일자^FS
-            // ^FO50,230^A1N,36,16^FD전공정^FS
-            // ^FO50,290^A1N,36,16^FD수량^FS
-            // ^FO50,350^A1N,36,16^FD품번^FS
-
-            // ^FO180,50^A1N,36,16^FD^FS
-            // ^FO180,110^A1N,36,16^FD{라벨.품목명}^FS
-            // ^FO180,170^A1N,36,16^FD{라벨.BARCODE_DATE}^FS
-            // ^FO180,230^A1N,36,16^FD주조^FS
-            // ^FO180,290^A1N,36,16^FD{라벨.P_QTY}^FS
-            // ^FO180,350^A1N,36,16^FD{라벨.RESOURCE_NO}^FS
-
-            // ^FO410,50^A1N,36,16^FDLOT NO.^FS
-            // ^FO410,170^A1N,36,16^FD이동일자^FS
-            // ^FO410,230^A1N,36,16^FD재고기록표^FS
-
-            // ^FO510,50^A1N,36,16^FD{라벨.LOT_NO}^FS
-            // ^FO510,170^A1N,36,16^FD{라벨.MOVE_DATE}^FS
-            // ^FO510,230^A1N,36,16^FD{라벨.ID}^FS
-
-            // ^FO580,290^BON,7,7
-
-            // ^BXN,4,200^FDMM,B0024 {라벨.BARCODE_NO}^F
-
-            // ^XZ";
             zplCommand = $@"^XA
-^SEE:UHANGUL.DAT^FS
-^CW1,E:KFONT3.FNT^CI26^FS
+                                ^SEE:UHANGUL.DAT^FS
+                                ^CW1,E:KFONT3.FNT^CI26^FS
 
 
-^FO30,30^GB730,360,3^FS
+                                ^FO30,30^GB730,360,3^FS
 
-^FO170,30^GB3,360,3^FS
-^FO400,30^GB3,60,3^FS
-^FO500,30^GB3,60,3^FS
+                                ^FO170,30^GB3,360,3^FS
+                                ^FO400,30^GB3,60,3^FS
+                                ^FO500,30^GB3,60,3^FS
 
-^FO30,90^GB730,3,3^FS
-^FO30,150^GB730,3,3^FS
-^FO30,210^GB730,3,3^FS
-^FO30,270^GB730,3,3^FS
-^FO30,330^GB470,3,3^FS
+                                ^FO30,90^GB730,3,3^FS
+                                ^FO30,150^GB730,3,3^FS
+                                ^FO30,210^GB730,3,3^FS
+                                ^FO30,270^GB730,3,3^FS
+                                ^FO30,330^GB470,3,3^FS
 
-^FO400,150^GB3,120,3^FS
-^FO500,150^GB3,240,3^FS
+                                ^FO400,150^GB3,120,3^FS
+                                ^FO500,150^GB3,240,3^FS
 
- ^FO50,50^A1N,36,16^FD고객사^FS
- ^FO50,110^A1N,36,16^FD품명^FS
- ^FO50,170^A1N,36,16^FD생산일자^FS
- ^FO50,230^A1N,36,16^FD전공정^FS
- ^FO50,290^A1N,36,16^FD수량^FS
- ^FO50,350^A1N,36,16^FD품번^FS
+                                 ^FO50,50^A1N,36,16^FD고객사^FS
+                                 ^FO50,110^A1N,36,16^FD품명^FS
+                                 ^FO50,170^A1N,36,16^FD생산일자^FS
+                                 ^FO50,230^A1N,36,16^FD전공정^FS
+                                 ^FO50,290^A1N,36,16^FD수량^FS
+                                 ^FO50,350^A1N,36,16^FD품번^FS
 
- ^FO180,50^A1N,36,16^FD^FS
- ^FO180,110^A1N,36,16^FD{라벨.품목명}^FS
- ^FO180,170^A1N,36,16^FD{라벨.BARCODE_DATE}^FS
- ^FO180,230^A1N,36,16^FD주조^FS
- ^FO180,290^A1N,36,16^FD{라벨.P_QTY}^FS
- ^FO180,350^A1N,36,16^FD{라벨.RESOURCE_NO}^FS
+                                 ^FO180,50^A1N,36,16^FD^FS
+                                 ^FO180,110^A1N,36,16^FD{라벨.품목명}^FS
+                                 ^FO180,170^A1N,36,16^FD{라벨.BARCODE_DATE}^FS
+                                 ^FO180,230^A1N,36,16^FD주조^FS
+                                 ^FO180,290^A1N,36,16^FD{라벨.P_QTY}^FS
+                                 ^FO180,350^A1N,36,16^FD{라벨.RESOURCE_NO}^FS
 
- ^FO410,50^A1N,36,16^FDLOT NO.^FS
- ^FO410,170^A1N,36,16^FD이동일자^FS
- ^FO410,230^A1N,36,16^FD재고기록표^FS
+                                 ^FO410,50^A1N,36,16^FDLOT NO.^FS
+                                 ^FO410,170^A1N,36,16^FD이동일자^FS
+                                 ^FO410,230^A1N,36,16^FD재고기록표^FS
 
- ^FO510,50^A1N,36,16^FD{라벨.LOT_NO}^FS
- ^FO510,170^A1N,36,16^FD{라벨.MOVE_DATE}^FS
- ^FO510,230^A1N,36,16^FD{라벨.ID}^FS
+                                 ^FO510,50^A1N,36,16^FD{라벨.LOT_NO}^FS
+                                 ^FO510,170^A1N,36,16^FD{라벨.MOVE_DATE}^FS
+                                 ^FO510,230^A1N,36,16^FD{라벨.ID}^FS
 
 
 
- ^FO580,290^BON,7,7
+                                 ^FO580,290^BON,7,7
                             
- ^BXN,4,200^FDMM,B0024 {라벨.BARCODE_NO}^F
+                                 ^BXN,4,200^FDMM,B0024 {라벨.BARCODE_NO}^F
                             
- ^XZ";
+                                 ^XZ";
             try
             {
                 PrintServer printServer = new PrintServer();

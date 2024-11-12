@@ -804,9 +804,7 @@ namespace CalculateForSea
                                             sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
                                             sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
                                             sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
-
                                             sqlcmd.ExecuteNonQuery();
-
 
                                             WriteLog("SHOT Data Processed");
                                         }

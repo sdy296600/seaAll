@@ -216,8 +216,8 @@ namespace CoFAS.NEW.MES.POP
                     DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_MaterialBarcode_A10(
                  lbl_용탕_품목코드.Text
                 ,lbl_용탕.Text
-                ,lbl_총중량_용탕.Text
-                ,txt_번들수_용탕.Text
+                ,Convert.ToDecimal(lbl_총중량_용탕.Text)
+                ,Convert.ToInt32(txt_번들수_용탕.Text)
                 ,txt_lot_용탕.Text
                 ,_비고_용탕.Text
                 ); ;
@@ -280,11 +280,11 @@ namespace CoFAS.NEW.MES.POP
 
 
                     DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_MaterialBarcode_A10(
-                lbl_로드셀_품목코드.Text
-                ,_고객사콤보_로드셀.GetValue()
-                ,lbl_총중량_로드셀.Text
-                ,"1"
-                ,_LOT.Text
+                  lbl_로드셀_품목코드.Text
+                , _고객사콤보_로드셀.GetValue().ToString()
+                , Convert.ToDecimal(lbl_총중량_로드셀.Text)
+                , Convert.ToInt32(txt_번들수_용탕.Text)
+                , _LOT.Text
                 ,_비고_로드셀.Text
                 ); ;
                     if (dt.Rows.Count != 0)

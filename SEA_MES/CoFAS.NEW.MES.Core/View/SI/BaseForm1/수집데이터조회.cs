@@ -44,6 +44,7 @@ namespace CoFAS.NEW.MES.Core
                 CustomMsg.ShowExceptionMessage(pExcption.ToString(), "Error", MessageBoxButtons.OK);
             }
         }
+
         public override void MainFind_DisplayData()
         {
             try
@@ -75,8 +76,6 @@ namespace CoFAS.NEW.MES.Core
                                             $"   ORDER BY T1.DATE, T2.ORDER_NO, T2.START_TIME, T2.END_TIME      " +
                                             $"";
 
-
-                //DataTable dtAllOkcnt = new MY_DBClass().SELECT_DataTable(getMySqlDataGrid);
 
                 DataSet ds = new DataSet();
                 MySqlConnection conn2 = new MySqlConnection("Server=10.10.10.216;Database=hansoldms;Uid=coever;Pwd=coever119!");
