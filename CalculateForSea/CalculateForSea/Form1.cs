@@ -1040,7 +1040,7 @@ namespace CalculateForSea
                                 $"                                                        ORDER BY ID DESC LIMIT 1                "+
                                 $"			  				                        )                                             "+
                                 $"                            AND A.VL > 0                                                        "+
-                                $"                                                                                                "+
+                                $"                            AND A.VL < 5000                                                     " +
                                 $"                            AND A.CD = 'DCM_{20+i}_TAG_D3705'                                   "+
                                 $"                                                                                                "+
                                 $"                            AND B.MACHINE_NO = 'WCI_D{20+i}')) AS OKCNT                         "+
@@ -1064,11 +1064,12 @@ namespace CalculateForSea
                                 $"                                                ORDER BY ID DESC LIMIT 1                        "+
                                 $"                                    )                                                           "+
                                 $"                            AND A.VL > 0                                                        "+
+                                $"                            AND A.VL < 5000                                                     " +
                                 $"                            AND A.CD = 'DCM_{20+i}_TAG_D3705'                                   "+
                                 $"                            AND B.MACHINE_NO = 'WCI_D{20+i}'                                    "+
                                 $"                        ),0)*{cavity}                                                           "+
                                 $"                                                                                                "+
-                                $", work_warmupcnt = IFNULL((                                                       " +
+                                $", work_warmupcnt = IFNULL((                                                                     " +
                                 $"                        SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))           "+
                                 $"                            FROM data_collection       A                                        "+
                                 $"                            WHERE A.Tm > (SELECT START_TIME FROM work_performance               "+
