@@ -1288,8 +1288,8 @@ namespace CoFAS.NEW.MES.POP.Function
             (
               string ResourceNo
              ,string Vendor_No
-             ,string ResourceWeight
-             ,string SplitQty
+             ,decimal ResourceWeight
+             ,int SplitQty
              ,string Lot_No
              ,string Comment
             )
@@ -1315,7 +1315,7 @@ namespace CoFAS.NEW.MES.POP.Function
                 cmd.Parameters.Add(new SqlParameter("@Lot_No           ".Trim(), SqlDbType.VarChar, 50));
        
                 cmd.Parameters["@ResourceNo      ".Trim()].Value = ResourceNo;
-                cmd.Parameters["@ResourceType    ".Trim()].Value = "";
+                cmd.Parameters["@ResourceType    ".Trim()].Value = string.Empty;
                 cmd.Parameters["@Vendor_No       ".Trim()].Value = Vendor_No;
                 cmd.Parameters["@ResourceWeight  ".Trim()].Value = ResourceWeight;
                 cmd.Parameters["@SplitQty        ".Trim()].Value = SplitQty;
