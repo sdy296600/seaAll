@@ -153,15 +153,17 @@ namespace CoFAS.NEW.MES.POP
                 CustomMsg.ShowMessage("입력된 바코드정보가 없습니다.");
                 return;
             }
-            string sql2 = $@"SELECT COUNT(*) AS COUNT_BCD FROM MATERIAL_BARCODE WHERE BARCODE_NO = {ucTextEdit1.Text}";
+            string sql2 = $@"SELECT COUNT(*) AS COUNT_BCD FROM MATERIAL_BARCODE WHERE BARCODE_NO = '{ucTextEdit1.Text}'";
             DataTable dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql2);
 
             int resultBcd = 0;
-            if (Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd)) 
+            Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd);
+            if (resultBcd <= 0) 
             {
                 CustomMsg.ShowMessage("등록되지 않은 바코드 입니다.");
                 return;
             }
+
 
             string[] bar = ucTextEdit1.Text.Split('|');
 
