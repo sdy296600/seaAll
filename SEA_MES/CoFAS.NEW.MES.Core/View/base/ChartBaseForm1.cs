@@ -9,6 +9,7 @@ using CoFAS.NEW.MES.Core.Business;
 using FarPoint.Win.Spread.CellType;
 using System.Text;
 using DevExpress.XtraCharts;
+using System.Linq;
 
 namespace CoFAS.NEW.MES.Core
 {
@@ -442,7 +443,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
   LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
   ON A.RESOURCE_NO = I.RESOURCE_NO
    
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100";
+  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59'";
 
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
@@ -451,9 +452,9 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
 
 
                 DataTable _DataTable = new CoreBusiness().SELECT(sql);
-
+                RemoveDuplicateRows(_DataTable, new string[] { "D.호기", "A.RESOURCE_NO", "A.LOT_NO", "A.REG_DATE" });
                 if (_DataTable != null && _DataTable.Rows.Count > 0)
-                {
+                {   
                     fpMain.Sheets[0].Visible = false;
                     fpMain.Sheets[0].Rows.Count = _DataTable.Rows.Count;
 
@@ -610,7 +611,20 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
                 DevExpressManager.SetCursor(this, Cursors.Default);
             }
         }
+        public static void RemoveDuplicateRows(DataTable table, string[] columnsToCompare)
+        {
+            var distinctRows = table.AsEnumerable()
+                .GroupBy(row => string.Join(",", columnsToCompare.Select(col => row[col].ToString())))
+                .Select(g => g.First())  // 각 그룹에서 첫 번째 행을 선택
+                .CopyToDataTable();  // 결과를 새 DataTable로 복사
 
+            // 기존 테이블을 새로 갱신
+            table.Clear();
+            foreach (DataRow row in distinctRows.Rows)
+            {
+                table.ImportRow(row);
+            }
+        }
 
 
 
