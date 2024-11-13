@@ -251,13 +251,13 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.base_FromtoDateTime1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.base_FromtoDateTime1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.base_FromtoDateTime1.EndValue = new System.DateTime(2024, 10, 31, 23, 59, 0, 0);
+            this.base_FromtoDateTime1.EndValue = new System.DateTime(2024, 11, 30, 23, 59, 0, 0);
             this.base_FromtoDateTime1.Location = new System.Drawing.Point(560, 0);
             this.base_FromtoDateTime1.Margin = new System.Windows.Forms.Padding(0);
             this.base_FromtoDateTime1.Name = "base_FromtoDateTime1";
             this.base_FromtoDateTime1.SearchName = "날짜";
             this.base_FromtoDateTime1.Size = new System.Drawing.Size(337, 68);
-            this.base_FromtoDateTime1.StartValue = new System.DateTime(2024, 10, 1, 0, 0, 0, 0);
+            this.base_FromtoDateTime1.StartValue = new System.DateTime(2024, 11, 1, 0, 0, 0, 0);
             this.base_FromtoDateTime1.TabIndex = 9;
             // 
             // tableLayoutPanel5

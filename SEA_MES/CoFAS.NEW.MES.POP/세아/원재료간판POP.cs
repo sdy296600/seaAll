@@ -188,12 +188,6 @@ namespace CoFAS.NEW.MES.POP
 
                 DataTable dtLotNo = new MS_DBClass(utility.My_Settings_Get()).SELECT2(getLotNo);
 
-                if (dtLotNo.Rows.Count > 0 || dtLotNo.Rows.Count == null)
-                {
-                    CustomMsg.ShowMessage("이미 등록된 LOT번호가 있습니다.");
-                    return;
-                }
-
                 if (_품목콤보.GetValue() == "")
                 {
                     CustomMsg.ShowMessage("품목명을 확인해 주세요.");
