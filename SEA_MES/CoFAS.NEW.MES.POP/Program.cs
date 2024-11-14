@@ -43,8 +43,9 @@ namespace CoFAS.NEW.MES.POP
         {
 
             string sqlcon = DBManager.PrimaryConnectionString;
-            string updatetype = "NEW_세아_POP";
+            string updatetype = "세아POP";
             //string updatetype = "세아간판POP";
+            //string updatetype = "NEW_세아_POP";
             string runName = "CoFAS.NEW.MES.POP.exe";
             string name = "CoFAS.NEW.MES.Download.exe";
 

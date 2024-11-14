@@ -30,7 +30,7 @@ namespace CoFAS.NEW.MES
             //
             //string sqlcon = "Server=222.113.146.82,11433;Database=Hansol_Auto_Update;UID=sa;PWD=coever1191!;";
             string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
-            string updatetype = "세아";
+            string updatetype = "세아MES";
             string runName  = "CoFAS.NEW.MES.exe";
             string name = "CoFAS.NEW.MES.Download.exe";
 

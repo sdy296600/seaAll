@@ -29,10 +29,21 @@ namespace CoFAS.NEW.MES.Download
             //utility.My_Settings_Start();
             //utility.My_Settings_Get();
 
-            string sqlcon =  "Server=172.22.4.11,60901;Database=HS_MES;UID=MesConnection;PWD=8$dJ@-!W3b-35;";
-            string updatetype = "작업표준서";
-            string runName  = "CoFAS.NEW.MES.POP.exe";
-            string name = "CoFAS.NEW.MES.Download.exe";
+            ////세아_MES
+            //string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
+            //string updatetype = "세아MES";
+            //string runName = "CoFAS.NEW.MES";
+
+            //세아간판POP
+            string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
+            string updatetype = "세아간판POP";
+            string runName = "CoFAS.NEW.MES.POP";
+            Platform_Launcher(sqlcon, updatetype, runName);
+
+            //string sqlcon =  "Server=172.22.4.11,60901;Database=HS_MES;UID=MesConnection;PWD=8$dJ@-!W3b-35;";
+            //string updatetype = "작업표준서";
+            //string runName  = "CoFAS.NEW.MES.POP.exe";
+            //string name = "CoFAS.NEW.MES.Download.exe";
 
             string arguments = sqlcon + " " + updatetype + " " + runName;
 
@@ -89,20 +100,6 @@ namespace CoFAS.NEW.MES.Download
 
             // string runName = "CoFAS_MES.POP";
 
-            ////세아_MES
-            //string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
-
-            //string updatetype = "세아MES";
-
-            //string runName = "CoFAS.NEW.MES";
-
-            //세아_POP
-            //string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
-
-            //string updatetype = "세아간판POP";
-
-            //string runName = "CoFAS.NEW.MES.POP";
-            //Platform_Launcher(sqlcon, updatetype, runName);
 
 
         }
