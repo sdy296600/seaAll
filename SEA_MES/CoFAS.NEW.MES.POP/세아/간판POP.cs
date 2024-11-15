@@ -165,7 +165,7 @@ namespace CoFAS.NEW.MES.POP
             this.Close();
         }
 
-
+        //생성
         private void button4_Click(object sender, EventArgs e)
         {
             try
@@ -176,26 +176,33 @@ namespace CoFAS.NEW.MES.POP
 
                 if (!int.TryParse(txt_포장수량.Text, out 포장수량))
                 {
+                    CustomMsg.ShowMessage("포장할 양품이 없습니다.");
                     return;
                 }
+
+                if (Convert.ToInt32(lbl_양품수량.Text) <= 0 || Convert.ToInt32(lbl_양품수량.Text) < 포장수량 )
+                {
+                    CustomMsg.ShowMessage("포장 수장은 양품수량보다 클 수 없습니다. 양품수량에 맞게 포장해 주세요.");
+                    return;
+                }
+
 
                 string msg = $"라벨 출력 하시겠습니까?";
                 if (CustomMsg.ShowMessage(msg, "확인", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
 
-                    DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_ProductBarcode_A10(
-                    lbl_품번.Text
-                   ,""
-                   ,_pLOT
-                   ,"주조"
-                   ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                   ,DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                   ,""
-                   , txt_포장수량.Text.ToString()
-                   ,txt_비고.Text.ToString()
-                   ,_UserEntity.user_account
-                   ,_p실적
-                    );
+                    DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_ProductBarcode_A10( lbl_품번.Text
+                                                                                                   , ""
+                                                                                                   , _pLOT
+                                                                                                   , "주조"
+                                                                                                   , DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                                                   , DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                                                   , ""
+                                                                                                   , txt_포장수량.Text.ToString()
+                                                                                                   , txt_비고.Text.ToString()
+                                                                                                   , _UserEntity.user_account
+                                                                                                   , _p실적
+                                                                                                   );
                         
                     if (dt.Rows.Count != 0)
                     {
@@ -205,143 +212,59 @@ namespace CoFAS.NEW.MES.POP
 
                             공정이동표 라벨 = new 공정이동표();
 
-                            라벨.LOT_NO       =  item["LOT_NO      ".Trim()].ToString();
-                            라벨.품목명       = lbl_품목명.Text;
-                            라벨.BARCODE_DATE =  item["BARCODE_DATE".Trim()].ToString();
-                            라벨.MOVE_DATE    =  item["MOVE_DATE   ".Trim()].ToString();
-                            라벨.ID           =  item["ID          ".Trim()].ToString();
-                            라벨.P_QTY        =  item["P_QTY       ".Trim()].ToString();
-                            라벨.RESOURCE_NO  =  item["RESOURCE_NO ".Trim()].ToString();
-                            라벨.BARCODE_NO   =  item["BARCODE_NO   ".Trim()].ToString();
+                            라벨.LOT_NO       = item["LOT_NO      ".Trim()].ToString();
+                            라벨.품목명        = lbl_품목명.Text;
+                            라벨.BARCODE_DATE = item["BARCODE_DATE".Trim()].ToString();
+                            라벨.MOVE_DATE    = item["MOVE_DATE   ".Trim()].ToString();
+                            라벨.ID           = item["ID          ".Trim()].ToString();
+                            라벨.P_QTY        = item["P_QTY       ".Trim()].ToString();
+                            라벨.RESOURCE_NO  = item["RESOURCE_NO ".Trim()].ToString();
+                            라벨.BARCODE_NO   = item["BARCODE_NO   ".Trim()].ToString();
                             print(라벨);
                         }
 
-                        string sql = $@"SELECT                       
-                            ISNULL(SUM(ISNULL(P_QTY,0)),0) AS P_QTY
-                            FROM [HS_MES].[dbo].[PRODUCT_BARCODE]
-                            WHERE 1=1 
-                            AND WORK_PERFORMANCE_ID = {_p실적}";
-
-                        /// INNER JOIN [sea_mfg].[dbo].[address] B ON A.VENDOR_NO = B.address_key";
-                        //WHERE BARCODE_DATE >= '{DateTime.Now.ToString("yyyy-MM-dd")}'";
-
+                        string sql = $@"SELECT ISNULL(SUM(ISNULL(P_QTY,0)),0) AS P_QTY
+                                          FROM HS_MES.dbo.PRODUCT_BARCODE
+                                         WHERE WORK_PERFORMANCE_ID = {_p실적}";
                         DataTable dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql);
 
-                        sql = $@"UPDATE [dbo].[WORK_PERFORMANCE]
-                                    SET 
-                                        [QTY_COMPLETE] = '{dt2.Rows[0]["P_QTY"].ToString()}'
-                                        ,[UP_DATE]  = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}'
-                                WHERE ID = '{_p실적}'";
+                        sql = $@"UPDATE dbo.WORK_PERFORMANCE
+                                    SET QTY_COMPLETE = '{dt2.Rows[0]["P_QTY"].ToString()}'
+                                      , UP_DATE      = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}'
+                                  WHERE ID           = '{_p실적}'";
                         DataTable _DataTable = new CoreBusiness().SELECT(sql);
 
-                        button5_Click(sender, e);       
+
+                        lbl_양품수량.Text = (Convert.ToInt32(lbl_양품수량.Text) - Convert.ToInt32(txt_포장수량.Text)).ToString(); 
+                        txt_포장수량.Text = "";
+
+                        button5_Click(sender, e);
+
                         }
                     }
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-
+                CustomMsg.ShowExceptionMessage(ex.ToString(), "Error발생 관리자에게 문의 해 주세요.", MessageBoxButtons.OK);
             }
 
         }
 
-        //private void print(DataRow dr)
-        //{ 
-        //    string printerName = "ZDesigner GT800 (EPL)"; // 프린터 이름으로 변경하세요
-        //    string zplCommand = string.Empty;
-
-        //    zplCommand = $@"^XA
-        //                    ^BY2,2.0^FS
-        //                    ^SEE:UHANGUL.DAT^FS
-        //                    ^CW1,E:KFONT3.FNT^CI26^FS
-        //                    ^FO35,20^GB250,90,4^FS
-        //                    ^FO35,20^GB520,90,4^FS
-        //                    ^FO35,20^GB750,90,4^FS
-        //                    ^FO35,20^GB1050,90,4^FS
-                            
-        //                    ^FO35,20^GB250,180,4^FS
-        //                    ^FO35,20^GB1050,180,4^FS
-                            
-        //                    ^FO35,20^GB250,270,4^FS
-        //                    ^FO35,198^GB520,90,4^FS
-        //                    ^FO35,198^GB750,90,4^FS
-        //                    ^FO35,20^GB1050,270,4^FS
-
-        //                    ^FO35,20^GB250,360,4^FS
-        //                    ^FO35,287^GB520,90,4^FS
-        //                    ^FO35,287^GB750,90,4^FS
-        //                    ^FO35,20^GB1050,360,4^FS
-                            
-        //                    ^FO35,20^GB250,450,4^FS
-        //                    ^FO35,376^GB750,90,4^FS
-                            
-        //                    ^FO35,20^GB250,540,4^FS
-        //                    ^FO35,376^GB750,180,4^FS
-        //                    ^FO35,20^GB1050,540,4^FS
-                            
-        //                    ^FO50,50^A1N,36,16^FD고객사^FS
-        //                    ^FO300,50^A1N,36,16^FD ^FS
-        //                    ^FO580,50^A1N,36,16^FDLOT No.^FS
-        //                    ^FO850,50^A1N,36,16^FD{dr["LOT_NO"].ToString()}^FS
-                            
-        //                    ^FO50,140^A1N,36,16^FD품명^FS
-        //                    ^FO290,140^A1N,36,16^FD{lbl_품목명.Text}^FS
-                            
-        //                    ^FO50,230^A1N,36,16^FD생산일자^FS
-        //                    ^FO290,230^A1N,36,16^FD{dr["BARCODE_DATE"].ToString()}^FS
-        //                    ^FO565,230^A1N,36,16^FD이동일자^FS
-        //                    ^FO790,230^A1N,36,16^FD{dr["MOVE_DATE"].ToString()}^FS
-                            
-        //                    ^FO50,320^A1N,36,16^FD전공정^FS
-        //                    ^FO290,320^A1N,36,16^FD주조^FS
-        //                    ^FO560,320^A1N,36,16^FD재고기록표^FS
-        //                    ^FO870,320^A1N,36,16^FD{dr["ID"].ToString()}^FS
-                            
-        //                    ^FO50,410^A1N,36,16^FD수량^FS
-        //                    ^FO425,410^A1N,36,20^FD{dr["P_QTY"].ToString()}^FS
-                            
-        //                    ^FO50,500^A1N,36,16^FD품번^FS
-        //                    ^FO300,500^A1N,36,16^FD{dr["RESOURCE_NO"].ToString()}^FS
-                            
-        //                    ^FO850,390^BON,7,7
-                            
-        //                    ^BQN,2,6^FDMM,B0024 {dr["BARCODE_NO"].ToString()}^F
-                            
-        //                    ^XZ";
-
-
-        //    try
-        //    {
-        //        RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-        //       // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //_lblMessage.Text = $"ZPL 명령 전송 중 오류 발생: {ex.Message}";
-        //    }
-        //}
-
+        //조회버튼
         private void button5_Click(object sender, EventArgs e)
         {
             prodBcdQty = "0";
-
-            string sql = $@"SELECT                       
-                           'False' as CK
-                          ,A.*
-						  ,B.DESCRIPTION  
-                           FROM [HS_MES].[dbo].[PRODUCT_BARCODE] A
-                            INNER JOIN [sea_mfg].[dbo].[resource] AS B
-                             ON A.resource_no = B.resource_no
-                           WHERE 1=1 
-                           AND BARCODE_DATE BETWEEN '{base_FromtoDateTime1.StartValue.ToString("yyyy-MM-dd HH:mm:ss.fff")}' AND '{base_FromtoDateTime1.EndValue.ToString("yyyy-MM-dd HH:mm:ss.fff")}'
-                         AND WORK_PERFORMANCE_ID = {_p실적} "; ;
-
-                        /// INNER JOIN [sea_mfg].[dbo].[address] B ON A.VENDOR_NO = B.address_key";
-                       //WHERE BARCODE_DATE >= '{DateTime.Now.ToString("yyyy-MM-dd")}'";
-
-            DataTable dt = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql);
-
-            Core.Function.Core.DisplayData_Set(dt, fpMain);
+            string GET_PACK_INFO = $@" SELECT 'False' as CK
+                                            , A.*
+						                    , B.DESCRIPTION  
+                                         FROM HS_MES.dbo.PRODUCT_BARCODE   A
+                                            , sea_mfg.dbo.resource    B
+                                        WHERE A.resource_no = B.resource_no
+                                          AND A.WORK_PERFORMANCE_ID = {_p실적} 
+                                          AND A.BARCODE_DATE BETWEEN '{base_FromtoDateTime1.StartValue.ToString("yyyy-MM-dd HH:mm:ss.fff")}' AND '{base_FromtoDateTime1.EndValue.ToString("yyyy-MM-dd HH:mm:ss.fff")}'
+                                     "; 
+            DataTable dtGetPackInfo = new MS_DBClass(utility.My_Settings_Get()).SELECT2(GET_PACK_INFO);
+            Core.Function.Core.DisplayData_Set(dtGetPackInfo, fpMain);
 
             int row;
             for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
@@ -353,6 +276,11 @@ namespace CoFAS.NEW.MES.POP
                     prodBcdQty = fpMain.Sheets[0].GetValue(row, "P_QTY   ".Trim()).ToString();
                 }
             }
+
+            //lbl_양품수량.Text = ;
+            //int packQty = Convert.ToInt16(dtGetPackInfo.Rows[0]["P_QTY"].ToString());
+            //prodBcdQty = Convert.ToInt16(prodBcdQty) - packQty;
+
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -379,9 +307,9 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(공정이동표 라벨)
         {
-            string printerName = "ZDesigner ZD230-203dpi ZPL";
-            //string printerName = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
-            //string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
+            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
+            //string printerName2 = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
+            string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA
@@ -440,8 +368,8 @@ namespace CoFAS.NEW.MES.POP
                 printQueue.Purge();
 
                 RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-
-                RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+                //RawPrinterHelper.SendStringToPrinter(printerName2, zplCommand);
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
             }
             catch (Exception ex)

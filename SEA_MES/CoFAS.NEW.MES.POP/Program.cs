@@ -31,6 +31,7 @@ namespace CoFAS.NEW.MES.POP
             utility.My_Settings_Start();
             utility.My_Settings_Get();
 
+            
             세아_POP();
             //원재료간판_POP();
 
@@ -44,7 +45,6 @@ namespace CoFAS.NEW.MES.POP
 
             string sqlcon = DBManager.PrimaryConnectionString;
             string updatetype = "세아POP";
-            //string updatetype = "세아간판POP";
             //string updatetype = "NEW_세아_POP";
             string runName = "CoFAS.NEW.MES.POP.exe";
             string name = "CoFAS.NEW.MES.Download.exe";
@@ -89,7 +89,7 @@ namespace CoFAS.NEW.MES.POP
         {
 
             string sqlcon = DBManager.PrimaryConnectionString;
-            string updatetype = "NEW_세아원재료간판_POP";
+            string updatetype = "세아간판POP";
             string runName = "CoFAS.NEW.MES.POP.exe";
             string name = "CoFAS.NEW.MES.Download.exe";
 

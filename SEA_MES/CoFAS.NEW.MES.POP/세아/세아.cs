@@ -518,25 +518,25 @@ namespace CoFAS.NEW.MES.POP
 
                 // 작업실적 dtl 조회 [WORK_PERFORMANCE]
                 string getWorkInfo = $@"SELECT ID
-                                     , ORDER_NO
-                                     , RESOURCE_NO
-                                     , LOT_NO
-                                     , ORDER_DATE
-                                     , SHIFT
-                                     , WORK_CODE
-                                     , QTY_COMPLETE
-                                     , WORK_TIME
-                                     , CONVERT(varchar, START_TIME, 20) AS START_TIME
-                                     , CONVERT(varchar, END_TIME, 20)   AS END_TIME
-                                     , REG_USER
-                                     , REG_DATE
-                                     , UP_USER
-                                     , UP_DATE
-                                     , IN_PER
-                                  FROM dbo.WORK_PERFORMANCE
-                                 WHERE RESOURCE_NO = '{_p품번}'
-                                   AND LOT_NO = '{_pLOT}'
-  　　　　　　　　　　                AND ID = '{_p실적}'";
+                                             , ORDER_NO
+                                             , RESOURCE_NO
+                                             , LOT_NO
+                                             , ORDER_DATE
+                                             , SHIFT
+                                             , WORK_CODE
+                                             , QTY_COMPLETE
+                                             , WORK_TIME
+                                             , CONVERT(varchar, START_TIME, 20) AS START_TIME
+                                             , CONVERT(varchar, END_TIME, 20)   AS END_TIME
+                                             , REG_USER
+                                             , REG_DATE
+                                             , UP_USER
+                                             , UP_DATE
+                                             , IN_PER
+                                          FROM dbo.WORK_PERFORMANCE
+                                         WHERE RESOURCE_NO = '{_p품번}'
+                                           AND LOT_NO = '{_pLOT}'
+  　　　　　　　　　　                        AND ID = '{_p실적}'";
 
                 DataTable dtWorkInfo = new CoreBusiness().SELECT(getWorkInfo);
 
@@ -576,7 +576,7 @@ namespace CoFAS.NEW.MES.POP
                     DataTable dtOkQty = new MY_DBClass().SELECT_DataTable(getOkQty);
                     DataTable dtPackQty = new CoreBusiness().SELECT(getPackQty);
 
-                    if (dtOkQty.Rows.Count == 0 && dtOkQty.Rows.Count == 0)
+                    if (dtOkQty.Rows.Count == 0 && dtPackQty.Rows.Count == 0)
                     {
                         _lbl_총생산량.Text = "0";
                         _lbl_양품.Text = "0";
@@ -598,13 +598,13 @@ namespace CoFAS.NEW.MES.POP
                     int qty = Convert.ToInt32(dtOkQty.Rows[0]["WORK_OKCNT"].ToString());
                     _lbl_양품.Text = (qty - Convert.ToInt32(_lbl_실적불량.Text)).ToString();
 
+                    //미포장수량에 예열타/양품 수량 차감
+                    //int waitPackQty = Convert.ToInt32(_lbl_양품.Text) - Convert.ToInt32(_포장수량.Text);
+                    _미포장수량.Text = (Convert.ToInt32(_lbl_양품.Text) - Convert.ToInt32(_포장수량.Text)).ToString();
+
                     //총 미포장 수량 
                     int workOkcnt = Convert.ToInt32(dtOkQty.Rows[0]["ALL_OK_QTY"].ToString());
                     int packQty = Convert.ToInt32(dtPackQty.Rows[0]["ALL_PACK_QTY"].ToString());
-
-                    //미포장수량에 예열타/양품 수량 차감
-                    int waitPackQty = Convert.ToInt32(_lbl_양품.Text) - Convert.ToInt32(_포장수량.Text);
-                    _미포장수량.Text = waitPackQty.ToString();
 
                     if (workOkcnt - packQty <= 0)
                     {
@@ -864,7 +864,7 @@ namespace CoFAS.NEW.MES.POP
                 fpMain.Sheets[0].Rows.Count = 0;
 
                 string str = $@"select * from 
-(SELECT   A.order_date                   AS 'ORDER_DATE'
+                                            (SELECT   A.order_date                   AS 'ORDER_DATE'
                                           ,A.resource_no                  AS 'RESOURCE_NO'
                                           ,B.[description]                AS 'DESCRIPTION'
                                           ,A.lot                          AS 'LOT'
@@ -953,87 +953,16 @@ namespace CoFAS.NEW.MES.POP
         }
 
 
-        private void 원자재투입_Click(object sender, EventArgs e)
+        private void 시작_Click(object sender, EventArgs e)
         {
             try
             {
-                if (_p품번 != string.Empty &&
-                    _pLOT != string.Empty &&
-                    _p실적 != string.Empty)
+                // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+                if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
                 {
-                    using (from_CHECK_Barcode popup = new from_CHECK_Barcode())
-                    {
-                        popup._품번 = _p품번;
-                        popup._LOT = _pLOT;
-                        popup._p실적 = _p실적;
-                        popup.ShowDialog();
-
-                        for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                        {
-                            if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString().Trim() == _p실적)
-                            {
-                                fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                            }
-                        }
-                    }
-
-                    _로드셀_Open();
+                    CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
+                    return;
                 }
-            }
-            catch (Exception _Exception)
-            {
-                CustomMsg.ShowExceptionMessage(_Exception.ToString(), "Error", MessageBoxButtons.OK);
-            }
-
-        }
-
-
-        private void 간판_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty &&
-                 _pLOT != string.Empty &&
-                 _p실적 != string.Empty)
-            {
-                int row = 0;
-
-                for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
-                {
-                    if (fpMain.Sheets[0].GetValue(i, "RESOURCE_NO   ".Trim()).ToString().Trim() == _p품번 &&
-                        fpMain.Sheets[0].GetValue(i, "LOT           ".Trim()).ToString().Trim() == _pLOT)
-                    {
-                        row = i;
-                    }
-                }
-
-                using (간판POP popup = new 간판POP(_UserEntity
-                , fpMain.Sheets[0].GetValue(row, "RESOURCE_NO   ".Trim()).ToString()
-                , fpMain.Sheets[0].GetValue(row, "DESCRIPTION ".Trim()).ToString()
-                , fpMain.Sheets[0].GetValue(row, "ORDER_QTY   ".Trim()).ToString()
-                , _미포장수량.Text
-                , _pLOT
-                , _p실적))
-
-                {
-                    if (popup.ShowDialog() == DialogResult.OK)
-
-                        for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                        {
-                            if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
-                            {
-                                fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                            }
-                        }
-                    조회.PerformClick();
-                    run(_p품번, _pLOT, _p호기);
-                }
-                this.간판_Click(_p실적, e);
-            }
-        }
-
-        private void 시작_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty && _pLOT != string.Empty)
-            {
 
                 bool ck = true;
                 for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
@@ -1051,7 +980,6 @@ namespace CoFAS.NEW.MES.POP
                 }
 
                 int planQty = 0;
-
                 int row = 0;
 
                 for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
@@ -1077,64 +1005,61 @@ namespace CoFAS.NEW.MES.POP
 
                 int comQty = Convert.ToInt32(_포장수량.Text);
                 DateTime dateTime = DateTime.Now;
-                DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_WorkPerformance_A10(
-                  _p호기
-                , _작업일자.DateTime.ToString("yyyyMMdd")
-                , _p품번
-                , _pLOT
-                , _교대조.Text
-                , _작업코드.Text
-                , comQty
-                , "1"
-                , _시작.DateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                , null
-                , "admin"
-                , dateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                , "admin"
-                , dateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                , _p작업인원);
+
+                DataTable dt = new MS_DBClass(utility.My_Settings_Get()).USP_WorkPerformance_A10(_p호기
+                                                                                                , _작업일자.DateTime.ToString("yyyyMMdd")
+                                                                                                , _p품번
+                                                                                                , _pLOT
+                                                                                                , _교대조.Text
+                                                                                                , _작업코드.Text
+                                                                                                , comQty
+                                                                                                , "1"
+                                                                                                , _시작.DateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                                                , null
+                                                                                                , "admin"
+                                                                                                , dateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                                                , "admin"
+                                                                                                , dateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                                                , _p작업인원);
 
                 string id = dt.Rows[0]["ID"].ToString();
 
-                string sql = $@"INSERT INTO WORK_PERFORMANCE
-                               (
-                                MACHINE_NO
-                               ,ORDER_NO
-                               ,RESOURCE_NO
-                               ,LOT_NO
-                               ,ORDER_DATE
-                               ,SHIFT
-                               ,PLAN_PERFORMANCE
-                               ,IS_WORKING
-                               ,WORK_CODE
-                               ,QTY_COMPLETE
-                               ,WORK_TIME
-                               ,START_TIME
-                               ,END_TIME
-                               ,REG_USER
-                               ,REG_DATE
-                               ,UP_USER
-                               ,UP_DATE
-                               ,WORK_PERFORMANCE_ID)
-                         VALUES
-                               ('{dt.Rows[0]["MACHINE_NO"].ToString()}'
-                               ,'{dt.Rows[0]["ORDER_NO"].ToString()}'
-                               ,'{dt.Rows[0]["RESOURCE_NO"].ToString()}'
-                               ,'{dt.Rows[0]["LOT_NO"].ToString()}'
-                               ,'{Convert.ToDateTime(dt.Rows[0]["ORDER_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
-                               ,'{dt.Rows[0]["SHIFT"].ToString()}'
-                               ,'{planQty.ToString()}'
-                               ,'가동'
-                               ,'{dt.Rows[0]["WORK_CODE"].ToString()}'
-                               ,'{dt.Rows[0]["QTY_COMPLETE"].ToString()}'
-                               ,'{dt.Rows[0]["WORK_TIME"].ToString()}'
-                               ,'{Convert.ToDateTime(dt.Rows[0]["START_TIME"]).ToString("yyyy-MM-dd HH:mm:ss")}'
-                               ,'{Convert.ToDateTime(dt.Rows[0]["START_TIME"]).ToString("yyyy-MM-dd HH:mm:ss")}'
-                               ,'{dt.Rows[0]["REG_USER"].ToString()}'
-                               ,'{Convert.ToDateTime(dt.Rows[0]["REG_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
-                               ,'{dt.Rows[0]["UP_USER"].ToString()}'
-                               ,'{Convert.ToDateTime(dt.Rows[0]["UP_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
-                               ,'{id}')";
+                string sql = $@"INSERT INTO WORK_PERFORMANCE ( MACHINE_NO
+                                                             , ORDER_NO
+                                                             , RESOURCE_NO
+                                                             , LOT_NO
+                                                             , ORDER_DATE
+                                                             , SHIFT
+                                                             , PLAN_PERFORMANCE
+                                                             , IS_WORKING
+                                                             , WORK_CODE
+                                                             , QTY_COMPLETE
+                                                             , WORK_TIME
+                                                             , START_TIME
+                                                             , END_TIME
+                                                             , REG_USER
+                                                             , REG_DATE
+                                                             , UP_USER
+                                                             , UP_DATE
+                                                             , WORK_PERFORMANCE_ID)
+                                                      VALUES ( '{dt.Rows[0]["MACHINE_NO"].ToString()}'
+                                                             , '{dt.Rows[0]["ORDER_NO"].ToString()}'
+                                                             , '{dt.Rows[0]["RESOURCE_NO"].ToString()}'
+                                                             , '{dt.Rows[0]["LOT_NO"].ToString()}'
+                                                             , '{Convert.ToDateTime(dt.Rows[0]["ORDER_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
+                                                             , '{dt.Rows[0]["SHIFT"].ToString()}'
+                                                             , '{planQty.ToString()}'
+                                                             , '가동'
+                                                             , '{dt.Rows[0]["WORK_CODE"].ToString()}'
+                                                             , '{dt.Rows[0]["QTY_COMPLETE"].ToString()}'
+                                                             , '{dt.Rows[0]["WORK_TIME"].ToString()}'
+                                                             , '{Convert.ToDateTime(dt.Rows[0]["START_TIME"]).ToString("yyyy-MM-dd HH:mm:ss")}'
+                                                             , '{Convert.ToDateTime(dt.Rows[0]["START_TIME"]).ToString("yyyy-MM-dd HH:mm:ss")}'
+                                                             , '{dt.Rows[0]["REG_USER"].ToString()}'
+                                                             , '{Convert.ToDateTime(dt.Rows[0]["REG_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
+                                                             , '{dt.Rows[0]["UP_USER"].ToString()}'
+                                                             , '{Convert.ToDateTime(dt.Rows[0]["UP_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
+                                                             , '{id}')";
                 //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                 DataTable pDataTable5 = new MY_DBClass().SELECT_DataTable(sql);
 
@@ -1159,9 +1084,392 @@ namespace CoFAS.NEW.MES.POP
 
                 CustomMsg.ShowMessage("저장 되었습니다.");
 
-
+            }
+            catch (Exception ex)
+            {
+                CustomMsg.ShowExceptionMessage(ex.ToString(), "Error발생 관리자에게 문의 해 주세요.", MessageBoxButtons.OK);
             }
         }
+
+
+        private void 완료_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+                if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+                {
+                    CustomMsg.ShowMessage("선택된 작업지시가 없습니다. 작업 지시서를 선택 해 주세요.");
+                    return;
+                }
+
+                int row = 0;
+                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                {
+                    if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString() == _p실적)
+                    {
+                        row = i;
+                        if (fpSub.Sheets[0].GetValue(i, "END_TIME    ".Trim()).ToString() != "")
+                        {
+                            CustomMsg.ShowMessage("이미 종료된 작업 실적 입니다.");
+                            return;
+                        }
+                    }
+                }
+
+                if (Convert.ToInt32(_lbl_양품.Text) <= 0)
+                {
+                    CustomMsg.ShowMessage("아직 생산된 양품이 없습니다.");
+                    return;
+                }
+
+                String comQty = (Convert.ToInt32(_간판발행수.Text) * Convert.ToInt32(_포장수량.Text)).ToString(); //완료수량
+                DateTime startTime = _시작.DateTime;
+                DateTime endTime = _종료.DateTime;
+
+                // 두 날짜/시간 사이의 시간 차이 계산
+                TimeSpan difference = endTime - startTime;
+                string sql = $@"UPDATE dbo.WORK_PERFORMANCE
+                                   SET QTY_COMPLETE = '{comQty}'
+                                     , WORK_TIME    = '{difference.TotalSeconds}'
+                                     , END_TIME     = '{_종료.DateTime.ToString("yyyy-MM-dd HH:mm:ss")}'
+                                 WHERE ID           = '{_p실적}'";
+                DataTable _DataTable = new CoreBusiness().SELECT(sql);
+
+
+                new MS_DBClass(utility.My_Settings_Get()).USP_BadPerformance_A10( DateTime.Now.ToString("yyyyMMdd")
+                                                                                , fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()
+                                                                                , "Y"
+                                                                                , comQty
+                                                                                , "T"
+                                                                                , fpSub.Sheets[0].GetValue(row, "ORDER_NO    ".Trim()).ToString()
+                                                                                , fpSub.Sheets[0].GetValue(row, "LOT_NO    ".Trim()).ToString()
+                                                                                , "ADMIN"
+                                                                                , "ADMIN"
+                                                                                );
+
+                sql = $@"UPDATE work_performance
+                            SET END_TIME    = '{startTime.ToString("yyyy-MM-dd HH:mm:ss")}'
+                              , IS_WORKING  = '비가동'
+                          WHERE RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'
+                            AND LOT_NO      = '{fpSub.Sheets[0].GetValue(row, "LOT_NO         ".Trim()).ToString()}'";
+
+                new MY_DBClass().SELECT_DataTable(sql);
+
+
+                sql = $@"select ISNULL(AVG(CAST(B.VALUE AS DECIMAL(10, 2))),0) AS VALUE,A.code_name as TYPE
+                           from [dbo].[Code_Mst] A
+                         left join [dbo].[WORK_RECYCLE_DETAIL] B ON A.code_name = B.TYPE AND  CAST(B.VALUE AS DECIMAL(10, 2)) > 0 AND B.WORK_PERFORMANCE_ID  ='{_p실적}'
+                         WHERE A.code_type = 'CD20' AND A.code_name ='Scrap'
+                         GROUP BY A.code_name";
+                DataTable pDataTable8 = new CoreBusiness().SELECT(sql);
+
+
+                if (pDataTable8.Rows.Count != 0)
+                {
+                    decimal 이동중량 = 0;
+
+                    decimal 샷CAV = (Convert.ToDecimal(_lbl_양품.Text));
+
+                    decimal 스크랩중량 = Convert.ToDecimal(pDataTable8.Rows[0]["VALUE"]);
+
+                    if (스크랩중량 != 0)
+                    {
+                        이동중량 = (샷CAV * 스크랩중량);
+                    }
+                    else
+                    {
+                        sql = $@"SELECT  resource_no,resource_used,qty_per
+                                   FROM [sea_mfg].[dbo].[cproduct_defn]
+                                    where resource_no = '{_p품번}'
+                                   order by resource_no";
+
+                        DataTable bom_dt = new CoreBusiness().SELECT(sql);
+                        이동중량 = (샷CAV * (Convert.ToDecimal(bom_dt.Rows[0]["qty_per"])));
+                    }
+
+                    sql = $@"INSERT INTO [dbo].[SCRAP_MOVE_MST]
+                                    ([WORK_PERFORMANCE_ID]
+                                    ,[RESOURCE_NO]
+                                    ,[LOT_NO]
+                                    ,[DATE]
+                                    ,[QTY]
+                                    ,[COMMENT]
+                                    ,[USE_YN]
+                                    ,[UP_USER]
+                                    ,[UP_DATE]
+                                    ,[REG_USER]
+                                    ,[REG_DATE])
+                              VALUES
+                                    ('{_p실적}'
+                                    ,'{_p품번}'
+                                    ,'{_pLOT}'
+                                    ,GETDATE()
+                                    ,{이동중량}
+                                    ,''
+                                    ,'Y'
+                                    ,'{_UserEntity.user_account}'
+                                    ,GETDATE()
+                                    ,'{_UserEntity.user_account}'
+                                    ,GETDATE())";
+
+                    new MY_DBClass().SELECT_DataTable(sql);
+                }
+
+                CustomMsg.ShowMessage("저장 되었습니다.");
+
+                for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
+                {
+                    if (fpMain.Sheets[0].GetValue(i, "RESOURCE_NO".Trim()).ToString().Trim() == _p품번 &&
+                        fpMain.Sheets[0].GetValue(i, "LOT".Trim()).ToString().Trim() == _pLOT)
+                    {
+                        fpMain_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                    }
+                }
+
+                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                {
+                    if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString().Trim() == _p실적)
+                    {
+                        fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CustomMsg.ShowExceptionMessage(ex.ToString(), "Error발생 관리자에게 문의 해 주세요.", MessageBoxButtons.OK);
+            }
+        }
+
+
+        private void 원자재투입_Click(object sender, EventArgs e)
+        {
+            try
+            {   // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+                if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+                {
+                    CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
+                    return;
+                }
+
+                using (from_CHECK_Barcode popup = new from_CHECK_Barcode())
+                {
+                    popup._품번 = _p품번;
+                    popup._LOT = _pLOT;
+                    popup._p실적 = _p실적;
+                    popup.ShowDialog();
+
+                    for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                    {
+                        if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString().Trim() == _p실적)
+                        {
+                            fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                        }
+                    }
+                }
+
+                _로드셀_Open();
+            }
+            catch (Exception ex)
+            {
+                CustomMsg.ShowExceptionMessage(ex.ToString(), "Error발생 관리자에게 문의 해 주세요.", MessageBoxButtons.OK);
+            }
+        }
+
+
+        private void btn_불량실적_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+                if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+                {
+                    CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
+                    return;
+                }
+
+                // 불량 실적 값이 0이 아닌지 확인 후 메시지 출력 및 종료
+                if (Convert.ToInt32(_lbl_실적불량.Text) == 0)
+                {
+                    CustomMsg.ShowMessage("불량실적에 등록할 양품이 없습니다.");
+                    return;
+                }
+
+                // 불량 입력 폼 열기
+                using (from_불량입력 from = new from_불량입력(_UserEntity))
+                {
+                    from._p품번 = _p품번;
+                    from._p품명 = _품목명.Text;
+                    from._pLOT = _pLOT;
+                    from._p실적 = _p실적;
+                    from.ShowDialog();
+                }
+
+                // fpSub 컨트롤에서 _p실적과 일치하는 ID 행 선택
+                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                {
+                    if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString().Trim() == _p실적)
+                    {
+                        fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                        break; // 일치하는 행을 찾으면 루프 종료
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CustomMsg.ShowExceptionMessage(ex.ToString(), "Error발생 관리자에게 문의 해 주세요.", MessageBoxButtons.OK);
+            }
+        }
+
+        private void 간판_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+                if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+                {
+                    CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
+                    return;
+                }
+
+                // 불량 실적 값이 0이 아닌지 확인 후 메시지 출력 및 종료
+                if (Convert.ToInt32(_lbl_양품.Text) <= 0)
+                {
+                    CustomMsg.ShowMessage("포장할 양품이 없습니다.");
+                    return;
+                }
+
+                int row = 0;
+                for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
+                {
+                    if (fpMain.Sheets[0].GetValue(i, "RESOURCE_NO   ".Trim()).ToString().Trim() == _p품번 &&
+                        fpMain.Sheets[0].GetValue(i, "LOT           ".Trim()).ToString().Trim() == _pLOT)
+                    {
+                        row = i;
+                    }
+                }
+
+                using (간판POP popup = new 간판POP ( _UserEntity
+                                                  , fpMain.Sheets[0].GetValue(row, "RESOURCE_NO   ".Trim()).ToString()
+                                                  , fpMain.Sheets[0].GetValue(row, "DESCRIPTION ".Trim()).ToString()
+                                                  , fpMain.Sheets[0].GetValue(row, "ORDER_QTY   ".Trim()).ToString()
+                                                  , _미포장수량.Text
+                                                  , _pLOT
+                                                  , _p실적
+                                                  ) )
+
+                {
+                    if (popup.ShowDialog() == DialogResult.OK)
+
+                        for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                        {
+                            if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
+                            {
+                                fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                            }
+                        }
+                    조회.PerformClick();
+                    run(_p품번, _pLOT, _p호기);
+                }
+                //this.간판_Click(_p실적, e);
+            }
+            catch (Exception ex)
+            {
+                CustomMsg.ShowExceptionMessage(ex.ToString(), "Error발생 관리자에게 문의 해 주세요.", MessageBoxButtons.OK);
+            }
+        }
+
+        private void btn_출탕_Click(object sender, EventArgs e)
+        {
+
+            // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+            if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+            {
+                CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
+                return;
+            }
+
+            if (_로드셀중량.Text != "-")
+            {
+
+                string sql = $@"SELECT  resource_no,resource_used,qty_per
+                                   FROM [sea_mfg].[dbo].[cproduct_defn]
+                                    where resource_no = '{_p품번}'
+                                   order by resource_no";
+
+                DataTable pDataTable9 = new CoreBusiness().SELECT(sql);
+
+
+                using (출탕 from = new 출탕(_UserEntity
+                     , _용탕투입중량.Text
+                     , _로드셀중량.Text
+                     , pDataTable9.Rows[0]["resource_used"].ToString()
+                     , pDataTable9.Rows[0]["resource_used"].ToString())
+                    )
+                {
+
+
+
+                    from._pLOT = _pLOT;
+                    from._p품번 = pDataTable9.Rows[0]["resource_used"].ToString();
+                    from._p실적 = _p실적;
+
+                    from.ShowDialog();
+
+
+
+                    // 마지막 행을 비활성화
+                    for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                    {
+                        if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
+                        {
+                            fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                CustomMsg.ShowMessage("등록된 중량이 없습니다.");
+            }
+        }
+        private void btn_중량검사_Click(object sender, EventArgs e)
+        {
+            // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
+            if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+            {
+                CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
+                return;
+            }
+
+            using (from_세아초중종 from = new from_세아초중종())
+            {
+                from._p품번 = _p품번;
+                from._pLOT = _pLOT;
+                from._p실적 = _p실적;
+                from.ShowDialog();
+
+                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
+                {
+                    if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
+                    {
+                        fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
+                    }
+                }
+            }
+
+        }
+
+
+        private void btn_COM설정_Click(object sender, EventArgs e)
+        {
+            //BaseFormSetting baseFormSetting = new BaseFormSetting(this.Name, "admin");
+            //baseFormSetting.Show();
+
+        }
+
+
+        #region [정지버튼]
         //private void 정지_Click(object sender, EventArgs e)
         //{
         //    if (_p실적 != string.Empty)
@@ -1236,292 +1544,8 @@ namespace CoFAS.NEW.MES.POP
         //        }
         //    }
         //}
-        private void 완료_Click(object sender, EventArgs e)
-        {
-            if (_p실적 != string.Empty)
-            {
-                int row = 0;
-                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                {
-                    if (fpSub.Sheets[0].GetValue(i, "ID".Trim()).ToString() == _p실적)
-                    {
-                        row = i;
-                        if (fpSub.Sheets[0].GetValue(i, "END_TIME    ".Trim()).ToString() != "")
-                        {
-                            CustomMsg.ShowMessage("종료된 작업 실적 입니다.");
-                            return;
-                        }
-                    }
-                }
 
-
-                int ok_qty = 0;
-
-                if (!int.TryParse(_lbl_양품.Text, out ok_qty))
-                {
-                    CustomMsg.ShowMessage("양품수량을 입력해주세요.");
-                    return;
-                }
-                if (ok_qty == 0)
-                {
-                    CustomMsg.ShowMessage("양품수량을 입력해주세요.");
-                    return;
-                }
-
-                String comQty = (Convert.ToInt32(_간판발행수.Text) * Convert.ToInt32(_포장수량.Text)).ToString(); //완료수량
-                DateTime startTime = _시작.DateTime;
-                DateTime endTime = _종료.DateTime;
-
-                // 두 날짜/시간 사이의 시간 차이 계산
-                TimeSpan difference = endTime - startTime;
-                string sql = $@"UPDATE [dbo].[WORK_PERFORMANCE]
-                                  SET 
-                                      [QTY_COMPLETE] = '{comQty}'
-                                     ,[WORK_TIME]    = '{difference.TotalSeconds}'
-                                     ,[END_TIME]     = '{_종료.DateTime.ToString("yyyy-MM-dd HH:mm:ss")}'
-                                WHERE ID = '{_p실적}'";
-                DataTable _DataTable = new CoreBusiness().SELECT(sql);
-
-
-
-                new MS_DBClass(utility.My_Settings_Get()).USP_BadPerformance_A10(
-                    DateTime.Now.ToString("yyyyMMdd")
-                   , fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()
-                   , "Y"
-                   , comQty
-                   , "T"
-                   , fpSub.Sheets[0].GetValue(row, "ORDER_NO    ".Trim()).ToString()
-                   , fpSub.Sheets[0].GetValue(row, "LOT_NO    ".Trim()).ToString()
-                   , "ADMIN"
-                   , "ADMIN"
-                   );
-
-
-
-
-                sql = $@"UPDATE work_performance
-                         SET END_TIME = '{startTime.ToString("yyyy-MM-dd HH:mm:ss")}'
-                            ,IS_WORKING = '비가동'
-                         WHERE 1 = 1
-                         AND RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'
-                         AND LOT_NO      = '{fpSub.Sheets[0].GetValue(row, "LOT_NO         ".Trim()).ToString()}'";
-
-                new MY_DBClass().SELECT_DataTable(sql);
-
-
-
-
-                sql = $@"select ISNULL(AVG(CAST(B.VALUE AS DECIMAL(10, 2))),0) AS VALUE,A.code_name as TYPE
-                           from [dbo].[Code_Mst] A
-                         left join [dbo].[WORK_RECYCLE_DETAIL] B ON A.code_name = B.TYPE AND  CAST(B.VALUE AS DECIMAL(10, 2)) > 0 AND B.WORK_PERFORMANCE_ID  ='{_p실적}'
-                         WHERE A.code_type = 'CD20' AND A.code_name ='Scrap'
-                         GROUP BY A.code_name";
-
-                DataTable pDataTable8 = new CoreBusiness().SELECT(sql);
-
-
-
-                if (pDataTable8.Rows.Count != 0)
-                {
-                    decimal 이동중량 = 0;
-
-                    decimal 샷CAV = (Convert.ToDecimal(_lbl_양품.Text));
-
-                    decimal 스크랩중량 = Convert.ToDecimal(pDataTable8.Rows[0]["VALUE"]);
-
-                    if (스크랩중량 != 0)
-                    {
-                        이동중량 = (샷CAV * 스크랩중량);
-                    }
-                    else
-                    {
-                        sql = $@"SELECT  resource_no,resource_used,qty_per
-                                   FROM [sea_mfg].[dbo].[cproduct_defn]
-                                    where resource_no = '{_p품번}'
-                                   order by resource_no";
-
-                        DataTable bom_dt = new CoreBusiness().SELECT(sql);
-                        이동중량 = (샷CAV * (Convert.ToDecimal(bom_dt.Rows[0]["qty_per"])));
-                    }
-
-                    sql = $@"INSERT INTO [dbo].[SCRAP_MOVE_MST]
-                                    ([WORK_PERFORMANCE_ID]
-                                    ,[RESOURCE_NO]
-                                    ,[LOT_NO]
-                                    ,[DATE]
-                                    ,[QTY]
-                                    ,[COMMENT]
-                                    ,[USE_YN]
-                                    ,[UP_USER]
-                                    ,[UP_DATE]
-                                    ,[REG_USER]
-                                    ,[REG_DATE])
-                              VALUES
-                                    ('{_p실적}'
-                                    ,'{_p품번}'
-                                    ,'{_pLOT}'
-                                    ,GETDATE()
-                                    ,{이동중량}
-                                    ,''
-                                    ,'Y'
-                                    ,'{_UserEntity.user_account}'
-                                    ,GETDATE()
-                                    ,'{_UserEntity.user_account}'
-                                    ,GETDATE())";
-
-                    new MY_DBClass().SELECT_DataTable(sql);
-                }
-
-
-
-                CustomMsg.ShowMessage("저장 되었습니다.");
-
-                for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
-                {
-                    if (fpMain.Sheets[0].GetValue(i, "RESOURCE_NO   ".Trim()).ToString().Trim() == _p품번 &&
-                        fpMain.Sheets[0].GetValue(i, "LOT           ".Trim()).ToString().Trim() == _pLOT)
-                    {
-                        fpMain_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                    }
-                }
-
-                for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                {
-                    if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
-                    {
-                        fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                    }
-                }
-            }
-        }
-        private void btn_중량검사_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty &&
-                 _pLOT != string.Empty &&
-                _p실적 != string.Empty)
-            {
-                using (from_세아초중종 from = new from_세아초중종())
-                {
-                    from._p품번 = _p품번;
-                    from._pLOT = _pLOT;
-                    from._p실적 = _p실적;
-                    from.ShowDialog();
-
-                    // 마지막 행을 비활성화
-                    for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                    {
-                        if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
-                        {
-                            fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                CustomMsg.ShowMessage("선택된 작업지시가 없습니다.");
-            }
-        }
-
-        private void btn_출탕_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty &&
-                 _pLOT != string.Empty &&
-                 _p실적 != string.Empty
-                )
-            {
-                if (_로드셀중량.Text != "-")
-                {
-
-                    string sql = $@"SELECT  resource_no,resource_used,qty_per
-                                   FROM [sea_mfg].[dbo].[cproduct_defn]
-                                    where resource_no = '{_p품번}'
-                                   order by resource_no";
-
-                    DataTable pDataTable9 = new CoreBusiness().SELECT(sql);
-
-
-                    using (출탕 from = new 출탕(_UserEntity
-                         , _용탕투입중량.Text
-                         , _로드셀중량.Text
-                         , pDataTable9.Rows[0]["resource_used"].ToString()
-                         , pDataTable9.Rows[0]["resource_used"].ToString())
-                        )
-                    {
-
-
-
-                        from._pLOT = _pLOT;
-                        from._p품번 = pDataTable9.Rows[0]["resource_used"].ToString();
-                        from._p실적 = _p실적;
-
-                        from.ShowDialog();
-
-
-
-                        // 마지막 행을 비활성화
-                        for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                        {
-                            if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
-                            {
-                                fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    CustomMsg.ShowMessage("등록된 중량이 없습니다.");
-                }
-
-            }
-        }
-
-        private void btn_불량실적_Click(object sender, EventArgs e)
-        {
-            if (_p품번 != string.Empty &&
-                   _pLOT != string.Empty &&
-                  _p실적 != string.Empty)
-            {
-                using (from_불량입력 from = new from_불량입력(_UserEntity))
-                {
-
-
-                    from._p품번 = _p품번;
-                    from._p품명 = _품목명.Text;
-                    from._pLOT = _pLOT;
-                    from._p실적 = _p실적;
-                    from.ShowDialog();
-
-
-
-                    for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
-                    {
-                        if (fpSub.Sheets[0].GetValue(i, "ID           ".Trim()).ToString().Trim() == _p실적)
-                        {
-
-                            fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
-
-                        }
-                    }
-                }
-            }
-            else
-            {
-                CustomMsg.ShowMessage("선택된 작업지시가 없습니다.");
-            }
-
-
-        }
-
-        private void btn_COM설정_Click(object sender, EventArgs e)
-        {
-            BaseFormSetting baseFormSetting = new BaseFormSetting(this.Name, "admin");
-
-            baseFormSetting.Show();
-
-        }
-
+        #endregion
 
 
 

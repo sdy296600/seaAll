@@ -253,9 +253,9 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(원재료간판라벨 라벨)
         {
-            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
             //string printerName2 = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
-            string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
+            string printerName = "ZDesigner ZD230-203dpi ZPL";
+            //string printerName = "ZDesigner GT800 ( )"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 
@@ -271,10 +271,10 @@ namespace CoFAS.NEW.MES.POP
                             ^FO50,158^GB350,70,4^FS
                             ^FO50,158^GB525,70,4^FS
                             ^FS^FO55,40^A1N,35,20^FD품번 : 
-                            ^FS^FO55,110^A1N,35,20^FD거래처 : 
+                            ^FS^FO55,110^A1N,35,20^FD거래처 :    
                             ^FS^FO55,180^A1N,35,15^FD중량 : 
                             ^FS^FO55,245^A1N,35,15^FDLOT : 
-                            ^FS^FO400,40^A1N,36,20^FD{라벨.ResourceNo}
+                            ^FS^FO210,40^A1N,36,20^FD{라벨.ResourceNo}
                             ^FS^FO400,110^A1N,36,20^FD{라벨.Vendor_No}
                             ^FS^FO210,180^A1N,36,20^FD{라벨.BarcodeCount}
                             ^FS^FO210,245^A1N,36,20^FD{라벨.LOT_NO}
@@ -293,10 +293,10 @@ namespace CoFAS.NEW.MES.POP
             {
                 PrintServer printServer = new PrintServer();
                 PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
-                printQueue.Purge();
+                //printQueue.Purge();
 
                 RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-                RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+                //RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                 //RawPrinterHelper.SendStringToPrinter(printerName2, zplCommand);
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
             }

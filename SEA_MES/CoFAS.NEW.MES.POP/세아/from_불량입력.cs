@@ -237,32 +237,8 @@ namespace CoFAS.NEW.MES.POP
             }
         }
 
-
-
-
-
         #endregion
 
-
-
-
-
-
-
-
-
-
-
-        //private void _중량_Click(object sender, EventArgs e)
-        //{
-        //    using (from_키패드 popup = new from_키패드())
-        //    {
-        //        if (popup.ShowDialog() == DialogResult.OK)
-        //        {
-        //            _중량.Text = popup._code;
-        //        }
-        //    }
-        //}
     }
 }
 

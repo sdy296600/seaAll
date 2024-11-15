@@ -17,9 +17,7 @@ namespace CoFAS.NEW.MES.Download
         public FormDownload_세아_간판POP()
         {
             _sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
-
             _updatetype = "세아간판POP";
-
             _runName = "CoFAS.NEW.MES.POP";
             InitializeComponent();
 

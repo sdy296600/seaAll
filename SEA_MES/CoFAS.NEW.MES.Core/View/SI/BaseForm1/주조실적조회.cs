@@ -33,17 +33,17 @@ namespace CoFAS.NEW.MES.Core
                 DevExpressManager.SetCursor(this, Cursors.WaitCursor);
 
                 DataTable _DataTable = new CoreBusiness().BaseForm1_R10(_PAN_WHERE, this._pMenuSettingEntity);
-        
-                string sql = "SELECT * FROM WORK_PERFORMANCE";
+
+                string sql = $"SELECT * FROM WORK_PERFORMANCE";
 
                 DataSet ds = myDb.GetAllData(sql);
                 DataTable dt = ds.Tables[0];
 
-                sql = "SELECT * FROM BAD_PERFORMANCE";
+                sql = "SELECT WORK_PERFORMANCE_ID, SUM(BAD_QTY) AS BAD_QTY ,MAX(LOT_NO) AS LOT_NO, MAX(RESOURCE_NO) AS RESOURCE_NO  FROM BAD_PERFORMANCE GROUP BY WORK_PERFORMANCE_ID";
                 DataSet ds2 = msDb.GetAllData(sql);
                 DataTable dt2 = ds2.Tables[0];
                 DataTable resultTable = new DataTable();
-               
+
 
                 // dt1의 모든 열을 resultTable에 추가
                 foreach (DataColumn column in _DataTable.Columns)
@@ -56,11 +56,11 @@ namespace CoFAS.NEW.MES.Core
 
 
                 // LINQ로 조인 수행하여 모든 열 가져오기
-                var joinedData = from row1 in _DataTable.AsEnumerable()
-                                 join row2 in dt.AsEnumerable()
+                var joinedData = from row1 in _DataTable.AsEnumerable() // mssql 작업지시
+                                 join row2 in dt.AsEnumerable()   // mysql work_performance
                                  on row1.Field<long?>("ID") equals row2.Field<long?>("WORK_PERFORMANCE_ID") into gj2 // 'into'를 사용하여 그룹을 생성
                                  from subRow2 in gj2.DefaultIfEmpty() // row2가 null인 경우에 대비
-                                 join row3 in dt2.AsEnumerable()
+                                 join row3 in dt2.AsEnumerable() //mssql bad_perfromace
                                  on row1.Field<long?>("ID") equals row3.Field<long?>("WORK_PERFORMANCE_ID") into gj3 // 'into'를 사용하여 그룹을 생성
                                  from subRow3 in gj3.DefaultIfEmpty() // row3가 null인 경우에 대비
                                                                       // 여기를 통해 row1의 LOT_NO 및 RESOURCE_NO를 subRow2 및 subRow3와 비교
@@ -83,7 +83,7 @@ namespace CoFAS.NEW.MES.Core
                                  };
 
 
-                // 결과를 resultTable에 추가
+                // 결과를 resultTable에 추가 
                 foreach (var item in joinedData)
                 {
                     var newRow = resultTable.NewRow();

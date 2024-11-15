@@ -613,8 +613,10 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._로드셀중량.Location = new System.Drawing.Point(407, 88);
             this._로드셀중량.Name = "_로드셀중량";
-            this._로드셀중량.Size = new System.Drawing.Size(100, 23);
+            this._로드셀중량.Size = new System.Drawing.Size(168, 28);
             this._로드셀중량.TabIndex = 21;
+            this._로드셀중량.Text = "0";
+            this._로드셀중량.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // _지시수량
             // 
@@ -1275,6 +1277,7 @@ namespace CoFAS.NEW.MES.POP
             this.정지.TabIndex = 2;
             this.정지.Text = "정지";
             this.정지.UseVisualStyleBackColor = false;
+            this.정지.Visible = false;
             this.정지.Click += new System.EventHandler(this.완료_Click);
             // 
             // 완료
@@ -1398,6 +1401,7 @@ namespace CoFAS.NEW.MES.POP
             this.btn_COM설정.TabIndex = 3;
             this.btn_COM설정.Text = "COM설정";
             this.btn_COM설정.UseVisualStyleBackColor = false;
+            this.btn_COM설정.Visible = false;
             this.btn_COM설정.Click += new System.EventHandler(this.btn_COM설정_Click);
             // 
             // label18
