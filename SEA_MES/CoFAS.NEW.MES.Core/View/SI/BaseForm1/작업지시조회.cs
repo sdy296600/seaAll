@@ -33,11 +33,16 @@ namespace CoFAS.NEW.MES.Core
                 // MPL02818AC-DIE
 
                 Base_FromtoDateTime datetime = _PAN_WHERE.Controls[0] as Base_FromtoDateTime;
-                Base_textbox txtBox = _PAN_WHERE.Controls[1] as Base_textbox;
-                string RESOURCE_NO = txtBox.SearchText;
                 string strTime = datetime.StartValue.ToString("yyyy-MM-dd");
                 string endTime = datetime.EndValue.ToString("yyyy-MM-dd");
-                                                                                                                             
+                
+                Base_textbox txtBox = _PAN_WHERE.Controls[1] as Base_textbox;
+                string RESOURCE_NO = txtBox.SearchText;
+                if (txtBox.SearchText == null)
+                {
+                   RESOURCE_NO = "";
+                }
+
                 string GET_DEMAND_MSTR =  $"  SELECT T1.ORDER_NO                                                           " +
                                           $"       , T1.LOT                                                                " +
                                           $"       , T1.ORDER_TYPE                                                         " +
@@ -78,7 +83,7 @@ namespace CoFAS.NEW.MES.Core
 	                                      $"       , T1.SHIFT                                                              " +
                                           $"    FROM SEA_MFG.DBO.DEMAND_MSTR    T1                                         " +
                                           $"   WHERE T1.ORDER_DATE  BETWEEN '{strTime}' AND '{endTime}'                    " +
-                                          $"     AND T1.RESOURCE_NO LIKE '%'{RESOURCE_NO}'%'                               " +
+                                          $"     AND T1.RESOURCE_NO LIKE '%{RESOURCE_NO}%'                               " +
                                           $"   GROUP BY T1.ORDER_NO                                                        " +
                                           $"       , T1.LOT                                                                " +
                                           $"       , T1.ORDER_TYPE                                                         " +
