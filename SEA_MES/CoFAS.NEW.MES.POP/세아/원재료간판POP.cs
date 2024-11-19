@@ -270,17 +270,17 @@ namespace CoFAS.NEW.MES.POP
                             ^FO50,158^GB280,70,4^FS
                             ^FO50,158^GB350,70,4^FS
                             ^FO50,158^GB525,70,4^FS
-                            ^FS^FO55,40^A1N,35,20^FD품번 : 
-                            ^FS^FO55,110^A1N,35,20^FD거래처 :    
-                            ^FS^FO55,180^A1N,35,15^FD중량 : 
-                            ^FS^FO55,245^A1N,35,15^FDLOT : 
+                            ^FS^FO60,40^A1N,35,20^FD품번
+                            ^FS^FO60,110^A1N,35,20^FD거래처   
+                            ^FS^FO60,180^A1N,35,15^FD중량 
+                            ^FS^FO60,245^A1N,35,15^FDLOT
                             ^FS^FO210,40^A1N,36,20^FD{라벨.ResourceNo}
-                            ^FS^FO400,110^A1N,36,20^FD{라벨.Vendor_No}
+                            ^FS^FO420,110^A1N,36,20^FD{라벨.Vendor_No}
                             ^FS^FO210,180^A1N,36,20^FD{라벨.BarcodeCount}
                             ^FS^FO210,245^A1N,36,20^FD{라벨.LOT_NO}
                             ^FS^FO600,245^A1N,36,20^FD{라벨.COMMENT}
-                            ^FS^FO335,180^ADN,36,20^FDKg
-                            ^FS^FO400,180^A1N,36,20^FD발행일
+                            ^FS^FO340,180^ADN,36,20^FDKg
+                            ^FS^FO420,180^A1N,36,20^FD발행일
                             ^FS^FO600,180^A1N,36,20^FD{DateTime.Now.ToString("yyyy-MM-dd")}
                             ^FS^FO600,40^A1N,36,20^FD{라벨.LabelNo}
                          

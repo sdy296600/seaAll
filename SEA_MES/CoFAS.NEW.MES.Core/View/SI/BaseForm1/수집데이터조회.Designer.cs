@@ -114,7 +114,7 @@
             this.Name = "수집데이터조회";
             this.Text = "수집데이터조회";
             this.WindowName = "수집데이터조회";
-            this.Load += new System.EventHandler(this.수집데이터조회_Load);
+            this.Load += new System.EventHandler(this.Form_Load);
             this.panel1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fpMain)).EndInit();

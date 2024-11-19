@@ -27,55 +27,71 @@ namespace CoFAS.NEW.MES.Core
         {
             InitializeComponent();
 
+            Load += new EventHandler(Form_Load);
         }
 
-
-        public override void _InitialButtonClicked(object sender, EventArgs e)
+        private void Form_Load(object sender, EventArgs e)
         {
-            try
-            {
-                DataTable pDataTable = new CoreBusiness().BASE_MENU_SETTING_R10(this._pMenuSettingEntity.MENU_WINDOW_NAME, fpMain, this._pMenuSettingEntity.BASE_TABLE.Split('/')[0]);
+            DevExpressManager.SetCursor(this, Cursors.WaitCursor);
+            fpMain.Sheets[0].Rows.Count = 0;
 
-                Function.Core.InitializeControl(pDataTable, fpMain, this, _PAN_WHERE, _pMenuSettingEntity);
-                수집데이터조회_Load(null, null);
-            }
-            catch (Exception pExcption)
-            {
-                CustomMsg.ShowExceptionMessage(pExcption.ToString(), "Error", MessageBoxButtons.OK);
-            }
+            string mysqlconn = $"Server=10.10.10.216;Database=hansoldms;UID=coever;PWD=coever119!";
+            string mssqlconn = $"Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#";
+
+            myDb = new DataBase_Class(new MY_DB(mysqlconn));
+            Base_ComboBox text = _PAN_WHERE.Controls[0] as Base_ComboBox;
+            Base_FromtoDateTime datetime = _PAN_WHERE.Controls[1] as Base_FromtoDateTime;
+            datetime.OnlyUseOneBox();
+            text._SearchCom.DeleteItemByIndex(0);
+            text._SearchCom.ItemIndex = 0;
+
         }
+
+        //public override void _InitialButtonClicked(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        DataTable pDataTable = new CoreBusiness().BASE_MENU_SETTING_R10(this._pMenuSettingEntity.MENU_WINDOW_NAME, fpMain, this._pMenuSettingEntity.BASE_TABLE.Split('/')[0]);
+
+        //        Function.Core.InitializeControl(pDataTable, fpMain, this, _PAN_WHERE, _pMenuSettingEntity);
+        //        Form_Load(null, null);
+        //    }
+        //    catch (Exception pExcption)
+        //    {
+        //        CustomMsg.ShowExceptionMessage(pExcption.ToString(), "Error", MessageBoxButtons.OK);
+        //    }
+        //}
 
         public override void MainFind_DisplayData()
         {
             try
             {
-                DevExpressManager.SetCursor(this, Cursors.WaitCursor);
+                //DevExpressManager.SetCursor(this, Cursors.WaitCursor);
 
                 Base_ComboBox text = _PAN_WHERE.Controls[0] as Base_ComboBox;
                 string machine_no = text.SearchText;
                 Base_FromtoDateTime datetime = _PAN_WHERE.Controls[1] as Base_FromtoDateTime;
                 string startTime = datetime.StartValue.ToString("yyyy-MM-dd");
 
-                string getMySqlDataGrid =   $"SELECT T2.ID                                                    " +
-                                            $"     , T2.ORDER_NO                                              " +
-                                            $"     , T2.START_TIME                                            " +
-                                            $"     , T2.END_TIME                                              " +
-                                            $"     , T1.*                                                     " +
-                                            $"  FROM data_for_grid   T1                                       " +
-                                            $"     , ( SELECT START_TIME                                      " +
-                                            $"              , end_time                                        " +
-                                            $"              , ID                                              " +
-                                            $"              , MACHIN_NO                                      " +
-                                            $"              , ORDER_NO                                        " +
-                                            $"           FROM WORK_PERFORMANCE                                " +
-                                            $"          WHERE MACHINE_NO = IFNULL(MACHINE_NO, '{machine_no}')    " +
-                                            $"                 )                                               " +
-                                            $" WHERE T1.MACHINE_NO = T2.MACHINE_NO                              " +
-                                            $"   AND T1.DATE >= T2.START_TIME                                   " +
-                                            $"   AND T1.DATE <= T2.end_time                                     " +
-                                            $"   ORDER BY T1.DATE, T2.ORDER_NO, T2.START_TIME, T2.END_TIME      " +
-                                            $"";
-
+                string getMySqlDataGrid =   $" SELECT T2.ID                                                    " +
+                                            $"      , T2.ORDER_NO                                              " +
+                                            $"      , T2.START_TIME                                            " +
+                                            $"      , T2.END_TIME                                              " +
+                                            $"      , T1.*                                                     " +
+                                            $"   FROM data_for_grid   T1                                       " +
+                                            $"      , ( SELECT START_TIME                                      " +
+                                            $"               , end_time                                        " +
+                                            $"               , ID                                              " +
+                                            $"               , MACHIN_NO                                       " +
+                                            $"               , ORDER_NO                                        " +
+                                            $"            FROM WORK_PERFORMANCE                                " +
+                                            $"           WHERE MACHINE_NO = IFNULL(MACHINE_NO, '{machine_no}') " +
+                                            $"       )                                                         " +
+                                            $"  WHERE T1.MACHINE_NO = T2.MACHINE_NO                            " +
+                                            $"    AND T1.DATE >= T2.START_TIME                                 " +
+                                            $"    AND T1.DATE <= T2.end_time                                   " +
+                                            $"  ORDER BY T1.DATE, T2.ORDER_NO, T2.START_TIME, T2.END_TIME     " ;
+                                               
 
                 DataSet ds = new DataSet();
                 MySqlConnection conn2 = new MySqlConnection("Server=10.10.10.216;Database=hansoldms;Uid=coever;Pwd=coever119!");
@@ -501,18 +517,6 @@ namespace CoFAS.NEW.MES.Core
             }
         }
 
-        private void 수집데이터조회_Load(object sender, EventArgs e)
-        {
-            string mysqlconn = "Server=10.10.10.216;Database=hansoldms;UID=coever;PWD=coever119!";
-            string mssqlconn = $"Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#";
-
-            myDb = new DataBase_Class(new MY_DB(mysqlconn));
-            Base_ComboBox text = _PAN_WHERE.Controls[0] as Base_ComboBox;
-            Base_FromtoDateTime datetime = _PAN_WHERE.Controls[1] as Base_FromtoDateTime;
-            datetime.OnlyUseOneBox();
-            text._SearchCom.DeleteItemByIndex(0);
-            text._SearchCom.ItemIndex = 0;
-
-        }
+       
     }
 }

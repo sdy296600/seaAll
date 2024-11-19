@@ -13,7 +13,6 @@ namespace CoFAS.NEW.MES.Core
         public 작업지시조회()
         {
             InitializeComponent();
-
             Load += new EventHandler(Form_Load);
         }
 
@@ -21,7 +20,6 @@ namespace CoFAS.NEW.MES.Core
         private void Form_Load(object sender, EventArgs e)
         {
             DevExpressManager.SetCursor(this, Cursors.WaitCursor);
-            
             fpMain.Sheets[0].Rows.Count = 0;
             //MainFind_DisplayData();
         }
