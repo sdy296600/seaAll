@@ -677,7 +677,7 @@ namespace CalculateForSea
                         using (MySqlConnection conn = new MySqlConnection(ConnectionString))
                         {
                             conn.Open();
-                            using (MySqlCommand cmd = new MySqlCommand("DELETE FROM timeseriesdata WHERE id = @id", conn))
+                            using (MySqlCommand cmd = new MySqlCommand("DELETE FROM timeseriesdata WHERE id = @id AND category LIKE  '%TAG_D42%'  AND VALUE LIKE '999%'", conn))
                             {
                                 cmd.CommandType = CommandType.Text;
                                 cmd.Parameters.AddWithValue("@id", id); // 파라미터화된 쿼리 사용

@@ -7,6 +7,7 @@ using FarPoint.Win.Spread;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Printing;
 using System.Runtime.InteropServices;
@@ -292,9 +293,9 @@ namespace CoFAS.NEW.MES.POP
                     공정이동표 라벨 = new 공정이동표();
 
                     라벨.LOT_NO           = fpMain.Sheets[0].GetValue(i, "LOT_NO      ".Trim()).ToString();
-                    라벨.품목명           = fpMain.Sheets[0].GetValue(i, "DESCRIPTION ".Trim()).ToString();
-                    라벨.BARCODE_DATE     = fpMain.Sheets[0].GetValue(i, "BARCODE_DATE".Trim()).ToString();
-                    라벨.MOVE_DATE        = fpMain.Sheets[0].GetValue(i, "MOVE_DATE   ".Trim()).ToString();
+                    라벨.품목명            = fpMain.Sheets[0].GetValue(i, "DESCRIPTION ".Trim()).ToString();
+                    라벨.BARCODE_DATE     = Convert.ToDateTime(fpMain.Sheets[0].GetValue(i, "BARCODE_DATE").ToString()).ToString("yyyy-MM-dd");
+                    라벨.MOVE_DATE        = Convert.ToDateTime(fpMain.Sheets[0].GetValue(i, "MOVE_DATE").ToString()).ToString("yyyy-MM-dd");
                     라벨.ID               = fpMain.Sheets[0].GetValue(i, "ID          ".Trim()).ToString();
                     라벨.P_QTY            = fpMain.Sheets[0].GetValue(i, "P_QTY       ".Trim()).ToString();
                     라벨.RESOURCE_NO      = fpMain.Sheets[0].GetValue(i, "RESOURCE_NO ".Trim()).ToString();
@@ -307,69 +308,61 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(공정이동표 라벨)
         {
-            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
-            //string printerName2 = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
             string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
+            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA
-                                ^SEE:UHANGUL.DAT^FS
-                                ^CW1,E:KFONT3.FNT^CI26^FS
+                            ^SEE:UHANGUL.DAT^FS
+                            ^CW1,E:KFONT3.FNT^CI26^FS
+                            ^FO30,30^GB730,360,3^FS
+                            ^FO30,90^GB730,3,3^FS
+                            ^FO30,150^GB730,3,3^FS
+                            ^FO30,210^GB730,3,3^FS
+                            ^FO30,270^GB730,3,3^FS
+                            ^FO30,330^GB470,3,3^FS
+                            ^FO50,50^A1N,36,16^FD고객사^FS
+                            ^FO50,110^A1N,36,16^FD품명^FS
+                            ^FO50,170^A1N,36,16^FD생산일자^FS
+                            ^FO50,230^A1N,36,16^FD전공정^FS
+                            ^FO50,290^A1N,36,16^FD수량^FS
+                            ^FO50,350^A1N,36,16^FD품번^FS
 
+                            ^FO170,30^GB3,360,3^FS
+                            ^FO180,230^A1N,36,16^FD주조^FS
+                            ^FO415,50^A1N,36,16^FDLOT^FS
+                            ^FO415,170^A1N,36,16^FD이동일자^FS
+                            ^FO415,230^A1N,36,16^FD재고기록표^FS
 
-                                ^FO30,30^GB730,360,3^FS
+                            ^FO180,50^A1N,36,16^FD^FS
+                            ^FO185,110^A1N,36,16^FD{라벨.품목명}^FS
+                            ^FO185,170^A1N,36,16^FD{라벨.BARCODE_DATE}^FS
+                            ^FO185,290^A1N,36,16^FD{라벨.P_QTY}^FS
+                            ^FO185,350^A1N,36,16^FD{라벨.RESOURCE_NO}^FS
 
-                                ^FO170,30^GB3,360,3^FS
-                                ^FO400,30^GB3,60,3^FS
-                                ^FO500,30^GB3,60,3^FS
+                            ^FO400,30^GB3,60,3^FS
+                            ^FO400,150^GB3,120,3^FS
+                            ^FO500,30^GB3,60,3^FS
+                            ^FO500,150^GB3,240,3^FS
 
-                                ^FO30,90^GB730,3,3^FS
-                                ^FO30,150^GB730,3,3^FS
-                                ^FO30,210^GB730,3,3^FS
-                                ^FO30,270^GB730,3,3^FS
-                                ^FO30,330^GB470,3,3^FS
+                            ^FO515,50^A1N,36,16^FD{라벨.LOT_NO}^FS
+                            ^FO515,170^A1N,36,16^FD{라벨.MOVE_DATE}^FS
+                            ^FO515,230^A1N,36,16^FD{라벨.ID}^FS
 
-                                ^FO400,150^GB3,120,3^FS
-                                ^FO500,150^GB3,240,3^FS
-
-                                 ^FO50,50^A1N,36,16^FD고객사^FS
-                                 ^FO50,110^A1N,36,16^FD품명^FS
-                                 ^FO50,170^A1N,36,16^FD생산일자^FS
-                                 ^FO50,230^A1N,36,16^FD전공정^FS
-                                 ^FO50,290^A1N,36,16^FD수량^FS
-                                 ^FO50,350^A1N,36,16^FD품번^FS
-
-                                 ^FO180,50^A1N,36,16^FD^FS
-                                 ^FO180,110^A1N,36,16^FD{라벨.품목명}^FS
-                                 ^FO180,170^A1N,36,16^FD{라벨.BARCODE_DATE}^FS
-                                 ^FO180,230^A1N,36,16^FD주조^FS
-                                 ^FO180,290^A1N,36,16^FD{라벨.P_QTY}^FS
-                                 ^FO180,350^A1N,36,16^FD{라벨.RESOURCE_NO}^FS
-
-                                 ^FO410,50^A1N,36,16^FDLOT NO.^FS
-                                 ^FO410,170^A1N,36,16^FD이동일자^FS
-                                 ^FO410,230^A1N,36,16^FD재고기록표^FS
-
-                                 ^FO510,50^A1N,36,16^FD{라벨.LOT_NO}^FS
-                                 ^FO510,170^A1N,36,16^FD{라벨.MOVE_DATE}^FS
-                                 ^FO510,230^A1N,36,16^FD{라벨.ID}^FS
-
-
-
-                                 ^FO580,290^BON,7,7
-                            
-                                 ^BXN,4,200^FDMM,B0024 {라벨.BARCODE_NO}^F
-                            
-                                 ^XZ";
+                            ^FO580,290^BON,7,7
+                            ^BXN,4,200^FDMM,B0024 {라벨.BARCODE_NO}^F
+                            ^XZ";
             try
             {
                 PrintServer printServer = new PrintServer();
-                PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
-                printQueue.Purge();
 
+                PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
                 RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-                RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
-                //RawPrinterHelper.SendStringToPrinter(printerName2, zplCommand);
+                //printQueue.Purge();
+
+                //PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
+                //RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
             }
             catch (Exception ex)
@@ -380,6 +373,7 @@ namespace CoFAS.NEW.MES.POP
 
       
     }
+
     public class 공정이동표
     {
         public string LOT_NO        { get; set; }
@@ -391,8 +385,6 @@ namespace CoFAS.NEW.MES.POP
         public string RESOURCE_NO   { get; set; }
         public string BARCODE_NO   { get; set; }
     }
-
-  
 }
 
 

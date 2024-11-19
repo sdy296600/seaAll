@@ -31,7 +31,7 @@ namespace CoFAS.NEW.MES.POP
             utility.My_Settings_Start();
             utility.My_Settings_Get();
 
-            
+            // 출력 테스트 이후에 라벨 프린트기 명 확인할것
             //세아_POP();
             원재료간판_POP();
 

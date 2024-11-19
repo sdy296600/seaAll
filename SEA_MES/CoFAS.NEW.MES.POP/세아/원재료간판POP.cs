@@ -8,10 +8,12 @@ using FarPoint.Excel;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Printing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CoFAS.NEW.MES.POP
 {
@@ -258,44 +260,50 @@ namespace CoFAS.NEW.MES.POP
             string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
-            zplCommand = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 
-                            ^FO50,20^GB770,70,4^FS
-                            ^FO50,20^GB770,140,4^FS
-                            ^FO50,20^GB770,210,4^FS
-                            ^FO50,20^GB770,270,4^FS
-                            ^FO50,20^GB770,350,4^FS
-                            ^FO50,20^GB150,270,4^FS
-                            ^FO50,20^GB525,70,4^FS
-                            ^FO570,225^GB0,65,4^FS
-                            ^FO50,158^GB280,70,4^FS
-                            ^FO50,158^GB350,70,4^FS
-                            ^FO50,158^GB525,70,4^FS
-                            ^FS^FO60,40^A1N,35,20^FD품번
-                            ^FS^FO60,110^A1N,35,20^FD거래처   
-                            ^FS^FO60,180^A1N,35,15^FD중량 
-                            ^FS^FO60,245^A1N,35,15^FDLOT
-                            ^FS^FO210,40^A1N,36,20^FD{라벨.ResourceNo}
-                            ^FS^FO420,110^A1N,36,20^FD{라벨.Vendor_No}
-                            ^FS^FO210,180^A1N,36,20^FD{라벨.BarcodeCount}
-                            ^FS^FO210,245^A1N,36,20^FD{라벨.LOT_NO}
-                            ^FS^FO600,245^A1N,36,20^FD{라벨.COMMENT}
-                            ^FS^FO340,180^ADN,36,20^FDKg
-                            ^FS^FO420,180^A1N,36,20^FD발행일
-                            ^FS^FO600,180^A1N,36,20^FD{DateTime.Now.ToString("yyyy-MM-dd")}
-                            ^FS^FO600,40^A1N,36,20^FD{라벨.LabelNo}
-                         
+            zplCommand = $@"^XA^BY2
+                            , 2.0^FS^SEE:UHANGUL.DAT^FS^CW1
+                            , E:KFONT3.FNT^CI26^FS 
+                            ^FO50,  20^GB770, 70,  4^FS
+                            ^FO50,  20^GB770, 140, 4^FS
+                            ^FO50,  20^GB770, 210, 4^FS
+                            ^FO50,  20^GB770, 270, 4^FS
+                            ^FO50,  20^GB770, 350, 4^FS
+                            ^FO50,  20^GB150, 270, 4^FS
+                            ^FO50,  20^GB525, 70,  4^FS
+                            ^FO50,  158^GB280,70,  4^FS
+                            ^FO50,  158^GB350,70,  4^FS
+                            ^FO50,  158^GB525,70,  4^FS
+                            ^FO570, 225^GB0,  65,  4^FS
 
+                            ^FS^FO60, 40^A1N,35,20^FD품번
+                            ^FS^FO60, 110^A1N,35,20^FD거래처   
+                            ^FS^FO60, 180^A1N,35,15^FD중량 
+                            ^FS^FO60, 245^A1N,35,15^FDLOT
+
+                            ^FS^FO210, 40^A1N,36,20^FD{라벨.ResourceNo}
+                            ^FS^FO420, 110^A1N,36,20^FD{라벨.Vendor_No}
+                            ^FS^FO210, 180^A1N,36,20^FD{라벨.BarcodeCount}
+                            ^FS^FO210, 245^A1N,36,20^FD{라벨.LOT_NO}
+                            ^FS^FO600, 245^A1N,36,20^FD{라벨.COMMENT}
+                            ^FS^FO340, 180^ADN,36,20^FDKg
+                            ^FS^FO420, 180^A1N,36,20^FD발행일
+                            ^FS^FO600, 180^A1N,36,20^FD{DateTime.Now.ToString("yyyy-MM-dd")}
+                            ^FS^FO600, 40^A1N,36,20^FD{라벨.LabelNo}
+                        
                             ^FS^BY2,3,50^FT 80, 350
                             ^BCN,40,N,N,Y^FD{라벨.BarcodeNo}^FS^XZ";
 
 
             try
             {
+
+
                 PrintServer printServer = new PrintServer();
                 PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
+                PrintQueue printQueue1 = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
                 //printQueue.Purge();
 
-                RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                //RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                 RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
                 //RawPrinterHelper.SendStringToPrinter(printerName2, zplCommand);
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
@@ -306,6 +314,7 @@ namespace CoFAS.NEW.MES.POP
                 CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
             }
         }
+
 
         private void 조회버튼_Click(object sender, EventArgs e)
         {
