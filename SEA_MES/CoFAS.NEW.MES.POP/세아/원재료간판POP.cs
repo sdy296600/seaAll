@@ -100,14 +100,12 @@ namespace CoFAS.NEW.MES.POP
             this.WindowState = FormWindowState.Maximized;
             this.MinimumSize = this.Size;
         }
+
         public 원재료간판POP()
         {
             InitializeComponent();
 
-
-
             _MY = utility.My_Settings_Get();
-
             Load += new EventHandler(Form_Load);
 
             this.Font = new Font(_MY.FONT_TYPE, _MY.FONT_SIZE, FontStyle.Bold);
@@ -243,6 +241,8 @@ namespace CoFAS.NEW.MES.POP
                         CustomMsg.ShowMessage("바코드 출력이 완료되었습니다.");
                         조회버튼_Click(sender, e);
                     }
+
+
                 }
             }
             catch (Exception ex)
@@ -254,8 +254,8 @@ namespace CoFAS.NEW.MES.POP
         private void print(원재료간판라벨 라벨)
         {
             //string printerName2 = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
-            string printerName = "ZDesigner ZD230-203dpi ZPL";
-            //string printerName = "ZDesigner GT800 ( )"; //세아 라벨 프린트
+            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
+            string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 
@@ -296,7 +296,7 @@ namespace CoFAS.NEW.MES.POP
                 //printQueue.Purge();
 
                 RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-                //RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
                 //RawPrinterHelper.SendStringToPrinter(printerName2, zplCommand);
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
             }

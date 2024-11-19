@@ -349,6 +349,12 @@
     <Compile Include="View\SI\BaseForm1\수집데이터조회.Designer.cs">
       <DependentUpon>수집데이터조회.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SI\BaseForm1\작업지시조회.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\BaseForm1\작업지시조회.Designer.cs">
+      <DependentUpon>작업지시조회.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\SI\BaseForm1\주조실적조회.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1113,6 +1119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\SI\BaseForm1\수집데이터조회.resx">
       <DependentUpon>수집데이터조회.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\BaseForm1\작업지시조회.resx">
+      <DependentUpon>작업지시조회.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\SI\BaseForm1\주조실적조회.resx">
       <DependentUpon>주조실적조회.cs</DependentUpon>

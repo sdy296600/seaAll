@@ -82,8 +82,6 @@ namespace CoFAS.NEW.MES.POP
 
                 DataTable pDataTable1 =  new CoreBusiness().BASE_MENU_SETTING_R10(this.Name,fpMain,"BAD_PERFORMANCE");
 
-
-
                 if (pDataTable1 != null && pDataTable1.Rows.Count != 0)
                 {
                     CoFAS.NEW.MES.Core.Function.Core.initializeSpread(pDataTable1, fpMain, this.Name, _UserEntity.user_account);
@@ -172,7 +170,6 @@ namespace CoFAS.NEW.MES.POP
                                  AND ACTIVE ='A'";
 
             DataTable dt1 =  new CoreBusiness().SELECT(sql);
-
             CoFAS.NEW.MES.Core.Function.Core.DisplayData_Set(dt1, fpMain);
 
 

@@ -129,7 +129,8 @@ namespace CoFAS.NEW.MES.Upload
 
                     }
 
-                    MessageBox.Show(ok + "건 수정 되었습니다.");
+                    MessageBox.Show(new Form { TopMost = true }, ok + "건 수정 되었습니다."); //항상 최상위로 나옴
+                    //MessageBox.Show(ok + "건 수정 되었습니다.");
                 })))
                 {
                     frm.ShowDialog(this);

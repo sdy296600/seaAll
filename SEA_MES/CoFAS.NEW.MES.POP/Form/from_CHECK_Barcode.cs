@@ -65,7 +65,8 @@ namespace CoFAS.NEW.MES.POP
 
             Load += new EventHandler(Form_Load);
 
-
+            this.ActiveControl = ucTextEdit1;
+            ucTextEdit1.Focus();
         }
 
         #endregion
@@ -103,7 +104,6 @@ namespace CoFAS.NEW.MES.POP
 
                 Set_Spread_Date(fpMain, dt2);
 
-                ucTextEdit1.Focus();
 
                 _로드셀_Open();
             }
@@ -156,40 +156,44 @@ namespace CoFAS.NEW.MES.POP
             string sql2 = $@"SELECT COUNT(*) AS COUNT_BCD FROM MATERIAL_BARCODE WHERE BARCODE_NO = '{ucTextEdit1.Text}'";
             DataTable dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql2);
 
-          
-
             int resultBcd = 0;
             Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd);
 
-           
             if (resultBcd <= 0) 
             {
-                CustomMsg.ShowMessage("등록되지 않은 바코드 입니다.");
+                CustomMsg.ShowMessage("등록되지 않은 바코드 입니다. 바코드를 확인해 주세요.");
+                ucTextEdit1.Text = "";
                 return;
             }
-            sql2 = $@"SELECT COUNT(*) AS COUNT_BCD FROM IN_BARCODE WHERE BARCODE_NO = '{ucTextEdit1.Text}'  AND TYPE = '실투입'";
+
+            sql2 = $@"SELECT COUNT(*) AS COUNT_BCD 
+                        FROM IN_BARCODE 
+                       WHERE BARCODE_NO = '{ucTextEdit1.Text}'  AND TYPE = '실투입'";
             dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql2);
+            
             resultBcd = 0;
             Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd);
+
             if (resultBcd > 0) 
             {
                 CustomMsg.ShowMessage("이미 투입된 바코드 입니다.");
+                ucTextEdit1.Text = "";
                 return;
             }
 
 
             string[] bar = ucTextEdit1.Text.Split('|');
 
-
             if (bar.Length != 0)
             {
                 string sql = $@"SELECT [resource_no]
-                                        ,[resource_used]
-                                        ,[qty_per]
-                                        ,[operation]
-                                        ,[scrap_pct]                                      
-                                    FROM [sea_mfg].[dbo].[cproduct_defn] with (nolock)
-                                    where resource_no = '{_품번}' AND resource_used ='{bar[0]}'";
+                                     , [resource_used]
+                                     , [qty_per]
+                                     , [operation]
+                                     , [scrap_pct]                                      
+                                 FROM  [sea_mfg].[dbo].[cproduct_defn] with (nolock)
+                                 WHERE resource_no = '{_품번}'
+                                   AND resource_used ='{bar[0]}'";
 
                 DataTable dt = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql);
 
@@ -289,53 +293,56 @@ namespace CoFAS.NEW.MES.POP
             if (ucTextEdit1.Enabled) 
             {
                 CustomMsg.ShowMessage("검증 되지 않은 바코드입니다.");
+                ucTextEdit1.Text = "";
                 return;
             }
+            
             string sql2 = $@"SELECT COUNT(*) AS COUNT_BCD FROM IN_BARCODE WHERE BARCODE_NO = '{ucTextEdit1.Text}' AND TYPE = '실투입'";
             DataTable dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql2);
+            
             int resultBcd = 0;
             Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd);
+            
             if (resultBcd > 0)
             {
                 CustomMsg.ShowMessage("이미 투입된 바코드 입니다.");
+                ucTextEdit1.Text = "";
                 return;
             }
 
             string sql = $@"INSERT INTO [dbo].[IN_BARCODE] 
-                                    ([WORK_PERFORMANCE_ID]
-                                    ,[TYPE]
-                                    ,[DATE]
-                                    ,[RESOURCE_NO]
-                                    ,[LOT_NO]
-                                    ,[BARCODE_NO]
-                                    ,[WEIGHT]
-                                    ,[REG_DATE])
+                                    ( [WORK_PERFORMANCE_ID]
+                                    , [TYPE]
+                                    , [DATE]
+                                    , [RESOURCE_NO]
+                                    , [LOT_NO]
+                                    , [BARCODE_NO]
+                                    , [WEIGHT]
+                                    , [REG_DATE])
                               VALUES
-                                    (
-                                    {_p실적}
-                                    ,'실투입'
-                                    ,GETDATE()
-                                    ,'{_품번}'
-                                    ,'{_LOT}'
-                                    ,'{ucTextEdit1.Text}'
-                                    ,(SELECT SPLIT_QTY FROM MATERIAL_BARCODE WHERE BARCODE_NO = '{ucTextEdit1.Text}')
-                                    ,GETDATE());     ";            
+                                    ( {_p실적}
+                                    , '실투입'
+                                    , GETDATE()
+                                    , '{_품번}'
+                                    , '{_LOT}'
+                                    , '{ucTextEdit1.Text}'
+                                    , ( SELECT SPLIT_QTY FROM MATERIAL_BARCODE WHERE BARCODE_NO = '{ucTextEdit1.Text}')
+                                    , GETDATE());     ";            
 
             DataTable dt1 = new CoreBusiness().SELECT(sql);
 
 
             sql2 = $@"select * 
-                     from[dbo].[IN_BARCODE]
-                     where 1 = 1
-                     and RESOURCE_NO              = '{_품번}'
-                     and LOT_NO                   = '{_LOT}'
-                     and WORK_PERFORMANCE_ID      = '{_p실적}'";
+                        from [dbo].[IN_BARCODE]
+                       where  RESOURCE_NO              = '{_품번}'
+                         and LOT_NO                   = '{_LOT}'
+                         and WORK_PERFORMANCE_ID      = '{_p실적}'";
             dt2 = new CoreBusiness().SELECT(sql2);
 
 
             Set_Spread_Date(fpMain, dt2);
             CustomMsg.ShowMessage("저장 되었습니다.");
-            ////CustomMsg.ShowMessage("저장 되었습니다.");
+            ucTextEdit1.Text = "";
 
             //_bar = ucTextEdit1.Text;
             this.DialogResult = DialogResult.OK;
