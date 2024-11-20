@@ -7,6 +7,7 @@ using CoFAS.NEW.MES.POP.Function;
 using FarPoint.Excel;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
@@ -240,7 +241,9 @@ namespace CoFAS.NEW.MES.POP
 
                             print(라벨);
                         }
+
                         CustomMsg.ShowMessage("바코드 출력이 완료되었습니다.");
+
                         조회버튼_Click(sender, e);
                     }
 
@@ -249,7 +252,8 @@ namespace CoFAS.NEW.MES.POP
             }
             catch (Exception ex)
             {
-                CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
+                //CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
+                CustomMsg.ShowMessage($"TEST15:44_ {ex.Message}");
             }
         }
 
@@ -297,21 +301,27 @@ namespace CoFAS.NEW.MES.POP
             try
             {
 
-
                 PrintServer printServer = new PrintServer();
-                PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
-                PrintQueue printQueue1 = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
-                //printQueue.Purge();
 
-                //RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-                RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
-                //RawPrinterHelper.SendStringToPrinter(printerName2, zplCommand);
-                // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
+                 if (printServer.Name.ToString() == "\\\\YOUNG")
+                {
+                    PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
+                    RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+                    //printQueue1.Purge();  
+                }
+                else
+                {
+                    PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
+                    RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                    //printQueue.Purge();
+                }
+
+                //CustomMsg.ShowMessage("라벨출력이 완료되었습니다.");
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message);
-                CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
+                //ㄴCustomMsg.ShowMessage($"TEST15:44_ {ex.Message}");
+                //CustomMsg.ShowMessage($"ZPL 명령 전송 중 오류 발생: {ex.Message}");
             }
         }
 
@@ -378,6 +388,7 @@ namespace CoFAS.NEW.MES.POP
                         라벨.COMMENT = fpMain.Sheets[0].GetValue(i, "COMMENT      ".Trim()).ToString();
                         라벨.BarcodeNo = fpMain.Sheets[0].GetValue(i, "BARCODE_NO   ".Trim()).ToString();
                         라벨.LabelNo = fpMain.Sheets[0].GetValue(i, "BARCODE_NO   ".Trim()).ToString().Substring(라벨.BarcodeNo.Length - 3, 3);
+                        checkBox2_CheckedChanged(sender,e);
                         print(라벨);
                     }
                 }
@@ -390,36 +401,38 @@ namespace CoFAS.NEW.MES.POP
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            string urlstring = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 
-                            ^FO50,20^GB770,70,4^FS
-                            ^FO50,20^GB770,140,4^FS
-                            ^FO50,20^GB770,210,4^FS
-                            ^FO50,20^GB770,270,4^FS
-                            ^FO50,20^GB770,350,4^FS
-                            ^FO50,20^GB150,270,4^FS
-                            ^FO50,20^GB525,70,4^FS
-                            ^FO570,225^GB0,65,4^FS
-                            ^FO50,158^GB280,70,4^FS
-                            ^FO50,158^GB350,70,4^FS
-                            ^FO50,158^GB525,70,4^FS
-                            ^FS^FO55,40^A1N,35,20^FD품번 : 
-                            ^FS^FO55,110^A1N,35,20^FD거래처 : 
-                            ^FS^FO55,180^A1N,35,15^FD중량 : 
-                            ^FS^FO55,245^A1N,35,15^FDLOT : 
-                            ^FS^FO400,40^A1N,36,20^FD{""}
-                            ^FS^FO400,110^A1N,36,20^FD{""}
-                            ^FS^FO210,180^A1N,36,20^FD{""}
-                            ^FS^FO210,245^A1N,36,20^FD{""}
-                            ^FS^FO600,245^A1N,36,20^FD{""}
-                            ^FS^FO335,180^ADN,36,20^FDKg
-                            ^FS^FO400,180^A1N,36,20^FD발행일
-                            ^FS^FO600,180^A1N,36,20^FD{DateTime.Now.ToString("yyyy-MM-dd")}
+            string urlstring = $@"^XA^BY2
+                            , 2.0^FS^SEE:UHANGUL.DAT^FS^CW1
+                            , E:KFONT3.FNT^CI26^FS 
+                            ^FO50,  20^GB770, 70,  4^FS
+                            ^FO50,  20^GB770, 140, 4^FS
+                            ^FO50,  20^GB770, 210, 4^FS
+                            ^FO50,  20^GB770, 270, 4^FS
+                            ^FO50,  20^GB770, 350, 4^FS
+                            ^FO50,  20^GB150, 270, 4^FS
+                            ^FO50,  20^GB525, 70,  4^FS
+                            ^FO50,  158^GB280,70,  4^FS
+                            ^FO50,  158^GB350,70,  4^FS
+                            ^FO50,  158^GB525,70,  4^FS
+                            ^FO570, 225^GB0,  65,  4^FS
 
-                            ^FS^FO600,40^A1N,36,20^FD{""}
-                         
+                            ^FS^FO60, 40^A1N,35,20^FDItem_NO
+                            ^FS^FO60, 110^A1N,35,20^FDCust   
+                            ^FS^FO60, 180^A1N,35,15^FDWeight 
+                            ^FS^FO60, 245^A1N,35,15^FDLOT
 
+                            ^FS^FO210, 40^A1N,36,20^FD{".ResourceNo"}
+                            ^FS^FO420, 110^A1N,36,20^FD{".Vendor_No"}
+                            ^FS^FO210, 180^A1N,36,20^FD{".BarcodeCount"}
+                            ^FS^FO210, 245^A1N,36,20^FD{".LOT_NO"}
+                            ^FS^FO600, 245^A1N,36,20^FD{".COMMENT"}
+                            ^FS^FO340, 180^ADN,36,20^FDKg
+                            ^FS^FO420, 180^A1N,36,20^FDGeneratDate
+                            ^FS^FO600, 180^A1N,36,20^FD{DateTime.Now.ToString("yyyy-MM-dd")}
+                            ^FS^FO600, 40^A1N,36,20^FD{".LabelNo"}
+                        
                             ^FS^BY2,3,50^FT 80, 350
-                            ^BCN,40,N,N,Y^FD{""}^FS^XZ";
+                            ^BCN,40,N,N,Y^FD{"BarcodeNo"}^FS^XZ";
 
             Bitmap bmp = new CoFAS_Label().WebImageView(urlstring); // 이미지 가져오기
 

@@ -22,12 +22,6 @@ namespace CoFAS.NEW.MES.POP
         {
             DBManager.PrimaryDBManagerType = DBManagerType.SQLServer;
             DBManager.PrimaryConnectionString = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#";
-
-            //===========================
-            //DBManager.PrimaryConnectionString = "Server = 222.113.146.82,11433;Database=HS_MES;UID=sa;PWD=coever1191!";
-            //DBManager.PrimaryConnectionString = "Server = 172.22.4.11,60901; Database=HS_MES;UID=MesConnection;PWD=8$dJ@-!W3b-35;";
-            //DBManager.PrimaryConnectionString = "Server =127.0.0.1;Database=HS_MES;UID=sa;PWD=coever1191!";
-
             utility.My_Settings_Start();
             utility.My_Settings_Get();
 
@@ -35,9 +29,6 @@ namespace CoFAS.NEW.MES.POP
             //세아_POP();
             원재료간판_POP();
 
-            //===========================
-            //이튼_POP();
-            //이튼_작업표준서();
         }
 
         public static void 세아_POP()

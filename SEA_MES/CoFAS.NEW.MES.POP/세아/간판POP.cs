@@ -356,13 +356,19 @@ namespace CoFAS.NEW.MES.POP
             {
                 PrintServer printServer = new PrintServer();
 
-                PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
-                RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-                //printQueue.Purge();
+                if (printServer.Name.ToString() == "\\\\YOUNG")
+                {
+                    PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
+                    RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+                }
+                else
+                {
+                    PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
+                    RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                    //printQueue.Purge();
+                }
 
-                //PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
-                //RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
-
+                //CustomMsg.ShowMessage("라벨출력이 완료되었습니다.");
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
             }
             catch (Exception ex)
