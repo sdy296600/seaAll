@@ -123,9 +123,7 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
-
                 _품목콤보.AddValue(new CoreBusiness().Spread_ComboBox("RESOURCE_품목", "", ""), 0, 0, "", true);
-                // _고객사.AddValue(new CoreBusiness().Spread_ComboBox("세아_거래처", "", ""), 0, 0, "", true);
                 _품목콤보.ValueChanged += _품목콤보_EditValueChanged;
 
                 txt_총중량.Font = new Font("맑은 고딕", 15, FontStyle.Bold);

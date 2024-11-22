@@ -47,9 +47,9 @@ namespace CoFAS.NEW.MES.POP
             this.fpSub3 = new CoFAS.NEW.MES.Core.xFpSpread();
             this.fpSub3_Sheet1 = new FarPoint.Win.Spread.SheetView();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.label28 = new System.Windows.Forms.Label();
             this._교대조 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -70,14 +70,11 @@ namespace CoFAS.NEW.MES.POP
             this._작업코드 = new System.Windows.Forms.Label();
             this._총미포장 = new System.Windows.Forms.Label();
             this._금형 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this._상태 = new System.Windows.Forms.Label();
             this._미포장수량 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this._품번 = new System.Windows.Forms.Label();
             this._품목명 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this._LOT = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
@@ -119,9 +116,12 @@ namespace CoFAS.NEW.MES.POP
             this.btn_출탕 = new System.Windows.Forms.Button();
             this.btn_중량검사 = new System.Windows.Forms.Button();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblMachineNo = new System.Windows.Forms.Label();
             this._PAN_WHERE = new System.Windows.Forms.Panel();
-            this.btn_COM설정 = new System.Windows.Forms.Button();
             this.label18 = new System.Windows.Forms.Label();
+            this._상태 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -267,11 +267,11 @@ namespace CoFAS.NEW.MES.POP
             this.fpMain.AccessibleDescription = "";
             this.fpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fpMain.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.fpMain.Location = new System.Drawing.Point(3, 25);
+            this.fpMain.Location = new System.Drawing.Point(3, 21);
             this.fpMain.Name = "fpMain";
             this.fpMain.Sheets.AddRange(new FarPoint.Win.Spread.SheetView[] {
             this.fpMain_Sheet1});
-            this.fpMain.Size = new System.Drawing.Size(883, 361);
+            this.fpMain.Size = new System.Drawing.Size(883, 365);
             this.fpMain.TabIndex = 0;
             // 
             // fpMain_Sheet1
@@ -297,11 +297,11 @@ namespace CoFAS.NEW.MES.POP
             this.fpSub.AccessibleDescription = "";
             this.fpSub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fpSub.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.fpSub.Location = new System.Drawing.Point(3, 25);
+            this.fpSub.Location = new System.Drawing.Point(3, 21);
             this.fpSub.Name = "fpSub";
             this.fpSub.Sheets.AddRange(new FarPoint.Win.Spread.SheetView[] {
             this.fpSub_Sheet1});
-            this.fpSub.Size = new System.Drawing.Size(883, 361);
+            this.fpSub.Size = new System.Drawing.Size(883, 365);
             this.fpSub.TabIndex = 0;
             this.fpSub.CellClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSub_CellClick);
             // 
@@ -333,7 +333,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel9, 0, 2);
             this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel10, 0, 4);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 25);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 21);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 6;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -342,7 +342,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(585, 756);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(585, 760);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // fpSub3
@@ -352,11 +352,11 @@ namespace CoFAS.NEW.MES.POP
             this.fpSub3.AccessibleDescription = "";
             this.fpSub3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fpSub3.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.fpSub3.Location = new System.Drawing.Point(3, 610);
+            this.fpSub3.Location = new System.Drawing.Point(3, 613);
             this.fpSub3.Name = "fpSub3";
             this.fpSub3.Sheets.AddRange(new FarPoint.Win.Spread.SheetView[] {
             this.fpSub3_Sheet1});
-            this.fpSub3.Size = new System.Drawing.Size(579, 143);
+            this.fpSub3.Size = new System.Drawing.Size(579, 144);
             this.fpSub3.TabIndex = 3;
             // 
             // fpSub3_Sheet1
@@ -366,57 +366,58 @@ namespace CoFAS.NEW.MES.POP
             // 
             // tableLayoutPanel6
             // 
+            this.tableLayoutPanel6.AllowDrop = true;
             this.tableLayoutPanel6.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel6.ColumnCount = 4;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel6.Controls.Add(this._교대조, 0, 9);
+            this.tableLayoutPanel6.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.label28, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this._교대조, 1, 9);
             this.tableLayoutPanel6.Controls.Add(this.label25, 0, 9);
-            this.tableLayoutPanel6.Controls.Add(this.label3, 0, 4);
             this.tableLayoutPanel6.Controls.Add(this.label4, 0, 5);
-            this.tableLayoutPanel6.Controls.Add(this.label5, 0, 6);
+            this.tableLayoutPanel6.Controls.Add(this.label5, 0, 8);
             this.tableLayoutPanel6.Controls.Add(this.label6, 0, 7);
-            this.tableLayoutPanel6.Controls.Add(this.label7, 0, 8);
-            this.tableLayoutPanel6.Controls.Add(this.label8, 2, 8);
+            this.tableLayoutPanel6.Controls.Add(this.label7, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.label8, 2, 3);
             this.tableLayoutPanel6.Controls.Add(this.label9, 2, 7);
-            this.tableLayoutPanel6.Controls.Add(this.label10, 2, 6);
+            this.tableLayoutPanel6.Controls.Add(this.label10, 2, 8);
             this.tableLayoutPanel6.Controls.Add(this.label11, 2, 5);
-            this.tableLayoutPanel6.Controls.Add(this.label12, 2, 4);
-            this.tableLayoutPanel6.Controls.Add(this.label13, 2, 3);
-            this.tableLayoutPanel6.Controls.Add(this._로드셀중량, 3, 3);
-            this.tableLayoutPanel6.Controls.Add(this._지시수량, 3, 4);
-            this.tableLayoutPanel6.Controls.Add(this._작업일자, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.label12, 2, 2);
+            this.tableLayoutPanel6.Controls.Add(this.label13, 2, 9);
+            this.tableLayoutPanel6.Controls.Add(this._로드셀중량, 3, 9);
+            this.tableLayoutPanel6.Controls.Add(this._지시수량, 3, 2);
+            this.tableLayoutPanel6.Controls.Add(this._작업일자, 1, 3);
             this.tableLayoutPanel6.Controls.Add(this._시작, 1, 5);
             this.tableLayoutPanel6.Controls.Add(this._종료, 3, 5);
-            this.tableLayoutPanel6.Controls.Add(this._포장수량, 1, 6);
+            this.tableLayoutPanel6.Controls.Add(this._포장수량, 1, 8);
             this.tableLayoutPanel6.Controls.Add(this._간판발행수, 1, 7);
-            this.tableLayoutPanel6.Controls.Add(this._작업코드, 1, 8);
+            this.tableLayoutPanel6.Controls.Add(this._작업코드, 1, 4);
             this.tableLayoutPanel6.Controls.Add(this._총미포장, 3, 7);
-            this.tableLayoutPanel6.Controls.Add(this._금형, 3, 8);
-            this.tableLayoutPanel6.Controls.Add(this.label28, 3, 0);
-            this.tableLayoutPanel6.Controls.Add(this._상태, 3, 1);
-            this.tableLayoutPanel6.Controls.Add(this._미포장수량, 3, 6);
+            this.tableLayoutPanel6.Controls.Add(this._금형, 3, 3);
+            this.tableLayoutPanel6.Controls.Add(this._상태, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this._미포장수량, 3, 8);
             this.tableLayoutPanel6.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.label14, 0, 1);
             this.tableLayoutPanel6.Controls.Add(this._품번, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this._품목명, 1, 1);
-            this.tableLayoutPanel6.Controls.Add(this.label2, 0, 2);
-            this.tableLayoutPanel6.Controls.Add(this.label22, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this._LOT, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.label23, 2, 2);
-            this.tableLayoutPanel6.Controls.Add(this._양품사용중량, 1, 3);
-            this.tableLayoutPanel6.Controls.Add(this._용탕투입중량, 3, 2);
-            this.tableLayoutPanel6.Controls.Add(this.label24, 2, 9);
-            this.tableLayoutPanel6.Controls.Add(this._CAV, 3, 9);
+            this.tableLayoutPanel6.Controls.Add(this.label2, 3, 0);
+            this.tableLayoutPanel6.Controls.Add(this.label22, 0, 6);
+            this.tableLayoutPanel6.Controls.Add(this._LOT, 3, 1);
+            this.tableLayoutPanel6.Controls.Add(this.label23, 2, 6);
+            this.tableLayoutPanel6.Controls.Add(this._양품사용중량, 1, 6);
+            this.tableLayoutPanel6.Controls.Add(this._용탕투입중량, 3, 6);
+            this.tableLayoutPanel6.Controls.Add(this.label24, 2, 4);
+            this.tableLayoutPanel6.Controls.Add(this._CAV, 3, 4);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 10;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.00235F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.00235F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.897611F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.556314F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.999351F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.999351F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.999351F));
@@ -425,18 +426,32 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.999351F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.999097F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(579, 292);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(579, 294);
             this.tableLayoutPanel6.TabIndex = 1;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
+            this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label28.ForeColor = System.Drawing.Color.White;
+            this.label28.Location = new System.Drawing.Point(1, 59);
+            this.label28.Margin = new System.Windows.Forms.Padding(0);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(114, 27);
+            this.label28.TabIndex = 22;
+            this.label28.Text = "상태";
+            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // _교대조
             // 
             this._교대조.AutoSize = true;
             this._교대조.BackColor = System.Drawing.Color.White;
             this._교대조.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._교대조.Location = new System.Drawing.Point(121, 267);
+            this._교대조.Location = new System.Drawing.Point(121, 266);
             this._교대조.Margin = new System.Windows.Forms.Padding(5);
             this._교대조.Name = "_교대조";
-            this._교대조.Size = new System.Drawing.Size(162, 19);
+            this._교대조.Size = new System.Drawing.Size(162, 22);
             this._교대조.TabIndex = 20;
             this._교대조.Text = "-";
             this._교대조.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -447,27 +462,13 @@ namespace CoFAS.NEW.MES.POP
             this.label25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label25.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label25.ForeColor = System.Drawing.Color.White;
-            this.label25.Location = new System.Drawing.Point(1, 262);
+            this.label25.Location = new System.Drawing.Point(1, 261);
             this.label25.Margin = new System.Windows.Forms.Padding(0);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(114, 29);
+            this.label25.Size = new System.Drawing.Size(114, 32);
             this.label25.TabIndex = 19;
             this.label25.Text = "교대조";
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(1, 117);
-            this.label3.Margin = new System.Windows.Forms.Padding(0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(114, 28);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "작업일자";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label4
             // 
@@ -475,7 +476,7 @@ namespace CoFAS.NEW.MES.POP
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(1, 146);
+            this.label4.Location = new System.Drawing.Point(1, 145);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(114, 28);
@@ -489,7 +490,7 @@ namespace CoFAS.NEW.MES.POP
             this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(1, 175);
+            this.label5.Location = new System.Drawing.Point(1, 232);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(114, 28);
@@ -503,7 +504,7 @@ namespace CoFAS.NEW.MES.POP
             this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(1, 204);
+            this.label6.Location = new System.Drawing.Point(1, 203);
             this.label6.Margin = new System.Windows.Forms.Padding(0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(114, 28);
@@ -517,7 +518,7 @@ namespace CoFAS.NEW.MES.POP
             this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(1, 233);
+            this.label7.Location = new System.Drawing.Point(1, 116);
             this.label7.Margin = new System.Windows.Forms.Padding(0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(114, 28);
@@ -531,7 +532,7 @@ namespace CoFAS.NEW.MES.POP
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(289, 233);
+            this.label8.Location = new System.Drawing.Point(289, 87);
             this.label8.Margin = new System.Windows.Forms.Padding(0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(114, 28);
@@ -545,7 +546,7 @@ namespace CoFAS.NEW.MES.POP
             this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(289, 204);
+            this.label9.Location = new System.Drawing.Point(289, 203);
             this.label9.Margin = new System.Windows.Forms.Padding(0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(114, 28);
@@ -559,7 +560,7 @@ namespace CoFAS.NEW.MES.POP
             this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(289, 175);
+            this.label10.Location = new System.Drawing.Point(289, 232);
             this.label10.Margin = new System.Windows.Forms.Padding(0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(114, 28);
@@ -573,7 +574,7 @@ namespace CoFAS.NEW.MES.POP
             this.label11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(289, 146);
+            this.label11.Location = new System.Drawing.Point(289, 145);
             this.label11.Margin = new System.Windows.Forms.Padding(0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(114, 28);
@@ -583,14 +584,15 @@ namespace CoFAS.NEW.MES.POP
             // 
             // label12
             // 
+            this.label12.AllowDrop = true;
             this.label12.AutoSize = true;
             this.label12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(289, 117);
+            this.label12.Location = new System.Drawing.Point(289, 59);
             this.label12.Margin = new System.Windows.Forms.Padding(0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(114, 28);
+            this.label12.Size = new System.Drawing.Size(114, 27);
             this.label12.TabIndex = 0;
             this.label12.Text = "지시수량";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -601,19 +603,20 @@ namespace CoFAS.NEW.MES.POP
             this.label13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(289, 88);
+            this.label13.Location = new System.Drawing.Point(289, 261);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(114, 28);
+            this.label13.Size = new System.Drawing.Size(114, 32);
             this.label13.TabIndex = 0;
             this.label13.Text = "로드셀중량";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // _로드셀중량
             // 
-            this._로드셀중량.Location = new System.Drawing.Point(407, 88);
+            this._로드셀중량.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this._로드셀중량.Location = new System.Drawing.Point(407, 265);
             this._로드셀중량.Name = "_로드셀중량";
-            this._로드셀중량.Size = new System.Drawing.Size(168, 28);
+            this._로드셀중량.Size = new System.Drawing.Size(168, 23);
             this._로드셀중량.TabIndex = 21;
             this._로드셀중량.Text = "0";
             this._로드셀중량.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -622,9 +625,9 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._지시수량.AutoSize = true;
             this._지시수량.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._지시수량.Location = new System.Drawing.Point(407, 117);
+            this._지시수량.Location = new System.Drawing.Point(407, 59);
             this._지시수량.Name = "_지시수량";
-            this._지시수량.Size = new System.Drawing.Size(168, 28);
+            this._지시수량.Size = new System.Drawing.Size(168, 27);
             this._지시수량.TabIndex = 5;
             this._지시수량.Text = "0";
             this._지시수량.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -636,7 +639,7 @@ namespace CoFAS.NEW.MES.POP
             this._작업일자.DateEdit_Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this._작업일자.DateTime = new System.DateTime(2024, 4, 16, 11, 38, 50, 43);
             this._작업일자.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._작업일자.Location = new System.Drawing.Point(121, 122);
+            this._작업일자.Location = new System.Drawing.Point(121, 92);
             this._작업일자.Margin = new System.Windows.Forms.Padding(5);
             this._작업일자.Name = "_작업일자";
             this._작업일자.ReadOnly = false;
@@ -650,7 +653,7 @@ namespace CoFAS.NEW.MES.POP
             this._시작.DateEdit_Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this._시작.DateTime = new System.DateTime(2024, 4, 16, 11, 38, 52, 387);
             this._시작.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._시작.Location = new System.Drawing.Point(121, 151);
+            this._시작.Location = new System.Drawing.Point(121, 150);
             this._시작.Margin = new System.Windows.Forms.Padding(5);
             this._시작.Name = "_시작";
             this._시작.ReadOnly = false;
@@ -664,7 +667,7 @@ namespace CoFAS.NEW.MES.POP
             this._종료.DateEdit_Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this._종료.DateTime = new System.DateTime(2024, 4, 16, 11, 38, 56, 14);
             this._종료.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._종료.Location = new System.Drawing.Point(409, 151);
+            this._종료.Location = new System.Drawing.Point(409, 150);
             this._종료.Margin = new System.Windows.Forms.Padding(5);
             this._종료.Name = "_종료";
             this._종료.ReadOnly = false;
@@ -675,7 +678,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._포장수량.AutoSize = true;
             this._포장수량.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._포장수량.Location = new System.Drawing.Point(119, 175);
+            this._포장수량.Location = new System.Drawing.Point(119, 232);
             this._포장수량.Name = "_포장수량";
             this._포장수량.Size = new System.Drawing.Size(166, 28);
             this._포장수량.TabIndex = 9;
@@ -686,7 +689,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._간판발행수.AutoSize = true;
             this._간판발행수.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._간판발행수.Location = new System.Drawing.Point(119, 204);
+            this._간판발행수.Location = new System.Drawing.Point(119, 203);
             this._간판발행수.Name = "_간판발행수";
             this._간판발행수.Size = new System.Drawing.Size(166, 28);
             this._간판발행수.TabIndex = 10;
@@ -698,7 +701,7 @@ namespace CoFAS.NEW.MES.POP
             this._작업코드.AutoSize = true;
             this._작업코드.BackColor = System.Drawing.Color.Yellow;
             this._작업코드.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._작업코드.Location = new System.Drawing.Point(121, 238);
+            this._작업코드.Location = new System.Drawing.Point(121, 121);
             this._작업코드.Margin = new System.Windows.Forms.Padding(5);
             this._작업코드.Name = "_작업코드";
             this._작업코드.Size = new System.Drawing.Size(162, 18);
@@ -711,7 +714,7 @@ namespace CoFAS.NEW.MES.POP
             this._총미포장.AutoSize = true;
             this._총미포장.BackColor = System.Drawing.Color.White;
             this._총미포장.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._총미포장.Location = new System.Drawing.Point(409, 209);
+            this._총미포장.Location = new System.Drawing.Point(409, 208);
             this._총미포장.Margin = new System.Windows.Forms.Padding(5);
             this._총미포장.Name = "_총미포장";
             this._총미포장.Size = new System.Drawing.Size(164, 18);
@@ -724,7 +727,7 @@ namespace CoFAS.NEW.MES.POP
             this._금형.AutoSize = true;
             this._금형.BackColor = System.Drawing.Color.Yellow;
             this._금형.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._금형.Location = new System.Drawing.Point(409, 238);
+            this._금형.Location = new System.Drawing.Point(409, 92);
             this._금형.Margin = new System.Windows.Forms.Padding(5);
             this._금형.Name = "_금형";
             this._금형.Size = new System.Drawing.Size(164, 18);
@@ -732,36 +735,11 @@ namespace CoFAS.NEW.MES.POP
             this._금형.Text = "-";
             this._금형.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
-            this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label28.ForeColor = System.Drawing.Color.White;
-            this.label28.Location = new System.Drawing.Point(404, 1);
-            this.label28.Margin = new System.Windows.Forms.Padding(0);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(174, 28);
-            this.label28.TabIndex = 16;
-            this.label28.Text = "상태";
-            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // _상태
-            // 
-            this._상태.AutoSize = true;
-            this._상태.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._상태.Location = new System.Drawing.Point(407, 30);
-            this._상태.Name = "_상태";
-            this._상태.Size = new System.Drawing.Size(168, 28);
-            this._상태.TabIndex = 17;
-            this._상태.Text = "-";
-            this._상태.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // _미포장수량
             // 
             this._미포장수량.AutoSize = true;
             this._미포장수량.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._미포장수량.Location = new System.Drawing.Point(409, 180);
+            this._미포장수량.Location = new System.Drawing.Point(409, 237);
             this._미포장수량.Margin = new System.Windows.Forms.Padding(5);
             this._미포장수량.Name = "_미포장수량";
             this._미포장수량.Size = new System.Drawing.Size(164, 18);
@@ -823,27 +801,13 @@ namespace CoFAS.NEW.MES.POP
             this._품목명.Text = "-";
             this._품목명.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(1, 59);
-            this.label2.Margin = new System.Windows.Forms.Padding(0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 28);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "LOT";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // label22
             // 
             this.label22.AutoSize = true;
             this.label22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label22.ForeColor = System.Drawing.Color.White;
-            this.label22.Location = new System.Drawing.Point(1, 88);
+            this.label22.Location = new System.Drawing.Point(1, 174);
             this.label22.Margin = new System.Windows.Forms.Padding(0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(114, 28);
@@ -855,20 +819,21 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._LOT.AutoSize = true;
             this._LOT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._LOT.Location = new System.Drawing.Point(119, 59);
+            this._LOT.Location = new System.Drawing.Point(407, 30);
             this._LOT.Name = "_LOT";
-            this._LOT.Size = new System.Drawing.Size(166, 28);
+            this._LOT.Size = new System.Drawing.Size(168, 28);
             this._LOT.TabIndex = 2;
             this._LOT.Text = "-";
             this._LOT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label23
             // 
+            this.label23.AllowDrop = true;
             this.label23.AutoSize = true;
             this.label23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label23.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label23.ForeColor = System.Drawing.Color.White;
-            this.label23.Location = new System.Drawing.Point(289, 59);
+            this.label23.Location = new System.Drawing.Point(289, 174);
             this.label23.Margin = new System.Windows.Forms.Padding(0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(114, 28);
@@ -880,7 +845,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._양품사용중량.AutoSize = true;
             this._양품사용중량.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._양품사용중량.Location = new System.Drawing.Point(119, 88);
+            this._양품사용중량.Location = new System.Drawing.Point(119, 174);
             this._양품사용중량.Name = "_양품사용중량";
             this._양품사용중량.Size = new System.Drawing.Size(166, 28);
             this._양품사용중량.TabIndex = 2;
@@ -891,7 +856,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._용탕투입중량.AutoSize = true;
             this._용탕투입중량.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._용탕투입중량.Location = new System.Drawing.Point(407, 59);
+            this._용탕투입중량.Location = new System.Drawing.Point(407, 174);
             this._용탕투입중량.Name = "_용탕투입중량";
             this._용탕투입중량.Size = new System.Drawing.Size(168, 28);
             this._용탕투입중량.TabIndex = 4;
@@ -904,10 +869,10 @@ namespace CoFAS.NEW.MES.POP
             this.label24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label24.ForeColor = System.Drawing.Color.White;
-            this.label24.Location = new System.Drawing.Point(289, 262);
+            this.label24.Location = new System.Drawing.Point(289, 116);
             this.label24.Margin = new System.Windows.Forms.Padding(0);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(114, 29);
+            this.label24.Size = new System.Drawing.Size(114, 28);
             this.label24.TabIndex = 0;
             this.label24.Text = "CAV";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -917,10 +882,10 @@ namespace CoFAS.NEW.MES.POP
             this._CAV.AutoSize = true;
             this._CAV.BackColor = System.Drawing.Color.Yellow;
             this._CAV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._CAV.Location = new System.Drawing.Point(409, 267);
+            this._CAV.Location = new System.Drawing.Point(409, 121);
             this._CAV.Margin = new System.Windows.Forms.Padding(5);
             this._CAV.Name = "_CAV";
-            this._CAV.Size = new System.Drawing.Size(164, 19);
+            this._CAV.Size = new System.Drawing.Size(164, 18);
             this._CAV.TabIndex = 14;
             this._CAV.Text = "-";
             this._CAV.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -936,24 +901,25 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel7.Controls.Add(this.label19, 3, 0);
-            this.tableLayoutPanel7.Controls.Add(this.lblPlcDef, 4, 1);
+            this.tableLayoutPanel7.Controls.Add(this.label19, 5, 0);
+            this.tableLayoutPanel7.Controls.Add(this.lblPlcDef, 3, 1);
             this.tableLayoutPanel7.Controls.Add(this.label15, 0, 0);
-            this.tableLayoutPanel7.Controls.Add(this.label16, 1, 0);
-            this.tableLayoutPanel7.Controls.Add(this.label17, 2, 0);
-            this.tableLayoutPanel7.Controls.Add(this.label20, 4, 0);
-            this.tableLayoutPanel7.Controls.Add(this.label21, 5, 0);
+            this.tableLayoutPanel7.Controls.Add(this.label16, 2, 0);
+            this.tableLayoutPanel7.Controls.Add(this.label17, 1, 0);
+            this.tableLayoutPanel7.Controls.Add(this.label20, 3, 0);
+            this.tableLayoutPanel7.Controls.Add(this.label21, 4, 0);
             this.tableLayoutPanel7.Controls.Add(this._lbl_총생산량, 0, 1);
-            this.tableLayoutPanel7.Controls.Add(this._lbl_양품, 1, 1);
-            this.tableLayoutPanel7.Controls.Add(this._lbl_예열타, 2, 1);
-            this.tableLayoutPanel7.Controls.Add(this._lbl_간판발행, 3, 1);
-            this.tableLayoutPanel7.Controls.Add(this._lbl_실적불량, 5, 1);
+            this.tableLayoutPanel7.Controls.Add(this._lbl_양품, 2, 1);
+            this.tableLayoutPanel7.Controls.Add(this._lbl_예열타, 1, 1);
+            this.tableLayoutPanel7.Controls.Add(this._lbl_간판발행, 5, 1);
+            this.tableLayoutPanel7.Controls.Add(this._lbl_실적불량, 4, 1);
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 301);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 303);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel7.Size = new System.Drawing.Size(579, 74);
             this.tableLayoutPanel7.TabIndex = 2;
             // 
@@ -962,9 +928,9 @@ namespace CoFAS.NEW.MES.POP
             this.label19.AllowDrop = true;
             this.label19.AutoSize = true;
             this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label19.Location = new System.Drawing.Point(293, 2);
+            this.label19.Location = new System.Drawing.Point(485, 2);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(88, 34);
+            this.label19.Size = new System.Drawing.Size(89, 34);
             this.label19.TabIndex = 13;
             this.label19.Text = "간판발행";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -974,7 +940,7 @@ namespace CoFAS.NEW.MES.POP
             this.lblPlcDef.AutoSize = true;
             this.lblPlcDef.BackColor = System.Drawing.Color.White;
             this.lblPlcDef.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPlcDef.Location = new System.Drawing.Point(389, 41);
+            this.lblPlcDef.Location = new System.Drawing.Point(293, 41);
             this.lblPlcDef.Margin = new System.Windows.Forms.Padding(3);
             this.lblPlcDef.Name = "lblPlcDef";
             this.lblPlcDef.Size = new System.Drawing.Size(88, 28);
@@ -997,7 +963,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.label16.AutoSize = true;
             this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label16.Location = new System.Drawing.Point(101, 2);
+            this.label16.Location = new System.Drawing.Point(197, 2);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(88, 34);
             this.label16.TabIndex = 1;
@@ -1008,7 +974,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.label17.AutoSize = true;
             this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label17.Location = new System.Drawing.Point(197, 2);
+            this.label17.Location = new System.Drawing.Point(101, 2);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(88, 34);
             this.label17.TabIndex = 2;
@@ -1019,7 +985,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.label20.AutoSize = true;
             this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label20.Location = new System.Drawing.Point(389, 2);
+            this.label20.Location = new System.Drawing.Point(293, 2);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(88, 34);
             this.label20.TabIndex = 4;
@@ -1030,9 +996,9 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.label21.AutoSize = true;
             this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label21.Location = new System.Drawing.Point(485, 2);
+            this.label21.Location = new System.Drawing.Point(389, 2);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(89, 34);
+            this.label21.Size = new System.Drawing.Size(88, 34);
             this.label21.TabIndex = 5;
             this.label21.Text = "실적불량";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1053,7 +1019,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._lbl_양품.AutoSize = true;
             this._lbl_양품.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._lbl_양품.Location = new System.Drawing.Point(101, 41);
+            this._lbl_양품.Location = new System.Drawing.Point(197, 41);
             this._lbl_양품.Margin = new System.Windows.Forms.Padding(3);
             this._lbl_양품.Name = "_lbl_양품";
             this._lbl_양품.Size = new System.Drawing.Size(88, 28);
@@ -1065,7 +1031,7 @@ namespace CoFAS.NEW.MES.POP
             // 
             this._lbl_예열타.AutoSize = true;
             this._lbl_예열타.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._lbl_예열타.Location = new System.Drawing.Point(197, 41);
+            this._lbl_예열타.Location = new System.Drawing.Point(101, 41);
             this._lbl_예열타.Margin = new System.Windows.Forms.Padding(3);
             this._lbl_예열타.Name = "_lbl_예열타";
             this._lbl_예열타.Size = new System.Drawing.Size(88, 28);
@@ -1078,10 +1044,10 @@ namespace CoFAS.NEW.MES.POP
             this._lbl_간판발행.AutoSize = true;
             this._lbl_간판발행.BackColor = System.Drawing.Color.White;
             this._lbl_간판발행.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._lbl_간판발행.Location = new System.Drawing.Point(293, 41);
+            this._lbl_간판발행.Location = new System.Drawing.Point(485, 41);
             this._lbl_간판발행.Margin = new System.Windows.Forms.Padding(3);
             this._lbl_간판발행.Name = "_lbl_간판발행";
-            this._lbl_간판발행.Size = new System.Drawing.Size(88, 28);
+            this._lbl_간판발행.Size = new System.Drawing.Size(89, 28);
             this._lbl_간판발행.TabIndex = 9;
             this._lbl_간판발행.Text = "0";
             this._lbl_간판발행.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1091,10 +1057,10 @@ namespace CoFAS.NEW.MES.POP
             this._lbl_실적불량.AutoSize = true;
             this._lbl_실적불량.BackColor = System.Drawing.Color.White;
             this._lbl_실적불량.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._lbl_실적불량.Location = new System.Drawing.Point(485, 41);
+            this._lbl_실적불량.Location = new System.Drawing.Point(389, 41);
             this._lbl_실적불량.Margin = new System.Windows.Forms.Padding(3);
             this._lbl_실적불량.Name = "_lbl_실적불량";
-            this._lbl_실적불량.Size = new System.Drawing.Size(89, 28);
+            this._lbl_실적불량.Size = new System.Drawing.Size(88, 28);
             this._lbl_실적불량.TabIndex = 11;
             this._lbl_실적불량.Text = "0";
             this._lbl_실적불량.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1106,11 +1072,11 @@ namespace CoFAS.NEW.MES.POP
             this.fpSub2.AccessibleDescription = "";
             this.fpSub2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fpSub2.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.fpSub2.Location = new System.Drawing.Point(3, 421);
+            this.fpSub2.Location = new System.Drawing.Point(3, 423);
             this.fpSub2.Name = "fpSub2";
             this.fpSub2.Sheets.AddRange(new FarPoint.Win.Spread.SheetView[] {
             this.sheetView1});
-            this.fpSub2.Size = new System.Drawing.Size(579, 143);
+            this.fpSub2.Size = new System.Drawing.Size(579, 144);
             this.fpSub2.TabIndex = 3;
             // 
             // sheetView1
@@ -1126,7 +1092,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel9.Controls.Add(this.label30, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.btn_불량실적, 1, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 378);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 380);
             this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 1;
@@ -1167,7 +1133,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel10.Controls.Add(this.btm_잉곳사용, 1, 0);
             this.tableLayoutPanel10.Controls.Add(this.btm_잉곳투입, 2, 0);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 567);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 570);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
@@ -1371,9 +1337,9 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.tableLayoutPanel11.ColumnCount = 2;
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 596F));
+            this.tableLayoutPanel11.Controls.Add(this.lblMachineNo, 1, 0);
             this.tableLayoutPanel11.Controls.Add(this._PAN_WHERE, 0, 0);
-            this.tableLayoutPanel11.Controls.Add(this.btn_COM설정, 1, 0);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
@@ -1382,27 +1348,25 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel11.Size = new System.Drawing.Size(1492, 74);
             this.tableLayoutPanel11.TabIndex = 3;
             // 
+            // lblMachineNo
+            // 
+            this.lblMachineNo.AutoSize = true;
+            this.lblMachineNo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMachineNo.Font = new System.Drawing.Font("맑은 고딕", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblMachineNo.Location = new System.Drawing.Point(899, 0);
+            this.lblMachineNo.Name = "lblMachineNo";
+            this.lblMachineNo.Size = new System.Drawing.Size(590, 74);
+            this.lblMachineNo.TabIndex = 3;
+            this.lblMachineNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // _PAN_WHERE
             // 
             this._PAN_WHERE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._PAN_WHERE.Dock = System.Windows.Forms.DockStyle.Fill;
             this._PAN_WHERE.Location = new System.Drawing.Point(3, 3);
             this._PAN_WHERE.Name = "_PAN_WHERE";
-            this._PAN_WHERE.Size = new System.Drawing.Size(1386, 68);
+            this._PAN_WHERE.Size = new System.Drawing.Size(890, 68);
             this._PAN_WHERE.TabIndex = 2;
-            // 
-            // btn_COM설정
-            // 
-            this.btn_COM설정.BackColor = System.Drawing.Color.White;
-            this.btn_COM설정.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_COM설정.Location = new System.Drawing.Point(1395, 3);
-            this.btn_COM설정.Name = "btn_COM설정";
-            this.btn_COM설정.Size = new System.Drawing.Size(94, 68);
-            this.btn_COM설정.TabIndex = 3;
-            this.btn_COM설정.Text = "COM설정";
-            this.btn_COM설정.UseVisualStyleBackColor = false;
-            this.btn_COM설정.Visible = false;
-            this.btn_COM설정.Click += new System.EventHandler(this.btn_COM설정_Click);
             // 
             // label18
             // 
@@ -1416,6 +1380,45 @@ namespace CoFAS.NEW.MES.POP
             this.label18.Size = new System.Drawing.Size(1498, 30);
             this.label18.TabIndex = 7;
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // _상태
+            // 
+            this._상태.AutoSize = true;
+            this._상태.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._상태.Location = new System.Drawing.Point(119, 59);
+            this._상태.Name = "_상태";
+            this._상태.Size = new System.Drawing.Size(166, 27);
+            this._상태.TabIndex = 17;
+            this._상태.Text = "-";
+            this._상태.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(404, 1);
+            this.label2.Margin = new System.Windows.Forms.Padding(0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(174, 28);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "LOT";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(1, 87);
+            this.label3.Margin = new System.Windows.Forms.Padding(0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(114, 28);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "지시일자";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // 세아
             // 
@@ -1458,6 +1461,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel10.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel11.ResumeLayout(false);
+            this.tableLayoutPanel11.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1477,8 +1481,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
@@ -1487,7 +1489,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label _품번;
@@ -1516,8 +1517,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label _lbl_실적불량;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private System.Windows.Forms.Button 스크랩이동;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label _상태;
         private System.Windows.Forms.Button 시작;
         private System.Windows.Forms.Button 정지;
         private System.Windows.Forms.Button 완료;
@@ -1545,9 +1544,7 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Button btn_출탕;
         private System.Windows.Forms.Label _미포장수량;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
-        private System.Windows.Forms.Button btn_COM설정;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label _양품사용중량;
         private System.Windows.Forms.Label _용탕투입중량;
         private System.Windows.Forms.Label label24;
@@ -1556,5 +1553,12 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label lblPlcDef;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label lblMachineNo;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label _상태;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

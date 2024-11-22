@@ -15,6 +15,7 @@ using System.Text;
 using CoFAS.NEW.MES.Core.Entity;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FarPoint.Excel;
 
 namespace CoFAS.NEW.MES.Core
 {
@@ -36,42 +37,69 @@ namespace CoFAS.NEW.MES.Core
             fpMain.Sheets[0].Rows.Count = 0;
 
             string mysqlconn = $"Server=10.10.10.216;Database=hansoldms;UID=coever;PWD=coever119!";
-            string mssqlconn = $"Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#";
-
             myDb = new DataBase_Class(new MY_DB(mysqlconn));
-            Base_ComboBox text = _PAN_WHERE.Controls[0] as Base_ComboBox;
-            Base_FromtoDateTime datetime = _PAN_WHERE.Controls[1] as Base_FromtoDateTime;
-            datetime.OnlyUseOneBox();
-            text._SearchCom.DeleteItemByIndex(0);
-            text._SearchCom.ItemIndex = 0;
 
         }
 
-        //public override void _InitialButtonClicked(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        DataTable pDataTable = new CoreBusiness().BASE_MENU_SETTING_R10(this._pMenuSettingEntity.MENU_WINDOW_NAME, fpMain, this._pMenuSettingEntity.BASE_TABLE.Split('/')[0]);
+        public override void _InitialButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable pDataTable = new CoreBusiness().BASE_MENU_SETTING_R10(this._pMenuSettingEntity.MENU_WINDOW_NAME, fpMain, this._pMenuSettingEntity.BASE_TABLE.Split('/')[0]);
 
-        //        Function.Core.InitializeControl(pDataTable, fpMain, this, _PAN_WHERE, _pMenuSettingEntity);
-        //        Form_Load(null, null);
-        //    }
-        //    catch (Exception pExcption)
-        //    {
-        //        CustomMsg.ShowExceptionMessage(pExcption.ToString(), "Error", MessageBoxButtons.OK);
-        //    }
-        //}
+                Function.Core.InitializeControl(pDataTable, fpMain, this, _PAN_WHERE, _pMenuSettingEntity);
+                Form_Load(null, null);
+            }
+            catch (Exception pExcption)
+            {
+                CustomMsg.ShowExceptionMessage(pExcption.ToString(), "Error", MessageBoxButtons.OK);
+            }
+        }
 
         public override void MainFind_DisplayData()
         {
             try
             {
-                //DevExpressManager.SetCursor(this, Cursors.WaitCursor);
+                DevExpressManager.SetCursor(this, Cursors.WaitCursor);
 
                 Base_ComboBox text = _PAN_WHERE.Controls[0] as Base_ComboBox;
-                string machine_no = text.SearchText;
+                string machine_id = text.SearchText;
+                //여기에 
+                switch (machine_id)
+                {
+                    case "13호기":
+                        machine_id = "'WCI_D13'";
+
+                        break;
+                    case "21호기":
+                        machine_id = "'WCI_D21'";
+
+                        break;
+                    case "22호기":
+                        machine_id = "'WCI_D22'";
+
+                        break;
+                    case "23호기":
+                        machine_id = "'WCI_D23'";
+
+                        break;
+                    case "24호기":
+                        machine_id = "'WCI_D24'";
+
+                        break;
+
+                    case "25호기":
+                        machine_id = "'WCI_D25'";
+
+                        break;
+                    default : machine_id = "NULL";
+                        break;
+
+                }
+
                 Base_FromtoDateTime datetime = _PAN_WHERE.Controls[1] as Base_FromtoDateTime;
-                string startTime = datetime.StartValue.ToString("yyyy-MM-dd");
+                string strTime = datetime.StartValue.ToString("yyyy-MM-dd");
+                string endTime = datetime.EndValue.ToString("yyyy-MM-dd");
 
                 string getMySqlDataGrid =   $" SELECT T2.ID                                                    " +
                                             $"      , T2.ORDER_NO                                              " +
@@ -79,39 +107,18 @@ namespace CoFAS.NEW.MES.Core
                                             $"      , T2.END_TIME                                              " +
                                             $"      , T1.*                                                     " +
                                             $"   FROM data_for_grid   T1                                       " +
-                                            $"      , ( SELECT START_TIME                                      " +
-                                            $"               , end_time                                        " +
-                                            $"               , ID                                              " +
-                                            $"               , MACHIN_NO                                       " +
-                                            $"               , ORDER_NO                                        " +
-                                            $"            FROM WORK_PERFORMANCE                                " +
-                                            $"           WHERE MACHINE_NO = IFNULL(MACHINE_NO, '{machine_no}') " +
-                                            $"       )                                                         " +
-                                            $"  WHERE T1.MACHINE_NO = T2.MACHINE_NO                            " +
-                                            $"    AND T1.DATE >= T2.START_TIME                                 " +
-                                            $"    AND T1.DATE <= T2.end_time                                   " +
-                                            $"  ORDER BY T1.DATE, T2.ORDER_NO, T2.START_TIME, T2.END_TIME     " ;
-                                               
+                                            $"      , WORK_PERFORMANCE T2                                                     " +
+                                            $"  WHERE T1.machine_no = T2.MACHINE_NO                            " +
+                                            $"    AND T1.DATE BETWEEN T2.START_TIME AND T2.END_TIME                                   " +
+                                            $"    AND T1.DATE BETWEEN '{strTime}' AND '{endTime}'                                    " +
+                                            $"    AND T1.MACHINE_NO = IFNULL({machine_id}, T1.MACHINE_NO)                                   " +
+                                            $"  ORDER BY T2.ORDER_NO, T1.DATE " ;
 
-                DataSet ds = new DataSet();
-                MySqlConnection conn2 = new MySqlConnection("Server=10.10.10.216;Database=hansoldms;Uid=coever;Pwd=coever119!");
-                using (conn2)
-                {
-                    conn2.Open();
-
-                    MySqlCommand cmd = new MySqlCommand();
-                    cmd.CommandText = getMySqlDataGrid;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Connection  = conn2;
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                    adapter.Fill(ds); 
-                  
-                }
-          
+                DataSet ds = myDb.GetAllData(getMySqlDataGrid);
                 DataTable dt = ds.Tables[0];
                 Function.Core.DisplayData_Set(dt, fpMain);
 
-                #region
+                #region [수정전]
 
                 //string category = "";
                 //string sql2 = "";

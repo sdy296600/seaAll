@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -14,11 +15,12 @@ namespace CoFAS.NEW.MES.Download
         public string _sqlcon = "";
         public string _updatetype = "";
         public string _runName = "";
-        public FormDownload_세아_간판POP()
+
+        public FormDownload_세아_간판POP(string sqlcon, string updatetype, string runName)
         {
-            _sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
-            _updatetype = "세아간판POP";
-            _runName = "CoFAS.NEW.MES.POP";
+            _sqlcon = sqlcon;
+            _updatetype = updatetype;
+            _runName = runName;
             InitializeComponent();
 
         }
@@ -35,9 +37,10 @@ namespace CoFAS.NEW.MES.Download
             }
             catch (Exception err)
             {
-
+                MessageBox.Show(err.Message);
             }
         }
+
         public void ProgValueSetting()
         {
             try
@@ -93,11 +96,11 @@ namespace CoFAS.NEW.MES.Download
                     }));
                 }
 
-                Thread.Sleep(2000);
+                Thread.Sleep(3000);
 
                 BeginInvoke(new MethodInvoker(delegate ()
                 {
-                    Process proc = new Process();              
+                    Process proc = new Process();
                     proc.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
                     proc.StartInfo.FileName = $"{_runName}.exe";
                     proc.StartInfo.Verb = "runas";
@@ -113,6 +116,7 @@ namespace CoFAS.NEW.MES.Download
                 Application.Exit();
             }
         }
+
         private DataTable Get_Crc_Autoupdate(string updatetype)
         {
             DataTable dt = new DataTable();
@@ -186,7 +190,7 @@ namespace CoFAS.NEW.MES.Download
                     {
                         if (_runName == "Platform_Launcher")
                         {
-                            string path = Directory.GetCurrentDirectory() + $"\\"  + "System" + "\\" + "PMS" + "\\" + filename;
+                            string path = Directory.GetCurrentDirectory() + $"\\" + "System" + "\\" + "PMS" + "\\" + filename;
 
                             FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
 
@@ -213,8 +217,6 @@ namespace CoFAS.NEW.MES.Download
                 return crcYn = false;
             }
         }
-
-     
 
     }
 }

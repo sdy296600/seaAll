@@ -1,9 +1,11 @@
 ﻿using CoFAS.NEW.MES.Core.Function;
 using CoFAS.NEW.MES.POP.Function;
+using FarPoint.Excel;
 using MyUpDate;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,13 +23,12 @@ namespace CoFAS.NEW.MES.POP
         static void Main()
         {
             DBManager.PrimaryDBManagerType = DBManagerType.SQLServer;
-            DBManager.PrimaryConnectionString = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#";
+            DBManager.PrimaryConnectionString = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
             utility.My_Settings_Start();
             utility.My_Settings_Get();
 
-            // 출력 테스트 이후에 라벨 프린트기 명 확인할것
-            //세아_POP();
-            원재료간판_POP();
+            세아_POP();
+            //원재료간판_POP();
 
         }
 
@@ -36,7 +37,6 @@ namespace CoFAS.NEW.MES.POP
 
             string sqlcon = DBManager.PrimaryConnectionString;
             string updatetype = "세아POP";
-            //string updatetype = "NEW_세아_POP";
             string runName = "CoFAS.NEW.MES.POP.exe";
             string name = "CoFAS.NEW.MES.Download.exe";
 
@@ -90,10 +90,12 @@ namespace CoFAS.NEW.MES.POP
             FileInfo di = new FileInfo(dic);
             if (di.Exists)
             {
-                MyUpDate.MyUpDate date = new MyUpDate.MyUpDate();
 
-                if (date.UpDate_Check(Application.StartupPath, updatetype, sqlcon))
+                //MyUpDate.MyUpDate date = new MyUpDate.MyUpDate();
+
+                if (UpDate_Check(Application.StartupPath, updatetype, sqlcon))
                 {
+
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new 원재료간판POP());
@@ -121,98 +123,145 @@ namespace CoFAS.NEW.MES.POP
 
         }
 
-        #region [타 업체]
-
-        public static void 이튼_POP()
+        private static string sqlcon = "";
+        public static bool UpDate_Check(string startupPath, string type, string sql)
         {
+            sqlcon = sql;
+            string path = startupPath + "\\STARTDATA.txt";
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmPOPLogin());
-            //string sqlcon =  DBManager.PrimaryConnectionString;
-            //string updatetype = "NEW_이앤아이비_POP";
-            //string runName  = "CoFAS.NEW.MES.POP.exe";
-            //string name = "CoFAS.NEW.MES.Download.exe";
-
-            //string arguments = sqlcon + " " + updatetype + " " + runName;
-            //string dic = Application.StartupPath +"\\"+ name;
-
-            //FileInfo di = new FileInfo(dic);
-            //if (di.Exists)
-            //{
-            //    MyUpDate.MyUpDate date = new MyUpDate.MyUpDate();
-
-            //    if (date.UpDate_Check(Application.StartupPath, updatetype, sqlcon))
-            //    {
-            //        Application.EnableVisualStyles();
-            //        Application.SetCompatibleTextRenderingDefault(false);
-            //        Application.Run(new frmPOPLogin());
-            //    }
-            //    else
-            //    {
-            //        Process proc = new Process();
-            //        proc.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-            //        proc.StartInfo.FileName = $"{name}";
-            //        proc.StartInfo.Verb = "runas";
-            //        proc.StartInfo.UseShellExecute = true;
-            //        proc.StartInfo.RedirectStandardOutput = false;
-            //        proc.StartInfo.Arguments = arguments;
-            //        proc.Start();
-            //        Application.Exit();
-            //    }
-            //}
-            //else
-            //{
-            //    Application.EnableVisualStyles();
-            //    Application.SetCompatibleTextRenderingDefault(false);
-            //    Application.Run(new frmPOPLogin());
-            //}
-        }
-
-        public static void 이튼_작업표준서()
-        {
-
-
-            string sqlcon = DBManager.PrimaryConnectionString;
-            string updatetype = "작업표준서";
-            string runName = "CoFAS.NEW.MES.POP.exe";
-            string name = "CoFAS.NEW.MES.Download.exe";
-
-            string arguments = sqlcon + " " + updatetype + " " + runName;
-            string dic = Application.StartupPath + "\\" + name;
-
-            FileInfo di = new FileInfo(dic);
-            if (di.Exists)
+            try
             {
-                MyUpDate.MyUpDate date = new MyUpDate.MyUpDate();
 
-                if (date.UpDate_Check(Application.StartupPath, updatetype, sqlcon))
+                FileInfo info = new FileInfo(path);
+
+                bool startYN = true;
+
+                if (info.Exists)
                 {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new 작업표준서());
+                    startYN = true;
                 }
                 else
                 {
-                    Process proc = new Process();
-                    proc.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-                    proc.StartInfo.FileName = $"{name}";
-                    proc.StartInfo.Verb = "runas";
-                    proc.StartInfo.UseShellExecute = true;
-                    proc.StartInfo.RedirectStandardOutput = false;
-                    proc.StartInfo.Arguments = arguments;
-                    proc.Start();
-                    Application.Exit();
+                    File.WriteAllText(startupPath + "\\STARTDATA.txt", DateTime.Parse("2022-01-01 00:00:00").ToString());
+                    startYN = false;
+                }
+
+                // DB 연결 체크
+                if (DB_Open_Check())
+                {
+                    DataTable dt = Get_Up_Load_Date_Autoupdate(type);
+
+                    DateTime version = new DateTime();
+
+                    string st = File.ReadAllText(path);
+
+                    if (!DateTime.TryParse(st, out version))
+                    {
+
+                        version = DateTime.Parse("2022-01-01 00:00:00");
+                    }
+
+                    bool upcheck = true;
+
+                    foreach (DataRow item in dt.Rows)
+                    {
+                        DateTime get_version = Convert.ToDateTime(item[0].ToString());
+
+                        if (version < get_version)
+                        {
+                            File.WriteAllText(startupPath + "\\STARTDATA.txt", get_version.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                            upcheck = false;
+                        }
+                    }
+
+                    if (upcheck && startYN)
+                    {
+
+                        return true;
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return true;
                 }
             }
-            else
+            catch (Exception err)
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new 작업표준서());
+                // MessageBox.Show(err.Message);
+                File.Delete(startupPath + "\\STARTDATA.txt");
+
+                return false;
             }
         }
-        #endregion
+        private static bool DB_Open_Check()
+        {
+            bool check = true;
+
+
+            SqlConnection conn = new SqlConnection(sqlcon + "Connection Timeout=10;");
+            try
+            {
+                // DB 연결          
+                conn.Open();
+
+                // 연결여부에 따라 다른 메시지를 보여준다
+                if (conn.State != ConnectionState.Open)
+                {
+                    check = false;
+                }
+
+                conn.Close();
+
+                return check;
+            }
+            catch (Exception err)
+            {
+                conn.Close();
+                return check = false;
+            }
+        }
+
+        private static DataTable Get_Up_Load_Date_Autoupdate(string type)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                SqlConnection conn = new SqlConnection(sqlcon);
+
+                // DB 연결
+                string strSql_Insert = $@" select UPLOADDATE
+                                                       from [dbo].[t_autoupdate]
+                                                     where UPDATETYPE = '{type}'";
+
+                SqlCommand cmd_Insert = new SqlCommand(strSql_Insert, conn);
+
+                conn.Open();
+
+                System.Data.SqlClient.SqlDataReader dr;
+
+                dt = new System.Data.DataTable();
+
+                dr = cmd_Insert.ExecuteReader();
+
+                dt.Load(dr);
+
+                conn.Close();
+
+                return dt;
+
+            }
+            catch (Exception err)
+            {
+                return dt;
+            }
+        }
 
     }
+
 }

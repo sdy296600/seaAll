@@ -89,6 +89,7 @@ namespace CalculateForSea
         List<string> IDS = new List<string>();
 
         #endregion
+
         public Form1()
         {
             InitializeComponent();
@@ -173,7 +174,6 @@ namespace CalculateForSea
                 }
                 else if (topic.Contains("P_Active_Mhours"))
                 {
-                    //model2.ESG_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                     model2.ESG_M = double.Parse(Encoding.UTF8.GetString(message));
                 }
                 return;
@@ -1560,7 +1560,19 @@ namespace CalculateForSea
         /// </summary>
         private void WriteLog(string log)
         {
-            lb_logbox.Invoke(new Action(() =>
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    lb_logbox.Items.Insert(0, $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} : {log}");
+
+                    if (lb_logbox.Items.Count > 100)
+                    {
+                        lb_logbox.Items.RemoveAt(lb_logbox.Items.Count - 1);
+                    }
+                }));
+            }
+            else
             {
                 lb_logbox.Items.Insert(0, $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} : {log}");
 
@@ -1568,8 +1580,9 @@ namespace CalculateForSea
                 {
                     lb_logbox.Items.RemoveAt(lb_logbox.Items.Count - 1);
                 }
-            }));
+            }
         }
+
         private void Get_DCM(int i, GridModel gridModel)
         {
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/DCM_{machines[i]}_TAG_D6900_Ruled", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.V1).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));

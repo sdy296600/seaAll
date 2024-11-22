@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -10,32 +11,13 @@ namespace CoFAS.NEW.MES.Upload
     public static class DBClass
     {
 
-        //public static string sqlcon = $"Server={CoFAS.NEW.MES.Upload.Properties.Settings.Default.Server_IP};" +
-        //                                        $"Database={CoFAS.NEW.MES.Upload.Properties.Settings.Default.Database_Name};" +
-        //                                        $"uid={CoFAS.NEW.MES.Upload.Properties.Settings.Default.Uid};" +
-        //                                        $"pwd={CoFAS.NEW.MES.Upload.Properties.Settings.Default.Pwd};";
-
-        //public static string sqlcon = "Server=wms.tapex.co.kr;Database=Hansol_Auto_Update;UID=sa;PWD=coever1191!;";
-
-        //대성금형
-        //public static string sqlcon = "Server=211.221.27.249,1433;Database=Hansol_Auto_Update;UID=sa;PWD=coever1191!;";
-
-        //이앤아이비
-        //public static string sqlcon = "Server=222.113.146.82,11433;Database=Hansol_Auto_Update;UID=sa;PWD=coever1191!;";
-        //이튼
-
-        //public static string sqlcon = "Server = 172.22.4.11,60901; Database = HS_MES; UID = MesConnection; PWD=8$dJ@-!W3b-35;";
-        public static string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
-        //public static string sqlcon = "Server= 127.0.0.1;" +
-        //                    "Database= HS_MES;" +
-        //                    "UID= sa;" +
-        //                    "PWD= coever1191!;";
+        public static string sqlcon = $"Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
 
         public static bool DB_Open_Check()
         {
             bool check = true;
 
-            string str = sqlcon+ $"Connection Timeout=10;";
+            string str = sqlcon+ $"Connection Timeout=30;";
 
             SqlConnection conn = new SqlConnection(str);
             try
@@ -59,6 +41,7 @@ namespace CoFAS.NEW.MES.Upload
                 return check = false;
             }
         }
+
         public static DataTable Get_Updateinto()
         {
             DataTable dt = new DataTable();
@@ -108,6 +91,7 @@ namespace CoFAS.NEW.MES.Upload
                 return dt;
             }
         }
+
         public static DataTable Get_Autoupdate(string updatetype)
         {
             DataTable dt = new DataTable();
@@ -361,6 +345,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 return crcYn = false;
             }
         }
+
         public static void insert_Autoupdate(string updatetype, string version, string filename, byte[] flie)
         {
             DataTable dt = new DataTable();
@@ -516,6 +501,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 MessageBox.Show(err.Message);
             }
         }
+
         public static void Update_Autoupdate(string updatetype, string filename, byte[] flie,DateTime dateTime)
         {          
             try
@@ -554,7 +540,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
 
 
                 cmd_Insert.Parameters.Add("@FILEIMAGE", SqlDbType.Image).Value = flie;
-                cmd_Insert.Parameters.Add("@UPLOADDATE", SqlDbType.DateTime).Value = dateTime;
+                cmd_Insert.Parameters.Add("@UPLOADDATE", SqlDbType.DateTime).Value = dateTime.ToString();
                 cmd_Insert.Parameters.Add("@CRC", SqlDbType.VarChar).Value = crc1;
                 cmd_Insert.Parameters.Add("@FILESIZE", SqlDbType.Int).Value = flie.Length;
 
@@ -569,6 +555,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 MessageBox.Show(err.Message);
             }
         }
+
         public static void Update_Autoupdate(string updatetype, string version, string filename, byte[] flie, DateTime dateTime)
         {
             try
@@ -580,15 +567,15 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 INSERT INTO [dbo].[t_autoupdatehistory]        
                         SELECT * 
                          FROM [dbo].[t_autoupdate] 
-                        WHERE UPDATETYPE ='{updatetype}' AND FILENAME = '{filename.ToUpper()}';
+                        WHERE UPDATETYPE ='{updatetype}' 
+                          AND FILENAME = '{filename.ToUpper()}';
 
                  UPDATE [dbo].[t_autoupdate]
-                 SET         
-                  [FILEIMAGE] = @FILEIMAGE            
-                 ,[UPLOADDATE] = @UPLOADDATE
-                 ,[CRC] = @CRC
-                 ,[FILESIZE] = @FILESIZE
-                 ,[VERSION] = @VERSION
+                 SET  [FILEIMAGE] = @FILEIMAGE            
+                     ,[UPLOADDATE] = @UPLOADDATE
+                     ,[CRC] = @CRC
+                     ,[FILESIZE] = @FILESIZE
+                     ,[VERSION] = '{version}'
                  WHERE UPDATETYPE ='{updatetype}' AND FILENAME = '{filename.ToUpper()}'";
 
                 SqlCommand cmd_Insert = new SqlCommand(strSql_Insert, conn);
@@ -606,9 +593,8 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                     crc2 = crc32.byteToCrc(flie);
                 }
 
-
                 cmd_Insert.Parameters.Add("@FILEIMAGE", SqlDbType.Image).Value = flie;
-                cmd_Insert.Parameters.Add("@UPLOADDATE", SqlDbType.DateTime).Value = dateTime;
+                cmd_Insert.Parameters.Add("@UPLOADDATE", SqlDbType.DateTime).Value = dateTime.ToString();
                 cmd_Insert.Parameters.Add("@CRC", SqlDbType.VarChar).Value = crc1;
                 cmd_Insert.Parameters.Add("@FILESIZE", SqlDbType.Int).Value = flie.Length;
                 cmd_Insert.Parameters.Add("@VERSION", SqlDbType.VarChar).Value = version;
@@ -624,6 +610,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 MessageBox.Show(err.Message);
             }
         }
+
         public static void Update_UpDateInto(string key, string updatetype, string name)
         {
             DataTable dt = new DataTable();
@@ -666,11 +653,10 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 SqlConnection conn = new SqlConnection(sqlcon);
 
                 // DB 연결
-                string strSql_Insert = $@"  
-                 DELETE FROM [dbo].[t_autoupdatehistory]
-                 WHERE UPDATETYPE ='{row["UPDATETYPE"].ToString()}' 
-                      and FILENAME = '{row["FILENAME"].ToString()}'
-                      and UPLOADDATE = '{Convert.ToDateTime(row["UPLOADDATE"]).ToString("yyyy-MM-dd HH:mm:ss.fff")}'; ";
+                string strSql_Insert = $@"DELETE FROM [dbo].[t_autoupdatehistory]
+                                          WHERE UPDATETYPE ='{row["UPDATETYPE"].ToString()}' 
+                                            and FILENAME = '{row["FILENAME"].ToString()}'
+                                            and UPLOADDATE = '{Convert.ToDateTime(row["UPLOADDATE"]).ToString("yyyy-MM-dd HH:mm:ss.fff")}'; ";
 
                 SqlCommand cmd_Insert = new SqlCommand(strSql_Insert, conn);
 
@@ -685,6 +671,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
 
             }
         }
+
         public static void Delete_Autoupdate(DataRow row)
         {
             DataTable dt = new DataTable();
@@ -715,7 +702,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
             }
             catch (Exception err)
             {
-
+                MessageBox.Show(err.Message);
             }
         }
         public static void Rollback_Autoupdatehistor(DataRow row)
@@ -753,6 +740,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
             catch (Exception err)
             {
 
+                MessageBox.Show(err.Message);
             }
         }
         public static void Delete_UpdateInto(string updatetype)
@@ -782,6 +770,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
             catch (Exception err)
             {
 
+                MessageBox.Show(err.Message);
             }
         }
     }

@@ -14,6 +14,7 @@ namespace CoFAS.NEW.MES.Upload
         }
 
         public string _seleted_value = null;
+        public string ver = "0.0.0.6";
         private void Form_Upload_Load(object sender, EventArgs e)
         {
             try
@@ -55,6 +56,7 @@ namespace CoFAS.NEW.MES.Upload
                 MessageBox.Show(err.Message);
             }
         }
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -90,6 +92,7 @@ namespace CoFAS.NEW.MES.Upload
                 MessageBox.Show(err.Message);
             }
         }
+
         private void Flie_DragDrop(object sender, DragEventArgs e)
         {
             try
@@ -117,8 +120,8 @@ namespace CoFAS.NEW.MES.Upload
 
                         if (drs.Length != 0)
                         {
-                            DBClass.Update_Autoupdate(_seleted_value, name, as1, dateTime);
-
+                            //DBClass.Update_Autoupdate(_seleted_value, name, as1, dateTime);
+                            DBClass.Update_Autoupdate(_seleted_value, ver, name, as1, dateTime);
                             ok++;
                         }
                         else
@@ -414,6 +417,7 @@ namespace CoFAS.NEW.MES.Upload
             MessageBox.Show("저장 되었습니다.");
 
         }
+
         private void btn_reset_Click(object sender, EventArgs e)
         {
             if (_seleted_value != null)

@@ -152,34 +152,33 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
-
-                // MessageBox.Show(this.Name);
-                //base_ComboBox1._SearchCom.AddValue(new CoreBusiness().Spread_ComboBox("세아_작업장", "", ""), 0, 0, "", true);
-
                 DataTable pDataTable1 = new CoreBusiness().BASE_MENU_SETTING_R10(this.Name, fpMain, "");
                 DataTable pDataTable2 = new CoreBusiness().BASE_MENU_SETTING_R10(this.Name, fpSub, "WORK_PERFORMANCE");
                 DataTable pDataTable3 = new CoreBusiness().BASE_MENU_SETTING_R10(this.Name, fpSub2, "BAD_PERFORMANCE");
                 DataTable dtWorkInfo = new CoreBusiness().BASE_MENU_SETTING_R10(this.Name, fpSub3, "IN_BARCODE");
+
                 if (pDataTable1 != null && pDataTable1.Rows.Count != 0)
                 {
                     CoFAS.NEW.MES.Core.Function.Core.initializeSpread(pDataTable1, fpMain, this.Name, _UserEntity.user_account);
                     CoFAS.NEW.MES.Core.Function.Core.InitializeControl(pDataTable1, fpMain, this, _PAN_WHERE, new MenuSettingEntity() { BASE_TABLE = "" });
                 }
+
                 if (pDataTable2 != null && pDataTable2.Rows.Count != 0)
                 {
                     CoFAS.NEW.MES.Core.Function.Core.initializeSpread(pDataTable2, fpSub, this.Name, _UserEntity.user_account);
                 }
+
                 if (pDataTable3 != null && pDataTable3.Rows.Count != 0)
                 {
                     Core.Function.Core.initializeSpread(pDataTable3, fpSub2, this.Name, _UserEntity.user_account);
                 }
+
                 if (dtWorkInfo != null && dtWorkInfo.Rows.Count != 0)
                 {
                     CoFAS.NEW.MES.Core.Function.Core.initializeSpread(dtWorkInfo, fpSub3, this.Name, _UserEntity.user_account);
                 }
 
                 this.FormClosing += Form_Closing;
-
 
                 _작업일자._pDateEdit.Font = new Font(_UserEntity.FONT_TYPE, _UserEntity.FONT_SIZE - 5, FontStyle.Bold);
                 _시작._pDateEdit.Font = new Font(_UserEntity.FONT_TYPE, _UserEntity.FONT_SIZE - 5, FontStyle.Bold);
@@ -234,10 +233,13 @@ namespace CoFAS.NEW.MES.POP
                 MessageBox.Show(err.Message);
             }
         }
+
         private void FpMain_Change(object sender, ChangeEventArgs e)
         {
             try
             {
+                
+
                 xFpSpread xFp = sender as xFpSpread;
 
                 if (xFp.Sheets[0].Columns[e.Column].CellType.GetType() == typeof(FarPoint.Win.Spread.CellType.CheckBoxCellType))
@@ -361,15 +363,25 @@ namespace CoFAS.NEW.MES.POP
             }
         }
 
-
+        
         public virtual void fpMain_CellClick(object sender, CellClickEventArgs e)
         {
             try
             {
+                _품목명.Text = "-";
+
                 _p품번 = fpMain.Sheets[0].GetValue(e.Row, "RESOURCE_NO").ToString().Trim();
                 _pLOT = fpMain.Sheets[0].GetValue(e.Row, "LOT").ToString().Trim();
                 _p호기 = fpMain.Sheets[0].GetValue(e.Row, "WORKCENTER").ToString().Trim();
+
                 run(_p품번, _pLOT, _p호기);
+
+                lblMachineNo.Text = "";
+                _품번.Text = _p품번;
+                _LOT.Text = _pLOT;
+                _지시수량.Text = fpMain.Sheets[0].GetValue(e.Row, "ORDER_QTY").ToString().Trim(); 
+                _상태.Text = fpMain.Sheets[0].GetValue(e.Row, "DEAMND_STATUS").ToString().Trim();
+                _품목명.Text = fpMain.Sheets[0].GetValue(e.Row, "DESCRIPTION").ToString().Trim();
 
                 fpMain.ActiveSheet.SetActiveCell(e.Row, e.Column);
                 fpMain.ShowActiveCell(FarPoint.Win.Spread.VerticalPosition.Center, FarPoint.Win.Spread.HorizontalPosition.Center);
@@ -421,39 +433,39 @@ namespace CoFAS.NEW.MES.POP
 
             }
 
-            //생산 실적 정보 초기화
-            _p작업인원 = "1";
+            ////생산 실적 정보 초기화
+            //_p작업인원 = "1";
 
-            _품번.Text = "-";
-            _품목명.Text = "-";
-            _상태.Text = "-";
-            _LOT.Text = "-";
-            _용탕투입중량.Text = "0";
-            _양품사용중량.Text = "0";
-            _로드셀중량.Text = "0";
+            //_품번.Text = "-";
+            //_품목명.Text = "-";
+            //_상태.Text = "-";
+            //_LOT.Text = "-";
+            //_용탕투입중량.Text = "0";
+            //_양품사용중량.Text = "0";
+            //_로드셀중량.Text = "0";
 
-            _작업일자.DateTime = DateTime.Now;
-            _지시수량.Text = "-";
+            //_작업일자.DateTime = DateTime.Now;
+            //_지시수량.Text = "-";
 
-            _시작.DateTime = DateTime.Now;
-            _종료.DateTime = DateTime.Now;
+            //_시작.DateTime = DateTime.Now;
+            //_종료.DateTime = DateTime.Now;
 
-            _포장수량.Text = "0";
-            _미포장수량.Text = "0";
-            _총미포장.Text = "0";
-            _간판발행수.Text = "0";
+            //_포장수량.Text = "0";
+            //_미포장수량.Text = "0";
+            //_총미포장.Text = "0";
+            //_간판발행수.Text = "0";
 
-            _작업코드.Text = "-";
-            _교대조.Text = "-";
-            _금형.Text = "-"; ;
-            _CAV.Text = "0";
+            //_작업코드.Text = "-";
+            //_교대조.Text = "-";
+            //_금형.Text = "-"; ;
+            //_CAV.Text = "0";
 
-            _lbl_총생산량.Text = "0";
-            _lbl_양품.Text = "0";
-            _lbl_예열타.Text = "0";
-            _lbl_간판발행.Text = "0";
-            lblPlcDef.Text = "0"; //plc불량
-            _lbl_실적불량.Text = "0";
+            //_lbl_총생산량.Text = "0";
+            //_lbl_양품.Text = "0";
+            //_lbl_예열타.Text = "0";
+            //_lbl_간판발행.Text = "0";
+            //lblPlcDef.Text = "0"; //plc불량
+            //_lbl_실적불량.Text = "0";
 
         }
 
@@ -867,9 +879,48 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
-                DevExpressManager.SetCursor(this, Cursors.WaitCursor);
+                //생산 실적 정보 초기화
+                _p작업인원 = "1";
+                _pLOT = "";
+                _p실적 = "";
+                _p품번 = "";
+                _p호기 = "";
 
+                _품번.Text = "-";
+                _품목명.Text = "-";
+                _상태.Text = "-";
+                _LOT.Text = "-";
+                _용탕투입중량.Text = "0";
+                _양품사용중량.Text = "0";
+                _로드셀중량.Text = "0";
+
+                _작업일자.DateTime = DateTime.Now;
+                _지시수량.Text = "0";
+
+                _시작.DateTime = DateTime.Now;
+                _종료.DateTime = DateTime.Now;
+
+                _포장수량.Text = "0";
+                _미포장수량.Text = "0";
+                _총미포장.Text = "0";
+                _간판발행수.Text = "0";
+
+                _작업코드.Text = "-";
+                _교대조.Text = "-";
+                _금형.Text = "-"; ;
+                _CAV.Text = "0";
+
+                _lbl_총생산량.Text = "0";
+                _lbl_양품.Text = "0";
+                _lbl_예열타.Text = "0";
+                _lbl_간판발행.Text = "0";
+                lblPlcDef.Text = "0"; //plc불량
+                _lbl_실적불량.Text = "0";
+                
                 fpMain.Sheets[0].Rows.Count = 0;
+                fpSub.Sheets[0].Rows.Count = 0;
+
+                DevExpressManager.SetCursor(this, Cursors.WaitCursor);
 
                 string str = $@"select * from 
                                             (SELECT   A.order_date                   AS 'ORDER_DATE'
@@ -963,8 +1014,8 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
-                // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
-                if (string.IsNullOrEmpty(_p품번) || string.IsNullOrEmpty(_pLOT) || string.IsNullOrEmpty(_p실적))
+                // 필수 값 체크 (_p품번, _pLOT모두 비어있어야 실행)
+                if (string.IsNullOrEmpty(_품번.Text) || string.IsNullOrEmpty(_LOT.Text) )
                 {
                     CustomMsg.ShowMessage("선택된 작업실적이 없습니다. 작업 실적을 선택해 주세요.");
                     return;
@@ -1124,11 +1175,12 @@ namespace CoFAS.NEW.MES.POP
                     }
                 }
 
-                if (Convert.ToInt32(_lbl_양품.Text) <= 0)
-                {
-                    CustomMsg.ShowMessage("아직 생산된 양품이 없습니다.");
-                    return;
-                }
+                //if (Convert.ToInt32(_lbl_양품.Text) <= 0)
+                //{
+                //    CustomMsg.ShowMessage("아직 생산된 양품이 없습니다.");
+                //    return;
+                //}
+
 
                 String comQty = (Convert.ToInt32(_간판발행수.Text) * Convert.ToInt32(_포장수량.Text)).ToString(); //완료수량
                 DateTime startTime = _시작.DateTime;
@@ -1156,7 +1208,7 @@ namespace CoFAS.NEW.MES.POP
                                                                                 );
 
                 sql = $@"UPDATE work_performance
-                            SET END_TIME    = '{startTime.ToString("yyyy-MM-dd HH:mm:ss")}'
+                            SET END_TIME    = '{endTime.ToString("yyyy-MM-dd HH:mm:ss")}'
                               , IS_WORKING  = '비가동'
                           WHERE RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'
                             AND LOT_NO      = '{fpSub.Sheets[0].GetValue(row, "LOT_NO         ".Trim()).ToString()}'";
@@ -1522,7 +1574,7 @@ namespace CoFAS.NEW.MES.POP
         //            );
 
         //        sql = $@"UPDATE work_performance
-        //                 SET END_TIME = '{startTime.ToString("yyyy-MM-dd HH:mm:ss")}'
+        //                 SET END_TIME = '{endTime.ToString("yyyy-MM-dd HH:mm:ss")}'
         //                    ,IS_WORKING = '비가동'
         //                 WHERE 1 = 1
         //                 AND RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'

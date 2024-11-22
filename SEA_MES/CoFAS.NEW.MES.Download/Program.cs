@@ -18,13 +18,23 @@ namespace CoFAS.NEW.MES.Download
         [STAThread]
         static void Main(string[] strs2)
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //FormDownload_세아_MES from = new FormDownload_세아_MES();
-            //FormDownload_세아_POP from = new FormDownload_세아_POP();
-            FormDownload_세아_간판POP from =  new FormDownload_세아_간판POP();
 
-            Application.Run(from);
+            string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
+            string updatetype = "세아간판POP";
+            string runName = "CoFAS.NEW.MES.POP";
+
+            string arguments = sqlcon + " " + updatetype + " " + runName;
+
+            //string[] strs = arguments.Split(" ");
+
+
+            Platform_Launcher(sqlcon, updatetype, runName);
+
+
+
         }
 
         private static void Platform_Launcher(string sql, string type, string _runName)
@@ -45,11 +55,11 @@ namespace CoFAS.NEW.MES.Download
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new FormDownload_세아_간판POP());
+                Application.Run(new FormDownload_세아_간판POP(sql, type, _runName));
             }
         }
 
-        private static string sqlcon ="";
+        private static string sqlcon = "";
         public static bool UpDate_Check(string startupPath, string type, string sql)
         {
             sqlcon = sql;
@@ -68,9 +78,10 @@ namespace CoFAS.NEW.MES.Download
                 }
                 else
                 {
-                    File.WriteAllText(startupPath + "\\STARTDATA.txt", DateTime.Parse("2022-01-01").ToString());
+                    File.WriteAllText(startupPath + "\\STARTDATA.txt", DateTime.Parse("2022-01-01 00:00:00").ToString());
                     startYN = false;
                 }
+
                 // DB 연결 체크
                 if (DB_Open_Check())
                 {
@@ -83,7 +94,7 @@ namespace CoFAS.NEW.MES.Download
                     if (!DateTime.TryParse(st, out version))
                     {
 
-                        version = DateTime.Parse("2022-01-01");
+                        version = DateTime.Parse("2022-01-01 00:00:00");
                     }
 
                     bool upcheck = true;
@@ -129,7 +140,7 @@ namespace CoFAS.NEW.MES.Download
             bool check = true;
 
 
-            SqlConnection conn = new SqlConnection(sqlcon+ "Connection Timeout=10;");
+            SqlConnection conn = new SqlConnection(sqlcon + "Connection Timeout=10;");
             try
             {
                 // DB 연결          

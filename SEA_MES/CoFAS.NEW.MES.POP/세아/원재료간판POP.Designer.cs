@@ -132,7 +132,7 @@ namespace CoFAS.NEW.MES.POP
             this._Title.Name = "_Title";
             this._Title.Size = new System.Drawing.Size(1244, 30);
             this._Title.TabIndex = 0;
-            this._Title.Text = "System Main";
+            this._Title.Text = "원재료 간판 POP";
             this._Title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this._Title.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tspMain_MouseDown);
             // 
@@ -200,7 +200,7 @@ namespace CoFAS.NEW.MES.POP
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(309, 66);
             this.label1.TabIndex = 1;
-            this.label1.Text = "[간편 라벨 설정]";
+            this.label1.Text = "원재료 라벨 발행";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btn_생성
@@ -498,6 +498,7 @@ namespace CoFAS.NEW.MES.POP
             this.checkBox2.TabIndex = 3;
             this.checkBox2.Text = "출력 미리보기";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Visible = false;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // pictureBox1
