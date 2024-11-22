@@ -368,6 +368,7 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
+                
                 _품목명.Text = "-";
 
                 _p품번 = fpMain.Sheets[0].GetValue(e.Row, "RESOURCE_NO").ToString().Trim();
@@ -379,7 +380,7 @@ namespace CoFAS.NEW.MES.POP
                 lblMachineNo.Text = "";
                 _품번.Text = _p품번;
                 _LOT.Text = _pLOT;
-                _지시수량.Text = fpMain.Sheets[0].GetValue(e.Row, "ORDER_QTY").ToString().Trim(); 
+                _지시수량.Text =  fpMain.Sheets[0].GetValue(e.Row, "ORDER_QTY").ToString().Trim();
                 _상태.Text = fpMain.Sheets[0].GetValue(e.Row, "DEAMND_STATUS").ToString().Trim();
                 _품목명.Text = fpMain.Sheets[0].GetValue(e.Row, "DESCRIPTION").ToString().Trim();
 
@@ -627,14 +628,15 @@ namespace CoFAS.NEW.MES.POP
                     if (workOkcnt - packQty <= 0)
                     {
                         packQty = 0;
-                    };
-
-                    // 총 미포장 = 해당 lot의 양품 - 실적 불량 - 포장 수량 
-                    _총미포장.Text = (workOkcnt - packQty - (allBadQty * 2)).ToString() ;
-                    //_교대조.Text = dtWorkInfo.Rows[0]["SHIFT"].ToString();
-                    //_교대조.Text = dtWorkInfo.Rows[0]["SHIFT"].ToString();
-                    //_작업코드.Text = dtWorkInfo.Rows[0]["WORK_CODE"].ToString();
-
+                    }
+                    else
+                    {
+                        // 총 미포장 = 해당 lot의 양품 - 실적 불량 - 포장 수량 
+                        _총미포장.Text = (workOkcnt - packQty - (allBadQty * 2)).ToString();
+                        //_교대조.Text = dtWorkInfo.Rows[0]["SHIFT"].ToString();
+                        //_교대조.Text = dtWorkInfo.Rows[0]["SHIFT"].ToString();
+                        //_작업코드.Text = dtWorkInfo.Rows[0]["WORK_CODE"].ToString();
+                    }
 
                     #region [용탑투입]
                     String sql1 = $@"SELECT ISNULL(SUM(WEIGHT),0) AS 중량,TYPE
