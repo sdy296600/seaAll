@@ -39,6 +39,7 @@ namespace CoFAS.NEW.MES.Download
 
             }
         }
+
         public void ProgValueSetting()
         {
             try

@@ -51,9 +51,9 @@ namespace CoFAS.NEW.MES.Core
 
   ON A.RESOURCE_NO = B.RESOURCE_NO
   AND A.LOT_NO = B.LOT_NO
-  AND B.TYPE ='검증'
                                 WHERE 1=1 ";
-
+                
+                //AND B.TYPE = '검증'
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
 

@@ -44,6 +44,7 @@ namespace CoFAS.NEW.MES.POP
             string dic = Application.StartupPath + "\\" + name;
 
             FileInfo di = new FileInfo(dic);
+
             if (di.Exists)
             {
                 MyUpDate.MyUpDate date = new MyUpDate.MyUpDate();
