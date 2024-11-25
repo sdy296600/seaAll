@@ -123,6 +123,8 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
+
+                CustomMsg.ShowMessage("222원재료 간판 POP입니다.");
                 _품목콤보.AddValue(new CoreBusiness().Spread_ComboBox("RESOURCE_품목", "", ""), 0, 0, "", true);
                 _품목콤보.ValueChanged += _품목콤보_EditValueChanged;
 

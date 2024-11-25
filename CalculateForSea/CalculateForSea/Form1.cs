@@ -19,6 +19,8 @@ namespace CalculateForSea
 {
     public partial class Form1 : Form
     {
+        
+
         #region 모델
         public class DataModel
         {

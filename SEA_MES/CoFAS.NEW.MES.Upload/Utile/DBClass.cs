@@ -594,7 +594,7 @@ ORDER BY [UPLOADDATE],[FILENAME] DESC ";
                 }
 
                 cmd_Insert.Parameters.Add("@FILEIMAGE", SqlDbType.Image).Value = flie;
-                cmd_Insert.Parameters.Add("@UPLOADDATE", SqlDbType.DateTime).Value = dateTime.ToString();
+                cmd_Insert.Parameters.Add("@UPLOADDATE", SqlDbType.DateTime).Value = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
                 cmd_Insert.Parameters.Add("@CRC", SqlDbType.VarChar).Value = crc1;
                 cmd_Insert.Parameters.Add("@FILESIZE", SqlDbType.Int).Value = flie.Length;
                 cmd_Insert.Parameters.Add("@VERSION", SqlDbType.VarChar).Value = version;
