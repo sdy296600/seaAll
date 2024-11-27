@@ -1042,7 +1042,6 @@ namespace CalculateForSea
                                 $"                                                        ORDER BY ID DESC LIMIT 1                "+
                                 $"			  				                        )                                             "+
                                 $"                            AND A.VL > 0                                                        "+
-                                $"                            AND A.VL < 5000                                                     " +
                                 $"                            AND A.CD = 'DCM_{20+i}_TAG_D3705'                                   "+
                                 $"                                                                                                "+
                                 $"                            AND B.MACHINE_NO = 'WCI_D{20+i}')) AS OKCNT                         "+
@@ -1066,7 +1065,6 @@ namespace CalculateForSea
                                 $"                                                ORDER BY ID DESC LIMIT 1                        "+
                                 $"                                    )                                                           "+
                                 $"                            AND A.VL > 0                                                        "+
-                                $"                            AND A.VL < 5000                                                     " +
                                 $"                            AND A.CD = 'DCM_{20+i}_TAG_D3705'                                   "+
                                 $"                            AND B.MACHINE_NO = 'WCI_D{20+i}'                                    "+
                                 $"                        ),0)*{cavity}                                                           "+
