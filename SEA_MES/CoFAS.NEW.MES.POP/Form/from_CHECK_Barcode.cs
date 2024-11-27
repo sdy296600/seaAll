@@ -158,7 +158,10 @@ namespace CoFAS.NEW.MES.POP
             DataTable dt2 = new MS_DBClass(utility.My_Settings_Get()).SELECT2(sql2);
 
             int resultBcd = 0;
-            Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd);
+            if (!Int32.TryParse(dt2.Rows[0]["COUNT_BCD"].ToString(), out resultBcd)) 
+            {
+                resultBcd = 0;
+            };
 
             if (resultBcd <= 0) 
             {
