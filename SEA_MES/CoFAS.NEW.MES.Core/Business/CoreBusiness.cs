@@ -29,7 +29,7 @@ namespace CoFAS.NEW.MES.Core.Business
             }
             catch (ExceptionManager pExceptionManager)
             {
-                throw pExceptionManager;
+                    throw pExceptionManager;
             }
             catch (Exception pException)
             {

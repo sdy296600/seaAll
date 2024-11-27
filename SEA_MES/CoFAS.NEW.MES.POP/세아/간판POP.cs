@@ -308,7 +308,7 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(공정이동표 라벨)
         {
-            string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
+            string printerName = "ZDesigner GT800 (ZPL)"; //세아 라벨 프린트
             string printerName1 = "ZDesigner ZD230-203dpi ZPL";
             string zplCommand = string.Empty;
 

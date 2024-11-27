@@ -259,7 +259,7 @@ namespace CoFAS.NEW.MES.POP
         {
             //string printerName2 = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
             string printerName1 = "ZDesigner ZD230-203dpi ZPL";
-            string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트
+            string printerName = "ZDesigner GT800 (ZPL)"; //세아 라벨 프린트
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2
