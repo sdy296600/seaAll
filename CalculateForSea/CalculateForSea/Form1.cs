@@ -31,7 +31,7 @@ namespace CalculateForSea
             public double NowRETI { get; set; } = 0; // 현재 RETI
             public double NowESG { get; set; } = 0; // 현재 ESG
             public double Totalcnt { get; set; } = 0; // 현재 총 생산량 (사타수 + 배출수 + 양품수)
-            public double PORD_CNT { get; set; } = 0; // 제품 생산수 ( 배출수 + 양품수)
+            public double PROD_CNT { get; set; } = 0; // 제품 생산수 ( 배출수 + 양품수)
             public double Active_Power { get; set; } = 0; // 유효전력
             public double ReActive_Power { get; set; } = 0; // 무효전력
             public double NowMotorHour { get; set; } = 0; // 현재 구동시간 - 모터구동 시작했을 때 부터의 시간입니다. (모터 가동 정지 시 초기화 됨)
@@ -917,7 +917,7 @@ namespace CalculateForSea
 
                             models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
                             models[i].Totalcnt = nowtotalcnt;
-                            models[i].PORD_CNT = nowPordCnt;
+                            models[i].PROD_CNT = nowPordCnt;
 
                             // MSSQL 전달
                             using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
@@ -1174,7 +1174,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_13", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_13", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_13", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_13", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_13", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1191,7 +1191,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_13", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("13호기 MQTT Send");
             }
@@ -1220,7 +1220,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_21", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_21", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_21", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_21", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_21", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1237,7 +1237,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_21", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("21호기 MQTT Send");
             }
@@ -1266,7 +1266,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_22", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_22", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_22", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1283,7 +1283,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_22", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("22호기 MQTT Send");
             }
@@ -1312,7 +1312,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_23", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_23", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_23", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_23", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_23", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1329,7 +1329,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_23", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("23호기 MQTT Send");
             }
@@ -1358,7 +1358,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_24", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_24", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_24", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_24", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_24", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1375,7 +1375,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_24", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 
                 }
                 WriteLog("24호기 MQTT Send");
@@ -1405,7 +1405,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_25", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_25", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_25", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_25", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_25", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1422,7 +1422,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_25", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("25호기 MQTT Send");
             }
