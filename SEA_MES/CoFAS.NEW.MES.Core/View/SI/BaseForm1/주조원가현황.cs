@@ -20,7 +20,14 @@ namespace CoFAS.NEW.MES.Core
 
                 fpMain.Sheets[0].Rows.Count = 0;
 
-                string str = $@"SELECT A.CASTING_YEAR , A.CASTING_TYPE ,A.[1] , A.[2], A.[3], A.[4], A.[5], A.[6], A.[7], A.[8], A.[9],A.[10], A.[11], A.[12]
+                string str = $@" 
+SET ANSI_WARNINGS OFF;
+ SET ARITHIGNORE ON;
+ SET ARITHABORT OFF ;
+
+
+
+SELECT A.CASTING_YEAR , A.CASTING_TYPE ,A.[1] , A.[2], A.[3], A.[4], A.[5], A.[6], A.[7], A.[8], A.[9],A.[10], A.[11], A.[12]
 FROM
 (SELECT *
 FROM (
@@ -46,7 +53,7 @@ CONVERT(decimal(18,2), CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[9])
 CONVERT(decimal(18,2), CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[10])AS[10],
 CONVERT(decimal(18,2), CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[11])AS[11],
 CONVERT(decimal(18,2), CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[12])AS[12]
-FROM (				   
+FROM (               
     SELECT CASTING_YEAR,'직접노무비' AS CASTING_TYPE, CASTING_MONTH, CASTING_VALUE
     FROM [HS_MES].[dbo].[CASTING_SEARCH] WHERE CASTING_TYPE ='NET'
 ) AS B
@@ -72,7 +79,7 @@ CONVERT(decimal(18,2), (CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[9]
 CONVERT(decimal(18,2), (CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[10])*CONVERT(decimal(18,2),INDIRECT_LABOR_RATIO)/100)AS[10],
 CONVERT(decimal(18,2), (CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[11])*CONVERT(decimal(18,2),INDIRECT_LABOR_RATIO)/100)AS[11],
 CONVERT(decimal(18,2), (CONVERT(decimal(18,2),C.HOURLY_WAGE_PER_SECOND)*10*1/[12])*CONVERT(decimal(18,2),INDIRECT_LABOR_RATIO)/100)AS[12]
-FROM (										 
+FROM (                               
     SELECT CASTING_YEAR,'간접노무비' AS CASTING_TYPE, CASTING_MONTH, CASTING_VALUE
     FROM [HS_MES].[dbo].[CASTING_SEARCH] WHERE CASTING_TYPE ='NET'
 ) AS B
@@ -117,7 +124,7 @@ ON C.EQUIPMENT_ID ='설비850TON'
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
 
-                string sql = str + sb.ToString();
+                string sql = str + sb.ToString() + " order by CASTING_YEAR";
 
                 DataTable _DataTable = new CoreBusiness().SELECT(sql);
                 fpMain.Sheets[0].Rows.Count = 0;
@@ -132,7 +139,7 @@ ON C.EQUIPMENT_ID ='설비850TON'
                         {
                             fpMain.Sheets[0].SetValue(i, item.ColumnName, _DataTable.Rows[i][item.ColumnName]);
 
-                           
+
                         }
 
 
@@ -159,8 +166,6 @@ ON C.EQUIPMENT_ID ='설비850TON'
                 DevExpressManager.SetCursor(this, Cursors.Default);
             }
         }
-
-
 
     }
 }

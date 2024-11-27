@@ -57,7 +57,12 @@ namespace CoFAS.NEW.MES.Core
                                           $"           WHERE S1.LOT_NO	    = T1.LOT                                       " +
                                           $"             AND S1.RESOURCE_NO = T1.RESOURCE_NO                               " +
                                           $"         ) AS COM_QTY                                                          " +
-	                                      $"       , T1.QTY_SCRAPPED                                                       " +
+                                          $"       , (SELECT ISNULL(SUM(S2.BAD_QTY), 0)                                  " +
+                                          $"          FROM HS_MES.DBO.BAD_PERFORMANCE S2                                 " +
+                                          $"         WHERE S2.LOT_NO	    = T1.LOT                                       " +
+                                          $"           AND S2.RESOURCE_NO = T1.RESOURCE_NO                               " +
+                                          $"       ) AS BAD_QTY                                                            " +
+                                          $"       , T1.QTY_SCRAPPED                                                       " +
 	                                      $"       , T1.QTY_HELD                                                           " +
 	                                      $"       , T1.INPROCESS_CODE                                                     " +
 	                                      $"       , T1.CUSTOMER_NAME                                                      " +

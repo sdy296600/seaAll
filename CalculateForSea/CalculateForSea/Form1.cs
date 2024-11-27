@@ -539,10 +539,12 @@ namespace CalculateForSea
         private void CalculateAndPublishPowerConsumption(DataModel model, int machineId)
         {
 
-            //누적전력량 계산   *단위 -  0.01KW / 0.01KVAR
+            //누적전력량 계산   * 단위 -  0.01KW / 0.01KVAR
             double P = model.Active_Power;
             double Q = model.ReActive_Power;
 
+            // 적산전력 계산(유효)
+            double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ) * 1000; //Unit - 1KWh
 
             // 피상전력(S)을 계산합니다.
             double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
@@ -552,9 +554,6 @@ namespace CalculateForSea
 
             // 역률(PF)을 계산합니다.
             double MH = model.NowMotorHour;
-
-            // 적산 유효전력을 계산합니다.
-            double Cumulative_Power = P * MH;
 
             WriteLog($"{model.NowShotKW}");
 
@@ -568,8 +567,9 @@ namespace CalculateForSea
             double dailyAmount = dailyPower * electricityRate;
             double monthlyAmount = monthConversion * electricityRate;
             double unitAmount = unitPower * electricityRate;
+
             if (machineId == 0)
-            {
+             {
                 // MQTT로 전송
 
                 _mqttClient.Publish($"/event/c/data_collection_digit/RTU_13_01_Month_Power_Amount", Encoding.UTF8.GetBytes(monthlyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
@@ -676,16 +676,16 @@ namespace CalculateForSea
                                 sqlcmd.ExecuteNonQuery();
                             }
                         }
-                        using (MySqlConnection conn = new MySqlConnection(ConnectionString))
-                        {
-                            conn.Open();
-                            using (MySqlCommand cmd = new MySqlCommand("DELETE FROM timeseriesdata WHERE id = @id", conn))
-                            {
-                                cmd.CommandType = CommandType.Text;
-                                cmd.Parameters.AddWithValue("@id", id); // 파라미터화된 쿼리 사용
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
+                        //using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                        //{
+                        //    conn.Open();
+                        //    using (MySqlCommand cmd = new MySqlCommand("DELETE FROM timeseriesdata WHERE id = @id", conn))
+                        //    {
+                        //        cmd.CommandType = CommandType.Text;
+                        //        cmd.Parameters.AddWithValue("@id", id); // 파라미터화된 쿼리 사용
+                        //        cmd.ExecuteNonQuery();
+                        //    }
+                        //}
 
                         // 처리된 ID 목록에 추가
                         IDS.Add(id);

@@ -27,8 +27,8 @@ namespace CoFAS.NEW.MES.POP
             utility.My_Settings_Start();
             utility.My_Settings_Get();
 
-            //세아_POP();
-            원재료간판_POP();
+            세아_POP();
+            //원재료간판_POP();
 
         }
 
@@ -82,8 +82,8 @@ namespace CoFAS.NEW.MES.POP
 
             string sqlcon = DBManager.PrimaryConnectionString;
             string updatetype = "세아간판POP";
-            string runName = "CoFAS.NEW.MES.POP";
-            string name = "CoFAS.NEW.MES.Download";
+            string runName = "CoFAS.NEW.MES.POP.exe";
+            string name = "CoFAS.NEW.MES.Download.exe";
 
             string arguments = sqlcon + " " + updatetype + " " + runName;
             string dic = Application.StartupPath + "\\" + name;
@@ -105,7 +105,7 @@ namespace CoFAS.NEW.MES.POP
                 {
                     Process proc = new Process();
                     proc.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-                    proc.StartInfo.FileName = $"{name}.exe";
+                    proc.StartInfo.FileName = $"{name}";
                     proc.StartInfo.Verb = "runas";
                     proc.StartInfo.UseShellExecute = true;
                     proc.StartInfo.RedirectStandardOutput = false;

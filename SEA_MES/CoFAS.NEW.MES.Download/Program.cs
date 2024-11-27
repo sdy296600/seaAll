@@ -25,8 +25,13 @@ namespace CoFAS.NEW.MES.Download
             string sqlcon = "Server=10.10.10.180;Database=HS_MES;UID=hansol_mes;PWD=Hansol123!@#;";
             string updatetype = "세아간판POP";
             string runName = "CoFAS.NEW.MES.POP";
+            string name = "CoFAS.NEW.MES.POP";
+            //string runName = "CoFAS.NEW.MES.Download";
 
             string arguments = sqlcon + " " + updatetype + " " + runName;
+            string dic = Application.StartupPath + "\\" + name;
+
+            FileInfo di = new FileInfo(dic);
 
             //string[] strs = arguments.Split(" ");
 

@@ -20,7 +20,7 @@ namespace CoFAS.NEW.MES.Download
         {
             _sqlcon = sqlcon;
             _updatetype = updatetype;
-            _runName = runName;
+            _runName = "CoFAS.NEW.MES.POP.exe";
             InitializeComponent();
 
         }
@@ -55,7 +55,7 @@ namespace CoFAS.NEW.MES.Download
                     {
                         Process proc = new Process();
                         proc.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-                        proc.StartInfo.FileName = $"{_runName}.exe";
+                        proc.StartInfo.FileName = $"{_runName}";
                         proc.StartInfo.Verb = "runas";
                         proc.StartInfo.UseShellExecute = true;
                         proc.StartInfo.RedirectStandardOutput = false;

@@ -200,7 +200,7 @@ namespace CoFAS.NEW.MES.POP
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(309, 66);
             this.label1.TabIndex = 1;
-            this.label1.Text = "원재료 라벨 발행";
+            this.label1.Text = "[ 원재료 라벨 발행 ]";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btn_생성

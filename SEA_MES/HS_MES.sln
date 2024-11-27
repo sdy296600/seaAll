@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoFAS.NEW.MES.POP", "CoFAS.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoFAS.NEW.MES.Upload", "CoFAS.NEW.MES.Upload\CoFAS.NEW.MES.Upload.csproj", "{F8DC0C1F-FCBA-4F00-A3EF-B71DF9CF0755}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CoFAS.NEW.MES.MATERIAL_POP", "CoFAS.NEW.MES.MATERIAL_POP\CoFAS.NEW.MES.MATERIAL_POP.vdproj", "{CF5F6884-E727-4FCE-82C9-F74013C08706}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,8 +57,6 @@ Global
 		{F8DC0C1F-FCBA-4F00-A3EF-B71DF9CF0755}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8DC0C1F-FCBA-4F00-A3EF-B71DF9CF0755}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8DC0C1F-FCBA-4F00-A3EF-B71DF9CF0755}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF5F6884-E727-4FCE-82C9-F74013C08706}.Debug|Any CPU.ActiveCfg = Debug
-		{CF5F6884-E727-4FCE-82C9-F74013C08706}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

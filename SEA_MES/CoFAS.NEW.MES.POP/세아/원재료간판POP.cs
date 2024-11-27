@@ -123,8 +123,6 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
-
-                CustomMsg.ShowMessage("222원재료 간판 POP입니다.");
                 _품목콤보.AddValue(new CoreBusiness().Spread_ComboBox("RESOURCE_품목", "", ""), 0, 0, "", true);
                 _품목콤보.ValueChanged += _품목콤보_EditValueChanged;
 
@@ -267,16 +265,16 @@ namespace CoFAS.NEW.MES.POP
             zplCommand = $@"^XA^BY2
                             , 2.0^FS^SEE:UHANGUL.DAT^FS^CW1
                             , E:KFONT3.FNT^CI26^FS 
-                            ^FO50,  20^GB770, 70,  4^FS
-                            ^FO50,  20^GB770, 140, 4^FS
-                            ^FO50,  20^GB770, 210, 4^FS
-                            ^FO50,  20^GB770, 270, 4^FS
-                            ^FO50,  20^GB770, 350, 4^FS
-                            ^FO50,  20^GB150, 270, 4^FS
-                            ^FO50,  20^GB525, 70,  4^FS
-                            ^FO50,  158^GB280,70,  4^FS
-                            ^FO50,  158^GB350,70,  4^FS
-                            ^FO50,  158^GB525,70,  4^FS
+                            ^FO47,  20^GB770, 70,  4^FS
+                            ^FO47,  20^GB770, 140, 4^FS
+                            ^FO47,  20^GB770, 210, 4^FS
+                            ^FO47,  20^GB770, 270, 4^FS
+                            ^FO47,  20^GB770, 350, 4^FS
+                            ^FO47,  20^GB150, 270, 4^FS
+                            ^FO47,  20^GB525, 70,  4^FS
+                            ^FO47,  158^GB280,70,  4^FS
+                            ^FO47,  158^GB350,70,  4^FS
+                            ^FO47,  158^GB525,70,  4^FS
                             ^FO570, 225^GB0,  65,  4^FS
 
                             ^FS^FO60, 40^A1N,35,20^FD품번
@@ -312,6 +310,8 @@ namespace CoFAS.NEW.MES.POP
                 else
                 {
                     PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
+                    //입고라벨은 번들에 좌우로 붙일수있도록 한 바코드에 2개씩 나오게요청함
+                    RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                     RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                     //printQueue.Purge();
                 }
