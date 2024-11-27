@@ -4027,10 +4027,11 @@ ORDER BY
 
                         sheet.Cells[5, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()); //품번
                         sheet.Cells[6, 3].SetValueFromText(order_mst_NAME); //품명
-                        sheet.Cells[7, 3].SetValueFromText(_DataTable.Rows[i]["순서"].ToString() == "31" ? _DataTable.Rows[i]["구분"].ToString() : ""); //원재료
+                        sheet.Cells[7, 3].SetValueFromText(_DataTable.Rows[i]["순서"].ToString() == "31" ? _DataTable.Rows[i]["구분"].ToString() : ""); 
+                        //원재료
                         for (int num = 1; num <= 12; num++)
                         {
-                            sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
+                            //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
                             sheet.Cells[11, num + 5].SetValueFromText(_DataTable.Rows[2][$"{num}월"].ToString()); //3월 성능가동률
                             sheet.Cells[12, num + 5].SetValueFromText(_DataTable.Rows[3][$"{num}월"].ToString()); //3월 직접노무비
                             sheet.Cells[14, num + 5].SetValueFromText(_DataTable.Rows[5][$"{num}월"].ToString()); //3월 종합가동률
@@ -4039,6 +4040,7 @@ ORDER BY
                             sheet.Cells[17, num + 5].SetValueFromText(_DataTable.Rows[8][$"{num}월"].ToString()); //3월 수선비
                             sheet.Cells[18, num + 5].SetValueFromText(_DataTable.Rows[9][$"{num}월"].ToString()); //3월 전력비
                             sheet.Cells[19, num + 5].SetValueFromText(_DataTable.Rows[10][$"{num}월"].ToString()); //3월 간접경비
+                            sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[21][$"{num}월"].ToString()); //3월 원재료);
                         }
 
                         sheet.Cells[7, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "평균").ToString()); //평균
