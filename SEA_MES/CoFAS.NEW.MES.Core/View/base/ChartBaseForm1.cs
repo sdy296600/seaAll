@@ -366,7 +366,7 @@ namespace CoFAS.NEW.MES.Core
 
                 string str = $@"SELECT 
 		ROW_NUMBER() OVER (ORDER BY A.ID) AS RowNum,
-	   D.[description]   AS 'D.호기'
+	   D.[description]   AS 'D.description'
       ,J.[RESOURCE_NO]  AS 'J.RESOURCE_NO'
       ,J.[LOT_NO]       AS 'J.LOT_NO'
       ,B.[description]  AS 'B.설비명'
@@ -501,7 +501,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
 
                     mac_dt = _DataTable;
 
-                    mac_dt = mac_dt.DefaultView.ToTable(true, "D.호기");
+                    mac_dt = mac_dt.DefaultView.ToTable(true, "D.description");
 
                     //for (int i = 0; i < mac_dt.Rows.Count; i++)
                     //{
