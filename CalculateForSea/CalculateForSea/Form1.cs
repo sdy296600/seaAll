@@ -37,6 +37,7 @@ namespace CalculateForSea
             public double NowMotorHour { get; set; } = 0; // 현재 구동시간 - 모터구동 시작했을 때 부터의 시간입니다. (모터 가동 정지 시 초기화 됨)
             public double MotorLIFEDay { get; set; } = 0; // 총 모터 구동 일수
             public double MotorLIFEHour { get; set; } = 0; //총 모터 구동 시간 두개 데이터를 합쳐서 실제 사용한 구동시간을 산출합니다
+            public string ID { get; set; } = "";
         }
 
         public class DataModel2
@@ -557,12 +558,12 @@ namespace CalculateForSea
 
             WriteLog($"{model.NowShotKW}");
 
-            
+
             // 사용량 계산
             double monthConversion = P * 30;
             var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             double unitPower = model.Totalcnt != 0 ? model.NowShotKW / model.Totalcnt : 0;
-            // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
+;            // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
             double electricityRate = 153.7; // KRW per kWh 
             double dailyAmount = dailyPower * electricityRate;
             double monthlyAmount = monthConversion * electricityRate;
@@ -751,11 +752,17 @@ namespace CalculateForSea
                                 }
                             }
 
+                            string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["ID"].ToString();
+
                             string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
                             string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
                             string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
                             string WORK_POWER = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_POWER"].ToString();
 
+                            if (WORK_PERFORMANCE_ID != models[i].ID) 
+                            {
+                                models[i] = new DataModel() { ID=WORK_PERFORMANCE_ID };
+                            }
                             int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT)/cavity)
                                 + Convert.ToInt32(WORK_WARMUPCNT)
                                 + (Convert.ToInt32(WORK_ERRCOUNT)/cavity);
@@ -765,52 +772,54 @@ namespace CalculateForSea
 
                             if (models[i].Totalcnt < nowtotalcnt)
                             {
+                                
+                                using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                                {
+                                    sqlconn.Open();
+                                    using (SqlCommand sqlcmd = new SqlCommand())
+                                    {
+                                        // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
+                                        sqlcmd.Connection = sqlconn;
+                                        sqlcmd.CommandType = CommandType.StoredProcedure;
+                                        sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
+                                        sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
+                                        sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
+                                        sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
+                                        sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
+                                        sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
+                                        sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
+                                        sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
+                                        sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
+                                        sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
+                                        sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
+                                        sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
+                                        sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
+                                        sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
+                                        sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
+                                        sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
+                                        sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
+                                        sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
+                                        sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
+                                        sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
+                                        sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
+                                        sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
+                                        sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
+                                        sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
+                                        sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
+                                        sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
+                                        sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                        sqlcmd.ExecuteNonQuery();
+
+                                        WriteLog("SHOT Data Processed");
+                                    }
+
+                                }
                                 if (models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M - models[i].NowShotKW > 0)
                                 {
-                                    using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                                    {
-                                        sqlconn.Open();
-                                        using (SqlCommand sqlcmd = new SqlCommand())
-                                        {
-                                            // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
-                                            sqlcmd.Connection = sqlconn;
-                                            sqlcmd.CommandType = CommandType.StoredProcedure;
-                                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
-                                            sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                            sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
-                                            sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
-                                            sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
-                                            sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
-                                            sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
-                                            sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
-                                            sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
-                                            sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
-                                            sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
-                                            sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
-                                            sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
-                                            sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
-                                            sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                            sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                            sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                            sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                            sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                            sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                            sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                            sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
-                                            sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                            sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
-                                            sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
-                                            sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
-                                            sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
-                                            sqlcmd.ExecuteNonQuery();
-
-                                            WriteLog("SHOT Data Processed");
-                                        }
-                                     
-                                    }
+                                    models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
                                 }
                                 int machine_id;
                                 //여기에 
@@ -913,11 +922,10 @@ namespace CalculateForSea
                                     cmd.Connection = conn2;
                                     cmd.ExecuteNonQuery();
                                 }
+                                models[i].Totalcnt = nowtotalcnt;
+                                models[i].PROD_CNT = nowPordCnt;
                             }
 
-                            models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
-                            models[i].Totalcnt = nowtotalcnt;
-                            models[i].PROD_CNT = nowPordCnt;
 
                             // MSSQL 전달
                             using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
