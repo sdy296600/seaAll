@@ -79,6 +79,7 @@ namespace CoFAS.NEW.MES.Core
 
 
                 }
+
                 //chart2.ChartAreas[0].AxisX.Interval = 1;
 
                 _SystemLogEntity = new SystemLogEntity();
@@ -347,6 +348,13 @@ namespace CoFAS.NEW.MES.Core
         {
             try
             {
+                Base_textbox txtMachine = _PAN_WHERE.Controls[0] as Base_textbox;
+                Base_textbox txtPartNo  = _PAN_WHERE.Controls[1] as Base_textbox;
+                Base_textbox txtItem    = _PAN_WHERE.Controls[1] as Base_textbox;
+                Base_FromtoDateTime datetime = _PAN_WHERE.Controls[3] as Base_FromtoDateTime;
+                string strTime = datetime.StartValue.ToString("yyyy-MM-dd");
+                string endTime = datetime.EndValue.ToString("yyyy-MM-dd");
+
                 DevExpressManager.SetCursor(this, Cursors.WaitCursor);
 
                 if (chartControl1.Series.Count > 0)
