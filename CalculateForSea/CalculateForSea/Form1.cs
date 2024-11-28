@@ -31,12 +31,13 @@ namespace CalculateForSea
             public double NowRETI { get; set; } = 0; // 현재 RETI
             public double NowESG { get; set; } = 0; // 현재 ESG
             public double Totalcnt { get; set; } = 0; // 현재 총 생산량 (사타수 + 배출수 + 양품수)
-            public double PORD_CNT { get; set; } = 0; // 제품 생산수 ( 배출수 + 양품수)
+            public double PROD_CNT { get; set; } = 0; // 제품 생산수 ( 배출수 + 양품수)
             public double Active_Power { get; set; } = 0; // 유효전력
             public double ReActive_Power { get; set; } = 0; // 무효전력
             public double NowMotorHour { get; set; } = 0; // 현재 구동시간 - 모터구동 시작했을 때 부터의 시간입니다. (모터 가동 정지 시 초기화 됨)
             public double MotorLIFEDay { get; set; } = 0; // 총 모터 구동 일수
             public double MotorLIFEHour { get; set; } = 0; //총 모터 구동 시간 두개 데이터를 합쳐서 실제 사용한 구동시간을 산출합니다
+            public string ID { get; set; } = "";
         }
 
         public class DataModel2
@@ -557,16 +558,12 @@ namespace CalculateForSea
 
             WriteLog($"{model.NowShotKW}");
 
-            //var today_conversion = double.Parse(Encoding.UTF8.GetString(e.Message));
-            //var month_amount = today_conversion * 153.7;
-            //var daily_power = today_conversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            //var daily_amount = daily_power * 153.7;
 
             // 사용량 계산
             double monthConversion = P * 30;
             var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             double unitPower = model.Totalcnt != 0 ? model.NowShotKW / model.Totalcnt : 0;
-            // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
+;            // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
             double electricityRate = 153.7; // KRW per kWh 
             double dailyAmount = dailyPower * electricityRate;
             double monthlyAmount = monthConversion * electricityRate;
@@ -640,7 +637,7 @@ namespace CalculateForSea
                 foreach (DataRow data in ds.Tables[0].Rows)
                 {
                     string id = data["ID"].ToString();
-                    string category = data["Category"].ToString();
+                    string category = data["category"].ToString();
                     string value = data["Value"].ToString();
                     string timestamp = DateTime.Parse(data["Timestamp"].ToString()).ToString("yyyy-MM-dd HH:mm:ss.fff");
 
@@ -756,11 +753,17 @@ namespace CalculateForSea
                                 }
                             }
 
+                            string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["ID"].ToString();
+
                             string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
                             string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
                             string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
                             string WORK_POWER = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_POWER"].ToString();
 
+                            if (WORK_PERFORMANCE_ID != models[i].ID) 
+                            {
+                                models[i] = new DataModel() { ID=WORK_PERFORMANCE_ID };
+                            }
                             int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT)/cavity)
                                 + Convert.ToInt32(WORK_WARMUPCNT)
                                 + (Convert.ToInt32(WORK_ERRCOUNT)/cavity);
@@ -770,53 +773,54 @@ namespace CalculateForSea
 
                             if (models[i].Totalcnt < nowtotalcnt)
                             {
+                                
+                                using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                                {
+                                    sqlconn.Open();
+                                    using (SqlCommand sqlcmd = new SqlCommand())
+                                    {
+                                        // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
+                                        sqlcmd.Connection = sqlconn;
+                                        sqlcmd.CommandType = CommandType.StoredProcedure;
+                                        sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
+                                        sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
+                                        sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
+                                        sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
+                                        sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
+                                        sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
+                                        sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
+                                        sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
+                                        sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
+                                        sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
+                                        sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
+                                        sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
+                                        sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
+                                        sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
+                                        sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
+                                        sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
+                                        sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
+                                        sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
+                                        sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
+                                        sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
+                                        sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
+                                        sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
+                                        sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
+                                        sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
+                                        sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
+                                        sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
+                                        sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                        sqlcmd.ExecuteNonQuery();
+
+                                        WriteLog("SHOT Data Processed");
+                                    }
+
+                                }
                                 if (models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M - models[i].NowShotKW > 0)
                                 {
-                                    using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                                    {
-                                        sqlconn.Open();
-                                        using (SqlCommand sqlcmd = new SqlCommand())
-                                        {
-                                            // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
-                                            sqlcmd.Connection = sqlconn;
-                                            sqlcmd.CommandType = CommandType.StoredProcedure;
-                                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
-                                            //sqlcmd.Parameters.AddWithValue("@DATE", $"{ds.Tables[i].Rows[0]["ORDER_DATE"]}");
-                                            sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                            sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
-                                            sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
-                                            sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
-                                            sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
-                                            sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
-                                            sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
-                                            sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
-                                            sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
-                                            sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
-                                            sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
-                                            sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
-                                            sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
-                                            sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
-                                            sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                            sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                            sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                            sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                            sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                            sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                            sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                            sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
-                                            sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                            sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
-                                            sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
-                                            sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
-                                            sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
-                                            sqlcmd.ExecuteNonQuery();
-
-                                            WriteLog("SHOT Data Processed");
-                                        }
-                                     
-                                    }
+                                    models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
                                 }
                                 int machine_id;
                                 //여기에 
@@ -919,11 +923,10 @@ namespace CalculateForSea
                                     cmd.Connection = conn2;
                                     cmd.ExecuteNonQuery();
                                 }
+                                models[i].Totalcnt = nowtotalcnt;
+                                models[i].PROD_CNT = nowPordCnt;
                             }
 
-                            models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
-                            models[i].Totalcnt = nowtotalcnt;
-                            models[i].PORD_CNT = nowPordCnt;
 
                             // MSSQL 전달
                             using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
@@ -950,39 +953,39 @@ namespace CalculateForSea
                                 work_performanceSql =
                                 $"UPDATE work_performance                                                                                                          " +
                                 $"set                                                                                                                              " +
-                                $"work_power = IFNULL((SELECT IFNULL((MAX(CAST(value AS INT)) - MIN(CAST(value AS INT))) / 1000, 0) AS 생산수량                          " +
+                                $"work_power = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) / 1000, 0) AS 생산수량                          " +
                                 $"FROM data_collection a                                                                                                           " +
-                                $"WHERE Category = 'RTU_13_01_Load_Total_Power_Consumption'                                                                              " +
-                                $"                AND timestamp > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(value AS INT) > 0)                                                                                         " +
+                                $"WHERE CD = 'RTU_13_01_Load_Total_Power_Consumption'                                                                              " +
+                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                $"                AND CAST(VL AS INT) > 0)                                                                                         " +
                                 $"                +                                                                                                                " +
-                                $"                (SELECT IFNULL((MAX(CAST(value AS INT)) - MIN(CAST(value AS INT))), 0) AS 생산수량                                     " +
-                                $"                FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A                                                                                          " +
-                                $"                WHERE Category = 'ESG_P_Active_Khours'                                                                                 " +
-                                $"                AND timestamp > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(value AS INT) > 0)                                                                                         " +
+                                $"                (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                                     " +
+                                $"                FROM data_collection A                                                                                          " +
+                                $"                WHERE CD = 'ESG_P_Active_Khours'                                                                                 " +
+                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                $"                AND CAST(VL AS INT) > 0)                                                                                         " +
                                 $"                        +                                                                                                        " +
-                                $"                        (SELECT IFNULL((MAX(CAST(value AS INT)) - MIN(CAST(value AS INT))) * 1000, 0) AS 생산수량                      " +
-                                $"                FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A                                                                                           " +
-                                $"                WHERE Category = 'ESG_P_Active_Mhours'                                                                                   " +
-                                $"                AND timestamp > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(value AS INT) > 0),0)                                                                                     "+
+                                $"                        (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) * 1000, 0) AS 생산수량                      " +
+                                $"                FROM data_collection A                                                                                           " +
+                                $"                WHERE CD = 'ESG_P_Active_Mhours'                                                                                   " +
+                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                $"                AND CAST(VL AS INT) > 0),0)                                                                                     "+
                                 $" ,                                                                                                                              " +
-                                $"work_errcount = IFNULL((SELECT IFNULL((MAX(CAST(value AS INT)) - MIN(CAST(value AS INT))), 0) AS 생산수량                              " +
-                                $"                FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A                                                                                           " +
-                                $"                WHERE Category = 'DCM_13_TAG_D3705'                                                                                    "+
-                                $"                AND timestamp > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(value AS INT) > 0),0) * {cavity},                                                                              " +
-                                $"work_okcnt = IFNULL((SELECT IFNULL((MAX(value) - MIN(value)), 0) AS 생산수량                                                           " +
-                                $"                FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A                                                                                           " +
-                                $"                WHERE Category = 'DCM_13_TAG_D3704'                                                                                    " +
-                                $"                AND timestamp > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(value AS INT) > 0),0) * {cavity},                                                                              " +
-                                $"work_warmupcnt = IFNULL((SELECT IFNULL((MAX(value) - MIN(value)), 0) AS 생산수량                                                         " +
-                                $"                FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A                                                                                           " +
-                                $"                WHERE Category = 'DCM_13_TAG_D3706                                                                                      " +
-                                $"                AND timestamp > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(value AS INT) > 0),0)                                                                                      " +
+                                $"work_errcount = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                              " +
+                                $"                FROM data_collection A                                                                                           " +
+                                $"                WHERE CD = 'DCM_13_TAG_D3705'                                                                                    "+
+                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                $"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
+                                $"work_okcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                           " +
+                                $"                FROM data_collection A                                                                                           " +
+                                $"                WHERE CD = 'DCM_13_TAG_D3704'                                                                                    " +
+                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                $"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
+                                $"work_warmupcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                         " +
+                                $"                FROM data_collection A                                                                                           " +
+                                $"                WHERE CD = 'DCM_13_TAG_D3706                                                                                      " +
+                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                $"                AND CAST(VL AS INT) > 0),0)                                                                                      " +
                                 $"where end_time = start_time                                                                                                      " +
                                 $"    AND MACHINE_NO = 'WCI_D13'                                                                                                   " +
                                 $"ORDER BY ID DESC LIMIT 1;                                                                                                        "
@@ -990,187 +993,108 @@ namespace CalculateForSea
                             }
                             else 
                             {
-                                work_performanceSql=                                                                                       
-                                $@"UPDATE work_performance                                                                                       
-                                SET work_power = IFNULL((   SELECT CAST(A.value AS DOUBLE)          
-        FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-        JOIN work_performance B ON B.MACHINE_NO = 'WCI_D{20 + i}'  
-        WHERE A.Timestamp > (
-            SELECT START_TIME
-            FROM work_performance
-            WHERE start_time = end_time
-              AND MACHINE_NO = 'WCI_D{20 + i}'     
-            ORDER BY ID DESC
-            LIMIT 1
-        )
-        AND A.value > 0
-        AND A.value < 10000
-        AND A.Category = 'Casting_1{60 + i}_P_Active_Ruled'
-        ORDER BY A.Timestamp DESC
-        LIMIT 1),0)
-                                                                                                                                                
-                                , work_okcnt = IFNULL((SELECT (
-                (
-                    SELECT CAST(A.value AS DOUBLE)
-                    FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-                    JOIN work_performance B
-                      ON B.MACHINE_NO = 'WCI_D{20 + i}'
-                    WHERE A.Timestamp > (
-                        SELECT START_TIME
-                        FROM work_performance
-                        WHERE start_time = end_time
-                          AND MACHINE_NO = 'WCI_D{20 + i}'
-                        ORDER BY ID DESC
-                        LIMIT 1
-                    )
-                      AND A.value > 0
-        AND A.value < 100000
-                      AND A.Category = 'DCM_{20 + i}_TAG_D3704'
-                    ORDER BY A.Timestamp DESC
-                    LIMIT 1
-                ) -
-                (
-                    SELECT CAST(A.value AS DOUBLE)
-                    FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-                    JOIN work_performance B
-                      ON B.MACHINE_NO = 'WCI_D{20 + i}'
-                    WHERE A.Timestamp > (
-                        SELECT START_TIME
-                        FROM work_performance
-                        WHERE start_time = end_time
-                          AND MACHINE_NO = 'WCI_D{20 + i}'
-                        ORDER BY ID DESC
-                        LIMIT 1
-                    )
-                      AND A.value > 0
-        AND A.value < 100000
-                      AND A.Category = 'DCM_{20 + i}_TAG_D3704'
-                    ORDER BY A.Timestamp ASC
-                    LIMIT 1
-                )
-            ) -
-            (
-                (
-                    SELECT CAST(A.value AS DOUBLE)
-                    FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-                    JOIN work_performance B
-                      ON B.MACHINE_NO = 'WCI_D{20 + i}'
-                    WHERE A.Timestamp > (
-                        SELECT START_TIME
-                        FROM work_performance
-                        WHERE start_time = end_time
-                          AND MACHINE_NO = 'WCI_D{20 + i}'
-                        ORDER BY ID DESC
-                        LIMIT 1
-                    )
-                      AND A.value > 0
-        AND A.value < 10000
-                      AND A.Category = 'DCM_{20 + i}_TAG_D3705'
-                    ORDER BY A.Timestamp DESC
-                    LIMIT 1
-                ) -
-                (
-                    SELECT CAST(A.value AS DOUBLE)
-                    FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-                    JOIN work_performance B
-                      ON B.MACHINE_NO = 'WCI_D{20 + i}'
-                    WHERE A.Timestamp > (
-                        SELECT START_TIME
-                        FROM work_performance
-                        WHERE start_time = end_time
-                          AND MACHINE_NO = 'WCI_D{20 + i}'
-                        ORDER BY ID DESC
-                        LIMIT 1
-                    )
-                      AND A.value > 0
-        AND A.value < 10000
-                      AND A.Category = 'DCM_{20 + i}_TAG_D3705'
-                    ORDER BY A.Timestamp ASC
-                    LIMIT 1
-                )
-            )),0)*{cavity}                                                                         
-                                                                                                                                              
-                                , work_errcount = IFNULL((                                                                                    
-                                                        (
-        SELECT CAST(A.value AS DOUBLE)          
-        FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-        JOIN work_performance B ON B.MACHINE_NO = 'WCI_D{20 + i}'
-        WHERE A.Timestamp > (
-            SELECT START_TIME
-            FROM work_performance
-            WHERE start_time = end_time
-              AND MACHINE_NO = 'WCI_D{20 + i}'
-            ORDER BY ID DESC
-            LIMIT 1
-        )
-        AND A.value > 0
-        AND A.value < 10000
-        AND A.Category = 'DCM_{20 + i}_TAG_D3705'
-        ORDER BY A.Timestamp DESC
-        LIMIT 1
-    ) -
-    (
-        SELECT CAST(A.value AS DOUBLE)           
-        FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-        JOIN work_performance B ON B.MACHINE_NO = 'WCI_D{20 + i}'
-        WHERE A.Timestamp > (
-            SELECT START_TIME
-            FROM work_performance
-            WHERE start_time = end_time
-              AND MACHINE_NO = 'WCI_D{20 + i}'
-            ORDER BY ID DESC
-            LIMIT 1
-        )
-        AND A.value > 0
-        AND A.value < 10000
-        AND A.Category = 'DCM_{20 + i}_TAG_D3705'
-        ORDER BY A.Timestamp ASC
-        LIMIT 1
-    )                                                
-                                                        ),0)*{cavity}                                                                         
-                                                                                                                                              
-                                , work_warmupcnt = IFNULL((                                                                                    
-                                                        (
-        SELECT CAST(A.value AS DOUBLE)          
-        FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-        JOIN work_performance B ON B.MACHINE_NO = 'WCI_D{20 + i}'
-        WHERE A.Timestamp > (
-            SELECT START_TIME
-            FROM work_performance
-            WHERE start_time = end_time
-              AND MACHINE_NO = 'WCI_D{20 + i}'
-            ORDER BY ID DESC
-            LIMIT 1
-        )
-        AND A.value > 0
-        AND A.value < 10000
-        AND A.Category = 'DCM_{20 + i}_TAG_D3706'
-        ORDER BY A.Timestamp DESC
-        LIMIT 1
-    ) -
-    (
-        SELECT CAST(A.value AS DOUBLE)           
-        FROM (SELECT * FROM timeseriesData ORDER BY ID DESC LIMIT 100000) A
-        JOIN work_performance B ON B.MACHINE_NO = 'WCI_D{20 + i}'
-        WHERE A.Timestamp > (
-            SELECT START_TIME
-            FROM work_performance
-            WHERE start_time = end_time
-              AND MACHINE_NO = 'WCI_D{20 + i}'
-            ORDER BY ID DESC
-            LIMIT 1
-        )
-        AND A.value > 0
-        AND A.value < 10000
-        AND A.Category = 'DCM_{20 + i}_TAG_D3706'
-        ORDER BY A.Timestamp ASC
-        LIMIT 1
-    )                                                
-                                                        ),0)                                        
-                                where end_time = start_time                                                                                   
-                                    AND MACHINE_NO = 'WCI_D{20+i}'                                                                            
-                                ORDER BY ID DESC LIMIT 1"                                                                                 
-                                ;
+                                work_performanceSql =
+                               $"UPDATE work_performance                                                                         " +
+                               $"SET work_power = IFNULL((                                                                       " +
+                               $"                         SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))          " +
+                               $"                           FROM data_collection       A                                         " +
+                               $"                              , work_performance      B                                         " +
+                               $"                          WHERE A.Tm > (SELECT START_TIME FROM work_performance                 " +
+                               $"                                                                                                " +
+                               $"                                WHERE                                                           " +
+                               $"                                                                                                " +
+                               $"                                          start_time = end_time                                 " +
+                               $"                                                                                                " +
+                               $"                                AND MACHINE_NO = 'WCI_D{20 + i}'                                  " +
+                               $"                                                                                                " +
+                               $"                                          ORDER BY ID DESC LIMIT 1                              " +
+                               $"                                      )                                                         " +
+                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}'                                    " +
+                               $"                            AND A.CD = 'Casting_1{60 + i}_P_Active_Ruled'                             " +
+                               $"                      ),0)                                                                      " +
+                               $"                                                                                                " +
+                               $", work_okcnt = IFNULL((                                                             " +
+                               $"                                                                                                " +
+                               $"                        SELECT((SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))   " +
+                               $"                                                                                                " +
+                               $"                            FROM data_collection       A                                        " +
+                               $"                                , work_performance      B                                       " +
+                               $"                                                                                                " +
+                               $"                            WHERE A.Tm > (SELECT START_TIME                                     " +
+                               $"                                                                                                " +
+                               $"                                                            FROM work_performance               " +
+                               $"                                                                                                " +
+                               $"                                                WHERE start_time = end_time                     " +
+                               $"                                                                                                " +
+                               $"                                                    AND MACHINE_NO = 'WCI_D{20 + i}'              " +
+                               $"                                                                                                " +
+                               $"                                                        ORDER BY ID DESC LIMIT 1                " +
+                               $"                                                        )                                       " +
+                               $"                                                                                                " +
+                               $"                            AND A.VL > 0                                                        " +
+                               $"                                                                                                " +
+                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3704'                                   " +
+                               $"                                                                                                " +
+                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}')                                   " +
+                               $"                        - (SELECT  IFNULL(MAX(CAST(A.VL AS DOUBLE) ) - MIN(CAST(A.VL AS DOUBLE)),0)       " +
+                               $"                                                                                                " +
+                               $"                            FROM data_collection       A                                        " +
+                               $"                                , work_performance B                                            " +
+                               $"                                                                                                " +
+                               $"                            WHERE A.Tm > (SELECT START_TIME                                     " +
+                               $"                                                            FROM work_performance               " +
+                               $"                                                WHERE start_time = end_time                     " +
+                               $"                                                                                                " +
+                               $"                                                    AND MACHINE_NO = 'WCI_D{20 + i}'              " +
+                               $"                                                                                                " +
+                               $"                                                        ORDER BY ID DESC LIMIT 1                " +
+                               $"                                               )                                             " +
+                               $"                            AND A.VL > 0                                                        " +
+                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3705'                                   " +
+                               $"                                                                                                " +
+                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}')) AS OKCNT                         " +
+                               $"                                                                                                " +
+                               $"                            FROM DUAL                                                           " +
+                               $"                                                                                                " +
+                               $"                        ),0)*{cavity}                                                           " +
+                               $"                                                                                                " +
+                               $", work_errcount = IFNULL((                                                         " +
+                               $"                        SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))           " +
+                               $"                            FROM data_collection       A                                        " +
+                               $"                                , work_performance      B                                       " +
+                               $"                            WHERE A.Tm > (SELECT START_TIME                                     " +
+                               $"                                                                                                " +
+                               $"                                                            FROM work_performance               " +
+                               $"                                                                                                " +
+                               $"                                                WHERE start_time = end_time                     " +
+                               $"                                                                                                " +
+                               $"                                    AND MACHINE_NO = 'WCI_D{20 + i}'                              " +
+                               $"                                                                                                " +
+                               $"                                                ORDER BY ID DESC LIMIT 1                        " +
+                               $"                                    )                                                           " +
+                               $"                            AND A.VL > 0                                                        " +
+                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3705'                                   " +
+                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}'                                    " +
+                               $"                        ),0)*{cavity}                                                           " +
+                               $"                                                                                                " +
+                               $", work_warmupcnt = IFNULL((                                                                     " +
+                               $"                        SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))           " +
+                               $"                            FROM data_collection       A                                        " +
+                               $"                            WHERE A.Tm > (SELECT START_TIME FROM work_performance               " +
+                               $"                                                                                                " +
+                               $"                            WHERE                                                               " +
+                               $"                                                                                                " +
+                               $"                                        start_time = end_time                                   " +
+                               $"                                                                                                " +
+                               $"                            AND MACHINE_NO = 'WCI_D{20 + i}'                                      " +
+                               $"                                                                                                " +
+                               $"                                        ORDER BY ID DESC LIMIT 1                                " +
+                               $"                                    )                                                           " +
+                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3706'                                   " +
+                               $"                        ),0)                                                                    " +
+                               $"where end_time = start_time                                                                    " +
+                               $"    AND MACHINE_NO = 'WCI_D{20 + i}'                                                                  " +
+                               $"ORDER BY ID DESC LIMIT 1;                                                                       ";
                             }
                             MySqlConnection conn3 = new MySqlConnection(ConnectionString);
                             using (conn3)
@@ -1179,7 +1103,7 @@ namespace CalculateForSea
 
                                 MySqlCommand cmd = new MySqlCommand();
                                 cmd.CommandText = work_performanceSql;
-                                cmd.CommandType = CommandType.Text;
+                                 cmd.CommandType = CommandType.Text;
                                 cmd.Connection = conn3;
                                 cmd.ExecuteNonQuery();
                             }
@@ -1259,7 +1183,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_13", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_13", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_13", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_13", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_13", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1276,7 +1200,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_13", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_13", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("13호기 MQTT Send");
             }
@@ -1305,7 +1229,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_21", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_21", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_21", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_21", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_21", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1322,7 +1246,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_21", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_21", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("21호기 MQTT Send");
             }
@@ -1351,7 +1275,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_22", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_22", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1397,7 +1321,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_23", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_23", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_23", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_23", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_23", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1414,7 +1338,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_23", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_23", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("23호기 MQTT Send");
             }
@@ -1443,7 +1367,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_24", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_24", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_24", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_24", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_24", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1460,7 +1384,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_24", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_24", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 
                 }
                 WriteLog("24호기 MQTT Send");
@@ -1490,7 +1414,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_25", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_25", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_25", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_25", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_25", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1507,7 +1431,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_25", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_25", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("25호기 MQTT Send");
             }
