@@ -359,10 +359,11 @@ namespace CoFAS.NEW.MES.Core
                 string str = $@"SELECT 
 		ROW_NUMBER() OVER (ORDER BY A.ID) AS RowNum,
 	   D.[description]   AS 'D.호기'
-      ,A.[RESOURCE_NO]  AS 'A.RESOURCE_NO'
-      ,A.[LOT_NO]       AS 'A.LOT_NO'
+      ,J.[RESOURCE_NO]  AS 'J.RESOURCE_NO'
+      ,J.[LOT_NO]       AS 'J.LOT_NO'
       ,B.[description]  AS 'B.설비명'
       ,A.REG_DATE   AS 'A.REG_DATE'
+      ,J.REG_DATE   AS 'J.REG_DATE'
       ,ISNULL(F.cavity,'0')          AS 'F.CAVITY'   
       ,A.[ELECTRICAL_ENERGY] AS 'A.전력사용량'
       ,A.[CYCLE_TIME] AS 'A.CYCLE_TIME'
@@ -417,10 +418,11 @@ CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(int,(H.[EQUIPMENT_P
 CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
 	 AS '공정비'
 	,A.REG_DATE  
+	,J.REG_DATE  
 	,convert(decimal(18,2),(CONVERT(decimal(18,2),isnull((SELECT  top 1 [qty_per]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A' ),'0'))) * CONVERT(int,isnull((SELECT TOP 1 [price] FROM [sea_mfg].[dbo].[prices] where resource_no = (SELECT  top 1 [resource_used]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A') order by update_date desc),'0')) * (   (convert(int,G.MATERIAL_COST_PER) /100.0 +1) )  ) AS '재료비'
   FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
+  INNER JOIN (SELECT REG_DATE, RESOURCE_NO , LOT_NO  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY REG_DATE, RESOURCE_NO, LOT_NO  ) AS J
   ON A.RESOURCE_NO = J.RESOURCE_NO
   AND A.LOT_NO = J.LOT_NO
 
@@ -443,7 +445,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
   LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
   ON A.RESOURCE_NO = I.RESOURCE_NO
    
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59'";
+  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59' ";
 
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
@@ -452,7 +454,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
 
 
                 DataTable _DataTable = new CoreBusiness().SELECT(sql);
-                RemoveDuplicateRows(_DataTable, new string[] { "D.호기", "A.RESOURCE_NO", "A.LOT_NO", "A.REG_DATE" });
+                //RemoveDuplicateRows(_DataTable, new string[] { "J.REG_DATE" }); //"D.호기", "J.RESOURCE_NO", "J.LOT_NO", 
                 if (_DataTable != null && _DataTable.Rows.Count > 0)
                 {   
                     fpMain.Sheets[0].Visible = false;

@@ -27,7 +27,7 @@ SELECT
      , C.[DESCRIPTION] AS 품명
      , YEAR(A.ORDER_DATE) AS [YEAR]
      , MONTH(A.ORDER_DATE) AS [MONTH]
-     , A.[QTY_COMPLETE] AS 완료수량
+     , A.[QTY_COMPLETE] AS 완료수량ㄹ
      , A.[START_TIME] AS 생산일자
      , A.[SHIFT] AS [주/야 구분]
      , A.[IN_PER] AS 투입인원

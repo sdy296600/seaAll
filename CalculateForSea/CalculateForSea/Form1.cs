@@ -116,9 +116,9 @@ namespace CalculateForSea
                 models.AddRange(new[] { model13, model21, model22, model23, model24, model25 });
                 gridModels.AddRange(new[] { list_13, list_21, list_22, list_23, list_24, list_25 });
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
-                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 3000);//3000
+                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 10000);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
-                _tmrSerData = new System.Threading.Timer(new TimerCallback(SerDataTimerCallback), null, 0, 3000);//3000
+                _tmrSerData = new System.Threading.Timer(new TimerCallback(SerDataTimerCallback), null, 0, 10000);//3000
             }
             catch (Exception)
             {
@@ -557,7 +557,11 @@ namespace CalculateForSea
 
             WriteLog($"{model.NowShotKW}");
 
-            
+            //var today_conversion = double.Parse(Encoding.UTF8.GetString(e.Message));
+            //var month_amount = today_conversion * 153.7;
+            //var daily_power = today_conversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            //var daily_amount = daily_power * 153.7;
+
             // 사용량 계산
             double monthConversion = P * 30;
             var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
@@ -708,6 +712,7 @@ namespace CalculateForSea
         {
             try
             {
+                int nowPordCnt = 0;
                 DataSet ds = new DataSet();
                 DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
                 MySqlConnection conn = new MySqlConnection(ConnectionString);
@@ -760,7 +765,7 @@ namespace CalculateForSea
                                 + Convert.ToInt32(WORK_WARMUPCNT)
                                 + (Convert.ToInt32(WORK_ERRCOUNT)/cavity);
 
-                            int nowPordCnt = Convert.ToInt32(WORK_OKCNT)
+                            nowPordCnt = Convert.ToInt32(WORK_OKCNT)
                                 + Convert.ToInt32(WORK_ERRCOUNT);
 
                             if (models[i].Totalcnt < nowtotalcnt)
@@ -776,7 +781,7 @@ namespace CalculateForSea
                                             sqlcmd.Connection = sqlconn;
                                             sqlcmd.CommandType = CommandType.StoredProcedure;
                                             sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
-                                            sqlcmd.Parameters.AddWithValue("@DATE", $"{ds.Tables[i].Rows[0]["ORDER_DATE"]}");
+                                            //sqlcmd.Parameters.AddWithValue("@DATE", $"{ds.Tables[i].Rows[0]["ORDER_DATE"]}");
                                             sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
                                             sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
                                             sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
@@ -1346,7 +1351,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_22", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_22", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_22", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes(models[i].PORD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
                 {
@@ -1363,7 +1368,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_22", Encoding.UTF8.GetBytes("비가동"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PORD_CNT_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 WriteLog("22호기 MQTT Send");
             }

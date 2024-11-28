@@ -579,11 +579,14 @@ namespace CoFAS.NEW.MES.POP
                                             			 FROM HS_MES.dbo.PRODUCT_BARCODE T1
 										                WHERE T1.RESOURCE_NO = '{_p품번}'
                                             			  AND T1.LOT_NO      = '{_pLOT}' 
+                                            			  AND REG_USER      = '219220' 
                                             		) AS ALL_PACK_QTY
                                                  , (SELECT ISNULL(SUM(BAD_QTY),0) 
                                             			 FROM HS_MES.dbo.BAD_PERFORMANCE
 										                WHERE RESOURCE_NO = '{_p품번}'
                                             			  AND LOT_NO      = '{_pLOT}' 
+                                            			  AND REG_USER      = '219220' 
+                    
                                             		) AS ALL_BAD_QTY
                                               FROM HS_MES.dbo.PRODUCT_BARCODE
                                              WHERE RESOURCE_NO  = '{_p품번}'
@@ -611,6 +614,7 @@ namespace CoFAS.NEW.MES.POP
                     lblPlcDef.Text = dtOkQty.Rows[0]["WORK_ERRCOUNT"].ToString();
                     _포장수량.Text = dtPackQty.Rows[0]["포장수량".Trim()].ToString();
                     _간판발행수.Text = dtPackQty.Rows[0]["간판발행수".Trim()].ToString();
+                    _lbl_간판발행.Text = dtPackQty.Rows[0]["간판발행수".Trim()].ToString();
 
                     //PLC 데이터 양품 수량에 실적불량 차감 
                     int qty = Convert.ToInt32(dtOkQty.Rows[0]["WORK_OKCNT"].ToString());
