@@ -462,7 +462,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
 
 
                 DataTable _DataTable = new CoreBusiness().SELECT(sql);
-                //RemoveDuplicateRows(_DataTable, new string[] { "J.REG_DATE" }); //"D.호기", "J.RESOURCE_NO", "J.LOT_NO", 
+                RemoveDuplicateRows(_DataTable, new string[] { "A.REG_DATE", "D.description", "J.RESOURCE_NO", "J.LOT_NO" }); //"D.호기", "J.RESOURCE_NO", "J.LOT_NO", 
                 if (_DataTable != null && _DataTable.Rows.Count > 0)
                 {   
                     fpMain.Sheets[0].Visible = false;
