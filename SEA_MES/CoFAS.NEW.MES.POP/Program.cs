@@ -27,8 +27,8 @@ namespace CoFAS.NEW.MES.POP
             utility.My_Settings_Start();
             utility.My_Settings_Get();
 
-            세아_POP();
-            //원재료간판_POP();
+            //세아_POP();
+            원재료간판_POP();
 
         }
 
