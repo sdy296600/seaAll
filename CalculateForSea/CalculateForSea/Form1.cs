@@ -996,20 +996,20 @@ namespace CalculateForSea
                                 work_performanceSql =
                                $@"UPDATE work_performance                                                                        
                                SET work_power = IFNULL((                                                                      
-                                                          SELECT WORK_POWER - START_POWER FORM WROK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}'; 
+                                                          SELECT WORK_POWER - START_POWER FORM WORK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}'; 
                                                      ),0)                                                                     
                                                                                                                               
                                , work_okcnt = IFNULL((                                                            
                                                                                                                               
-                                                          SELECT (WORK_OKCNT - START_OKCNT) - (WORK_ERRCOUNT - START_ERRCOUNT) FORM WROK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}';                                                                       
+                                                          SELECT (WORK_OKCNT - START_OKCNT) - (WORK_ERRCOUNT - START_ERRCOUNT) FORM WORK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}';                                                                       
                                                        ),0)*{cavity}                                                          
                                                                                                                               
                                , work_errcount = IFNULL((                                                        
-                                                         SELECT WORK_ERRCOUNT - START_ERRCOUNT FORM WROK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}';                                                                                               
+                                                         SELECT WORK_ERRCOUNT - START_ERRCOUNT FORM WORK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}';                                                                                               
                                                        ),0)*{cavity}                                                          
                                                                                                                               
                                , work_warmupcnt = IFNULL((                                                                    
-                                                         SELECT WORK_WARMUPCNT - START_WARMUPCNT FORM WROK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}';                                                                                                                          
+                                                         SELECT WORK_WARMUPCNT - START_WARMUPCNT FORM WORK_DATA WHERE WORK_PERFROMANCE_ID = '{models[i].ID}';                                                                                                                          
                                                        ),0)                                                                   
                                where end_time = start_time                                                                   
                                    AND MACHINE_NO = 'WCI_D{20 + i}'                                                                 
