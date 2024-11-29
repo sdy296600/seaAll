@@ -1145,9 +1145,9 @@ namespace CoFAS.NEW.MES.POP
                     }
                 }
 
-                string no = dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1];
-                string no2 = (Convert.ToInt32(dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1])+140).ToString();
-                if (no == "21" && no == "22" && no == "23" && no == "24" && no == "25") 
+                string no = dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D","");
+                string no2 = (Convert.ToInt32(dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D", ""))+140).ToString();
+                if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
                     sql = $@"WITH RankedData AS (
                         SELECT CATEGORY, VALUE, TIMESTAMP,
@@ -1191,7 +1191,7 @@ namespace CoFAS.NEW.MES.POP
                         }
                     }
                     
-                    sql = $@"INSERT INTO WORK_DATA (WORK_PERFORMANCE_ID,START_POWER,START_OKCNT,START_ERRCOUNT,START_WARMUPCNT) VALUES({id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
+                    sql = $@"INSERT INTO WORK_DATA (WORK_PERFORMANCE_ID,START_POWER,START_OKCNT,START_ERRCOUNT,START_WARMUPCNT,WORK_POWER,WORK_OKCNT,WORK_ERRCOUNT,WORK_WARMUPCNT) VALUES({id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
                     //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                     DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
                 }
