@@ -1017,7 +1017,7 @@ namespace CalculateForSea
                                     WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
                                 ), 0)
                                 WHERE end_time = start_time                                                                   
-                                  WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'                                                               
+                                  AND WORK_PERFORMANCE_ID = '{models[i].ID}'                                                               
                                 ORDER BY ID DESC LIMIT 1;
                                 ";
 
