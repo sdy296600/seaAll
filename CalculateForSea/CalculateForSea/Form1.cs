@@ -950,163 +950,83 @@ namespace CalculateForSea
 
                             if (i == 0)
                             {
-                                work_performanceSql =
-                                $"UPDATE work_performance                                                                                                          " +
-                                $"set                                                                                                                              " +
-                                $"work_power = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) / 1000, 0) AS 생산수량                          " +
-                                $"FROM data_collection a                                                                                                           " +
-                                $"WHERE CD = 'RTU_13_01_Load_Total_Power_Consumption'                                                                              " +
-                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(VL AS INT) > 0)                                                                                         " +
-                                $"                +                                                                                                                " +
-                                $"                (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                                     " +
-                                $"                FROM data_collection A                                                                                          " +
-                                $"                WHERE CD = 'ESG_P_Active_Khours'                                                                                 " +
-                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(VL AS INT) > 0)                                                                                         " +
-                                $"                        +                                                                                                        " +
-                                $"                        (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) * 1000, 0) AS 생산수량                      " +
-                                $"                FROM data_collection A                                                                                           " +
-                                $"                WHERE CD = 'ESG_P_Active_Mhours'                                                                                   " +
-                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(VL AS INT) > 0),0)                                                                                     "+
-                                $" ,                                                                                                                              " +
-                                $"work_errcount = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                              " +
-                                $"                FROM data_collection A                                                                                           " +
-                                $"                WHERE CD = 'DCM_13_TAG_D3705'                                                                                    "+
-                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
-                                $"work_okcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                           " +
-                                $"                FROM data_collection A                                                                                           " +
-                                $"                WHERE CD = 'DCM_13_TAG_D3704'                                                                                    " +
-                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
-                                $"work_warmupcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                         " +
-                                $"                FROM data_collection A                                                                                           " +
-                                $"                WHERE CD = 'DCM_13_TAG_D3706                                                                                      " +
-                                $"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                $"                AND CAST(VL AS INT) > 0),0)                                                                                      " +
-                                $"where end_time = start_time                                                                                                      " +
-                                $"    AND MACHINE_NO = 'WCI_D13'                                                                                                   " +
-                                $"ORDER BY ID DESC LIMIT 1;                                                                                                        "
-                                ;
+                                //work_performanceSql =
+                                //$"UPDATE work_performance                                                                                                          " +
+                                //$"set                                                                                                                              " +
+                                //$"work_power = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) / 1000, 0) AS 생산수량                          " +
+                                //$"FROM data_collection a                                                                                                           " +
+                                //$"WHERE CD = 'RTU_13_01_Load_Total_Power_Consumption'                                                                              " +
+                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                //$"                AND CAST(VL AS INT) > 0)                                                                                         " +
+                                //$"                +                                                                                                                " +
+                                //$"                (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                                     " +
+                                //$"                FROM data_collection A                                                                                          " +
+                                //$"                WHERE CD = 'ESG_P_Active_Khours'                                                                                 " +
+                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                //$"                AND CAST(VL AS INT) > 0)                                                                                         " +
+                                //$"                        +                                                                                                        " +
+                                //$"                        (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) * 1000, 0) AS 생산수량                      " +
+                                //$"                FROM data_collection A                                                                                           " +
+                                //$"                WHERE CD = 'ESG_P_Active_Mhours'                                                                                   " +
+                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                //$"                AND CAST(VL AS INT) > 0),0)                                                                                     "+
+                                //$" ,                                                                                                                              " +
+                                //$"work_errcount = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                              " +
+                                //$"                FROM data_collection A                                                                                           " +
+                                //$"                WHERE CD = 'DCM_13_TAG_D3705'                                                                                    "+
+                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                //$"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
+                                //$"work_okcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                           " +
+                                //$"                FROM data_collection A                                                                                           " +
+                                //$"                WHERE CD = 'DCM_13_TAG_D3704'                                                                                    " +
+                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                //$"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
+                                //$"work_warmupcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                         " +
+                                //$"                FROM data_collection A                                                                                           " +
+                                //$"                WHERE CD = 'DCM_13_TAG_D3706                                                                                      " +
+                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
+                                //$"                AND CAST(VL AS INT) > 0),0)                                                                                      " +
+                                //$"where end_time = start_time                                                                                                      " +
+                                //$"    AND MACHINE_NO = 'WCI_D13'                                                                                                   " +
+                                //$"ORDER BY ID DESC LIMIT 1;                                                                                                        "
+                                //;
                             }
                             else 
                             {
                                 work_performanceSql =
-                               $"UPDATE work_performance                                                                         " +
-                               $"SET work_power = IFNULL((                                                                       " +
-                               $"                         SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))          " +
-                               $"                           FROM data_collection       A                                         " +
-                               $"                              , work_performance      B                                         " +
-                               $"                          WHERE A.Tm > (SELECT START_TIME FROM work_performance                 " +
-                               $"                                                                                                " +
-                               $"                                WHERE                                                           " +
-                               $"                                                                                                " +
-                               $"                                          start_time = end_time                                 " +
-                               $"                                                                                                " +
-                               $"                                AND MACHINE_NO = 'WCI_D{20 + i}'                                  " +
-                               $"                                                                                                " +
-                               $"                                          ORDER BY ID DESC LIMIT 1                              " +
-                               $"                                      )                                                         " +
-                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}'                                    " +
-                               $"                            AND A.CD = 'Casting_1{60 + i}_P_Active_Ruled'                             " +
-                               $"                      ),0)                                                                      " +
-                               $"                                                                                                " +
-                               $", work_okcnt = IFNULL((                                                             " +
-                               $"                                                                                                " +
-                               $"                        SELECT((SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))   " +
-                               $"                                                                                                " +
-                               $"                            FROM data_collection       A                                        " +
-                               $"                                , work_performance      B                                       " +
-                               $"                                                                                                " +
-                               $"                            WHERE A.Tm > (SELECT START_TIME                                     " +
-                               $"                                                                                                " +
-                               $"                                                            FROM work_performance               " +
-                               $"                                                                                                " +
-                               $"                                                WHERE start_time = end_time                     " +
-                               $"                                                                                                " +
-                               $"                                                    AND MACHINE_NO = 'WCI_D{20 + i}'              " +
-                               $"                                                                                                " +
-                               $"                                                        ORDER BY ID DESC LIMIT 1                " +
-                               $"                                                        )                                       " +
-                               $"                                                                                                " +
-                               $"                            AND A.VL > 0                                                        " +
-                               $"                                                                                                " +
-                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3704'                                   " +
-                               $"                                                                                                " +
-                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}')                                   " +
-                               $"                        - (SELECT  IFNULL(MAX(CAST(A.VL AS DOUBLE) ) - MIN(CAST(A.VL AS DOUBLE)),0)       " +
-                               $"                                                                                                " +
-                               $"                            FROM data_collection       A                                        " +
-                               $"                                , work_performance B                                            " +
-                               $"                                                                                                " +
-                               $"                            WHERE A.Tm > (SELECT START_TIME                                     " +
-                               $"                                                            FROM work_performance               " +
-                               $"                                                WHERE start_time = end_time                     " +
-                               $"                                                                                                " +
-                               $"                                                    AND MACHINE_NO = 'WCI_D{20 + i}'              " +
-                               $"                                                                                                " +
-                               $"                                                        ORDER BY ID DESC LIMIT 1                " +
-                               $"                                               )                                             " +
-                               $"                            AND A.VL > 0                                                        " +
-                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3705'                                   " +
-                               $"                                                                                                " +
-                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}')) AS OKCNT                         " +
-                               $"                                                                                                " +
-                               $"                            FROM DUAL                                                           " +
-                               $"                                                                                                " +
-                               $"                        ),0)*{cavity}                                                           " +
-                               $"                                                                                                " +
-                               $", work_errcount = IFNULL((                                                         " +
-                               $"                        SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))           " +
-                               $"                            FROM data_collection       A                                        " +
-                               $"                                , work_performance      B                                       " +
-                               $"                            WHERE A.Tm > (SELECT START_TIME                                     " +
-                               $"                                                                                                " +
-                               $"                                                            FROM work_performance               " +
-                               $"                                                                                                " +
-                               $"                                                WHERE start_time = end_time                     " +
-                               $"                                                                                                " +
-                               $"                                    AND MACHINE_NO = 'WCI_D{20 + i}'                              " +
-                               $"                                                                                                " +
-                               $"                                                ORDER BY ID DESC LIMIT 1                        " +
-                               $"                                    )                                                           " +
-                               $"                            AND A.VL > 0                                                        " +
-                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3705'                                   " +
-                               $"                            AND B.MACHINE_NO = 'WCI_D{20 + i}'                                    " +
-                               $"                        ),0)*{cavity}                                                           " +
-                               $"                                                                                                " +
-                               $", work_warmupcnt = IFNULL((                                                                     " +
-                               $"                        SELECT  MAX(CAST(A.VL AS DOUBLE)) - MIN(CAST(A.VL AS DOUBLE))           " +
-                               $"                            FROM data_collection       A                                        " +
-                               $"                            WHERE A.Tm > (SELECT START_TIME FROM work_performance               " +
-                               $"                                                                                                " +
-                               $"                            WHERE                                                               " +
-                               $"                                                                                                " +
-                               $"                                        start_time = end_time                                   " +
-                               $"                                                                                                " +
-                               $"                            AND MACHINE_NO = 'WCI_D{20 + i}'                                      " +
-                               $"                                                                                                " +
-                               $"                                        ORDER BY ID DESC LIMIT 1                                " +
-                               $"                                    )                                                           " +
-                               $"                            AND A.CD = 'DCM_{20 + i}_TAG_D3706'                                   " +
-                               $"                        ),0)                                                                    " +
-                               $"where end_time = start_time                                                                    " +
-                               $"    AND MACHINE_NO = 'WCI_D{20 + i}'                                                                  " +
-                               $"ORDER BY ID DESC LIMIT 1;                                                                       ";
-                            }
-                            MySqlConnection conn3 = new MySqlConnection(ConnectionString);
-                            using (conn3)
-                            {
-                                conn3.Open();
+                               $@"UPDATE work_performance                                                                        
+                               SET work_power = IFNULL((                                                                      
+                                                          SELECT WORK_POWER - START_POWER FORM WROK_DATA WHERE {models[i].ID}; 
+                                                     ),0)                                                                     
+                                                                                                                              
+                               , work_okcnt = IFNULL((                                                            
+                                                                                                                              
+                                                          SELECT (WORK_OKCNT - START_OKCNT) - (WORK_ERRCOUNT - START_ERRCOUNT) FORM WROK_DATA WHERE {models[i].ID};                                                                       
+                                                       ),0)*{cavity}                                                          
+                                                                                                                              
+                               , work_errcount = IFNULL((                                                        
+                                                         SELECT WORK_ERRCOUNT - START_ERRCOUNT FORM WROK_DATA WHERE {models[i].ID};                                                                                               
+                                                       ),0)*{cavity}                                                          
+                                                                                                                              
+                               , work_warmupcnt = IFNULL((                                                                    
+                                                         SELECT WORK_WARMUPCNT - START_WARMUPCNT FORM WROK_DATA WHERE {models[i].ID};                                                                                                                          
+                                                       ),0)                                                                   
+                               where end_time = start_time                                                                   
+                                   AND MACHINE_NO = 'WCI_D{20 + i}'                                                                 
+                               ORDER BY ID DESC LIMIT 1;";
+                                MySqlConnection conn3 = new MySqlConnection(ConnectionString);
+                                using (conn3)
+                                {
+                                    conn3.Open();
 
-                                MySqlCommand cmd = new MySqlCommand();
-                                cmd.CommandText = work_performanceSql;
-                                 cmd.CommandType = CommandType.Text;
-                                cmd.Connection = conn3;
-                                cmd.ExecuteNonQuery();
+                                    MySqlCommand cmd = new MySqlCommand();
+                                    cmd.CommandText = work_performanceSql;
+                                    cmd.CommandType = CommandType.Text;
+                                    cmd.Connection = conn3;
+                                    cmd.ExecuteNonQuery();
+                                }
                             }
+                           
 
 
                         }
