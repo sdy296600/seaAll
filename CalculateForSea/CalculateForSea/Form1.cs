@@ -119,7 +119,7 @@ namespace CalculateForSea
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
                 _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 10000);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
-                _tmrSerData = new System.Threading.Timer(new TimerCallback(SerDataTimerCallback), null, 0, 10000);//3000
+                //_tmrSerData = new System.Threading.Timer(new TimerCallback(SerDataTimerCallback), null, 0, 10000);//3000
             }
             catch (Exception)
             {
