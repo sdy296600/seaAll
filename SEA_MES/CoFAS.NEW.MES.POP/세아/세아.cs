@@ -1149,18 +1149,20 @@ namespace CoFAS.NEW.MES.POP
                 string no2 = (Convert.ToInt32(dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D", ""))+140).ToString();
                 if (no == "13") 
                 {
-                    sql = $@"WITH RankedData AS (
-                        SELECT CATEGORY, VALUE, TIMESTAMP,
-                               ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
-                        FROM TIMESERIESDATA
-                        WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                           OR CATEGORY LIKE 'ESG_P_Active_Ruled'
-                    )
-                    SELECT CATEGORY, VALUE
-                    FROM RankedData
-                    WHERE rn = 1";
+                    sql = $@"
+                        SELECT 
+                                    CATEGORY, 
+                                    MAX(TIMESTAMP) AS MAX_TIMESTAMP,
+                                    VALUE
+            
+                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 200000) AS D
+                               WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+                               OR CATEGORY LIKE 'ESG_P_Active_Ruled'
+                                GROUP BY D.CATEGORY
+            ";
+
 
                     DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
                     string START_POWER = "0";
@@ -1197,18 +1199,20 @@ namespace CoFAS.NEW.MES.POP
                 }
                 else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
-                    sql = $@"WITH RankedData AS (
-                        SELECT CATEGORY, VALUE, TIMESTAMP,
-                               ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
-                        FROM TIMESERIESDATA
-                        WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                           OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
-                    )
-                    SELECT CATEGORY, VALUE
-                    FROM RankedData
-                    WHERE rn = 1";
+                    sql = $@"
+                        SELECT 
+                                    CATEGORY, 
+                                    MAX(TIMESTAMP) AS MAX_TIMESTAMP,
+                                    VALUE
+            
+                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 200000) AS D
+                                WHERE D.CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+                                   OR D.CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                                   OR D.CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+                                   OR D.CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
+                                   OR D.CATEGORY LIKE 'ESG_P_Active_Ruled'
+                                GROUP BY D.CATEGORY
+            ";
                
                     DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
                     string START_POWER = "0";

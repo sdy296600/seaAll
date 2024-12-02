@@ -771,7 +771,7 @@ namespace CalculateForSea
                             nowPordCnt = Convert.ToInt32(WORK_OKCNT)
                                 + Convert.ToInt32(WORK_ERRCOUNT);
 
-                            if (models[i].Totalcnt < nowtotalcnt && !((models[i].Totalcnt*1.1) > nowtotalcnt) )
+                            if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt*1.1) < nowtotalcnt )
                             {
                                 
                                 using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
