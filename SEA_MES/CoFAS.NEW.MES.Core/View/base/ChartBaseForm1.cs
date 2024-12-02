@@ -455,6 +455,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
    
   WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59' ";
 
+                //.
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
 
