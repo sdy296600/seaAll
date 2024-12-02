@@ -948,51 +948,7 @@ namespace CalculateForSea
                             string work_performanceSql;
 
 
-                            if (i == 0)
-                            {
-                                //work_performanceSql =
-                                //$"UPDATE work_performance                                                                                                          " +
-                                //$"set                                                                                                                              " +
-                                //$"work_power = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) / 1000, 0) AS 생산수량                          " +
-                                //$"FROM data_collection a                                                                                                           " +
-                                //$"WHERE CD = 'RTU_13_01_Load_Total_Power_Consumption'                                                                              " +
-                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                //$"                AND CAST(VL AS INT) > 0)                                                                                         " +
-                                //$"                +                                                                                                                " +
-                                //$"                (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                                     " +
-                                //$"                FROM data_collection A                                                                                          " +
-                                //$"                WHERE CD = 'ESG_P_Active_Khours'                                                                                 " +
-                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                //$"                AND CAST(VL AS INT) > 0)                                                                                         " +
-                                //$"                        +                                                                                                        " +
-                                //$"                        (SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))) * 1000, 0) AS 생산수량                      " +
-                                //$"                FROM data_collection A                                                                                           " +
-                                //$"                WHERE CD = 'ESG_P_Active_Mhours'                                                                                   " +
-                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                //$"                AND CAST(VL AS INT) > 0),0)                                                                                     "+
-                                //$" ,                                                                                                                              " +
-                                //$"work_errcount = IFNULL((SELECT IFNULL((MAX(CAST(VL AS INT)) - MIN(CAST(VL AS INT))), 0) AS 생산수량                              " +
-                                //$"                FROM data_collection A                                                                                           " +
-                                //$"                WHERE CD = 'DCM_13_TAG_D3705'                                                                                    "+
-                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                //$"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
-                                //$"work_okcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                           " +
-                                //$"                FROM data_collection A                                                                                           " +
-                                //$"                WHERE CD = 'DCM_13_TAG_D3704'                                                                                    " +
-                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                //$"                AND CAST(VL AS INT) > 0),0) * {cavity},                                                                              " +
-                                //$"work_warmupcnt = IFNULL((SELECT IFNULL((MAX(VL) - MIN(VL)), 0) AS 생산수량                                                         " +
-                                //$"                FROM data_collection A                                                                                           " +
-                                //$"                WHERE CD = 'DCM_13_TAG_D3706                                                                                      " +
-                                //$"                AND Tm > (SELECT start_time FROM work_performance WHERE start_time = end_time ORDER BY id DESC limit 1)          " +
-                                //$"                AND CAST(VL AS INT) > 0),0)                                                                                      " +
-                                //$"where end_time = start_time                                                                                                      " +
-                                //$"    AND MACHINE_NO = 'WCI_D13'                                                                                                   " +
-                                //$"ORDER BY ID DESC LIMIT 1;                                                                                                        "
-                                //;
-                            }
-                            else 
-                            {
+                           
                                 work_performanceSql =
                              $@"
                                 UPDATE work_performance                                                                        
@@ -1032,7 +988,6 @@ namespace CalculateForSea
                                     cmd.Connection = conn3;
                                     cmd.ExecuteNonQuery();
                                 }
-                            }
                            
 
 

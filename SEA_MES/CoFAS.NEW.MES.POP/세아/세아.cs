@@ -1147,7 +1147,7 @@ namespace CoFAS.NEW.MES.POP
 
                 string no = dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D","");
                 string no2 = (Convert.ToInt32(dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D", ""))+140).ToString();
-                if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
+                if (no == "13") 
                 {
                     sql = $@"WITH RankedData AS (
                         SELECT CATEGORY, VALUE, TIMESTAMP,
@@ -1156,7 +1156,55 @@ namespace CoFAS.NEW.MES.POP
                         WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
                            OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
                            OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                           OR CATEGORY LIKE 'Casting_{no2}_A_POWER'
+                           OR CATEGORY LIKE 'ESG_P_Active_Ruled'
+                    )
+                    SELECT CATEGORY, VALUE
+                    FROM RankedData
+                    WHERE rn = 1";
+
+                    DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
+                    string START_POWER = "0";
+                    string START_ERRCOUNT = "0";
+                    string START_WARMUPCNT = "0";
+                    string START_OKCNT = "0";
+
+                    if (pDataTable6 != null)
+                    {
+                        foreach (DataRow rowdata in pDataTable6.Rows)
+                        {
+                            if (rowdata["Category"].ToString().Contains("D3704"))
+                            {
+                                START_OKCNT = rowdata["VALUE"].ToString();
+                            }
+                            if (rowdata["Category"].ToString().Contains("D3705"))
+                            {
+                                START_ERRCOUNT = rowdata["VALUE"].ToString();
+                            }
+                            if (rowdata["Category"].ToString().Contains("D3706"))
+                            {
+                                START_WARMUPCNT = rowdata["VALUE"].ToString();
+                            }
+                            if (rowdata["Category"].ToString().Contains("ESG_P_Active_Ruled"))
+                            {
+                                START_POWER = rowdata["VALUE"].ToString();
+                            }
+                        }
+                    }
+
+                    sql = $@"INSERT INTO WORK_DATA (WORK_PERFORMANCE_ID,START_POWER,START_OKCNT,START_ERRCOUNT,START_WARMUPCNT,WORK_POWER,WORK_OKCNT,WORK_ERRCOUNT,WORK_WARMUPCNT) VALUES({id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
+                    //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
+                    DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
+                }
+                else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
+                {
+                    sql = $@"WITH RankedData AS (
+                        SELECT CATEGORY, VALUE, TIMESTAMP,
+                               ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
+                        FROM TIMESERIESDATA
+                        WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+                           OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
                     )
                     SELECT CATEGORY, VALUE
                     FROM RankedData
@@ -1184,7 +1232,7 @@ namespace CoFAS.NEW.MES.POP
                             {
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
                             }
-                            if (rowdata["Category"].ToString().Contains("A_POWER"))
+                            if (rowdata["Category"].ToString().Contains("P_Active_Ruled"))
                             {
                                 START_POWER = rowdata["VALUE"].ToString();
                             }
