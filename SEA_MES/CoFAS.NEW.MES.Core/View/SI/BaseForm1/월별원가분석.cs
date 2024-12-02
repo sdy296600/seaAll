@@ -27,7 +27,7 @@ SELECT
      , C.[DESCRIPTION] AS 품명
      , YEAR(A.ORDER_DATE) AS [YEAR]
      , MONTH(A.ORDER_DATE) AS [MONTH]
-     , A.[QTY_COMPLETE] AS 완료수량ㄹ
+     , A.[QTY_COMPLETE] 
      , A.[START_TIME] AS 생산일자
      , A.[SHIFT] AS [주/야 구분]
      , A.[IN_PER] AS 투입인원
@@ -37,8 +37,8 @@ SELECT
 
   INNER JOIN [sea_mfg].[dbo].[RESOURCE] AS C
 ON A.RESOURCE_NO = C.RESOURCE_NO
-where A.[QTY_COMPLETE] >0
-ORDER BY [YEAR] , [MONTH]";
+where A.[QTY_COMPLETE] >= 0
+ORDER BY [YEAR], [MONTH]";
 
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
@@ -83,6 +83,7 @@ ORDER BY [YEAR] , [MONTH]";
                     fpMain.Sheets[0].SetColumnMerge(1, FarPoint.Win.Spread.Model.MergePolicy.Always);
                     fpMain.Sheets[0].SetColumnMerge(2, FarPoint.Win.Spread.Model.MergePolicy.Always);
                     fpMain.Sheets[0].SetColumnMerge(3, FarPoint.Win.Spread.Model.MergePolicy.Always);
+                    fpMain.Sheets[0].SetColumnMerge(10, FarPoint.Win.Spread.Model.MergePolicy.Always);
                 }
                 else
                 {
