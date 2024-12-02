@@ -118,8 +118,8 @@ namespace CalculateForSea
                 gridModels.AddRange(new[] { list_13, list_21, list_22, list_23, list_24, list_25 });
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
                 _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 10000);//3000
-                _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 10000);//15000
-                _tmrSerData = new System.Threading.Timer(new TimerCallback(SerDataTimerCallback), null, 0, 10000);//3000
+                _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
+                //_tmrSerData = new System.Threading.Timer(new TimerCallback(SerDataTimerCallback), null, 0, 10000);//3000
             }
             catch (Exception)
             {
@@ -556,7 +556,7 @@ namespace CalculateForSea
             // 역률(PF)을 계산합니다.
             double MH = model.NowMotorHour;
 
-            //WriteLog($"{model.NowShotKW}");
+            WriteLog($"{model.NowShotKW}");
 
 
             // 사용량 계산
@@ -705,7 +705,6 @@ namespace CalculateForSea
             }
         }
 
-        //
         private async void DataTimerCallback(object state)
         {
             try
@@ -726,7 +725,6 @@ namespace CalculateForSea
                     adapter.Fill(ds);
 
                 }
-
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
                     WriteLog("Data Received");
@@ -737,14 +735,8 @@ namespace CalculateForSea
                         {
                             
                             Get_DCM(i, gridModels_DCM[i]); //값 보내주기
-                            //CAVITY 수 만큼 양품 계산해줘야함
                             int cavity = 1;
-                            string cavitySql = $@"SELECT CAVITY 
-                                                    FROM SEA_MFG.DBO.MD_MST 
-                                                   WHERE CODE_MD =  (SELECT CODE_MD         
-                                                                       FROM [sea_mfg].dbo.demand_mstr_ext 
-                                                                      WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' 
-                                                                        AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
+                            string cavitySql = $"SELECT CAVITY FROM SEA_MFG.DBO.MD_MST WHERE CODE_MD =  (select CODE_MD from [sea_mfg].dbo.demand_mstr_ext WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
 
                             using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
                             {
@@ -772,7 +764,6 @@ namespace CalculateForSea
                             {
                                 models[i] = new DataModel() { ID=WORK_PERFORMANCE_ID };
                             }
-
                             int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT)/cavity)
                                 + Convert.ToInt32(WORK_WARMUPCNT)
                                 + (Convert.ToInt32(WORK_ERRCOUNT)/cavity);
@@ -780,18 +771,15 @@ namespace CalculateForSea
                             nowPordCnt = Convert.ToInt32(WORK_OKCNT)
                                 + Convert.ToInt32(WORK_ERRCOUNT);
 
-                            //Totalcnt( 총 생산량 = 사타수 + 배출수 + 양품수)가 nowtotalcnt보다 작고, nowtotalcntㄱㅏ 총 생산량 1.1배보다 작지 않을 때
-                            //if (models[i].Totalcnt < nowtotalcnt && !((models[i].Totalcnt * 1.1)> nowtotalcnt))
-                            if (models[i].Totalcnt < nowtotalcnt &&  (models[i].Totalcnt * 1.1) < nowtotalcnt )
+                            if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt*1.1) > nowtotalcnt )
                             {
                                 
                                 using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                                 {
-                                    WriteLog("①  msSQL [ELEC_SHOT]");
-                                    // ①  msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
                                     sqlconn.Open();
                                     using (SqlCommand sqlcmd = new SqlCommand())
                                     {
+                                        // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
                                         sqlcmd.Connection = sqlconn;
                                         sqlcmd.CommandType = CommandType.StoredProcedure;
                                         sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
@@ -830,12 +818,10 @@ namespace CalculateForSea
                                     }
 
                                 }
-
                                 if (models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M - models[i].NowShotKW > 0)
                                 {
                                     models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
                                 }
-
                                 int machine_id;
                                 //여기에 
                                 switch (i)
@@ -867,8 +853,6 @@ namespace CalculateForSea
                                         return;
 
                                 }
-
-                                //2. mysql [data_for_grid] INSERT
                                 string mysqlString =
                                                                $"INSERT INTO data_for_grid                                                                      " +
                                                                $"(                                                                                              " +
@@ -927,10 +911,7 @@ namespace CalculateForSea
                                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
                                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
                                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
-                                                               $");    " +
-                                                               $"                                                                                         ";
-
-                                WriteLog("2. mysql [data_for_grid] INSERT");
+                                                               $");                                                                                             ";
                                 MySqlConnection conn2 = new MySqlConnection(ConnectionString);
                                 using (conn2)
                                 {
@@ -950,8 +931,6 @@ namespace CalculateForSea
                             // MSSQL 전달
                             using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                             {
-
-                                WriteLog("3. MSSQL USP_ELECTRIC_USE_DPS_A10");
                                 sqlconn.Open();
                                 using (SqlCommand sqlcmd = new SqlCommand())
                                 {
@@ -998,8 +977,7 @@ namespace CalculateForSea
                                 ORDER BY ID DESC LIMIT 1;
                                 ";
 
-                            WriteLog("4. MySQL UPDATE work_performance");
-                            MySqlConnection conn3 = new MySqlConnection(ConnectionString);
+                                MySqlConnection conn3 = new MySqlConnection(ConnectionString);
                                 using (conn3)
                                 {
                                     conn3.Open();
