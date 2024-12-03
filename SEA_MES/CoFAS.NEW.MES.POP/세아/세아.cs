@@ -103,7 +103,9 @@ namespace CoFAS.NEW.MES.POP
 
         Barcode_Class _로드셀 = null;
 
+        int SubRow = -1;
 
+        Timer SubTimer = null;
         #endregion
 
 
@@ -473,8 +475,29 @@ namespace CoFAS.NEW.MES.POP
 
         public virtual void fpSub_CellClick(object sender, CellClickEventArgs e)
         {
+            SubRow = e.Row;
+            Load_Data();
+            if (SubTimer != null && SubTimer.Enabled) 
+            {
+                SubTimer.Stop();
+            }
+            SubTimer = new Timer();
+            SubTimer.Interval = 10000;
+            SubTimer.Tick += SubTimer_Tick;
+            SubTimer.Start();
+
+        }
+
+        private void SubTimer_Tick(object sender, EventArgs e)
+        {
+            Load_Data();
+        }
+
+        private void Load_Data() 
+        {
             try
             {
+                if (SubRow < 0) return;
                 _lbl_총생산량.Text = "0";
                 _lbl_양품.Text = "0";
                 _lbl_예열타.Text = "0";
@@ -483,7 +506,7 @@ namespace CoFAS.NEW.MES.POP
                 _lbl_실적불량.Text = "0";
                 _미포장수량.Text = "0";
 
-                _p실적 = fpSub.Sheets[0].GetValue(e.Row, "ID".Trim()).ToString();
+                _p실적 = fpSub.Sheets[0].GetValue(SubRow, "ID".Trim()).ToString();
                 set_Data();
 
                 int row = 0;
@@ -507,9 +530,9 @@ namespace CoFAS.NEW.MES.POP
                 _로드셀중량.Text = "0";
 
 
-                if (fpSub.Sheets[0].GetValue(e.Row, "START_TIME".Trim()).ToString() != "")
+                if (fpSub.Sheets[0].GetValue(SubRow, "START_TIME".Trim()).ToString() != "")
                 {
-                    _시작.DateTime = Convert.ToDateTime(fpSub.Sheets[0].GetValue(e.Row, "START_TIME".Trim()));
+                    _시작.DateTime = Convert.ToDateTime(fpSub.Sheets[0].GetValue(SubRow, "START_TIME".Trim()));
                     if (_시작.DateTime.Hour >= 8 && _시작.DateTime.Hour < 20)
                     {
                         _교대조.Text = "주간";
@@ -520,9 +543,9 @@ namespace CoFAS.NEW.MES.POP
                     }
                 }
 
-                if (fpSub.Sheets[0].GetValue(e.Row, "END_TIME".Trim()).ToString() != "")
+                if (fpSub.Sheets[0].GetValue(SubRow, "END_TIME".Trim()).ToString() != "")
                 {
-                    _종료.DateTime = Convert.ToDateTime(fpSub.Sheets[0].GetValue(e.Row, "END_TIME    ".Trim()));
+                    _종료.DateTime = Convert.ToDateTime(fpSub.Sheets[0].GetValue(SubRow, "END_TIME    ".Trim()));
                 }
                 else
                 {
@@ -805,7 +828,6 @@ namespace CoFAS.NEW.MES.POP
                 //CustomMsg.ShowExceptionMessage(_Exception.ToString(), "Error", MessageBoxButtons.OK);
             }
         }
-
 
         private void set_Data()
         {
