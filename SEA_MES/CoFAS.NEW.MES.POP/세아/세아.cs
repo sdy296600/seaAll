@@ -1216,7 +1216,7 @@ namespace CoFAS.NEW.MES.POP
                             }
                             if (rowdata["Category"].ToString().Contains("ESG_P_Active_Khours"))
                             {
-                                START_POWER = rowdata["VALUE"].ToString();
+                                START_POWER = (Convert.ToDouble(rowdata["VALUE"].ToString()) * 0.001) .ToString();
                             }
                         }
                     }
@@ -1237,14 +1237,42 @@ namespace CoFAS.NEW.MES.POP
                 else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
                     sql = $@"
-                        SELECT 
+                     SELECT ROUND(SUM(RESULT_TABLE.TOTAL_VALUE),2), RESULT_TABLE.CATEGORY FROM (SELECT SUM(
+								        CASE 
+								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3704' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3705' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3706' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Khours' THEN VALUE * 0.001
+								            WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Mhours' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Khours' THEN VALUE * 0.001
+								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Mhours' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Khours' THEN VALUE * 0.001
+								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Mhours' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'ESG_P_Active_Khours' THEN VALUE * 0.001
+								            ELSE T2.VALUE
+								        END
+								    ) AS TOTAL_VALUE,
+								    CASE
+										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%151%' OR LEFT(T2.CATEGORY,12) LIKE '%161%' OR LEFT(T2.CATEGORY,12) LIKE '%171%')
+										 THEN '21_P_Active'
+										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%152%' OR LEFT(T2.CATEGORY,12) LIKE '%162%' OR LEFT(T2.CATEGORY,12) LIKE '%172%')
+										 THEN '22_P_Active'
+										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%153%' OR LEFT(T2.CATEGORY,12) LIKE '%163%' OR LEFT(T2.CATEGORY,12) LIKE '%173%')
+										 THEN '23_P_Active'
+										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%154%' OR LEFT(T2.CATEGORY,12) LIKE '%164%' OR LEFT(T2.CATEGORY,12) LIKE '%174%')
+										 THEN '24_P_Active'
+										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%155%' OR LEFT(T2.CATEGORY,12) LIKE '%165%' OR LEFT(T2.CATEGORY,12) LIKE '%175%')
+										 THEN '25_P_Active'
+									 ELSE T2.CATEGORY
+									 END AS CATEGORY
+									 FROM
+            					(SELECT 
                                     CATEGORY, 
                                     MAX(TIMESTAMP) AS MAX_TIMESTAMP,
                                     VALUE
-            
                                 FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
                                WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'	
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
                                OR CATEGORY LIKE 'Casting_{no2}_P_Active_Khours'
                                OR CATEGORY LIKE 'Casting_{no2}_P_Active_Mhours'
@@ -1252,9 +1280,13 @@ namespace CoFAS.NEW.MES.POP
                                OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Mhours'
                                OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Khours'
                                OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Mhours'
-                                GROUP BY D.CATEGORY
+                               OR CATEGORY LIKE 'ESG_P_Active_Khours'
+                                GROUP BY D.CATEGORY) AS T2
+                                GROUP BY T2.CATEGORY) AS RESULT_TABLE
+                              	GROUP BY RESULT_TABLE.CATEGORY
+                                ;                                
             ";
-
+                        
 
 
                     //SELECT CASE WHEN CATEGORY = 'DCM_{no}_TAG_D3704' THEN 'DCM_{no}_TAG_D3704'
@@ -1295,12 +1327,11 @@ namespace CoFAS.NEW.MES.POP
 
                             else if (rowdata["CATEGORY"].ToString().Contains("D3706"))
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
+                            else if (rowdata["CATEGORY"].ToString().Contains("P_Active")) 
+                            {
+                                START_POWER =  rowdata["VALUE"].ToString();
+                            }
 
-                            else if (rowdata["CATEGORY"].ToString().Contains("Mhours"))
-                                START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]))).ToString();
-                                
-                            else if (rowdata["CATEGORY"].ToString().Contains("Khours"))
-                                START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]) * 0.001)).ToString();
                         }
                     }
 
