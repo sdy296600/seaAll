@@ -609,7 +609,7 @@ namespace CalculateForSea
 
                         cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                         cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineid", machineid);
+                        cmd.Parameters.AddWithValue("@machineNo", machineid);
 
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
