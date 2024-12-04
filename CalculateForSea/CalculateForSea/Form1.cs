@@ -773,7 +773,7 @@ namespace CalculateForSea
             using (MySqlConnection conn2 = new MySqlConnection(ConnectionString))
             {
                 string sql = $"SELECT START_POWER, WORK_POWER FROM WORK_DATA WHERE WORK_PERFORMANCE_ID = '{model.ID}'; ";
-                conn.Open();
+                conn2.Open();
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn2))
                 {
                     cmd.CommandType = CommandType.Text;
