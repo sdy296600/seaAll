@@ -1214,7 +1214,7 @@ namespace CoFAS.NEW.MES.POP
                             {
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
                             }
-                            if (rowdata["Category"].ToString().Contains("ESG_P_Active_Ruled"))
+                            if (rowdata["Category"].ToString().Contains("ESG_P_Active_Khours"))
                             {
                                 START_POWER = rowdata["VALUE"].ToString();
                             }
