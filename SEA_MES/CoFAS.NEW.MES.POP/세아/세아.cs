@@ -1299,11 +1299,11 @@ namespace CoFAS.NEW.MES.POP
                             {
                                 if (rowdata["CATEGORY"].ToString().Contains("Mhours"))
                                 {
-                                    START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]) * 1000)).ToString();
+                                    START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"])).ToString();
                                 }
                                 else
                                 {
-                                    START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
+                                    START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"])*0.001) ).ToString();
 
                                 }
                             }

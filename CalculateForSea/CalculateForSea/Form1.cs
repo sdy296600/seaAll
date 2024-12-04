@@ -459,7 +459,7 @@ namespace CalculateForSea
             model = models[index];
             if (topic.Contains("P_Active_Khours"))
             {
-                model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
+                model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message))* 0.001;
                 using (MySqlConnection conn = new MySqlConnection(ConnectionString))
                 {
                     DataSet ds= new DataSet();
@@ -522,7 +522,7 @@ namespace CalculateForSea
             }
             else if (topic.Contains("P_Active_Mhours"))
             {
-                model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
+                model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
                 //model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
                 using (MySqlConnection conn = new MySqlConnection(ConnectionString))
                 {
@@ -591,7 +591,7 @@ namespace CalculateForSea
             else if (topic.Contains("Load_Total_Power_Consumption"))
             {
                 //model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) / 1000;
-                model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
+                model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) * 0.001;
                 using (MySqlConnection conn = new MySqlConnection(ConnectionString))
                 {
                     DataSet ds = new DataSet();
@@ -768,7 +768,7 @@ namespace CalculateForSea
             double Q = model.ReActive_Power; // 무효전력
 
             //// 적산전력 계산(유효)
-            double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ) * 1000; //Unit - 1KWh
+            double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ); //Unit - 1KWh
 
             //// 피상전력(S)을 계산합니다.
             double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
