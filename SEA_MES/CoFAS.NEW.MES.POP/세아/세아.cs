@@ -10,6 +10,7 @@ using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -1186,7 +1187,7 @@ namespace CoFAS.NEW.MES.POP
                                WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                               OR CATEGORY LIKE 'ESG_P_Active_Ruled'
+                               OR CATEGORY LIKE 'ESG_P_Active_Khours'
                                 GROUP BY D.CATEGORY
             ";
 
@@ -1245,9 +1246,12 @@ namespace CoFAS.NEW.MES.POP
                                WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                               OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
-                               OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Ruled'
-                               OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Ruled'
+                               OR CATEGORY LIKE 'Casting_{no2}_P_Active_Khours'
+                               OR CATEGORY LIKE 'Casting_{no2}_P_Active_Mhours'
+                               OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Khours'
+                               OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Mhours'
+                               OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Khours'
+                               OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Mhours'
                                 GROUP BY D.CATEGORY
             ";
 
@@ -1283,23 +1287,27 @@ namespace CoFAS.NEW.MES.POP
                     {
                         foreach (DataRow rowdata in pDataTable6.Rows)
                         {
-                            if (rowdata["CATEGORY"].ToString().Contains("D3704")) 
+                            if (rowdata["CATEGORY"].ToString().Contains("D3704"))
                                 START_OKCNT = rowdata["VALUE"].ToString();
 
-                            if (rowdata["CATEGORY"].ToString().Contains("D3705"))
+                            else if (rowdata["CATEGORY"].ToString().Contains("D3705"))
                                 START_ERRCOUNT = rowdata["VALUE"].ToString();
 
-                            if (rowdata["CATEGORY"].ToString().Contains("D3706"))
+                            else if (rowdata["CATEGORY"].ToString().Contains("D3706"))
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
+                            else 
+                            {
+                                if (rowdata["CATEGORY"].ToString().Contains("Mhours"))
+                                {
+                                    START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]) * 1000)).ToString();
+                                }
+                                else
+                                {
+                                    START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
 
-                            if (rowdata["CATEGORY"].ToString().Contains("Casting_"))
-                                START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
+                                }
+                            }
 
-                            if (rowdata["CATEGORY"].ToString().Contains("Furnace_"))
-                                START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
-
-                            if (rowdata["CATEGORY"].ToString().Contains("Trimming_"))
-                                START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
                         }
                     }
 
@@ -1314,7 +1322,7 @@ namespace CoFAS.NEW.MES.POP
                                                    , WORK_OKCNT
                                                    , WORK_ERRCOUNT
                                                    , WORK_WARMUPCNT) 
-                                            VALUES ( {id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
+                                            VALUES ( '{id}','{START_POWER}','{START_OKCNT}','{START_ERRCOUNT}','{START_WARMUPCNT}','{START_POWER}','{START_OKCNT}','{START_ERRCOUNT}','{START_WARMUPCNT}')";
                     
                     //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                     DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
