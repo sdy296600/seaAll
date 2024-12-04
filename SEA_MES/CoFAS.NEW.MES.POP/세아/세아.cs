@@ -1295,19 +1295,12 @@ namespace CoFAS.NEW.MES.POP
 
                             else if (rowdata["CATEGORY"].ToString().Contains("D3706"))
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
-                            else 
-                            {
-                                if (rowdata["CATEGORY"].ToString().Contains("Mhours"))
-                                {
-                                    START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]))).ToString();
-                                }
-                                else
-                                {
-                                    START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"])*0.001) ).ToString();
 
-                                }
-                            }
-
+                            else if (rowdata["CATEGORY"].ToString().Contains("Mhours"))
+                                START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]))).ToString();
+                                
+                            else if (rowdata["CATEGORY"].ToString().Contains("Khours"))
+                                START_POWER = (Convert.ToDouble(START_POWER) + (Convert.ToDouble(rowdata["VALUE"]) * 0.001)).ToString();
                         }
                     }
 
