@@ -1183,7 +1183,7 @@ namespace CoFAS.NEW.MES.POP
                                     MAX(TIMESTAMP) AS MAX_TIMESTAMP,
                                     VALUE
             
-                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 200000) AS D
+                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
                                WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
@@ -1242,7 +1242,7 @@ namespace CoFAS.NEW.MES.POP
                                     MAX(TIMESTAMP) AS MAX_TIMESTAMP,
                                     VALUE
             
-                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 200000) AS D
+                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
                                WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
                                OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
