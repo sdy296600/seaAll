@@ -466,8 +466,8 @@ namespace CalculateForSea
                     conn.Open();
                     // 다중 SELECT 쿼리
                     string sql = @"
-                    SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
-                    SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
                 ";
                     int machineid = index != 0 ? index + 20 : 13;
 
@@ -485,11 +485,11 @@ namespace CalculateForSea
                         }
                     }
 
-                    // `elect_day`에 데이터가 없으면 INSERT 실행
+                    // `elec_day`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
                     {
                         string insertDaySql = @"
-                            INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
+                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateDay, @value, @machineNo)
                         ";
                         using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
@@ -501,11 +501,11 @@ namespace CalculateForSea
                         }
                     }
 
-                    // `elect_month`에 데이터가 없으면 INSERT 실행
+                    // `elec_month`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
                     {
                         string insertMonthSql = @"
-                            INSERT INTO elect_month (DATETIME, VALUE, MACHINE_NO)
+                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateMonth, @value, @machineNo)
                         ";
 
@@ -530,8 +530,8 @@ namespace CalculateForSea
                     conn.Open();
                     // 다중 SELECT 쿼리
                     string sql = @"
-                    SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
-                    SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
                 ";
                     int machineid = index != 0 ? index + 20 : 13;
 
@@ -549,11 +549,11 @@ namespace CalculateForSea
                         }
                     }
 
-                    // `elect_day`에 데이터가 없으면 INSERT 실행
+                    // `elec_day`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
                     {
                         string insertDaySql = @"
-                            INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
+                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateDay, @value, @machineNo)
                         ";
 
@@ -567,11 +567,11 @@ namespace CalculateForSea
                         }
                     }
 
-                    // `elect_month`에 데이터가 없으면 INSERT 실행
+                    // `elec_month`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
                     {
                         string insertMonthSql = @"
-                            INSERT INTO elect_month (DATETIME, VALUE, MACHINE_NO)
+                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateMonth, @value, @machineNo)
                         ";
 
@@ -598,8 +598,8 @@ namespace CalculateForSea
                     conn.Open();
                     // 다중 SELECT 쿼리
                     string sql = @"
-                    SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
-                    SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
                 ";
                     int machineid = index != 0 ? index + 20 : 13;
 
@@ -617,11 +617,11 @@ namespace CalculateForSea
                         }
                     }
 
-                    // `elect_day`에 데이터가 없으면 INSERT 실행
+                    // `elec_day`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
                     {
                         string insertDaySql = @"
-                            INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
+                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateDay, @value, @machineNo)
                         ";
 
@@ -635,11 +635,11 @@ namespace CalculateForSea
                         }
                     }
 
-                    // `elect_month`에 데이터가 없으면 INSERT 실행
+                    // `elec_month`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
                     {
                         string insertMonthSql = @"
-                            INSERT INTO elect_month (DATETIME, VALUE, MACHINE_NO)
+                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateMonth, @value, @machineNo)
                         ";
 
@@ -733,8 +733,8 @@ namespace CalculateForSea
                 MySqlCommand cmd = new MySqlCommand();
                 int index = machineId != 0 ? machineId + 20 : 13;
 
-                cmd.CommandText = $@"SELECT * FROM ELEC_DAY WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")}' and MACHINE_NO ='{index}';
-                                    SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")}' and MACHINE_NO ='{index}';
+                cmd.CommandText = $@"SELECT * FROM ELEC_DAY WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")}' and MACHINE_ID ='{index}';
+                                    SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")}' and MACHINE_ID ='{index}';
                             ";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = conn;
