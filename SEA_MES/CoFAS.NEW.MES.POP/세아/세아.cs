@@ -1216,7 +1216,7 @@ namespace CoFAS.NEW.MES.POP
                             }
                             if (rowdata["Category"].ToString().Contains("ESG_P_Active_Khours"))
                             {
-                                START_POWER = rowdata["VALUE"].ToString();
+                                START_POWER = (Convert.ToDouble(rowdata["VALUE"].ToString()) * 0.001) .ToString();
                             }
                         }
                     }
