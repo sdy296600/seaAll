@@ -459,16 +459,191 @@ namespace CalculateForSea
             if (topic.Contains("P_Active_Khours"))
             {
                 model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
+                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                {
+                    DataSet ds= new DataSet();
+                    conn.Open();
+                    // 다중 SELECT 쿼리
+                    string sql = @"
+                    SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
+                    SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
+                ";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        // 매개변수 추가
+                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                        cmd.Parameters.AddWithValue("@machineNo", model.ID);
+
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                        }
+                    }
+
+                    // `elect_day`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                    {
+                        string insertDaySql = @"
+                            INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
+                            VALUES (@dateDay, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                    // `elect_month`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                    {
+                        string insertMonthSql = @"
+                            INSERT INTO elect_month (DATETIME, VALUE, MACHINE_NO)
+                            VALUES (@dateMonth, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                }
             }
             else if (topic.Contains("P_Active_Mhours"))
             {
                 //model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                 model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
+                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                {
+                    DataSet ds = new DataSet();
+                    conn.Open();
+                    // 다중 SELECT 쿼리
+                    string sql = @"
+                    SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
+                    SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
+                ";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        // 매개변수 추가
+                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                        cmd.Parameters.AddWithValue("@machineNo", model.ID);
+
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                        }
+                    }
+
+                    // `elect_day`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                    {
+                        string insertDaySql = @"
+                            INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
+                            VALUES (@dateDay, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                    // `elect_month`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                    {
+                        string insertMonthSql = @"
+                            INSERT INTO elect_month (DATETIME, VALUE, MACHINE_NO)
+                            VALUES (@dateMonth, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                }
+
             }
             else if (topic.Contains("Load_Total_Power_Consumption"))
             {
                 //model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) / 1000;
                 model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
+                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                {
+                    DataSet ds = new DataSet();
+                    conn.Open();
+                    // 다중 SELECT 쿼리
+                    string sql = @"
+                    SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
+                    SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
+                ";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        // 매개변수 추가
+                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                        cmd.Parameters.AddWithValue("@machineNo", model.ID);
+
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                        }
+                    }
+
+                    // `elect_day`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                    {
+                        string insertDaySql = @"
+                            INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
+                            VALUES (@dateDay, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                    // `elect_month`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                    {
+                        string insertMonthSql = @"
+                            INSERT INTO elect_month (DATETIME, VALUE, MACHINE_NO)
+                            VALUES (@dateMonth, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                }
             }
             else if (topic.Contains("P_Active")) //유효전력
             {
@@ -540,35 +715,70 @@ namespace CalculateForSea
 
         private void CalculateAndPublishPowerConsumption(DataModel model, int machineId)
         {
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            DataSet ds = new DataSet();
+            using (conn)
+            {
+                conn.Open();
+                // work_performance조회 ( start_time = end_time 인것)
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.CommandText = $@"SELECT * FROM ELEC_DAY WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")} and MACHINE_NO ='{model.ID}';
+                                    SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")} and MACHINE_NO ='{model.ID}';
+                            ";
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = conn;
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                adapter.Fill(ds);
+            }
+            double electricityRate = 153.7; // KRW per kWh 
 
-            //누적전력량 계산   * 단위 -  0.01KW / 0.01KVAR
-            double P = model.Active_Power;
-            double Q = model.ReActive_Power;
+            double dailyPower = 0;
+            double dailyAmount = 0;
+            double monthConversion = 0;
+            double monthlyAmount = 0;
+            double unitAmount = 0;
+            double unitPower = 0;
 
-            // 적산전력 계산(유효)
+            if (ds.Tables[0].Rows.Count > 0) 
+            {
+                dailyPower = model.NowShotKW - Convert.ToDouble(ds.Tables[0].Rows[0]["VALUE"].ToString());
+                dailyAmount = dailyPower * electricityRate;
+            }
+            if (ds.Tables[1].Rows.Count > 0)
+            {
+                dailyPower = model.NowShotKW - Convert.ToDouble(ds.Tables[1].Rows[0]["VALUE"].ToString());
+                dailyAmount = dailyPower * electricityRate;
+            }
+            unitPower = model.NowShotKW;
+            unitAmount = model.NowShotKW* electricityRate;
+
+            ////누적전력량 계산   * 단위 -  0.01KW / 0.01KVAR
+            double P = model.Active_Power; //현재 사용전력
+            //double Q = model.ReActive_Power; // 무효전력
+
+            //// 적산전력 계산(유효)
             double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ) * 1000; //Unit - 1KWh
 
-            // 피상전력(S)을 계산합니다.
+            //// 피상전력(S)을 계산합니다.
             double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
 
-            // 역률(PF)을 계산합니다.
+            //// 역률(PF)을 계산합니다.
             double powerFactor = P / S;
 
-            // 역률(PF)을 계산합니다.
-            double MH = model.NowMotorHour;
+            //// 역률(PF)을 계산합니다.
+            //double MH = model.NowMotorHour;
 
-            WriteLog($"{model.NowShotKW}");
+            //WriteLog($"{model.NowShotKW}");
 
 
             // 사용량 계산
-            double monthConversion = P * 30;
-            var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            double unitPower = model.Totalcnt != 0 ? model.NowShotKW / model.Totalcnt : 0;
+            //double monthConversion = P * 30;
+            //var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            //double unitPower = model.Totalcnt != 0 ? model.NowShotKW / model.Totalcnt : 0;
 ;            // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
-            double electricityRate = 153.7; // KRW per kWh 
-            double dailyAmount = dailyPower * electricityRate;
-            double monthlyAmount = monthConversion * electricityRate;
-            double unitAmount = unitPower * electricityRate;
+            //double dailyAmount = dailyPower * electricityRate;
+            //double monthlyAmount = monthConversion * electricityRate;
+            //double unitAmount = unitPower * electricityRate;
 
             if (machineId == 0)
              {
@@ -822,9 +1032,9 @@ namespace CalculateForSea
                                     }
 
                                 }
-                                if (models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M - models[i].NowShotKW > 0)
+                                if ((models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M) - models[i].NowShotKW > 0)
                                 {
-                                    models[i].NowShotKW = models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M;
+                                    models[i].NowShotKW = (models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M) - models[i].NowShotKW;
                                 }
                                 int machine_id;
                                 //여기에 
