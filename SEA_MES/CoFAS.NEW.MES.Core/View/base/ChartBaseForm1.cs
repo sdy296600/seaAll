@@ -430,9 +430,10 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
 	,convert(decimal(18,2),(CONVERT(decimal(18,2),isnull((SELECT  top 1 [qty_per]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A' ),'0'))) * CONVERT(int,isnull((SELECT TOP 1 [price] FROM [sea_mfg].[dbo].[prices] where resource_no = (SELECT  top 1 [resource_used]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A') order by update_date desc),'0')) * (   (convert(int,G.MATERIAL_COST_PER) /100.0 +1) )  ) AS '재료비'
   FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
 
-  INNER JOIN (SELECT REG_DATE, RESOURCE_NO , LOT_NO  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY REG_DATE, RESOURCE_NO, LOT_NO  ) AS J
+  INNER JOIN (SELECT ORDER_NO,REG_DATE, RESOURCE_NO , LOT_NO  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY REG_DATE, RESOURCE_NO, LOT_NO,ORDER_NO  ) AS J
   ON A.RESOURCE_NO = J.RESOURCE_NO
   AND A.LOT_NO = J.LOT_NO
+  AND A.ORDER_NO = J.ORDER_NO
 
    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
   ON B.resource_no  = A.resource_no
@@ -452,8 +453,10 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
   ON H.EQUIPMENT_ID ='설비850TON'
   LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
   ON A.RESOURCE_NO = I.RESOURCE_NO
+  AND A.LOT_NO = I.LOT_NO
+  WHERE 1=1";
    
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59' ";
+  //WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59' 
 
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
