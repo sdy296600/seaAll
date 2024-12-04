@@ -1301,7 +1301,7 @@ namespace CoFAS.NEW.MES.POP
                         }
                     }
 
-                    START_OKCNT = (Convert.ToInt32(START_OKCNT) - Convert.ToInt32(START_ERRCOUNT)).ToString();
+                    //START_OKCNT = (Convert.ToInt32(START_OKCNT) - Convert.ToInt32(START_ERRCOUNT)).ToString();
 
                     sql = $@"INSERT INTO WORK_DATA ( WORK_PERFORMANCE_ID
                                                    , START_POWER
