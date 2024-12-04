@@ -3,7 +3,10 @@ using CoFAS.NEW.MES.Core.Business;
 using CoFAS.NEW.MES.Core.Entity;
 using CoFAS.NEW.MES.Core.Function;
 using CoFAS.NEW.MES.POP.Function;
+using DevExpress.Utils.OAuth;
+using FarPoint.Excel;
 using FarPoint.Win.Spread;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Data;
 using System.Drawing;
@@ -1146,6 +1149,7 @@ namespace CoFAS.NEW.MES.POP
                                                              , '{dt.Rows[0]["UP_USER"].ToString()}'
                                                              , '{Convert.ToDateTime(dt.Rows[0]["UP_DATE"]).ToString("yyyy-MM-dd HH:mm:ss")}'
                                                              , '{id}')";
+
                 //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                 DataTable pDataTable5 = new MY_DBClass().SELECT_DataTable(sql);
 
@@ -1161,30 +1165,33 @@ namespace CoFAS.NEW.MES.POP
                 // 마지막 행을 비활성화
                 for (int i = 0; i < fpSub.Sheets[0].RowCount - 1; i++)
                 {
-                    if (fpSub.Sheets[0].GetValue(i, "END_TIME           ".Trim()).ToString().Trim() == "")
+                    if (fpSub.Sheets[0].GetValue(i, "END_TIME".Trim()).ToString().Trim() == "")
                     {
                         fpSub_CellClick(fpSub, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
                     }
                 }
 
                 string no = dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D","");
-                string no2 = (Convert.ToInt32(dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D", ""))+140).ToString();
+                int no2 = (Convert.ToInt32(dt.Rows[0]["MACHINE_NO"].ToString().Split('_')[1].Replace("D", "")))+140;
+
                 if (no == "13") 
                 {
-                    sql = $@"WITH RankedData AS (
-                        SELECT CATEGORY, VALUE, TIMESTAMP,
-                               ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
-                        FROM TIMESERIESDATA
-                        WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                           OR CATEGORY LIKE 'ESG_P_Active_Ruled'
-                    )
-                    SELECT CATEGORY, VALUE
-                    FROM RankedData
-                    WHERE rn = 1";
+                    sql = $@"WITH RankedData AS ( SELECT CATEGORY
+								                       , VALUE
+								                       , TIMESTAMP
+								                       , ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
+		                                            FROM TIMESERIESDATA
+		                                           WHERE CATEGORY LIKE 'DCM_13_TAG_D3704'
+	                                                  OR CATEGORY LIKE 'DCM_13_TAG_D3705'
+	                                                  OR CATEGORY LIKE 'DCM_13_TAG_D3706'
+	                                                  OR CATEGORY LIKE 'ESG_P_Active_Ruled'
+                                                 )
+                            SELECT CATEGORY, VALUE
+                              FROM RankedData
+                             WHERE rn = 1";
 
                     DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
+
                     string START_POWER = "0";
                     string START_ERRCOUNT = "0";
                     string START_WARMUPCNT = "0";
@@ -1213,25 +1220,57 @@ namespace CoFAS.NEW.MES.POP
                         }
                     }
 
-                    sql = $@"INSERT INTO WORK_DATA (WORK_PERFORMANCE_ID,START_POWER,START_OKCNT,START_ERRCOUNT,START_WARMUPCNT,WORK_POWER,WORK_OKCNT,WORK_ERRCOUNT,WORK_WARMUPCNT) VALUES({id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
-                    //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
+                    sql = $@"INSERT INTO WORK_DATA ( WORK_PERFORMANCE_ID
+                                                   , START_POWER
+                                                   , START_OKCNT 
+                                                   , START_ERRCOUNT
+                                                   , START_WARMUPCNT
+                                                   , WORK_POWER
+                                                   , WORK_OKCNT
+                                                   , WORK_ERRCOUNT
+                                                   , WORK_WARMUPCNT) 
+                                           VALUES ( {id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
+                     //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                     DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
                 }
                 else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
-                    sql = $@"WITH RankedData AS (
-                        SELECT CATEGORY, VALUE, TIMESTAMP,
-                               ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
-                        FROM TIMESERIESDATA
-                        WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
-                           OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                           OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
-                    )
-                    SELECT CATEGORY, VALUE
-                    FROM RankedData
-                    WHERE rn = 1";
-               
+                    sql = $@"WITH GET_VALUES AS (
+                                                    SELECT CATEGORY, VALUE, TIMESTAMP,
+                                                           ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
+                                                    FROM TIMESERIESDATA
+                                                    WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+                                                       OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                                                       OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+                                                       OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
+                                                       OR CATEGORY LIKE 'Furnace_{no2-10}_P_Active_Ruled'
+                                                       OR CATEGORY LIKE 'Trimming_{no2+10}_P_Active_Ruled'
+                                                )
+                                SELECT CATEGORY, VALUE
+                            FROM GET_VALUES
+                            WHERE rn = 1";
+
+
+                    //SELECT CASE WHEN CATEGORY = 'DCM_{no}_TAG_D3704' THEN 'DCM_{no}_TAG_D3704'
+                    //                    ELSE CATEGORY
+                    //               END AS CATEGORY
+	                   //          , CASE WHEN CATEGORY = 'DCM_{no}_TAG_D3704' THEN
+                    //                     (SELECT LV1.VALUE - LV2.VALUE
+
+                    //                      FROM GET_VALUES LV1, GET_VALUES LV2
+
+                    //                      WHERE LV1.CATEGORY = 'DCM_{no}_TAG_D3704'
+
+                    //                        AND LV2.CATEGORY = 'DCM_{no}_TAG_D3705'
+
+                    //                        AND LV1.rn = 1
+
+                    //                        AND LV2.rn = 1)
+                    //                 ELSE SUM(VALUE)
+                    //            END AS VALUE
+                    //        FROM GET_VALUES
+                    //        WHERE rn = 1
+                    //        GROUP BY CATEGORY
                     DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
                     string START_POWER = "0";
                     string START_ERRCOUNT = "0";
@@ -1242,31 +1281,44 @@ namespace CoFAS.NEW.MES.POP
                     {
                         foreach (DataRow rowdata in pDataTable6.Rows)
                         {
-                            if (rowdata["Category"].ToString().Contains("D3704")) 
-                            {
+                            if (rowdata["CATEGORY"].ToString().Contains("D3704")) 
                                 START_OKCNT = rowdata["VALUE"].ToString();
-                            }
-                            if (rowdata["Category"].ToString().Contains("D3705"))
-                            {
+
+                            if (rowdata["CATEGORY"].ToString().Contains("D3705"))
                                 START_ERRCOUNT = rowdata["VALUE"].ToString();
-                            }
-                            if (rowdata["Category"].ToString().Contains("D3706"))
-                            {
+
+                            if (rowdata["CATEGORY"].ToString().Contains("D3706"))
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
-                            }
-                            if (rowdata["Category"].ToString().Contains("P_Active_Ruled"))
-                            {
-                                START_POWER = rowdata["VALUE"].ToString();
-                            }
+
+                            if (rowdata["CATEGORY"].ToString().Contains("Casting_"))
+                                START_POWER =  rowdata["VALUE"].ToString();
+
+                            if (rowdata["CATEGORY"].ToString().Contains("Furnace_"))
+                                START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
+
+                            if (rowdata["CATEGORY"].ToString().Contains("Trimming_"))
+                                START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
                         }
                     }
+
+                    START_OKCNT = (Convert.ToInt32(START_OKCNT) - Convert.ToInt32(START_ERRCOUNT)).ToString();
+
+                    sql = $@"INSERT INTO WORK_DATA ( WORK_PERFORMANCE_ID
+                                                   , START_POWER
+                                                   , START_OKCNT 
+                                                   , START_ERRCOUNT
+                                                   , START_WARMUPCNT
+                                                   , WORK_POWER
+                                                   , WORK_OKCNT
+                                                   , WORK_ERRCOUNT
+                                                   , WORK_WARMUPCNT) 
+                                            VALUES ( {id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
                     
-                    sql = $@"INSERT INTO WORK_DATA (WORK_PERFORMANCE_ID,START_POWER,START_OKCNT,START_ERRCOUNT,START_WARMUPCNT,WORK_POWER,WORK_OKCNT,WORK_ERRCOUNT,WORK_WARMUPCNT) VALUES({id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
                     //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                     DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
                 }
 
-                CustomMsg.ShowMessage("저장 되었습니다.");
+                CustomMsg.ShowMessage("작업실적이 시작되었습니다.");
 
             }
             catch (Exception ex)
@@ -1319,6 +1371,7 @@ namespace CoFAS.NEW.MES.POP
                                      , WORK_TIME    = '{difference.TotalSeconds}'
                                      , END_TIME     = '{_종료.DateTime.ToString("yyyy-MM-dd HH:mm:ss")}'
                                  WHERE ID           = '{_p실적}'";
+
                 DataTable _DataTable = new CoreBusiness().SELECT(sql);
 
 
@@ -1337,7 +1390,8 @@ namespace CoFAS.NEW.MES.POP
                             SET END_TIME    = '{endTime.ToString("yyyy-MM-dd HH:mm:ss")}'
                               , IS_WORKING  = '비가동'
                           WHERE RESOURCE_NO = '{fpSub.Sheets[0].GetValue(row, "RESOURCE_NO    ".Trim()).ToString()}'
-                            AND LOT_NO      = '{fpSub.Sheets[0].GetValue(row, "LOT_NO         ".Trim()).ToString()}'";
+                            AND LOT_NO      = '{fpSub.Sheets[0].GetValue(row, "LOT_NO         ".Trim()).ToString()}'
+                            AND WORK_PERFORMANCE_ID = '{_p실적}'";
 
                 new MY_DBClass().SELECT_DataTable(sql);
 
@@ -1401,7 +1455,7 @@ namespace CoFAS.NEW.MES.POP
                     new MY_DBClass().SELECT_DataTable(sql);
                 }
 
-                CustomMsg.ShowMessage("저장 되었습니다.");
+                CustomMsg.ShowMessage("작업 실적이 완료 되었습니다.");
 
                 for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
                 {
@@ -1419,6 +1473,7 @@ namespace CoFAS.NEW.MES.POP
                         fpSub_CellClick(fpMain, new CellClickEventArgs(null, i, 0, 0, 0, System.Windows.Forms.MouseButtons.Left, false, false));
                     }
                 }
+
             }
             catch (Exception ex)
             {
