@@ -14,6 +14,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Media.Media3D;
 using System.Data.SqlTypes;
+using System.Reflection;
 
 namespace CalculateForSea
 {
@@ -468,13 +469,15 @@ namespace CalculateForSea
                     SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
                     SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
                 ";
+                    int machineid = index != 0 ? index + 20 : 13;
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+
                         // 매개변수 추가
                         cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                         cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                        cmd.Parameters.AddWithValue("@machineNo", machineid);
 
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
@@ -489,12 +492,11 @@ namespace CalculateForSea
                             INSERT INTO elect_day (DATETIME, VALUE, MACHINE_NO)
                             VALUES (@dateDay, @value, @machineNo)
                         ";
-
                         using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
                         {
                             cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                             cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
                     }
@@ -511,7 +513,7 @@ namespace CalculateForSea
                         {
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
                             cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
                     }
@@ -531,13 +533,15 @@ namespace CalculateForSea
                     SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
                     SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
                 ";
+                    int machineid = index != 0 ? index + 20 : 13;
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+
                         // 매개변수 추가
                         cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                         cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                        cmd.Parameters.AddWithValue("@machineNo", machineid);
 
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
@@ -555,9 +559,10 @@ namespace CalculateForSea
 
                         using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
                         {
+
                             cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                             cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
                     }
@@ -572,9 +577,10 @@ namespace CalculateForSea
 
                         using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
                         {
+
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
                             cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
                     }
@@ -595,13 +601,15 @@ namespace CalculateForSea
                     SELECT Count(*) AS Count FROM elect_day WHERE DATETIME = @dateDay AND MACHINE_NO = @machineNo;
                     SELECT Count(*) AS Count FROM elect_month WHERE DATETIME = @dateMonth AND MACHINE_NO = @machineNo;
                 ";
+                    int machineid = index != 0 ? index + 20 : 13;
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         // 매개변수 추가
+
                         cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                         cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                        cmd.Parameters.AddWithValue("@machineid", machineid);
 
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
@@ -617,11 +625,12 @@ namespace CalculateForSea
                             VALUES (@dateDay, @value, @machineNo)
                         ";
 
+
                         using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
                         {
                             cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
                             cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
                     }
@@ -638,7 +647,7 @@ namespace CalculateForSea
                         {
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
                             cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", model.ID);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
                     }
@@ -722,8 +731,10 @@ namespace CalculateForSea
                 conn.Open();
                 // work_performance조회 ( start_time = end_time 인것)
                 MySqlCommand cmd = new MySqlCommand();
-                cmd.CommandText = $@"SELECT * FROM ELEC_DAY WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")} and MACHINE_NO ='{model.ID}';
-                                    SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")} and MACHINE_NO ='{model.ID}';
+                int index = machineId != 0 ? machineId + 20 : 13;
+
+                cmd.CommandText = $@"SELECT * FROM ELEC_DAY WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")}' and MACHINE_NO ='{index}';
+                                    SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")}' and MACHINE_NO ='{index}';
                             ";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = conn;
