@@ -767,8 +767,30 @@ namespace CalculateForSea
             double P = model.Active_Power; //현재 사용전력
             double Q = model.ReActive_Power; // 무효전력
 
+            DataSet ds2 = new DataSet();
+
+            // MySQL 연결 및 데이터 조회
+            using (MySqlConnection conn2 = new MySqlConnection(ConnectionString))
+            {
+                string sql = $"SELECT START_POWER, WORK_POWER FROM WORK_DATA WHERE WORK_PERFORMANCE_ID = '{model.ID}'; ";
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn2))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(ds2); // 시계열 데이터를 데이터셋에 채움
+                    }
+                }
+            }
             //// 적산전력 계산(유효)
-            double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ); //Unit - 1KWh
+            double Cumulative_Power = 0;
+            if (ds2.Tables[0].Rows.Count > 0) 
+            {
+                Cumulative_Power = Convert.ToDouble(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString())- Convert.ToDouble(ds2.Tables[0].Rows[0]["START_POWER"].ToString());
+
+            }
+
 
             //// 피상전력(S)을 계산합니다.
             double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
