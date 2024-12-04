@@ -1176,9 +1176,10 @@ namespace CalculateForSea
                            
                                 work_performanceSql =
                              $@"
+
                                 UPDATE work_performance                                                                        
                                 SET work_power = IFNULL((
-                                    SELECT WORK_POWER - START_POWER 
+                                    SELECT WORK_POWER - LAST_POWER 
                                     FROM WORK_DATA 
                                     WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
                                 ), 0),                                                                                                 
@@ -1200,6 +1201,9 @@ namespace CalculateForSea
                                 WHERE end_time = start_time                                                                   
                                   AND WORK_PERFORMANCE_ID = '{models[i].ID}'                                                               
                                 ORDER BY ID DESC LIMIT 1;
+                                UPDATE WORK_DATA SET
+                                    LAST_POWER = WORK_POWER
+                                WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
                                 ";
 
                                 MySqlConnection conn3 = new MySqlConnection(ConnectionString);
