@@ -1176,19 +1176,19 @@ namespace CoFAS.NEW.MES.POP
 
                 if (no == "13") 
                 {
-                    sql = $@"WITH RankedData AS ( SELECT CATEGORY
-								                       , VALUE
-								                       , TIMESTAMP
-								                       , ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
-		                                            FROM TIMESERIESDATA
-		                                           WHERE CATEGORY LIKE 'DCM_13_TAG_D3704'
-	                                                  OR CATEGORY LIKE 'DCM_13_TAG_D3705'
-	                                                  OR CATEGORY LIKE 'DCM_13_TAG_D3706'
-	                                                  OR CATEGORY LIKE 'ESG_P_Active_Ruled'
-                                                 )
-                            SELECT CATEGORY, VALUE
-                              FROM RankedData
-                             WHERE rn = 1";
+                    sql = $@"
+                        SELECT 
+                                    CATEGORY, 
+                                    MAX(TIMESTAMP) AS MAX_TIMESTAMP,
+                                    VALUE
+            
+                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 200000) AS D
+                               WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+                               OR CATEGORY LIKE 'ESG_P_Active_Ruled'
+                                GROUP BY D.CATEGORY
+            ";
 
                     DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
 
@@ -1235,26 +1235,28 @@ namespace CoFAS.NEW.MES.POP
                 }
                 else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
-                    sql = $@"WITH GET_VALUES AS (
-                                                    SELECT CATEGORY, VALUE, TIMESTAMP,
-                                                           ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY TIMESTAMP DESC) AS rn
-                                                    FROM TIMESERIESDATA
-                                                    WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                                                       OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
-                                                       OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                                                       OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
-                                                       OR CATEGORY LIKE 'Furnace_{no2-10}_P_Active_Ruled'
-                                                       OR CATEGORY LIKE 'Trimming_{no2+10}_P_Active_Ruled'
-                                                )
-                                SELECT CATEGORY, VALUE
-                            FROM GET_VALUES
-                            WHERE rn = 1";
+                    sql = $@"
+                        SELECT 
+                                    CATEGORY, 
+                                    MAX(TIMESTAMP) AS MAX_TIMESTAMP,
+                                    VALUE
+            
+                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 200000) AS D
+                               WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+                               OR CATEGORY LIKE 'Casting_{no2}_P_Active_Ruled'
+                               OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Ruled'
+                               OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Ruled'
+                                GROUP BY D.CATEGORY
+            ";
+
 
 
                     //SELECT CASE WHEN CATEGORY = 'DCM_{no}_TAG_D3704' THEN 'DCM_{no}_TAG_D3704'
                     //                    ELSE CATEGORY
                     //               END AS CATEGORY
-	                   //          , CASE WHEN CATEGORY = 'DCM_{no}_TAG_D3704' THEN
+                    //          , CASE WHEN CATEGORY = 'DCM_{no}_TAG_D3704' THEN
                     //                     (SELECT LV1.VALUE - LV2.VALUE
 
                     //                      FROM GET_VALUES LV1, GET_VALUES LV2
@@ -1291,7 +1293,7 @@ namespace CoFAS.NEW.MES.POP
                                 START_WARMUPCNT = rowdata["VALUE"].ToString();
 
                             if (rowdata["CATEGORY"].ToString().Contains("Casting_"))
-                                START_POWER =  rowdata["VALUE"].ToString();
+                                START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
 
                             if (rowdata["CATEGORY"].ToString().Contains("Furnace_"))
                                 START_POWER = (Convert.ToDouble(START_POWER) + Convert.ToDouble(rowdata["VALUE"])).ToString();
