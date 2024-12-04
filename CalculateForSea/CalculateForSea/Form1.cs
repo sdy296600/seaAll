@@ -754,10 +754,10 @@ namespace CalculateForSea
 
             ////누적전력량 계산   * 단위 -  0.01KW / 0.01KVAR
             double P = model.Active_Power; //현재 사용전력
-            //double Q = model.ReActive_Power; // 무효전력
+            double Q = model.ReActive_Power; // 무효전력
 
             //// 적산전력 계산(유효)
-            double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ); //Unit - 1KWh
+            double Cumulative_Power = ( model.Consumption_M + model.Consumption_K ) * 1000; //Unit - 1KWh
 
             //// 피상전력(S)을 계산합니다.
             double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
