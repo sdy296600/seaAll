@@ -39,6 +39,9 @@ namespace CalculateForSea
             public double MotorLIFEDay { get; set; } = 0; // 총 모터 구동 일수
             public double MotorLIFEHour { get; set; } = 0; //총 모터 구동 시간 두개 데이터를 합쳐서 실제 사용한 구동시간을 산출합니다
             public string ID { get; set; } = "";
+            public bool K_OK { get; set; } = false;
+            public bool M_OK { get; set; } = false;
+
         }
 
         public class DataModel2
@@ -47,6 +50,8 @@ namespace CalculateForSea
             public double ESG_M { get; set; } = 0; // 누적 ESG (MWh)
 
             public double TRIMING_SHOT { get; set; } = 0; // 누적 ESG (MWh)
+            public bool K_OK { get; set; } = false;
+            public bool M_OK { get; set; } = false;
         }
         #endregion
 
@@ -754,235 +759,244 @@ namespace CalculateForSea
             model = models[index];
             if (topic.Contains("P_Active_Khours"))
             {
-                model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message))* 0.001;
-                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
+                model.K_OK = true;
+                if (model.K_OK && model.M_OK)
                 {
-                    DataSet ds= new DataSet();
-                    conn.Open();
-                    // 다중 SELECT 쿼리
-                    string sql = @"
+                    using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                    {
+                        DataSet ds = new DataSet();
+                        conn.Open();
+                        // 다중 SELECT 쿼리
+                        string sql = @"
                     SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
                     SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
                 ";
-                    int machineid = index != 0 ? index + 20 : 13;
+                        int machineid = index != 0 ? index + 20 : 13;
 
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-
-                        // 매개변수 추가
-                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineNo", machineid);
-
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                         {
-                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
-                        }
-                    }
 
-                    // `elec_day`에 데이터가 없으면 INSERT 실행
-                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
-                    {
-                        string insertDaySql = @"
+                            // 매개변수 추가
+                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
+
+                            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                            {
+                                adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                            }
+                        }
+
+                        // `elec_day`에 데이터가 없으면 INSERT 실행
+                        if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                        {
+                            string insertDaySql = @"
                             INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateDay, @value, @machineNo)
                         ";
-                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
+                            using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                                cmd.Parameters.AddWithValue("@machineNo", machineid);
+                                cmd.ExecuteNonQuery(); // INSERT 실행
+                            }
                         }
-                    }
 
-                    // `elec_month`에 데이터가 없으면 INSERT 실행
-                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
-                    {
-                        string insertMonthSql = @"
+                        // `elec_month`에 데이터가 없으면 INSERT 실행
+                        if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                        {
+                            string insertMonthSql = @"
                             INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateMonth, @value, @machineNo)
                         ";
 
-                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
+                            using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                                cmd.Parameters.AddWithValue("@machineNo", machineid);
+                                cmd.ExecuteNonQuery(); // INSERT 실행
+                            }
                         }
-                    }
 
+                    }
                 }
+
             }
             else if (topic.Contains("P_Active_Mhours"))
             {
-                model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
+                model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                 //model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
-                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                model.M_OK = true;
+                if (model.K_OK && model.M_OK)
                 {
-                    DataSet ds = new DataSet();
-                    conn.Open();
-                    // 다중 SELECT 쿼리
-                    string sql = @"
+                    using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                    {
+                        DataSet ds = new DataSet();
+                        conn.Open();
+                        // 다중 SELECT 쿼리
+                        string sql = @"
                     SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
                     SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
                 ";
-                    int machineid = index != 0 ? index + 20 : 13;
+                        int machineid = index != 0 ? index + 20 : 13;
 
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-
-                        // 매개변수 추가
-                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineNo", machineid);
-
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                         {
-                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
-                        }
-                    }
 
-                    // `elec_day`에 데이터가 없으면 INSERT 실행
-                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
-                    {
-                        string insertDaySql = @"
+                            // 매개변수 추가
+                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
+
+                            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                            {
+                                adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                            }
+                        }
+
+                        // `elec_day`에 데이터가 없으면 INSERT 실행
+                        if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                        {
+                            string insertDaySql = @"
                             INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateDay, @value, @machineNo)
                         ";
 
-                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
-                        {
+                            using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                            {
 
-                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
+                                cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                                cmd.Parameters.AddWithValue("@machineNo", machineid);
+                                cmd.ExecuteNonQuery(); // INSERT 실행
+                            }
                         }
-                    }
 
-                    // `elec_month`에 데이터가 없으면 INSERT 실행
-                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
-                    {
-                        string insertMonthSql = @"
+                        // `elec_month`에 데이터가 없으면 INSERT 실행
+                        if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                        {
+                            string insertMonthSql = @"
                             INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateMonth, @value, @machineNo)
                         ";
 
-                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
-                        {
+                            using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                            {
 
-                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
+                                cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                                cmd.Parameters.AddWithValue("@machineNo", machineid);
+                                cmd.ExecuteNonQuery(); // INSERT 실행
+                            }
                         }
                     }
-
                 }
 
             }
             else if (topic.Contains("Load_Total_Power_Consumption"))
             {
                 //model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) / 1000;
-                model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) * 0.001;
-                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
+                if (model.K_OK && model.M_OK)
                 {
-                    DataSet ds = new DataSet();
-                    conn.Open();
-                    // 다중 SELECT 쿼리
-                    string sql = @"
-                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
-                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
-                ";
-                    int machineid = index != 0 ? index + 20 : 13;
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    using (MySqlConnection conn = new MySqlConnection(ConnectionString))
                     {
-                        // 매개변수 추가
+                        DataSet ds = new DataSet();
+                        conn.Open();
+                        // 다중 SELECT 쿼리
+                        string sql = @"
+                        SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
+                        SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
+                    ";
+                        int machineid = index != 0 ? index + 20 : 13;
 
-                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                        cmd.Parameters.AddWithValue("@machineNo", machineid);
-
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                         {
-                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
-                        }
-                    }
+                            // 매개변수 추가
 
-                    // `elec_day`에 데이터가 없으면 INSERT 실행
-                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
-                    {
-                        string insertDaySql = @"
-                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateDay, @value, @machineNo)
-                        ";
-
-
-                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
-                        {
                             cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
-                        }
-                    }
-
-                    // `elec_month`에 데이터가 없으면 INSERT 실행
-                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
-                    {
-                        string insertMonthSql = @"
-                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateMonth, @value, @machineNo)
-                        ";
-
-                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
-                        {
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
                             cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
+
+                            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                            {
+                                adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                            }
+                        }
+
+                        // `elec_day`에 데이터가 없으면 INSERT 실행
+                        if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                        {
+                            string insertDaySql = @"
+                                INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
+                                VALUES (@dateDay, @value, @machineNo)
+                            ";
+
+
+                            using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                                cmd.Parameters.AddWithValue("@machineNo", machineid);
+                                cmd.ExecuteNonQuery(); // INSERT 실행
+                            }
+                        }
+
+                        // `elec_month`에 데이터가 없으면 INSERT 실행
+                        if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                        {
+                            string insertMonthSql = @"
+                                INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
+                                VALUES (@dateMonth, @value, @machineNo)
+                            ";
+
+                            using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
+                                cmd.Parameters.AddWithValue("@machineNo", machineid);
+                                cmd.ExecuteNonQuery(); // INSERT 실행
+                            }
                         }
                     }
+                }
+                else if (topic.Contains("P_Active")) //유효전력
+                {
+                    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+                }
+                else if (topic.Contains("P_ReActive")) //무효전력
+                {
+                    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+                }
+                //else if (topic.Contains("P_Active") && !topic.Contains("Ruled")) //유효전력
+                //{
+                //    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+                //}
+                //else if (topic.Contains("P_ReActive") && !topic.Contains("Ruled")) //무효전력
+                //{
+                //    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+                //}
+                else if (topic.Contains("Current_Motor_Hour")) // 현재  
+                {
+                    model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
+                }
+                else if (topic.Contains("Motor_LIFE_Day")) // 구동 일수
+                {
+                    model.MotorLIFEDay = double.Parse(Encoding.UTF8.GetString(message));
+                }
+                else if (topic.Contains("Motor_LIFE_Hour")) // 구동 시간
+                {
+                    model.MotorLIFEHour = double.Parse(Encoding.UTF8.GetString(message));
 
                 }
+                else if (topic.Contains("RTU_13_01_Load_THD_Phase_Voltage") || topic.Contains("RTU_13_01_Load_THD_Phase_Current"))
+                {
+                    _mqttClient.Publish($"/event/c/data_collection_digit/{topic.Split('/')[1]}", Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(message)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                }
             }
-            else if (topic.Contains("P_Active")) //유효전력
-            {
-                model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            }
-            else if (topic.Contains("P_ReActive")) //무효전력
-            {
-                model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            }
-            //else if (topic.Contains("P_Active") && !topic.Contains("Ruled")) //유효전력
-            //{
-            //    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            //}
-            //else if (topic.Contains("P_ReActive") && !topic.Contains("Ruled")) //무효전력
-            //{
-            //    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            //}
-            else if (topic.Contains("Current_Motor_Hour")) // 현재  
-            {
-                model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
-            }
-            else if (topic.Contains("Motor_LIFE_Day")) // 구동 일수
-            {
-                model.MotorLIFEDay = double.Parse(Encoding.UTF8.GetString(message));
-            }
-            else if (topic.Contains("Motor_LIFE_Hour")) // 구동 시간
-            {
-                model.MotorLIFEHour = double.Parse(Encoding.UTF8.GetString(message));
-
-            }
-            else if (topic.Contains("RTU_13_01_Load_THD_Phase_Voltage") || topic.Contains("RTU_13_01_Load_THD_Phase_Current"))
-            {
-                _mqttClient.Publish($"/event/c/data_collection_digit/{topic.Split('/')[1]}", Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(message)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-            }
-
         }
         private void GET_AC(string topic, byte[] message)
         {
