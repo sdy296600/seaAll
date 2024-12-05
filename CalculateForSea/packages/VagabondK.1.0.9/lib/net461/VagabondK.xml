@@ -1,0 +1,622 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VagabondK</name>
+    </assembly>
+    <members>
+        <member name="T:System.ComponentModel.PropertyValues">
+            <summary>
+            이미 다른 클래스를 상속 받아서 NotifyPropertyChangeObject를 상속받지 못할 때 내부 속성 저장소로 사용하는 클래스
+            </summary>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.#ctor(System.Object)">
+            <summary>
+            생성자
+            </summary>
+            <param name="eventSource">이벤트 발생 소스</param>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.Get``1(System.Func{``0},System.String)">
+            <summary>
+            속성 값 가져오기
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="factory">속성 초기화 동작</param>
+            <param name="propertyName">속성 명</param>
+            <returns>속성 값</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.Get``1(``0,System.String)">
+            <summary>
+            속성 값 가져오기
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="defaultValue">초기 기본 값</param>
+            <param name="propertyName">속성 명</param>
+            <returns>속성 값</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.GetCommand(System.Action,System.String)">
+            <summary>
+            즉석 커맨드 가져오기
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.GetCommand(System.Action,System.Func{System.Boolean},System.String)">
+            <summary>
+            즉석 커맨드 가져오기
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="canExecuteFunc">커맨드 실행 가능 여부 Func</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.GetCommand``1(System.Action{``0},System.String)">
+            <summary>
+            파라미터를 포함한 즉석 커맨드 가져오기
+            </summary>
+            <typeparam name="TParameter">파라미터 형식</typeparam>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.GetCommand``1(System.Action{``0},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            파라미터를 포함한 즉석 커맨드 가져오기
+            </summary>
+            <typeparam name="TParameter">파라미터 형식</typeparam>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="canExecuteFunc">커맨드 실행 가능 여부 Func</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.Set``1(``0,System.String)">
+            <summary>
+            속성 값 설정하기
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="value">설정할 값</param>
+            <param name="propertyName">속성 명</param>
+            <returns>설정 여부</returns>
+        </member>
+        <member name="M:System.ComponentModel.PropertyValues.ClearProperty(System.String)">
+            <summary>
+            속성 값 제거, 제거되면 다시 Get으로 속성 값을 가져올 때 속성 초기화 동작 결과나 기본 값을 반환함.
+            </summary>
+            <param name="propertyName">속성 명</param>
+            <returns>제거 여부</returns>
+        </member>
+        <member name="T:System.ComponentModel.QueryPropertyChangingEventArgs">
+            <summary>
+            속성 변경 이벤트 처리 전에 취소 여부 질의가 가능하게 함.
+            </summary>
+        </member>
+        <member name="M:System.ComponentModel.QueryPropertyChangingEventArgs.#ctor(System.String)">
+            <summary>
+            생성자
+            </summary>
+            <param name="propertyName">속성 명</param>
+        </member>
+        <member name="P:System.ComponentModel.QueryPropertyChangingEventArgs.IsCanceled">
+            <summary>
+            속성 변경 취소 여부
+            </summary>
+        </member>
+        <member name="T:System.ComponentModel.QueryPropertyChangingEventArgs`1">
+            <summary>
+            속성 변경 이벤트 처리 전에 취소 여부 질의가 가능하게 함.
+            </summary>
+            <typeparam name="TProperty">속성의 형식</typeparam>
+        </member>
+        <member name="M:System.ComponentModel.QueryPropertyChangingEventArgs`1.#ctor(System.String,`0)">
+            <summary>
+            생성자
+            </summary>
+            <param name="newValue">새 속성 값</param>
+            <param name="propertyName">속성 명</param>
+        </member>
+        <member name="P:System.ComponentModel.QueryPropertyChangingEventArgs`1.NewValue">
+            <summary>
+            새 속성 값
+            </summary>
+        </member>
+        <member name="T:System.ComponentModel.NamespaceDoc">
+            <summary>
+            Vagabond K가 개인적으로 워낙 자주 써서 그냥 System.ComponentModel 네임스페이스에 추가해버린 기능들입니다.
+            </summary>
+        </member>
+        <member name="T:System.ConvertExtensions">
+            <summary>
+            데이터 변환 확장 메서드 모음
+            </summary>
+        </member>
+        <member name="M:System.ConvertExtensions.To``1(System.Object,``0)">
+            <summary>
+            value를 특정 형식으로 변환하고, value가 null이거나 변환 중 예외 발생 시 기본 값을 반환.
+            </summary>
+            <typeparam name="T">변환하고자 하는 형식</typeparam>
+            <param name="value">입력 값</param>
+            <param name="defaultValue">기본 반환 값</param>
+            <returns>변환 결과</returns>
+        </member>
+        <member name="M:System.ConvertExtensions.ToNullable``1(System.Object)">
+            <summary>
+            value를 특정 형식에 대한 Nullable로 변환하고, value가 null이거나 변환 중 예외 발생 시 null을 반환.
+            </summary>
+            <typeparam name="T">변환하고자 하는 Nullable의 형식 매개변수</typeparam>
+            <param name="value">입력 값</param>
+            <returns>변환 결과</returns>
+        </member>
+        <member name="M:System.ConvertExtensions.TryConvert``1(System.Object,``0@)">
+            <summary>
+            value를 특정 형식으로 변환 시도
+            </summary>
+            <typeparam name="T">변환하고자 하는 형식</typeparam>
+            <param name="value">입력 값</param>
+            <param name="result">변환 결과</param>
+            <returns>변환 성공 여부</returns>
+        </member>
+        <member name="T:System.DateTimeExtensions">
+            <summary>
+            DateTime 확장 메서드 모음
+            </summary>
+        </member>
+        <member name="M:System.DateTimeExtensions.FirstDayInYear(System.DateTime)">
+            <summary>
+            입력 DateTime 값의 년도 중 첫 번째 날짜를 반환
+            </summary>
+            <param name="dateTime">입력 값</param>
+            <returns>입력 DateTime 값의 년도 중 첫 번째 날짜</returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.FirstDayInMonth(System.DateTime)">
+            <summary>
+            입력 DateTime 값의 년월 중 첫 번째 날짜를 반환
+            </summary>
+            <param name="dateTime">입력 값</param>
+            <returns>입력 DateTime 값의 년월 중 첫 번째 날짜</returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.CutoutAfterHour(System.DateTime)">
+            <summary>
+            입력 DateTime에서 분, 초, 밀리초를 자르고 반환
+            </summary>
+            <param name="dateTime">입력 값</param>
+            <returns>입력 DateTime에서 분, 초, 밀리초를 자른 값</returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.CutoutAfterMinute(System.DateTime)">
+            <summary>
+            입력 DateTime에서 초, 밀리초를 자르고 반환
+            </summary>
+            <param name="dateTime">입력 값</param>
+            <returns>입력 DateTime에서 초, 밀리초를 자른 값</returns>
+        </member>
+        <member name="M:System.DateTimeExtensions.CutoutAfterSecond(System.DateTime)">
+            <summary>
+            입력 DateTime에서 밀리초를 자르고 반환
+            </summary>
+            <param name="dateTime">입력 값</param>
+            <returns>입력 DateTime에서 밀리초를 자른 값</returns>
+        </member>
+        <member name="T:System.IInstantCommand">
+            <summary>
+            즉석에서 정의해서 사용하는 커맨드 인터페이스
+            </summary>
+        </member>
+        <member name="M:System.IInstantCommand.RaiseCanExecuteChanged">
+            <summary>
+            CanExecuteChanged 이벤트를 발생시킴.
+            </summary>
+        </member>
+        <member name="T:System.InstantCommandBase">
+            <summary>
+            즉석에서 정의해서 사용하는 커맨드의 기본 클래스
+            </summary>
+        </member>
+        <member name="M:System.InstantCommandBase.#ctor">
+            <summary>
+            생성자
+            </summary>
+        </member>
+        <member name="E:System.InstantCommandBase.CanExecuteChanged">
+            <summary>
+            Occurs when changes occur that affect whether or not the command should execute.
+            </summary>
+        </member>
+        <member name="M:System.InstantCommandBase.OnCanExecuteChanged">
+            <summary>
+            CanExecuteChanged 이벤트를 발생시킴.
+            </summary>
+        </member>
+        <member name="M:System.InstantCommandBase.Execute(System.Object)">
+            <summary>
+            커맨드 실행
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+        </member>
+        <member name="M:System.InstantCommandBase.CanExecute(System.Object)">
+            <summary>
+            커맨드 실행 가능 여부를 반환
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+            <returns>커맨드 실행 가능 여부</returns>
+        </member>
+        <member name="T:System.InstantCommand">
+            <summary>
+            즉석에서 정의해서 사용하는 커맨드
+            </summary>
+        </member>
+        <member name="M:System.InstantCommand.#ctor(System.Action)">
+            <summary>
+            생성자
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+        </member>
+        <member name="M:System.InstantCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+            생성자
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="canExecuteFunc">커맨드 실행 가능 여부 Func</param>
+        </member>
+        <member name="M:System.InstantCommand.Execute">
+            <summary>
+            커맨드 실행
+            </summary>
+        </member>
+        <member name="M:System.InstantCommand.Execute(System.Object)">
+            <summary>
+            커맨드 실행
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+        </member>
+        <member name="M:System.InstantCommand.CanExecute">
+            <summary>
+            커맨드 실행 가능 여부를 반환
+            </summary>
+            <returns>커맨드 실행 가능 여부</returns>
+        </member>
+        <member name="M:System.InstantCommand.CanExecute(System.Object)">
+            <summary>
+            커맨드 실행 가능 여부를 반환
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+            <returns>커맨드 실행 가능 여부</returns>
+        </member>
+        <member name="T:System.InstantCommand`1">
+            <summary>
+            즉석에서 정의해서 사용하는 파라미터가 포함된 커맨드
+            </summary>
+            <typeparam name="TParameter">파라미터 형식</typeparam>
+        </member>
+        <member name="M:System.InstantCommand`1.#ctor(System.Action{`0})">
+            <summary>
+            생성자
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+        </member>
+        <member name="M:System.InstantCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean})">
+            <summary>
+            생성자
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="canExecuteFunc">커맨드 실행 가능 여부 Func</param>
+        </member>
+        <member name="M:System.InstantCommand`1.Execute(`0)">
+            <summary>
+            커맨드 실행
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+        </member>
+        <member name="M:System.InstantCommand`1.Execute(System.Object)">
+            <summary>
+            커맨드 실행
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+        </member>
+        <member name="M:System.InstantCommand`1.CanExecute(`0)">
+            <summary>
+            커맨드 실행 가능 여부를 반환
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+            <returns>커맨드 실행 가능 여부</returns>
+        </member>
+        <member name="M:System.InstantCommand`1.CanExecute(System.Object)">
+            <summary>
+            커맨드 실행 가능 여부를 반환
+            </summary>
+            <param name="parameter">커맨드 파라미터</param>
+            <returns>커맨드 실행 가능 여부</returns>
+        </member>
+        <member name="T:System.NamespaceGroupDoc">
+            <summary>
+            Vagabond K가 개인적으로 워낙 자주 써서 그냥 System 관련 네임스페이스에 추가해버린 기능들입니다.
+            </summary>
+        </member>
+        <member name="T:System.NamespaceDoc">
+            <summary>
+            Vagabond K가 개인적으로 워낙 자주 써서 그냥 System 네임스페이스에 추가해버린 기능들입니다.
+            </summary>
+        </member>
+        <member name="T:System.Threading.NamespaceDoc">
+            <summary>
+            Vagabond K가 개인적으로 워낙 자주 써서 그냥 System.Threading 네임스페이스에 추가해버린 기능들입니다.
+            </summary>
+        </member>
+        <member name="T:System.Threading.DisposableMutex">
+            <summary>
+            리소스 해제 가능한 Mutex
+            </summary>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.#ctor(System.Boolean,System.String,System.Boolean@)">
+            <summary>
+            생성자
+            </summary>
+            <param name="initiallyOwned">true to give the calling thread initial ownership of the named system mutex if the named system mutex is created as a result of this call; otherwise, false.</param>
+            <param name="name">The name of the System.Threading.Mutex. If the value is null, the System.Threading.Mutex is unnamed.</param>
+            <param name="createdNew">When this method returns, contains a Boolean that is true if a local mutex was created (that is, if name is null or an empty string) or if the specified named system mutex was created; false if the specified named system mutex already existed. This parameter is passed uninitialized.</param>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.Dispose(System.Boolean)">
+            <summary>
+            When overridden in a derived class, releases the unmanaged resources used by the System.Threading.WaitHandle, and optionally releases the managed resources.
+            </summary>
+            <param name="explicitDisposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.WaitOne">
+            <summary>
+            Blocks the current thread until the current System.Threading.WaitHandle receives a signal.
+            </summary>
+            <returns>true if the current instance receives a signal. If the current instance is never signaled, System.Threading.WaitHandle.WaitOne(System.Int32,System.Boolean) never returns.</returns>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.WaitOne(System.Int32)">
+            <summary>
+            Blocks the current thread until the current System.Threading.WaitHandle receives a signal, using a 32-bit signed integer to specify the time interval in milliseconds.
+            </summary>
+            <param name="millisecondsTimeout">The number of milliseconds to wait, or System.Threading.Timeout.Infinite (-1) to wait indefinitely.</param>
+            <returns>true if the current instance receives a signal; otherwise, false.</returns>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.WaitOne(System.Int32,System.Boolean)">
+            <summary>
+            Blocks the current thread until the current System.Threading.WaitHandle receives a signal, using a 32-bit signed integer to specify the time interval and specifying whether to exit the synchronization domain before the wait.
+            </summary>
+            <param name="millisecondsTimeout">The number of milliseconds to wait, or System.Threading.Timeout.Infinite (-1) to wait indefinitely.</param>
+            <param name="exitContext">true to exit the synchronization domain for the context before the wait (if in a synchronized context), and reacquire it afterward; otherwise, false.</param>
+            <returns>true if the current instance receives a signal; otherwise, false.</returns>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.WaitOne(System.TimeSpan)">
+            <summary>
+            Blocks the current thread until the current instance receives a signal, using a System.TimeSpan to specify the time interval.
+            </summary>
+            <param name="timeout">A System.TimeSpan that represents the number of milliseconds to wait, or a System.TimeSpan that represents -1 milliseconds to wait indefinitely.</param>
+            <returns>true if the current instance receives a signal; otherwise, false.</returns>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.WaitOne(System.TimeSpan,System.Boolean)">
+            <summary>
+            Blocks the current thread until the current instance receives a signal, using a System.TimeSpan to specify the time interval and specifying whether to exit the synchronization domain before the wait.
+            </summary>
+            <param name="timeout">A System.TimeSpan that represents the number of milliseconds to wait, or a System.TimeSpan that represents -1 milliseconds to wait indefinitely.</param>
+            <param name="exitContext">true to exit the synchronization domain for the context before the wait (if in a synchronized context), and reacquire it afterward; otherwise, false.</param>
+            <returns>true if the current instance receives a signal; otherwise, false.</returns>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.InitializeLifetimeService">
+            <summary>
+            Obtains a lifetime service object to control the lifetime policy for this instance.
+            </summary>
+            <returns>An object of type System.Runtime.Remoting.Lifetime.ILease used to control the lifetime policy for this instance. This is the current lifetime service object for this instance if one exists; otherwise, a new lifetime service object initialized to the value of the System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime property.</returns>
+        </member>
+        <member name="M:System.Threading.DisposableMutex.Close">
+            <summary>
+            Releases all resources held by the current System.Threading.WaitHandle.
+            </summary>
+        </member>
+        <member name="T:System.NotifyPropertyChangeObject">
+            <summary>
+            PropertyChanging과 PropertyChanged 이벤트 처리에 대한 기본적인 동작을 제공하는 클래스
+            </summary>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.#ctor">
+            <summary>
+            생성자
+            </summary>
+        </member>
+        <member name="E:System.NotifyPropertyChangeObject.PropertyChanging">
+            <summary>
+            Occurs when a property value is changing.
+            </summary>
+        </member>
+        <member name="E:System.NotifyPropertyChangeObject.PropertyChanged">
+            <summary>
+            Occurs when a property value changes.
+            </summary>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.OnPropertyChanging(System.ComponentModel.QueryPropertyChangingEventArgs)">
+            <summary>
+            PropertyChanging 이벤트를 발생시킴.
+            </summary>
+            <param name="e">속성 변경 이벤트 처리 전에 취소 여부 질의가 가능하게 함.</param>
+            <returns>속성 변경 여부</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            PropertyChanged 이벤트를 발생시킴.
+            </summary>
+            <param name="e">PropertyChanged 이벤트에 대한 데이터를 제공함.</param>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.GetPropertyType(System.String)">
+            <summary>
+            속성의 형식을 반환
+            </summary>
+            <param name="propertyName">속성 명</param>
+            <returns>속성 형식</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.Get``1(System.Func{``0},System.String)">
+            <summary>
+            속성 값 가져오기
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="factory">속성 초기화 동작</param>
+            <param name="propertyName">속성 명</param>
+            <returns>속성 값</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.Get``1(``0,System.String)">
+            <summary>
+            속성 값 가져오기
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="defaultValue">초기 기본 값</param>
+            <param name="propertyName">속성 명</param>
+            <returns>속성 값</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.GetCommand(System.Action,System.String)">
+            <summary>
+            즉석 커맨드 가져오기
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.GetCommand(System.Action,System.Func{System.Boolean},System.String)">
+            <summary>
+            즉석 커맨드 가져오기
+            </summary>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="canExecuteFunc">커맨드 실행 가능 여부 Func</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.GetCommand``1(System.Action{``0},System.String)">
+            <summary>
+            파라미터를 포함한 즉석 커맨드 가져오기
+            </summary>
+            <typeparam name="TParameter">파라미터 형식</typeparam>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.GetCommand``1(System.Action{``0},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            파라미터를 포함한 즉석 커맨드 가져오기
+            </summary>
+            <typeparam name="TParameter">파라미터 형식</typeparam>
+            <param name="executeAction">커맨드 실행 Action</param>
+            <param name="canExecuteFunc">커맨드 실행 가능 여부 Func</param>
+            <param name="propertyName">속성 명</param>
+            <returns>커맨드</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.Set``1(``0,System.String)">
+            <summary>
+            속성 값 설정하기
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="value">설정할 값</param>
+            <param name="propertyName">속성 명</param>
+            <returns>설정 여부</returns>
+        </member>
+        <member name="M:System.NotifyPropertyChangeObject.ClearProperty(System.String)">
+            <summary>
+            속성 값 제거, 제거되면 다시 Get으로 속성 값을 가져올 때 속성 초기화 동작 결과나 기본 값을 반환함.
+            </summary>
+            <param name="propertyName">속성 명</param>
+            <returns>제거 여부</returns>
+        </member>
+        <member name="T:System.PropertyExtensions">
+            <summary>
+            속성 관련 확장 메서드 모음
+            </summary>
+        </member>
+        <member name="M:System.PropertyExtensions.Get``1(System.Object,``0@,System.Func{``0})">
+            <summary>
+            속성 가져오기. null일 경우 초기화 동작의 결과를 반환. Lazy와 비슷함.
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="factory">속성 초기화 동작</param>
+            <returns>속성 값</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.Set``1(System.Object,``0@,``0)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.Set``1(System.ComponentModel.INotifyPropertyChanging,``0@,``0,System.ComponentModel.PropertyChangingEventHandler,System.String)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <param name="propertyChangingEvent">PropertyChanging 이벤트</param>
+            <param name="propertyName">속성 명</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.Set``1(System.ComponentModel.INotifyPropertyChanged,``0@,``0,System.ComponentModel.PropertyChangedEventHandler,System.String)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <param name="propertyChangedEvent">PropertyChanged 이벤트</param>
+            <param name="propertyName">속성 명</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.Set``2(``0,``1@,``1,System.ComponentModel.PropertyChangingEventHandler,System.ComponentModel.PropertyChangedEventHandler,System.String)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TObject">속성을 포함한 객체 형식. INotifyPropertyChanged, INotifyPropertyChanging를 구현해야 함.</typeparam>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <param name="propertyChangingEvent">PropertyChanging 이벤트</param>
+            <param name="propertyChangedEvent">PropertyChanged 이벤트</param>
+            <param name="propertyName">속성 명</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.GetNewValue(System.ComponentModel.PropertyChangingEventArgs)">
+            <summary>
+            PropertyChangingEventArgs 객체가 QueryPropertyChangingEventArgs일 경우, 새 속성 값 가져오기.
+            </summary>
+            <param name="propertyChangingEventArgs">PropertyChanging 이벤트 매개변수</param>
+            <returns>새 속성 값</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.GetNewValue``1(System.ComponentModel.PropertyChangingEventArgs)">
+            <summary>
+            PropertyChangingEventArgs 객체가 QueryPropertyChangingEventArgs일 경우, 새 속성 값 가져오기.
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="propertyChangingEventArgs">PropertyChanging 이벤트 매개변수</param>
+            <returns>새 속성 값</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.IsCanceled(System.ComponentModel.PropertyChangingEventArgs)">
+            <summary>
+            PropertyChangingEventArgs 객체가 QueryPropertyChangingEventArgs일 경우, 속성 변경이 취소되었는지 확인.
+            </summary>
+            <param name="propertyChangingEventArgs">PropertyChanging 이벤트 매개변수</param>
+            <returns>속성 변경 취소 여부</returns>
+        </member>
+        <member name="M:System.PropertyExtensions.SetCancel(System.ComponentModel.PropertyChangingEventArgs,System.Boolean)">
+            <summary>
+            PropertyChangingEventArgs 객체가 QueryPropertyChangingEventArgs일 경우, 속성 변경 취소하기.
+            </summary>
+            <param name="propertyChangingEventArgs">PropertyChanging 이벤트 매개변수</param>
+            <param name="cancel">속성 변경 취소 여부</param>
+        </member>
+        <member name="T:VagabondK.NamespaceGroupDoc">
+            <summary>
+            Vagabond K가 편하게 코딩하려고 만든 라이브러리입니다.
+            </summary>
+        </member>
+        <member name="T:VagabondK.NamespaceDoc">
+            <summary>
+            Vagabond K가 편하게 코딩하려고 만든 라이브러리입니다.
+            </summary>
+        </member>
+    </members>
+</doc>
