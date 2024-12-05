@@ -176,15 +176,49 @@ namespace CalculateForSea
                     }
 
                     TcpChannel ch = LSClient.Channel as TcpChannel;
-                    int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1]);
+                    int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1].ToString());
                     lock (gridModels_DCM[i]) 
                     {
                         gridModels_DCM[i].금형내부 = datas[1];
                         gridModels_DCM[i].오염도A = datas[2];
                         gridModels_DCM[i].오염도B = datas[3];
                         gridModels_DCM[i].탱크진공 = datas[4];
+                    }
+                    int machine_id;
+                    //여기에 
+                    switch (i)
+                    {
+                        case 0:
+                            machine_id = 13;
+                            break;
+                        case 1:
+                            machine_id = 21;
+
+                            break;
+                        case 2:
+                            machine_id = 22;
+
+                            break;
+                        case 3:
+                            machine_id = 23;
+
+                            break;
+                        case 4:
+                            machine_id = 24;
+
+                            break;
+                        case 5:
+                            machine_id = 25;
+
+                            break;
+                        default:
+                            return;
 
                     }
+                    dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
+                    dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
+                    dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
+                    dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
                 }
 
                 //}
