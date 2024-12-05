@@ -1960,6 +1960,7 @@ namespace CalculateForSea
                             adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
                         }
                     }
+                    double data = model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
 
                     // `elec_day`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
@@ -1971,7 +1972,7 @@ namespace CalculateForSea
                         using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
                         {
                             cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K);
+                            cmd.Parameters.AddWithValue("@value", data);
                             cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
@@ -1984,11 +1985,10 @@ namespace CalculateForSea
                             INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
                             VALUES (@dateMonth, @value, @machineNo)
                         ";
-
                         using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
                         {
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K);
+                            cmd.Parameters.AddWithValue("@value", data);
                             cmd.Parameters.AddWithValue("@machineNo", machineid);
                             cmd.ExecuteNonQuery(); // INSERT 실행
                         }
