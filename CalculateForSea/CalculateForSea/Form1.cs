@@ -42,16 +42,22 @@ namespace CalculateForSea
             public bool K_OK { get; set; } = false;
             public bool M_OK { get; set; } = false;
 
+            public bool R_OK { get; set; } = false;
         }
 
         public class DataModel2
         {
-            public double ESG_K { get; set; } = 0; // 누적 ESG (kWh)
-            public double ESG_M { get; set; } = 0; // 누적 ESG (MWh)
+            public double F_ESG_K { get; set; } = 0; // 누적 ESG (kWh)
+            public double F_ESG_M { get; set; } = 0; // 누적 ESG (MWh)
 
+            public double T_ESG_K { get; set; } = 0; // 누적 ESG (kWh)
+            public double T_ESG_M { get; set; } = 0; // 누적 ESG (MWh)
+ 
             public double TRIMING_SHOT { get; set; } = 0; // 누적 ESG (MWh)
-            public bool K_OK { get; set; } = false;
-            public bool M_OK { get; set; } = false;
+            public bool F_K_OK { get; set; } = false;
+            public bool F_M_OK { get; set; } = false;
+            public bool T_K_OK { get; set; } = false;
+            public bool T_M_OK { get; set; } = false;
         }
         #endregion
 
@@ -472,11 +478,37 @@ namespace CalculateForSea
 
                 if (topic.Contains("P_Active_Khours"))
                 {
-                    model2.ESG_K = double.Parse(Encoding.UTF8.GetString(message));
+                    model2.F_ESG_K = double.Parse(Encoding.UTF8.GetString(message));
+                    model2.F_K_OK = true;
+                    SetElec(models[index2], model2, index2);
                 }
                 else if (topic.Contains("P_Active_Mhours"))
                 {
-                    model2.ESG_M = double.Parse(Encoding.UTF8.GetString(message));
+                    model2.F_ESG_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
+                    model2.F_M_OK = true;
+                    SetElec(models[index2], model2, index2);
+                }
+                return;
+            }
+            if (topic.Contains("Trimming"))
+            {
+                DataModel2 model2;
+                Int32.TryParse(topic.Split('_')[1], out int index2);
+                index2 = index2 - 170 > 0 ? index2 - 170 : 0;
+                model2 = models2[index2];
+
+                if (topic.Contains("P_Active_Khours"))
+                {
+                    model2.T_ESG_K = double.Parse(Encoding.UTF8.GetString(message));
+                    model2.T_K_OK = true;
+                    SetElec(models[index2], model2, index2);
+                }
+                else if (topic.Contains("P_Active_Mhours"))
+                {
+                    model2.T_ESG_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
+                    model2.T_M_OK = true;
+                    SetElec(models[index2], model2, index2);
+
                 }
                 return;
             }
@@ -729,245 +761,62 @@ namespace CalculateForSea
             Int32.TryParse(topic.Split('_')[1], out int index);
             index = index - 160 > 0 ? index - 160 : 0;
             model = models[index];
+            DataModel2 model2;
+
+            model2 = models2[index];
+
             if (topic.Contains("P_Active_Khours"))
             {
                 model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
                 model.K_OK = true;
-                if (model.K_OK && model.M_OK)
-                {
-                    using (MySqlConnection conn = new MySqlConnection(ConnectionString))
-                    {
-                        DataSet ds = new DataSet();
-                        conn.Open();
-                        // 다중 SELECT 쿼리
-                        string sql = @"
-                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
-                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
-                ";
-                        int machineid = index != 0 ? index + 20 : 13;
-
-                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                        {
-
-                            // 매개변수 추가
-                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-
-                            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-                            {
-                                adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
-                            }
-                        }
-
-                        // `elec_day`에 데이터가 없으면 INSERT 실행
-                        if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
-                        {
-                            string insertDaySql = @"
-                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateDay, @value, @machineNo)
-                        ";
-                            using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                                cmd.Parameters.AddWithValue("@machineNo", machineid);
-                                cmd.ExecuteNonQuery(); // INSERT 실행
-                            }
-                        }
-
-                        // `elec_month`에 데이터가 없으면 INSERT 실행
-                        if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
-                        {
-                            string insertMonthSql = @"
-                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateMonth, @value, @machineNo)
-                        ";
-
-                            using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                                cmd.Parameters.AddWithValue("@machineNo", machineid);
-                                cmd.ExecuteNonQuery(); // INSERT 실행
-                            }
-                        }
-
-                    }
-                }
-
+                SetElec(model, model2, index);
             }
             else if (topic.Contains("P_Active_Mhours"))
             {
                 model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                 //model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
                 model.M_OK = true;
-                if (model.K_OK && model.M_OK)
-                {
-                    using (MySqlConnection conn = new MySqlConnection(ConnectionString))
-                    {
-                        DataSet ds = new DataSet();
-                        conn.Open();
-                        // 다중 SELECT 쿼리
-                        string sql = @"
-                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
-                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
-                ";
-                        int machineid = index != 0 ? index + 20 : 13;
-
-                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                        {
-
-                            // 매개변수 추가
-                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-
-                            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-                            {
-                                adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
-                            }
-                        }
-
-                        // `elec_day`에 데이터가 없으면 INSERT 실행
-                        if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
-                        {
-                            string insertDaySql = @"
-                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateDay, @value, @machineNo)
-                        ";
-
-                            using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
-                            {
-
-                                cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                                cmd.Parameters.AddWithValue("@machineNo", machineid);
-                                cmd.ExecuteNonQuery(); // INSERT 실행
-                            }
-                        }
-
-                        // `elec_month`에 데이터가 없으면 INSERT 실행
-                        if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
-                        {
-                            string insertMonthSql = @"
-                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateMonth, @value, @machineNo)
-                        ";
-
-                            using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
-                            {
-
-                                cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                                cmd.Parameters.AddWithValue("@machineNo", machineid);
-                                cmd.ExecuteNonQuery(); // INSERT 실행
-                            }
-                        }
-                    }
-                }
-
+                SetElec(model, model2, index);
             }
             else if (topic.Contains("Load_Total_Power_Consumption"))
             {
                 //model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) / 1000;
                 model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
-                if (model.K_OK && model.M_OK)
-                {
-                    using (MySqlConnection conn = new MySqlConnection(ConnectionString))
-                    {
-                        DataSet ds = new DataSet();
-                        conn.Open();
-                        // 다중 SELECT 쿼리
-                        string sql = @"
-                        SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
-                        SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
-                    ";
-                        int machineid = index != 0 ? index + 20 : 13;
+                model.R_OK = true;
+                SetElec(model, model2, index);
+            }
+            else if (topic.Contains("P_Active")) //유효전력
+            {
+                model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+            }
+            else if (topic.Contains("P_ReActive")) //무효전력
+            {
+                model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+            }
+            //else if (topic.Contains("P_Active") && !topic.Contains("Ruled")) //유효전력
+            //{
+            //    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+            //}
+            //else if (topic.Contains("P_ReActive") && !topic.Contains("Ruled")) //무효전력
+            //{
+            //    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
+            //}
+            else if (topic.Contains("Current_Motor_Hour")) // 현재  
+            {
+                model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
+            }
+            else if (topic.Contains("Motor_LIFE_Day")) // 구동 일수
+            {
+                model.MotorLIFEDay = double.Parse(Encoding.UTF8.GetString(message));
+            }
+            else if (topic.Contains("Motor_LIFE_Hour")) // 구동 시간
+            {
+                model.MotorLIFEHour = double.Parse(Encoding.UTF8.GetString(message));
 
-                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                        {
-                            // 매개변수 추가
-
-                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                            cmd.Parameters.AddWithValue("@machineNo", machineid);
-
-                            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-                            {
-                                adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
-                            }
-                        }
-
-                        // `elec_day`에 데이터가 없으면 INSERT 실행
-                        if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
-                        {
-                            string insertDaySql = @"
-                                INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
-                                VALUES (@dateDay, @value, @machineNo)
-                            ";
-
-
-                            using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
-                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                                cmd.Parameters.AddWithValue("@machineNo", machineid);
-                                cmd.ExecuteNonQuery(); // INSERT 실행
-                            }
-                        }
-
-                        // `elec_month`에 데이터가 없으면 INSERT 실행
-                        if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
-                        {
-                            string insertMonthSql = @"
-                                INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
-                                VALUES (@dateMonth, @value, @machineNo)
-                            ";
-
-                            using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
-                                cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI);
-                                cmd.Parameters.AddWithValue("@machineNo", machineid);
-                                cmd.ExecuteNonQuery(); // INSERT 실행
-                            }
-                        }
-                    }
-                }
-                else if (topic.Contains("P_Active")) //유효전력
-                {
-                    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-                }
-                else if (topic.Contains("P_ReActive")) //무효전력
-                {
-                    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-                }
-                //else if (topic.Contains("P_Active") && !topic.Contains("Ruled")) //유효전력
-                //{
-                //    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-                //}
-                //else if (topic.Contains("P_ReActive") && !topic.Contains("Ruled")) //무효전력
-                //{
-                //    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-                //}
-                else if (topic.Contains("Current_Motor_Hour")) // 현재  
-                {
-                    model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
-                }
-                else if (topic.Contains("Motor_LIFE_Day")) // 구동 일수
-                {
-                    model.MotorLIFEDay = double.Parse(Encoding.UTF8.GetString(message));
-                }
-                else if (topic.Contains("Motor_LIFE_Hour")) // 구동 시간
-                {
-                    model.MotorLIFEHour = double.Parse(Encoding.UTF8.GetString(message));
-
-                }
-                else if (topic.Contains("RTU_13_01_Load_THD_Phase_Voltage") || topic.Contains("RTU_13_01_Load_THD_Phase_Current"))
-                {
-                    _mqttClient.Publish($"/event/c/data_collection_digit/{topic.Split('/')[1]}", Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(message)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-                }
+            }
+            else if (topic.Contains("RTU_13_01_Load_THD_Phase_Voltage") || topic.Contains("RTU_13_01_Load_THD_Phase_Current"))
+            {
+                _mqttClient.Publish($"/event/c/data_collection_digit/{topic.Split('/')[1]}", Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(message)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
             }
         }
         private void GET_AC(string topic, byte[] message)
@@ -1610,7 +1459,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_13", Encoding.UTF8.GetBytes($"{(Convert.ToDouble(ds.Tables[i].Rows[0]["WORK_OKCNT"]) / Convert.ToInt32(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0]) * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_13", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_13", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_13", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_13", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_13", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
@@ -1656,7 +1505,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_21", Encoding.UTF8.GetBytes($"{(Convert.ToDouble(ds.Tables[i].Rows[0]["WORK_OKCNT"]) / Convert.ToInt32(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0]) * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_21", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_21", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_21", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_21", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_21", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
@@ -1702,7 +1551,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_22", Encoding.UTF8.GetBytes($"{(Convert.ToDouble(ds.Tables[i].Rows[0]["WORK_OKCNT"]) / Convert.ToInt32(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0]) * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_22", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_22", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_22", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_22", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
@@ -1748,7 +1597,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_23", Encoding.UTF8.GetBytes($"{(Convert.ToDouble(ds.Tables[i].Rows[0]["WORK_OKCNT"]) / Convert.ToInt32(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0]) * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_23", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_23", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_23", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_23", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_23", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
@@ -1794,7 +1643,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_24", Encoding.UTF8.GetBytes($"{(Convert.ToDouble(ds.Tables[i].Rows[0]["WORK_OKCNT"]) / Convert.ToInt32(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0]) * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_24", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_24", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_24", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_24", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_24", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
@@ -1841,7 +1690,7 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_25", Encoding.UTF8.GetBytes($"{(Convert.ToDouble(ds.Tables[i].Rows[0]["WORK_OKCNT"]) / Convert.ToInt32(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0]) * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_25", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_25", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_25", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].ESG_K + models2[i].ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_25", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_25", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
                 else
@@ -2083,5 +1932,70 @@ namespace CalculateForSea
             //Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/AC_{machines[i]}_D3706", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
 
         }
+        private void SetElec(DataModel model, DataModel2 model2, int index)
+        {
+            if (model.K_OK && model.M_OK &&(index == 0 && model.R_OK) || (index != 0 && model2.T_K_OK && model2.T_M_OK && model2.F_K_OK && model2.F_M_OK))
+            { 
+                using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+                {
+                    DataSet ds = new DataSet();
+                    conn.Open();
+                    // 다중 SELECT 쿼리
+                    string sql = @"
+                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
+                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
+                ";
+                    int machineid = index != 0 ? index + 20 : 13;
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+
+                        // 매개변수 추가
+                        cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                        cmd.Parameters.AddWithValue("@machineNo", machineid);
+
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
+                        }
+                    }
+
+                    // `elec_day`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
+                    {
+                        string insertDaySql = @"
+                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
+                            VALUES (@dateDay, @value, @machineNo)
+                        ";
+                        using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+
+                    // `elec_month`에 데이터가 없으면 INSERT 실행
+                    if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
+                    {
+                        string insertMonthSql = @"
+                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
+                            VALUES (@dateMonth, @value, @machineNo)
+                        ";
+
+                        using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
+                            cmd.Parameters.AddWithValue("@value", model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K);
+                            cmd.Parameters.AddWithValue("@machineNo", machineid);
+                            cmd.ExecuteNonQuery(); // INSERT 실행
+                        }
+                    }
+                }
+            }
+        }
     }
+  
 }
