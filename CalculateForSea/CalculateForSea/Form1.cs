@@ -129,6 +129,7 @@ namespace CalculateForSea
             StartPlcMonitoring(LSClient4);
             StartPlcMonitoring(LSClient5);
         }
+
         public void GetPlcAsync(string address, FEnetClient LSClient)
         {
 
@@ -1868,10 +1869,6 @@ namespace CalculateForSea
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW817", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.오염도A).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW818", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.오염도B).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW819", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.탱크진공).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW186", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.금형내부).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW187", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.오염도A).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW188", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.오염도B).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW189", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.탱크진공).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
        }
 
         private void Get_DCM(int i)
@@ -1900,10 +1897,6 @@ namespace CalculateForSea
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW817", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW818", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW819", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW186", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW187", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW188", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW189", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
        
         }
         private void SetElec(DataModel model, DataModel2 model2, int index)
