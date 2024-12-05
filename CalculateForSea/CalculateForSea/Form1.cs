@@ -242,29 +242,165 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 #endregion
 
 
                 #region [Furnace]
-
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 #endregion
 
                 #region [Trimming]
-
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_171_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_172_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_173_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_174_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Furnace_175_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 #endregion
 
                 #region [LS]
+                _mqttClient.Subscribe(new string[] { "DPS/LS_21_MX830" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_21_DW816" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_21_DW817" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_21_DW818" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_21_DW819" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_22_MX830" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_22_DW816" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_22_DW817" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_22_DW818" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_22_DW819" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_23_MX830" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_23_DW816" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_23_DW817" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_23_DW818" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_23_DW819" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_24_MX830" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_24_DW816" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_24_DW817" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_24_DW818" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_24_DW819" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_25_MX830" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_25_DW816" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_25_DW817" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_25_DW818" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/LS_25_DW819" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
                 #endregion
 
                 #region [AC]
-
+                _mqttClient.Subscribe(new string[] { "DPS/AC_21_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_21_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_21_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_22_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_22_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_22_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_23_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_23_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_23_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_24_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_24_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/AC_24_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+               
                 #endregion
 
                 #region [ACT]
@@ -829,7 +965,7 @@ namespace CalculateForSea
             //{
             //    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
             //}
-            else if (topic.Contains("Current_Motor_Hour")) // 현재 구동시간
+            else if (topic.Contains("Current_Motor_Hour")) // 현재  
             {
                 model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
             }
@@ -1224,10 +1360,12 @@ namespace CalculateForSea
                                     }
 
                                 }
+
                                 if ((models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M) - models[i].NowShotKW > 0)
                                 {
                                     models[i].NowShotKW = (models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M) - models[i].NowShotKW;
                                 }
+
                                 int machine_id;
                                 //여기에 
                                 switch (i)
