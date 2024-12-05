@@ -218,7 +218,7 @@ namespace CalculateForSea
                 //    LSClient.Close();
                 //}
             }
-            Task.Delay(30);
+           
         }
 
         public void StartPlcMonitoring(FEnetClient LSClient)
@@ -228,6 +228,7 @@ namespace CalculateForSea
                 while (true) // 반복적으로 실행
                 {
                     GetPlcAsync("%MX830", LSClient);
+                    Task.Delay(30);
                 }
             });
         }
