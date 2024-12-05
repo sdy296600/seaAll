@@ -1216,7 +1216,7 @@ namespace CoFAS.NEW.MES.POP
                             }
                             if (rowdata["Category"].ToString().Contains("ESG_P_Active_Khours"))
                             {
-                                START_POWER = (Convert.ToDouble(rowdata["VALUE"].ToString()) * 0.001) .ToString();
+                                START_POWER = (Convert.ToDouble(rowdata["VALUE"].ToString())) .ToString();
                             }
                         }
                     }
@@ -1243,13 +1243,13 @@ namespace CoFAS.NEW.MES.POP
 								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3704' THEN VALUE
 								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3705' THEN VALUE
 								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3706' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Khours' THEN VALUE * 0.001
-								            WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Mhours' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Khours' THEN VALUE * 0.001
-								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Mhours' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Khours' THEN VALUE * 0.001
-								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Mhours' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'ESG_P_Active_Khours' THEN VALUE * 0.001
+							                WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Khours' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Mhours' THEN VALUE * 1000
+								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Khours' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Mhours' THEN VALUE * 1000
+								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Khours' THEN VALUE
+								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Mhours' THEN VALUE * 1000
+								            WHEN T2.CATEGORY LIKE 'ESG_P_Active_Khours' THEN VALUE
 								            ELSE T2.VALUE
 								        END
 								    ) AS TOTAL_VALUE,
