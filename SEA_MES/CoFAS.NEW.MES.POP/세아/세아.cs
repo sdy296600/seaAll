@@ -1281,7 +1281,6 @@ namespace CoFAS.NEW.MES.POP
                                OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Mhours'
                                OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Khours'
                                OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Mhours'
-                               OR CATEGORY LIKE 'ESG_P_Active_Khours'
                                 GROUP BY D.CATEGORY) AS T2
                                 GROUP BY T2.CATEGORY) AS RESULT_TABLE
                               	GROUP BY RESULT_TABLE.CATEGORY
