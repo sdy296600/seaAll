@@ -177,12 +177,14 @@ namespace CalculateForSea
 
                     TcpChannel ch = LSClient.Channel as TcpChannel;
                     int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1]);
-                    gridModels_DCM[i].금형내부 = datas[1];
-                    gridModels_DCM[i].오염도A = datas[2];
-                    gridModels_DCM[i].오염도B = datas[3];
-                    gridModels_DCM[i].탱크진공 = datas[4];
+                    lock (gridModels_DCM[i]) 
+                    {
+                        gridModels_DCM[i].금형내부 = datas[1];
+                        gridModels_DCM[i].오염도A = datas[2];
+                        gridModels_DCM[i].오염도B = datas[3];
+                        gridModels_DCM[i].탱크진공 = datas[4];
 
-
+                    }
                 }
 
                 //}
@@ -216,6 +218,7 @@ namespace CalculateForSea
                 //    LSClient.Close();
                 //}
             }
+            Task.Delay(30);
         }
 
         public void StartPlcMonitoring(FEnetClient LSClient)
@@ -225,7 +228,6 @@ namespace CalculateForSea
                 while (true) // 반복적으로 실행
                 {
                     GetPlcAsync("%MX830", LSClient);
-                    Task.Delay(3000); // 1초 대기 후 반복 (주기적인 실행)
                 }
             });
         }
