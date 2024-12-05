@@ -741,42 +741,6 @@ namespace CalculateForSea
                     return;
             }
         }
-        //    if (topic.Contains("MX"))
-        //    {
-        //        gridModels_DCM[index2].트리거 = Encoding.UTF8.GetString(message);
-        //    }
-        //    else if (topic.Contains("DW"))
-        //    {
-        //        if (gridModels_DCM[index2].트리거 == "1")
-        //        {
-
-        //            if (topic.Contains("DW816") || topic.Contains("DW186"))
-        //            {
-        //                gridModels_DCM[index2].금형내부 = Encoding.UTF8.GetString(message);
-        //                dm_alram_status_update(gridModels_DCM[index2].금형내부, topic.Split('/')[1]);
-
-        //            }
-        //            if (topic.Contains("DW817") || topic.Contains("DW187"))
-        //            {
-        //                gridModels_DCM[index2].오염도A = Encoding.UTF8.GetString(message);
-        //                dm_alram_status_update(gridModels_DCM[index2].오염도A, topic.Split('/')[1]);
-
-        //            }
-        //            if (topic.Contains("DW818") || topic.Contains("DW188"))
-        //            {
-        //                gridModels_DCM[index2].오염도B = Encoding.UTF8.GetString(message);
-        //                dm_alram_status_update(gridModels_DCM[index2].오염도B, topic.Split('/')[1]);
-
-        //            }
-        //            if (topic.Contains("DW819") || topic.Contains("DW189"))
-        //            {
-        //                gridModels_DCM[index2].탱크진공 = Encoding.UTF8.GetString(message);
-        //                dm_alram_status_update(gridModels_DCM[index2].탱크진공, topic.Split('/')[1]);
-
-        //            }
-        //        }
-        //    }
-        //}
 
         private void GET_DCM(string topic, byte[] message)
         {
@@ -1037,10 +1001,7 @@ namespace CalculateForSea
             unitPower = model.NowShotKW;
             unitAmount = model.NowShotKW* electricityRate;
 
-            if (index < 13 )
-            {
-
-            }
+     
             DataModel2 model2 = models2[0];
             allActivePw = model.Active_Power + model2.tmActive_Power + model2.FnActive_Power; // 현재 사용전력
 
@@ -1061,11 +1022,11 @@ namespace CalculateForSea
                 }
             }
             //유효적산전력 (누적전력량) 계산      * 유효 전력 적산 계산예시 - KWh 표현 ( 1(MWh) x 1000 + 300(KWh)) = 1300 KWh 
-            int Cumulative_Power = 0;
-            if (ds2.Tables[0].Rows.Count > 0) 
+            double Cumulative_Power = 0;
+            Cumulative_Power = 0;
+            if (ds2.Tables[0].Rows.Count > 0)
             {
-                Cumulative_Power = (int)Convert.ToDouble(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString())
-                   - (int)Convert.ToDouble(ds2.Tables[0].Rows[0]["START_POWER"].ToString());
+                Cumulative_Power = Convert.ToDouble(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) - Convert.ToDouble(ds2.Tables[0].Rows[0]["START_POWER"].ToString());
             }
 
             if (machineId == 0)
