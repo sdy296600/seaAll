@@ -16,6 +16,9 @@ using System.Windows.Media.Media3D;
 using System.Data.SqlTypes;
 using System.Reflection;
 
+using VagabondK.Protocols.LSElectric.FEnet;
+using VagabondK.Protocols.Channels;
+
 namespace CalculateForSea
 {
     public partial class Form1 : Form
@@ -113,8 +116,117 @@ namespace CalculateForSea
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
+            FEnetClient LSClient = new FEnetClient(new TcpChannel("172.1.100.141", 2004));
+            FEnetClient LSClient2 = new FEnetClient(new TcpChannel("172.1.100.142", 2004));
+            FEnetClient LSClient3 = new FEnetClient(new TcpChannel("172.1.100.143", 2004));
+            FEnetClient LSClient4 = new FEnetClient(new TcpChannel("172.1.100.144", 2004));
+            FEnetClient LSClient5 = new FEnetClient(new TcpChannel("172.1.100.145", 2004));
+            StartPlcMonitoring(LSClient);
+            StartPlcMonitoring(LSClient2);
+            StartPlcMonitoring(LSClient3);
+            StartPlcMonitoring(LSClient4);
+            StartPlcMonitoring(LSClient5);
+        }
+        public void GetPlcAsync(string address, FEnetClient LSClient)
+        {
+
+            string data = "";
+            try
+            {
+                var cts = new CancellationTokenSource();
+                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
+
+
+                // Open 작업을 별도 실행
+                //var openTask = Task.Run(async () => await LSClient.Read(), cts.Token);
+
+                // Open과 타임아웃을 동시에 실행
+                //var completedTask = await Task.WhenAny(openTask, timeoutTask);
+                //if (completedTask == timeoutTask)
+                //{
+                //    cts.Cancel(); // 타임아웃 발생 시 작업 취소
+                //    throw new TimeoutException("PLC 연결이 2초 내에 완료되지 않았습니다.");
+                //}
+
+                cts.Cancel(); // Open이 완료되었으면 타임아웃 취소
+
+                //if (LSClient.Connected)
+                //{
+                // 비동기 메서드 호출
+                //byte[] results = await LSClient.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 442, 1);
+                //if (results != null && results.Length >= 2) // 워드 값은 2바이트
+                //{
+                // Little-Endian 방식으로 변환
+
+
+                List<string> datas = new List<string>();
+                foreach (var item in LSClient.Read(address))
+                {
+                    datas.Add(item.Value.WordValue.ToString());
+                }
+                if (datas[0] == "1")
+                {
+                    var item = LSClient.Read("%DW816", 4);
+                    foreach (var readItem in item)
+                    {
+                        // byte를 문자열로 변환
+                        datas.Add(readItem.ToString());
+                    }
+
+                    TcpChannel ch = LSClient.Channel as TcpChannel;
+                    int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1]);
+                    gridModels_DCM[i].금형내부 = datas[1];
+                    gridModels_DCM[i].오염도A = datas[2];
+                    gridModels_DCM[i].오염도B = datas[3];
+                    gridModels_DCM[i].탱크진공 = datas[4];
+
+
+                }
+
+                //}
+                //string connectionString = "User Id=BZUSER;Password=BZUSER123;Data Source=211.38.193.145:1521/ECMDB1;";
+
+
+                //DataBase_Class db = new DataBase_Class(new Oracle_DB(connectionString));
+                //string dateTime = DateTime.Now.ToString("yyyy-MM-dd");
+                //DataSet ds = db.GetAllData($"SELECT * FROM PLC_DATA WHERE DATETIME = '{dateTime}'");
+                //if (ds.Tables[0].Rows.Count > 0)
+                //{
+                //    db.ExecuteData($"UPDATE PLC_DATA SET VALUE = '{data.ToString()}' WHERE DATETIME ='{dateTime}'");
+                //}
+                //else
+                //{
+                //    string sql = $"INSERT INTO PLC_DATA(DATETIME, VALUE) VALUES('{dateTime}', '{data.ToString()}')";
+                //    db.ExecuteData(sql);
+                //}
+                //}
+            }
+            catch (TimeoutException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                //if (LSClient.Connected)
+                //{
+                //    LSClient.Close();
+                //}
+            }
         }
 
+        public void StartPlcMonitoring(FEnetClient LSClient)
+        {
+            Task.Run(() =>
+            {
+                while (true) // 반복적으로 실행
+                {
+                    GetPlcAsync("%MX830", LSClient);
+                    Task.Delay(3000); // 1초 대기 후 반복 (주기적인 실행)
+                }
+            });
+        }
         private void Init()
         {
             try
@@ -461,7 +573,7 @@ namespace CalculateForSea
             }
             if (topic.Contains("LS"))
             {
-                GET_LS(topic, message);
+                //GET_LS(topic, message);
                 return;
             }
             if (topic.Contains("AC"))
@@ -518,69 +630,69 @@ namespace CalculateForSea
                 return;
             }
         }
-        private void GET_LS(string topic, byte[] message)
-        {
-            int index2 = 0;
-            switch (topic.Split('_')[1])
-            {
-                case "13":
-                    index2 = 0;
-                    break;
-                case "21":
-                    index2 = 1;
-                    break;
-                case "22":
-                    index2 = 2;
-                    break;
-                case "23":
-                    index2 = 3;
-                    break;
-                case "24":
-                    index2 = 4;
-                    break;
-                case "25":
-                    index2 = 5;
-                    break;
-                default:
-                    return;
-            }
+        //private void GET_LS(string topic, byte[] message)
+        //{
+        //    int index2 = 0;
+        //    switch (topic.Split('_')[1])
+        //    {
+        //        case "13":
+        //            index2 = 0;
+        //            break;
+        //        case "21":
+        //            index2 = 1;
+        //            break;
+        //        case "22":
+        //            index2 = 2;
+        //            break;
+        //        case "23":
+        //            index2 = 3;
+        //            break;
+        //        case "24":
+        //            index2 = 4;
+        //            break;
+        //        case "25":
+        //            index2 = 5;
+        //            break;
+        //        default:
+        //            return;
+        //    }
 
-            if (topic.Contains("MX"))
-            {
-                gridModels_DCM[index2].트리거 = Encoding.UTF8.GetString(message);
-            }
-            else if (topic.Contains("DW"))
-            {
-                if (gridModels_DCM[index2].트리거 == "1")
-                {
+        //    if (topic.Contains("MX"))
+        //    {
+        //        gridModels_DCM[index2].트리거 = Encoding.UTF8.GetString(message);
+        //    }
+        //    else if (topic.Contains("DW"))
+        //    {
+        //        if (gridModels_DCM[index2].트리거 == "1")
+        //        {
 
-                    if (topic.Contains("DW816") || topic.Contains("DW186"))
-                    {
-                        gridModels_DCM[index2].금형내부 = Encoding.UTF8.GetString(message);
-                        dm_alram_status_update(gridModels_DCM[index2].금형내부, topic.Split('/')[1]);
+        //            if (topic.Contains("DW816") || topic.Contains("DW186"))
+        //            {
+        //                gridModels_DCM[index2].금형내부 = Encoding.UTF8.GetString(message);
+        //                dm_alram_status_update(gridModels_DCM[index2].금형내부, topic.Split('/')[1]);
 
-                    }
-                    if (topic.Contains("DW817") || topic.Contains("DW187"))
-                    {
-                        gridModels_DCM[index2].오염도A = Encoding.UTF8.GetString(message);
-                        dm_alram_status_update(gridModels_DCM[index2].오염도A, topic.Split('/')[1]);
+        //            }
+        //            if (topic.Contains("DW817") || topic.Contains("DW187"))
+        //            {
+        //                gridModels_DCM[index2].오염도A = Encoding.UTF8.GetString(message);
+        //                dm_alram_status_update(gridModels_DCM[index2].오염도A, topic.Split('/')[1]);
 
-                    }
-                    if (topic.Contains("DW818") || topic.Contains("DW188"))
-                    {
-                        gridModels_DCM[index2].오염도B = Encoding.UTF8.GetString(message);
-                        dm_alram_status_update(gridModels_DCM[index2].오염도B, topic.Split('/')[1]);
+        //            }
+        //            if (topic.Contains("DW818") || topic.Contains("DW188"))
+        //            {
+        //                gridModels_DCM[index2].오염도B = Encoding.UTF8.GetString(message);
+        //                dm_alram_status_update(gridModels_DCM[index2].오염도B, topic.Split('/')[1]);
 
-                    }
-                    if (topic.Contains("DW819") || topic.Contains("DW189"))
-                    {
-                        gridModels_DCM[index2].탱크진공 = Encoding.UTF8.GetString(message);
-                        dm_alram_status_update(gridModels_DCM[index2].탱크진공, topic.Split('/')[1]);
+        //            }
+        //            if (topic.Contains("DW819") || topic.Contains("DW189"))
+        //            {
+        //                gridModels_DCM[index2].탱크진공 = Encoding.UTF8.GetString(message);
+        //                dm_alram_status_update(gridModels_DCM[index2].탱크진공, topic.Split('/')[1]);
 
-                    }
-                }
-            }
-        }
+        //            }
+        //        }
+        //    }
+        //}
 
         private void GET_DCM(string topic, byte[] message)
         {
