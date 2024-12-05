@@ -774,13 +774,11 @@ namespace CalculateForSea
             else if (topic.Contains("P_Active_Mhours"))
             {
                 model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
-                //model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message));
                 model.M_OK = true;
                 SetElec(model, model2, index);
             }
             else if (topic.Contains("Load_Total_Power_Consumption"))
             {
-                //model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message)) / 1000;
                 model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
                 model.R_OK = true;
                 SetElec(model, model2, index);
@@ -793,14 +791,6 @@ namespace CalculateForSea
             {
                 model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
             }
-            //else if (topic.Contains("P_Active") && !topic.Contains("Ruled")) //유효전력
-            //{
-            //    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            //}
-            //else if (topic.Contains("P_ReActive") && !topic.Contains("Ruled")) //무효전력
-            //{
-            //    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            //}
             else if (topic.Contains("Current_Motor_Hour")) // 현재  
             {
                 model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
@@ -813,10 +803,6 @@ namespace CalculateForSea
             {
                 model.MotorLIFEHour = double.Parse(Encoding.UTF8.GetString(message));
 
-            }
-            else if (topic.Contains("RTU_13_01_Load_THD_Phase_Voltage") || topic.Contains("RTU_13_01_Load_THD_Phase_Current"))
-            {
-                _mqttClient.Publish($"/event/c/data_collection_digit/{topic.Split('/')[1]}", Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(message)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
             }
         }
         private void GET_AC(string topic, byte[] message)
@@ -926,22 +912,8 @@ namespace CalculateForSea
             double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
 
             //// 역률(PF)을 계산합니다.
-            double powerFactor = P / S;
+            //double powerFactor = P / S;
 
-            //// 역률(PF)을 계산합니다.
-            //double MH = model.NowMotorHour;
-
-            //WriteLog($"{model.NowShotKW}");
-
-
-            // 사용량 계산
-            //double monthConversion = P * 30;
-            //var dailyPower = monthConversion / DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            //double unitPower = model.Totalcnt != 0 ? model.NowShotKW / model.Totalcnt : 0;
-;            // 전기요금 계산 (한국전력기준 24년 산업용 전기 단가 153.7원)
-            //double dailyAmount = dailyPower * electricityRate;
-            //double monthlyAmount = monthConversion * electricityRate;
-            //double unitAmount = unitPower * electricityRate;
 
             if (machineId == 0)
              {
@@ -963,8 +935,8 @@ namespace CalculateForSea
                 // 역률  Casting_162_P_Factor_2
                 // 누적 사용량  Casting_162_Cumulative_Power
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Cumulative_Power", Encoding.UTF8.GetBytes(Cumulative_Power.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-                _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_P_Factor_2", Encoding.UTF8.GetBytes(powerFactor.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-                _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_APPARENT_POWER", Encoding.UTF8.GetBytes(S.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                //_mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_P_Factor_2", Encoding.UTF8.GetBytes(powerFactor.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                //_mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_APPARENT_POWER", Encoding.UTF8.GetBytes(S.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
 
 
                 // MQTT로 전송
