@@ -41,7 +41,6 @@ namespace CalculateForSea
             public string ID { get; set; } = "";
             public bool K_OK { get; set; } = false;
             public bool M_OK { get; set; } = false;
-
             public bool R_OK { get; set; } = false;
         }
 
@@ -52,13 +51,16 @@ namespace CalculateForSea
 
             public double T_ESG_K { get; set; } = 0; // 누적 ESG (kWh)
             public double T_ESG_M { get; set; } = 0; // 누적 ESG (MWh)
- 
+            public double FnActive_Power { get; set; } = 0; // 유효전력
+            public double tmActive_Power { get; set; } = 0; // 유효전력
+
             public double TRIMING_SHOT { get; set; } = 0; // 누적 ESG (MWh)
             public bool F_K_OK { get; set; } = false;
             public bool F_M_OK { get; set; } = false;
             public bool T_K_OK { get; set; } = false;
             public bool T_M_OK { get; set; } = false;
         }
+
         #endregion
 
         #region 전역 변수
@@ -253,9 +255,9 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });// 현재  
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });// 구동 일수
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });// 구동 시간
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -440,10 +442,9 @@ namespace CalculateForSea
                 ProcessData(e.Topic, e.Message);
                 string topic = e.Topic.Split('/')[1];
                 string message = Encoding.UTF8.GetString(e.Message);
+
                 if (!topic.Contains("_TAG_") && !topic.Contains("_DW")) 
-                {
                     _mqttClient.Publish($"/event/c/data_collection_digit/{topic}", Encoding.UTF8.GetBytes(message), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-                }
 
             }
             catch (Exception ex)
@@ -454,6 +455,13 @@ namespace CalculateForSea
 
         private void ProcessData(string topic, byte[] message)
         {
+
+            DataModel model;
+            DataModel2 model2;
+            
+            Int32.TryParse(topic.Split('_')[1], out int index);
+            Int32.TryParse(topic.Split('_')[1], out int index2);
+
             if (topic.Contains("DCM_"))
             {
                 GET_DCM(topic, message);
@@ -464,15 +472,50 @@ namespace CalculateForSea
                 GET_LS(topic, message);
                 return;
             }
+
             if (topic.Contains("AC"))
             {
                 GET_AC(topic, message);
                 return;
             }
+
+            if (topic.Contains("RTU_13") || topic.Contains("Casting_"))
+            {
+                index = index - 160 > 0 ? index - 160 : 0;
+                model = models[index];
+                model2 = models2[index];
+
+                if (topic.Contains("P_Active_Khours"))
+                {
+                    model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
+                    model.K_OK = true;
+                    SetElec(model, model2, index);
+                }
+                else if (topic.Contains("P_Active_Mhours"))
+                {
+                    model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
+                    model.M_OK = true;
+                    SetElec(model, model2, index);
+                }
+                else if (topic.Contains("Load_Total_Power_Consumption"))
+                {
+                    model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
+                    model.R_OK = true;
+                    SetElec(model, model2, index);
+                }
+                else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
+                {
+                    model.Active_Power = double.Parse(Encoding.UTF8.GetString(message));
+                }
+                else if (topic.Contains("P_ReActive_Ruled")) //무효전력 - Unit 0.01
+                {
+                    model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message));
+                }
+                return;
+            }
+
             if (topic.Contains("Furnace"))
             {
-                DataModel2 model2;
-                Int32.TryParse(topic.Split('_')[1], out int index2);
                 index2 = index2 - 150 > 0 ? index2 - 150 : 0;
                 model2 = models2[index2];
 
@@ -488,12 +531,16 @@ namespace CalculateForSea
                     model2.F_M_OK = true;
                     SetElec(models[index2], model2, index2);
                 }
+                else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
+                {
+                    model2.FnActive_Power = double.Parse(Encoding.UTF8.GetString(message));
+                }
+
                 return;
             }
+
             if (topic.Contains("Trimming"))
             {
-                DataModel2 model2;
-                Int32.TryParse(topic.Split('_')[1], out int index2);
                 index2 = index2 - 170 > 0 ? index2 - 170 : 0;
                 model2 = models2[index2];
 
@@ -508,16 +555,16 @@ namespace CalculateForSea
                     model2.T_ESG_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                     model2.T_M_OK = true;
                     SetElec(models[index2], model2, index2);
-
                 }
-                return;
-            }
-            if (topic.Contains("RTU_13") || topic.Contains("Casting_"))
-            {
-                Get_MQTT(topic, message);
+                else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
+                {
+                    model2.FnActive_Power = double.Parse(Encoding.UTF8.GetString(message));
+                }
+
                 return;
             }
         }
+
         private void GET_LS(string topic, byte[] message)
         {
             int index2 = 0;
@@ -731,80 +778,7 @@ namespace CalculateForSea
                
             }
         }
-        private void dm_alram_status_update(object data ,string TAG) 
-        {
-            try
-            {
-                string mysqlString = $"UPDATE dm_alarm_status set collection_value = {data.ToString()} where resource_code = '{TAG}'";
-                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                using (conn2)
-                {
-                    conn2.Open();
 
-                    MySqlCommand cmd = new MySqlCommand();
-                    cmd.CommandText = mysqlString;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Connection = conn2;
-                    cmd.ExecuteNonQuery();
-                }
-
-            } catch (Exception e)
-            {
-                WriteLog($"Error: {e.Message}");
-            }
-            
-        }
-
-        private void Get_MQTT(string topic, byte[] message)
-        {
-            DataModel model;
-            Int32.TryParse(topic.Split('_')[1], out int index);
-            index = index - 160 > 0 ? index - 160 : 0;
-            model = models[index];
-            DataModel2 model2;
-
-            model2 = models2[index];
-
-            if (topic.Contains("P_Active_Khours"))
-            {
-                model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
-                model.K_OK = true;
-                SetElec(model, model2, index);
-            }
-            else if (topic.Contains("P_Active_Mhours"))
-            {
-                model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
-                model.M_OK = true;
-                SetElec(model, model2, index);
-            }
-            else if (topic.Contains("Load_Total_Power_Consumption"))
-            {
-                model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
-                model.R_OK = true;
-                SetElec(model, model2, index);
-            }
-            else if (topic.Contains("P_Active")) //유효전력
-            {
-                model.Active_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            }
-            else if (topic.Contains("P_ReActive")) //무효전력
-            {
-                model.ReActive_Power = double.Parse(Encoding.UTF8.GetString(message)) * 0.01; //Unit값 곱하면 현재 측정값
-            }
-            else if (topic.Contains("Current_Motor_Hour")) // 현재  
-            {
-                model.NowMotorHour = double.Parse(Encoding.UTF8.GetString(message));
-            }
-            else if (topic.Contains("Motor_LIFE_Day")) // 구동 일수
-            {
-                model.MotorLIFEDay = double.Parse(Encoding.UTF8.GetString(message));
-            }
-            else if (topic.Contains("Motor_LIFE_Hour")) // 구동 시간
-            {
-                model.MotorLIFEHour = double.Parse(Encoding.UTF8.GetString(message));
-
-            }
-        }
         private void GET_AC(string topic, byte[] message)
         {
             if (topic.Contains("3706"))
@@ -838,26 +812,57 @@ namespace CalculateForSea
             }
         }
 
+        private void dm_alram_status_update(object data, string TAG)
+        {
+            try
+            {
+                string mysqlString = $"UPDATE dm_alarm_status SET collection_value = {data.ToString()} where resource_code = '{TAG}'";
+                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                using (conn2)
+                {
+                    conn2.Open();
+
+                    MySqlCommand cmd = new MySqlCommand();
+                    cmd.CommandText = mysqlString;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = conn2;
+                    cmd.ExecuteNonQuery();
+                }
+
+            }
+            catch (Exception e)
+            {
+                WriteLog($"Error: {e.Message}");
+            }
+
+        }
+
+
         private void CalculateAndPublishPowerConsumption(DataModel model, int machineId)
         {
+
+            int index = machineId != 0 ? machineId + 20:13;
+
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             DataSet ds = new DataSet();
+
             using (conn)
             {
                 conn.Open();
+
                 // work_performance조회 ( start_time = end_time 인것)
                 MySqlCommand cmd = new MySqlCommand();
-                int index = machineId != 0 ? machineId + 20 : 13;
 
-                cmd.CommandText = $@"SELECT * FROM ELEC_DAY WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")}' and MACHINE_ID ='{index}';
-                                    SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")}' and MACHINE_ID ='{index}';
-                            ";
+                cmd.CommandText = $@"SELECT * FROM ELEC_DAY   WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM-dd")}' and MACHINE_ID ='{index}';
+                                     SELECT * FROM ELEC_MONTH WHERE DATETIME = '{DateTime.Now.ToString("yyyy-MM")}'    and MACHINE_ID ='{index}';
+                                    ";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = conn;
                 MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                 adapter.Fill(ds);
             }
-            double electricityRate = 153.7; // KRW per kWh 
+
+            double electricityRate = 153.7; // KRW per kWh (단가)
 
             double dailyPower = 0;
             double dailyAmount = 0;
@@ -866,22 +871,29 @@ namespace CalculateForSea
             double unitAmount = 0;
             double unitPower = 0;
 
+            double allActivePw = 0;
+
             if (ds.Tables[0].Rows.Count > 0) 
             {
                 dailyPower = model.NowShotKW - Convert.ToDouble(ds.Tables[0].Rows[0]["VALUE"].ToString());
                 dailyAmount = dailyPower * electricityRate;
             }
+
             if (ds.Tables[1].Rows.Count > 0)
             {
                 dailyPower = model.NowShotKW - Convert.ToDouble(ds.Tables[1].Rows[0]["VALUE"].ToString());
                 dailyAmount = dailyPower * electricityRate;
             }
+
             unitPower = model.NowShotKW;
             unitAmount = model.NowShotKW* electricityRate;
 
-            ////누적전력량 계산   * 단위 -  0.01KW / 0.01KVAR
-            double P = model.Active_Power; //현재 사용전력
-            double Q = model.ReActive_Power; // 무효전력
+            if (index < 13 )
+            {
+
+            }
+            DataModel2 model2 = models2[0];
+            allActivePw = model.Active_Power + model2.tmActive_Power + model2.FnActive_Power; // 현재 사용전력
 
             DataSet ds2 = new DataSet();
 
@@ -899,26 +911,17 @@ namespace CalculateForSea
                     }
                 }
             }
-            //// 적산전력 계산(유효)
-            double Cumulative_Power = 0;
+            //유효적산전력 (누적전력량) 계산      * 유효 전력 적산 계산예시 - KWh 표현 ( 1(MWh) x 1000 + 300(KWh)) = 1300 KWh 
+            int Cumulative_Power = 0;
             if (ds2.Tables[0].Rows.Count > 0) 
             {
-                Cumulative_Power = Convert.ToDouble(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString())- Convert.ToDouble(ds2.Tables[0].Rows[0]["START_POWER"].ToString());
-
+                Cumulative_Power = (int)Convert.ToDouble(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString())
+                   - (int)Convert.ToDouble(ds2.Tables[0].Rows[0]["START_POWER"].ToString());
             }
-
-
-            //// 피상전력(S)을 계산합니다.
-            double S = Math.Sqrt(Math.Pow(P, 2) + Math.Pow(Q, 2));
-
-            //// 역률(PF)을 계산합니다.
-            //double powerFactor = P / S;
-
 
             if (machineId == 0)
              {
                 // MQTT로 전송
-
                 _mqttClient.Publish($"/event/c/data_collection_digit/RTU_13_01_Month_Power_Amount", Encoding.UTF8.GetBytes(monthlyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/RTU_13_01_Load_Power_Consumption_Today_Conversion", Encoding.UTF8.GetBytes(monthConversion.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/RTU_13_01_Daily_Power_Amount", Encoding.UTF8.GetBytes(dailyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
@@ -931,15 +934,10 @@ namespace CalculateForSea
             }
             else
             {
-                // 피상전력 Casting_162_APPARENT_POWER
-                // 역률  Casting_162_P_Factor_2
                 // 누적 사용량  Casting_162_Cumulative_Power
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Cumulative_Power", Encoding.UTF8.GetBytes(Cumulative_Power.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-                //_mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_P_Factor_2", Encoding.UTF8.GetBytes(powerFactor.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-                //_mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_APPARENT_POWER", Encoding.UTF8.GetBytes(S.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
-
-
-                // MQTT로 전송
+                // 모든 전력량계 현재사용량
+                _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_All_Active_Power", Encoding.UTF8.GetBytes(allActivePw.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Month_Power_Amount", Encoding.UTF8.GetBytes(monthlyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Load_Power_Consumption_Today_Conversion", Encoding.UTF8.GetBytes(monthConversion.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Daily_Power_Amount", Encoding.UTF8.GetBytes(dailyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
@@ -969,6 +967,7 @@ namespace CalculateForSea
                     MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     adapter.Fill(ds);
                 }
+
                 List<Task> tasks = new List<Task>();
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
