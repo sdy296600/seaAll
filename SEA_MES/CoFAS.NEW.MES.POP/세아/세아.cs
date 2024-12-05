@@ -1707,6 +1707,7 @@ namespace CoFAS.NEW.MES.POP
                 CustomMsg.ShowMessage("등록된 중량이 없습니다.");
             }
         }
+
         private void btn_중량검사_Click(object sender, EventArgs e)
         {
             // 필수 값 체크 (_p품번, _pLOT, _p실적 모두 비어있어야 실행)
