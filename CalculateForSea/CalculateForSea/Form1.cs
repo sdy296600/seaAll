@@ -703,7 +703,7 @@ namespace CalculateForSea
                 default:
                     return;
             }
-
+        }
         //    if (topic.Contains("MX"))
         //    {
         //        gridModels_DCM[index2].트리거 = Encoding.UTF8.GetString(message);
