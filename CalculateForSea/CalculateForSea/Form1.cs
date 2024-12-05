@@ -707,7 +707,7 @@ namespace CalculateForSea
                 }
                 else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
                 {
-                    model2.FnActive_Power = double.Parse(Encoding.UTF8.GetString(message));
+                    model2.tmActive_Power = double.Parse(Encoding.UTF8.GetString(message));
                 }
 
                 return;
