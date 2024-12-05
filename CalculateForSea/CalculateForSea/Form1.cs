@@ -1221,37 +1221,34 @@ namespace CalculateForSea
 
 
 
-                    work_performanceSql =
-                 $@"
-
-                                UPDATE work_performance                                                                        
-                                SET work_power = IFNULL((
-                                    SELECT WORK_POWER - LAST_POWER 
-                                    FROM WORK_DATA 
-                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                ), 0),                                                                                                 
-                                work_okcnt = IFNULL((
-                                    SELECT (WORK_OKCNT - START_OKCNT) - (WORK_ERRCOUNT - START_ERRCOUNT) 
-                                    FROM WORK_DATA 
-                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                ), 0) * {cavity},                                                          
-                                work_errcount = IFNULL((
-                                    SELECT WORK_ERRCOUNT - START_ERRCOUNT 
-                                    FROM WORK_DATA 
-                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                ), 0) * {cavity},                                                          
-                                work_warmupcnt = IFNULL((
-                                    SELECT WORK_WARMUPCNT - START_WARMUPCNT 
-                                    FROM WORK_DATA 
-                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                ), 0)
-                                WHERE end_time = start_time                                                                   
-                                  AND WORK_PERFORMANCE_ID = '{models[i].ID}'                                                               
-                                ORDER BY ID DESC LIMIT 1;
-                                UPDATE WORK_DATA SET
-                                    LAST_POWER = WORK_POWER
-                                WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
-                                ";
+                    work_performanceSql = $@"    UPDATE work_performance                                                                        
+                                                    SET work_power = IFNULL((
+                                                        SELECT WORK_POWER - LAST_POWER 
+                                                        FROM WORK_DATA 
+                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                    ), 0),                                                                                                 
+                                                    work_okcnt = IFNULL((
+                                                        SELECT (WORK_OKCNT - START_OKCNT) - (WORK_ERRCOUNT - START_ERRCOUNT) 
+                                                        FROM WORK_DATA 
+                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                    ), 0) * {cavity},                                                          
+                                                    work_errcount = IFNULL((
+                                                        SELECT WORK_ERRCOUNT - START_ERRCOUNT 
+                                                        FROM WORK_DATA 
+                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                    ), 0) * {cavity},                                                          
+                                                    work_warmupcnt = IFNULL((
+                                                        SELECT WORK_WARMUPCNT - START_WARMUPCNT 
+                                                        FROM WORK_DATA 
+                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                    ), 0)
+                                                    WHERE end_time = start_time                                                                   
+                                                        AND WORK_PERFORMANCE_ID = '{models[i].ID}'                                                               
+                                                    ORDER BY ID DESC LIMIT 1;
+                                                    UPDATE WORK_DATA SET
+                                                        LAST_POWER = WORK_POWER
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                                    ";
 
                     MySqlConnection conn3 = new MySqlConnection(ConnectionString);
                     using (conn3)
@@ -1766,8 +1763,8 @@ namespace CalculateForSea
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW187", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.오염도A).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW188", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.오염도B).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW189", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModel.탱크진공).TrimEnd('"').TrimStart('"')), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            //Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/AC_{machines[i]}_D3706", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(models2[i].TRIMING_SHOT)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-        }
+       }
+
         private void Get_DCM(int i)
         {
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/DCM_{machines[i]}_TAG_D6902_Ruled", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
@@ -1798,8 +1795,7 @@ namespace CalculateForSea
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW187", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW188", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW189", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-            //Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/AC_{machines[i]}_D3706", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-
+       
         }
         private void SetElec(DataModel model, DataModel2 model2, int index)
         {
