@@ -1238,7 +1238,7 @@ namespace CoFAS.NEW.MES.POP
                 else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
                     sql = $@"
-                     SELECT ROUND(SUM(RESULT_TABLE.TOTAL_VALUE),2), RESULT_TABLE.CATEGORY FROM (SELECT SUM(
+                     SELECT ROUND(SUM(RESULT_TABLE.TOTAL_VALUE),2) AS VALUE, RESULT_TABLE.CATEGORY AS CATEGORY FROM (SELECT SUM(
 								        CASE 
 								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3704' THEN VALUE
 								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3705' THEN VALUE
