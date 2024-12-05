@@ -112,7 +112,166 @@ namespace CalculateForSea
                 _mqttClient = new DPSMqttClient("10.10.10.216", 1883, false, null, null, 0);
 
                 _mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived;
-                _mqttClient.Subscribe(new string[] { "DPS/#" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                #region [DCM 태그]
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
+
+
+                #endregion
+
+                #region [Casting]
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                #endregion
+
+
+                #region [Furnace]
+
+                #endregion
+
+                #region [Trimming]
+
+                #endregion
+
+                #region [LS]
+
+                #endregion
+
+                #region [AC]
+
+                #endregion
+
+                #region [ACT]
+
+                #endregion
+
+
                 _mqttClient.Connect(Guid.NewGuid().ToString() + "_Message_Process");
                 models2.AddRange(new[] { model_13, model_21, model_22, model_23, model_24, model_25 });
                 models.AddRange(new[] { model13, model21, model22, model23, model24, model25 });
