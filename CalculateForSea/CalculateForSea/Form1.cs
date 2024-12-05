@@ -1251,7 +1251,6 @@ namespace CalculateForSea
         {
             try
             {
-                int nowPordCnt = 0;
                 DataSet ds = new DataSet();
                 DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
                 MySqlConnection conn = new MySqlConnection(ConnectionString);
@@ -1265,236 +1264,261 @@ namespace CalculateForSea
                     cmd.Connection = conn;
                     MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     adapter.Fill(ds);
-
                 }
+                List<Task> tasks = new List<Task>();
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
-                    WriteLog("Data Received");
-
-                    if (ds.Tables[i].Rows.Count > 0)
+                    int index = i;  // i를 캡처하여 Task에 전달
+                    var task = Task.Run(() =>
                     {
-                        try
+                        ThreadMethod(ds, index);
+                    });
+                    tasks.Add(task);
+                    Task.WhenAll(tasks).Wait();
+                }
+                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_13", Encoding.UTF8.GetBytes((model13.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_21", Encoding.UTF8.GetBytes((model21.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_22", Encoding.UTF8.GetBytes((model22.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_23", Encoding.UTF8.GetBytes((model23.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_24", Encoding.UTF8.GetBytes((model24.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_25", Encoding.UTF8.GetBytes((model25.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+            }
+            catch (Exception ex)
+            {
+                WriteLog($"Error : {ex.Message}");
+            }
+        }
+
+        private void ThreadMethod(DataSet ds ,int i)
+        {
+            WriteLog("Data Received");
+
+            int nowPordCnt = 0;
+
+            if (ds.Tables[i].Rows.Count > 0)
+            {
+                try
+                {
+
+                    Get_DCM(i, gridModels_DCM[i]); //값 보내주기
+                    int cavity = 1;
+                    string cavitySql = $"SELECT CAVITY FROM SEA_MFG.DBO.MD_MST WHERE CODE_MD =  (select CODE_MD from [sea_mfg].dbo.demand_mstr_ext WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
+
+                    using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
+                    {
+                        sqlconn.Open();
+                        using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
                         {
-                            
-                            Get_DCM(i, gridModels_DCM[i]); //값 보내주기
-                            int cavity = 1;
-                            string cavitySql = $"SELECT CAVITY FROM SEA_MFG.DBO.MD_MST WHERE CODE_MD =  (select CODE_MD from [sea_mfg].dbo.demand_mstr_ext WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
-
-                            using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
+                            using (SqlDataReader reader = sqlcmd.ExecuteReader())
                             {
-                                sqlconn.Open();
-                                using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
+                                if (reader.Read())
                                 {
-                                    using (SqlDataReader reader = sqlcmd.ExecuteReader())
-                                    {
-                                        if (reader.Read())
-                                        {
-                                            cavity = Convert.ToInt32(reader["CAVITY"].ToString());
-                                        }
-                                    }
+                                    cavity = Convert.ToInt32(reader["CAVITY"].ToString());
                                 }
                             }
+                        }
+                    }
 
-                            string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
+                    string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
 
-                            string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
-                            string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
-                            string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
-                            string WORK_POWER = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_POWER"].ToString();
+                    string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
+                    string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
+                    string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
+                    string WORK_POWER = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_POWER"].ToString();
 
-                            if (WORK_PERFORMANCE_ID != models[i].ID) 
+                    if (WORK_PERFORMANCE_ID != models[i].ID)
+                    {
+                        models[i] = new DataModel() { ID = WORK_PERFORMANCE_ID };
+                    }
+                    int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT) / cavity)
+                        + Convert.ToInt32(WORK_WARMUPCNT)
+                        + (Convert.ToInt32(WORK_ERRCOUNT) / cavity);
+
+                    nowPordCnt = Convert.ToInt32(WORK_OKCNT)
+                        + Convert.ToInt32(WORK_ERRCOUNT);
+
+                    if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
+                    {
+
+                        using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                        {
+                            sqlconn.Open();
+                            using (SqlCommand sqlcmd = new SqlCommand())
                             {
-                                models[i] = new DataModel() { ID=WORK_PERFORMANCE_ID };
-                            }
-                            int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT)/cavity)
-                                + Convert.ToInt32(WORK_WARMUPCNT)
-                                + (Convert.ToInt32(WORK_ERRCOUNT)/cavity);
+                                // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
+                                sqlcmd.Connection = sqlconn;
+                                sqlcmd.CommandType = CommandType.StoredProcedure;
+                                sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
+                                sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
+                                sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
+                                sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
+                                sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
+                                sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
+                                sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
+                                sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
+                                sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
+                                sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
+                                sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
+                                sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
+                                sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
+                                sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
+                                sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
+                                sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
+                                sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
+                                sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
+                                sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
+                                sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
+                                sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
+                                sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
+                                sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
+                                sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
+                                sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
+                                sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
+                                sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                sqlcmd.ExecuteNonQuery();
 
-                            nowPordCnt = Convert.ToInt32(WORK_OKCNT)
-                                + Convert.ToInt32(WORK_ERRCOUNT);
-
-                            if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt  == 0|| (models[i].Totalcnt*3) > nowtotalcnt) )
-                            {
-                                
-                                using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                                {
-                                    sqlconn.Open();
-                                    using (SqlCommand sqlcmd = new SqlCommand())
-                                    {
-                                        // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
-                                        sqlcmd.Connection = sqlconn;
-                                        sqlcmd.CommandType = CommandType.StoredProcedure;
-                                        sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20"; 
-                                        sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                        sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
-                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
-                                        sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
-                                        sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
-                                        sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
-                                        sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
-                                        sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
-                                        sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
-                                        sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
-                                        sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
-                                        sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
-                                        sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
-                                        sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
-                                        sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
-                                        sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                        sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                        sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                        sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                        sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                        sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                        sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                        sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
-                                        sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                        sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
-                                        sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
-                                        sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
-                                        sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
-                                        sqlcmd.ExecuteNonQuery();
-
-                                        WriteLog("SHOT Data Processed");
-                                    }
-
-                                }
-
-                                if ((models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M) - models[i].NowShotKW > 0)
-                                {
-                                    models[i].NowShotKW = (models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M) - models[i].NowShotKW;
-                                }
-
-                                int machine_id;
-                                //여기에 
-                                switch (i)
-                                {
-                                    case 0:
-                                        machine_id = 13;
-                                        break;
-                                    case 1:
-                                        machine_id = 21;
-
-                                        break;
-                                    case 2:
-                                        machine_id = 22;
-
-                                        break;
-                                    case 3:
-                                        machine_id = 23;
-
-                                        break;
-                                    case 4:
-                                        machine_id = 24;
-
-                                        break;
-                                    case 5:
-                                        machine_id = 25;
-
-                                        break;
-                                    default:
-                                        return;
-
-                                }
-                                string mysqlString =
-                                                               $"INSERT INTO data_for_grid                                                                      " +
-                                                               $"(                                                                                              " +
-                                                               $"`date`,                                                                                        " +
-                                                               $"machine_no,                                                                                    " +
-                                                               $"V1,                                                                                            " +
-                                                               $"V2,                                                                                            " +
-                                                               $"V3,                                                                                            " +
-                                                               $"V4,                                                                                            " +
-                                                               $"acceleration_pos,                                                                              " +
-                                                               $"deceleration_pos,                                                                              " +
-                                                               $"metal_pressure,                                                                                " +
-                                                               $"swap_time,                                                                                     " +
-                                                               $"biskit_thickness,                                                                              " +
-                                                               $"physical_strength_per,                                                                         " +
-                                                               $"physical_strength_mn,                                                                          " +
-                                                               $"cycle_time,                                                                                    " +
-                                                               $"type_weight_enrty_time,                                                                        " +
-                                                               $"bath_time,                                                                                     " +
-                                                               $"forward_time,                                                                                  " +
-                                                               $"freezing_time,                                                                                 " +
-                                                               $"type_weight_back_time,                                                                         " +
-                                                               $"extrusion_time,                                                                                " +
-                                                               $"extraction_time,                                                                               " +
-                                                               $"spray_time,                                                                                    " +
-                                                               $"cavity_core,                                                                                   " +
-                                                               $"A_Pollution_degree,                                                                            " +
-                                                               $"B_Pollution_degree                                                                             " +
-                                                               $", vacuum                                                                                       " +
-                                                               $")                                                                                              " +
-                                                               $"VALUES                                                                                         " +
-                                                               $"(                                                                                              " +
-                                                               $"now(),                                                                                         " +
-                                                               $"'WCI_D{machine_id}',                                                                                     " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
-                                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
-                                                               (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
-                                                               (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
-                                                               (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
-                                                               (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
-                                                               $");                                                                                             ";
-                                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                                using (conn2)
-                                {
-                                    conn2.Open();
-
-                                    MySqlCommand cmd = new MySqlCommand();
-                                    cmd.CommandText = mysqlString;
-                                    cmd.CommandType = CommandType.Text;
-                                    cmd.Connection = conn2;
-                                    cmd.ExecuteNonQuery();
-                                }
-                                models[i].Totalcnt = nowtotalcnt;
-                                models[i].PROD_CNT = nowPordCnt;
+                                WriteLog("SHOT Data Processed");
                             }
 
+                        }
 
-                            // MSSQL 전달
-                            using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                            {
-                                sqlconn.Open();
-                                using (SqlCommand sqlcmd = new SqlCommand())
-                                {
-                                    sqlcmd.Connection = sqlconn;
-                                    sqlcmd.CommandType = CommandType.StoredProcedure;
-                                    sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
-                                    sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
-                                    sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
-                                    sqlcmd.Parameters.AddWithValue("@ELEC_USE", ds.Tables[i].Rows[0]["WORK_POWER"].ToString());
-                                    sqlcmd.ExecuteNonQuery();
-                                }
-                            }
-                            WriteLog("Data MSSQL Processed");
+                        if ((models[i].ConsumptionRETI + models[i].Consumption_K + models[i].Consumption_M) - models[i].NowShotKW > 0)
+                        {
+                            models[i].NowShotKW = (models[i].Consumption_K + models[i].ConsumptionRETI + models[i].Consumption_M) - models[i].NowShotKW;
+                        }
 
-                            string work_performanceSql;
+                        int machine_id;
+                        //여기에 
+                        switch (i)
+                        {
+                            case 0:
+                                machine_id = 13;
+                                break;
+                            case 1:
+                                machine_id = 21;
+
+                                break;
+                            case 2:
+                                machine_id = 22;
+
+                                break;
+                            case 3:
+                                machine_id = 23;
+
+                                break;
+                            case 4:
+                                machine_id = 24;
+
+                                break;
+                            case 5:
+                                machine_id = 25;
+
+                                break;
+                            default:
+                                return;
+
+                        }
+                        string mysqlString =
+                                                       $"INSERT INTO data_for_grid                                                                      " +
+                                                       $"(                                                                                              " +
+                                                       $"`date`,                                                                                        " +
+                                                       $"machine_no,                                                                                    " +
+                                                       $"V1,                                                                                            " +
+                                                       $"V2,                                                                                            " +
+                                                       $"V3,                                                                                            " +
+                                                       $"V4,                                                                                            " +
+                                                       $"acceleration_pos,                                                                              " +
+                                                       $"deceleration_pos,                                                                              " +
+                                                       $"metal_pressure,                                                                                " +
+                                                       $"swap_time,                                                                                     " +
+                                                       $"biskit_thickness,                                                                              " +
+                                                       $"physical_strength_per,                                                                         " +
+                                                       $"physical_strength_mn,                                                                          " +
+                                                       $"cycle_time,                                                                                    " +
+                                                       $"type_weight_enrty_time,                                                                        " +
+                                                       $"bath_time,                                                                                     " +
+                                                       $"forward_time,                                                                                  " +
+                                                       $"freezing_time,                                                                                 " +
+                                                       $"type_weight_back_time,                                                                         " +
+                                                       $"extrusion_time,                                                                                " +
+                                                       $"extraction_time,                                                                               " +
+                                                       $"spray_time,                                                                                    " +
+                                                       $"cavity_core,                                                                                   " +
+                                                       $"A_Pollution_degree,                                                                            " +
+                                                       $"B_Pollution_degree                                                                             " +
+                                                       $", vacuum                                                                                       " +
+                                                       $")                                                                                              " +
+                                                       $"VALUES                                                                                         " +
+                                                       $"(                                                                                              " +
+                                                       $"now(),                                                                                         " +
+                                                       $"'WCI_D{machine_id}',                                                                                     " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
+                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
+                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
+                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
+                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
+                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
+                                                       $");                                                                                             ";
+                        MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                        using (conn2)
+                        {
+                            conn2.Open();
+
+                            MySqlCommand cmd = new MySqlCommand();
+                            cmd.CommandText = mysqlString;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Connection = conn2;
+                            cmd.ExecuteNonQuery();
+                        }
+                        models[i].Totalcnt = nowtotalcnt;
+                        models[i].PROD_CNT = nowPordCnt;
+                    }
 
 
-                           
-                                work_performanceSql =
-                             $@"
+                    // MSSQL 전달
+                    using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                    {
+                        sqlconn.Open();
+                        using (SqlCommand sqlcmd = new SqlCommand())
+                        {
+                            sqlcmd.Connection = sqlconn;
+                            sqlcmd.CommandType = CommandType.StoredProcedure;
+                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
+                            sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
+                            sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
+                            sqlcmd.Parameters.AddWithValue("@ELEC_USE", ds.Tables[i].Rows[0]["WORK_POWER"].ToString());
+                            sqlcmd.ExecuteNonQuery();
+                        }
+                    }
+                    WriteLog("Data MSSQL Processed");
+
+                    string work_performanceSql;
+
+
+
+                    work_performanceSql =
+                 $@"
 
                                 UPDATE work_performance                                                                        
                                 SET work_power = IFNULL((
@@ -1525,71 +1549,59 @@ namespace CalculateForSea
                                 WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
                                 ";
 
-                                MySqlConnection conn3 = new MySqlConnection(ConnectionString);
-                                using (conn3)
-                                {
-                                    conn3.Open();
-
-                                    MySqlCommand cmd = new MySqlCommand();
-                                    cmd.CommandText = work_performanceSql;
-                                    cmd.CommandType = CommandType.Text;
-                                    cmd.Connection = conn3;
-                                    cmd.ExecuteNonQuery();
-                                }
-                           
-
-
-                        }
-                        catch (Exception ex)
-                        {
-                            //여기서 입력문자열 예외 발생
-                            WriteLog(ex.Message);
-                        }
-                    }
-                    else
+                    MySqlConnection conn3 = new MySqlConnection(ConnectionString);
+                    using (conn3)
                     {
-                        Get_DCM(i); //작업지시 없으면 0으로 초기화
-                        WaitOrder();
+                        conn3.Open();
+
+                        MySqlCommand cmd = new MySqlCommand();
+                        cmd.CommandText = work_performanceSql;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = conn3;
+                        cmd.ExecuteNonQuery();
                     }
 
-                    switch (i)
-                    {
-                        case 0:
-                            SendMQTT_13(ds, i);
-                            break;
-                        case 1:
-                            SendMQTT_21(ds, i);
-                            break;
-                        case 2:
-                            SendMQTT_22(ds, i);
-                            break;
-                        case 3:
-                            SendMQTT_23(ds, i);
-                            break;
-                        case 4:
-                            SendMQTT_24(ds, i);
-                            break;
-                        case 5:
-                            SendMQTT_25(ds, i);
-                            break;
-                        default:
-                            break;
-                    }
-                    CalculateAndPublishPowerConsumption(models[i], i);
+
+
                 }
-                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_13", Encoding.UTF8.GetBytes((model13.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_21", Encoding.UTF8.GetBytes((model21.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_22", Encoding.UTF8.GetBytes((model22.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_23", Encoding.UTF8.GetBytes((model23.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_24", Encoding.UTF8.GetBytes((model24.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_25", Encoding.UTF8.GetBytes((model25.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                catch (Exception ex)
+                {
+                    //여기서 입력문자열 예외 발생
+                    WriteLog(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                WriteLog($"Error : {ex.Message}");
+                Get_DCM(i); //작업지시 없으면 0으로 초기화
+                WaitOrder();
             }
-        }
 
+            switch (i)
+            {
+                case 0:
+                    SendMQTT_13(ds, i);
+                    break;
+                case 1:
+                    SendMQTT_21(ds, i);
+                    break;
+                case 2:
+                    SendMQTT_22(ds, i);
+                    break;
+                case 3:
+                    SendMQTT_23(ds, i);
+                    break;
+                case 4:
+                    SendMQTT_24(ds, i);
+                    break;
+                case 5:
+                    SendMQTT_25(ds, i);
+                    break;
+                default:
+                    break;
+            }
+            CalculateAndPublishPowerConsumption(models[i], i);
+            Thread.Sleep(20);
+        }
         #region SEND_MQTT
 
         private void SendMQTT_13(DataSet ds, int i)
