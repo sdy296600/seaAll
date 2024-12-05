@@ -18,7 +18,6 @@ using System.Reflection;
 
 using VagabondK.Protocols.LSElectric.FEnet;
 using VagabondK.Protocols.Channels;
-using VagabondK.Protocols.LSElectric;
 
 namespace CalculateForSea
 {
@@ -170,8 +169,9 @@ namespace CalculateForSea
                 if (datas[0] == "1")
                 {
                     var item = LSClient.Read("%DW816", 4);
-                    foreach (int readItem in item.Cast(DataType.Word))
+                    foreach (var readItem in item)
                     {
+                        // byte를 문자열로 변환
                         datas.Add(readItem.ToString());
                     }
 
