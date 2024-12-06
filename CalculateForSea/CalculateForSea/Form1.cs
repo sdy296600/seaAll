@@ -150,12 +150,12 @@ namespace CalculateForSea
                 }
                 if (datas[0] == "1")
                 {
+                    Thread.Sleep(200);
                     var item = LSClient.Read("%DW816", 4);
                     foreach (int readItem in item.Cast(DataType.Word))
                     {
                         datas.Add(readItem.ToString());
                     }
-
                     TcpChannel ch = LSClient.Channel as TcpChannel;
                     int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1].ToString());
                     lock (gridModels_DCM[i]) 
@@ -173,7 +173,6 @@ namespace CalculateForSea
                             break;
                         case 1:
                             machine_id = 21;
-
                             break;
                         case 2:
                             machine_id = 22;
@@ -181,19 +180,15 @@ namespace CalculateForSea
                             break;
                         case 3:
                             machine_id = 23;
-
                             break;
                         case 4:
                             machine_id = 24;
-
                             break;
                         case 5:
                             machine_id = 25;
-
                             break;
                         default:
                             return;
-
                     }
                     dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
                     dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
@@ -1209,6 +1204,7 @@ namespace CalculateForSea
 
                     if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
+                        Thread.Sleep(1000);
                         int machine_id;
                         //여기에 
                         switch (i)
@@ -1241,7 +1237,7 @@ namespace CalculateForSea
 
                         }
 
-                        string mysqlString =
+                        string mysqlString = 
                                                 $"INSERT INTO data_for_grid                                                                      " +
                                                 $"(                                                                                              " +
                                                 $"`date`,                                                                                        " +
@@ -1374,7 +1370,8 @@ namespace CalculateForSea
                                 sqlcmd.Connection = sqlconn;
                                 sqlcmd.CommandType = CommandType.StoredProcedure;
                                 sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
-                                string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
+                                //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
+                                string dtValue = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 sqlcmd.Parameters.AddWithValue("@Date", dtValue);
                                 sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
                                 sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
