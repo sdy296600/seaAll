@@ -623,18 +623,24 @@ namespace CalculateForSea
                 {
                     model.Consumption_K = double.Parse(Encoding.UTF8.GetString(message));
                     model.K_OK = true;
+                    double data = models[index].Consumption_K + models[index].Consumption_M + models[index].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index);
                     SetElec(model, model2, index);
                 }
                 else if (topic.Contains("P_Active_Mhours"))
                 {
                     model.Consumption_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                     model.M_OK = true;
+                    double data = models[index].Consumption_K + models[index].Consumption_M + models[index].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index);
                     SetElec(model, model2, index);
                 }
                 else if (topic.Contains("Load_Total_Power_Consumption"))
                 {
                     model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
                     model.R_OK = true;
+                     double data = models[index].Consumption_K + models[index].Consumption_M + models[index].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index);
                     SetElec(model, model2, index);
                 }
                 else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
@@ -651,19 +657,25 @@ namespace CalculateForSea
             if (topic.Contains("Furnace"))
             {
                 index2 = index2 - 150 > 0 ? index2 - 150 : 0;
+                model = models[index2];
+
                 model2 = models2[index2];
 
                 if (topic.Contains("P_Active_Khours"))
                 {
                     model2.F_ESG_K = double.Parse(Encoding.UTF8.GetString(message));
                     model2.F_K_OK = true;
-                    SetElec(models[index2], model2, index2);
+                     double data = models[index2].Consumption_K + models[index2].Consumption_M + models[index2].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index2);
+                    SetElec(model, model2, index2);
                 }
                 else if (topic.Contains("P_Active_Mhours"))
                 {
                     model2.F_ESG_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                     model2.F_M_OK = true;
-                    SetElec(models[index2], model2, index2);
+                     double data = models[index2].Consumption_K + models[index2].Consumption_M + models[index2].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index2);
+                    SetElec(model, model2, index2);
                 }
                 else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
                 {
@@ -676,19 +688,25 @@ namespace CalculateForSea
             if (topic.Contains("Trimming"))
             {
                 index2 = index2 - 170 > 0 ? index2 - 170 : 0;
+                model = models[index2];
+
                 model2 = models2[index2];
 
                 if (topic.Contains("P_Active_Khours"))
                 {
                     model2.T_ESG_K = double.Parse(Encoding.UTF8.GetString(message));
                     model2.T_K_OK = true;
-                    SetElec(models[index2], model2, index2);
+                     double data = models[index2].Consumption_K + models[index2].Consumption_M + models[index2].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index2);
+                    SetElec(model, model2, index2);
                 }
                 else if (topic.Contains("P_Active_Mhours"))
                 {
                     model2.T_ESG_M = double.Parse(Encoding.UTF8.GetString(message)) * 1000;
                     model2.T_M_OK = true;
-                    SetElec(models[index2], model2, index2);
+                     double data = models[index2].Consumption_K + models[index2].Consumption_M + models[index2].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index2);
+                    SetElec(model, model2, index2);
                 }
                 else if (topic.Contains("P_Active_Ruled")) //유효전력 - Unit 0.01
                 {
@@ -698,6 +716,7 @@ namespace CalculateForSea
                 return;
             }
         }
+
 
         private void GET_LS(string topic, byte[] message)
         {
@@ -878,17 +897,21 @@ namespace CalculateForSea
             if (topic.Contains("_TAG_D3704"))
             {
                 models[indexM].getDtOkCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
+                SaveWorkData($"UPDATE WORK_DATA SET WORK_OKCNT = '{models[indexM].getDtOkCnt}'", indexM);
                 checkDt(indexM);
             }
             if (topic.Contains("_TAG_D3705"))
             {
                 models[indexM].getDtErrCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
+                SaveWorkData($"UPDATE WORK_DATA SET WORK_ERRCOUNT = '{models[indexM].getDtErrCnt}'", indexM);
                 checkDt(indexM);
+
 
             }
             if (topic.Contains("_TAG_D3706"))
             {
                 models[indexM].getDtWarmCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
+                SaveWorkData($"UPDATE WORK_DATA SET WORK_WARMUPCNT = '{models[indexM].getDtWarmCnt}'", indexM);
                 checkDt(indexM);
             }
         }
@@ -907,9 +930,61 @@ namespace CalculateForSea
                     models[i].dt = DateTime.Now;
                 }
                 models[i].getDtTotalCount = models[i].getDtOkCnt + models[i].getDtErrCnt + models[i].getDtWarmCnt;
+
             }
         }
 
+        private void SaveWorkData(string sql, int id) 
+        {
+            int machine_id;
+            //여기에 
+            switch (id)
+            {
+                case 0:
+                    machine_id = 13;
+                    break;
+                case 1:
+                    machine_id = 21;
+
+                    break;
+                case 2:
+                    machine_id = 22;
+
+                    break;
+                case 3:
+                    machine_id = 23;
+
+                    break;
+                case 4:
+                    machine_id = 24;
+
+                    break;
+                case 5:
+                    machine_id = 25;
+
+                    break;
+                default:
+                    return;
+            }
+
+            string mysqlString = sql + $@" WHERE WORK_PERFORMANCE_ID = (SELECT WORK_PERFORMANCE_ID 
+										         FROM work_performance
+										        WHERE start_time = end_time
+										          AND MACHINE_NO = 'WCI_D{machine_id}'
+										        ORDER BY WORK_PERFORMANCE_ID DESC
+										        LIMIT 1)";
+            MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+            using (conn2)
+            {
+                conn2.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.CommandText = mysqlString;
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = conn2;
+                cmd.ExecuteNonQuery();
+            }
+        }
         private void GET_AC(string topic, byte[] message)
         {
             if (topic.Contains("3706"))
