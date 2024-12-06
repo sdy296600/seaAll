@@ -936,43 +936,8 @@ namespace CalculateForSea
 
         private void SaveWorkData(string sql, int id) 
         {
-            int machine_id;
-            //여기에 
-            switch (id)
-            {
-                case 0:
-                    machine_id = 13;
-                    break;
-                case 1:
-                    machine_id = 21;
 
-                    break;
-                case 2:
-                    machine_id = 22;
-
-                    break;
-                case 3:
-                    machine_id = 23;
-
-                    break;
-                case 4:
-                    machine_id = 24;
-
-                    break;
-                case 5:
-                    machine_id = 25;
-
-                    break;
-                default:
-                    return;
-            }
-
-            string mysqlString = sql + $@" WHERE WORK_PERFORMANCE_ID = (SELECT WORK_PERFORMANCE_ID 
-										         FROM work_performance
-										        WHERE start_time = end_time
-										          AND MACHINE_NO = 'WCI_D{machine_id}'
-										        ORDER BY WORK_PERFORMANCE_ID DESC
-										        LIMIT 1)";
+            string mysqlString = sql + $@" WHERE WORK_PERFORMANCE_ID = '{models[id].ID}'";
             MySqlConnection conn2 = new MySqlConnection(ConnectionString);
             using (conn2)
             {
