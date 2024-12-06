@@ -47,6 +47,13 @@ namespace CalculateForSea
             public bool M_OK { get; set; } = false;
             public bool R_OK { get; set; } = false;
             public double All_Active_Power { get; set; } = 0; // 유효전력
+            public DateTime? dt { get; set; } = null;
+            public double getDtTotalCount { get; set; } = 0.001;
+
+            public double getDtOkCnt { get; set; } = 0.001;
+            public double getDtErrCnt { get; set; } = 0.001;
+            public double getDtWarmCnt { get; set; } = 0.001;
+
         }
 
         public class DataModel2
@@ -134,8 +141,6 @@ namespace CalculateForSea
 
         public void GetPlcAsync(string address, FEnetClient LSClient)
         {
-
-         
             try
             {
                 List<string> datas = new List<string>();
@@ -229,6 +234,10 @@ namespace CalculateForSea
 
                 _mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived;
                 #region [DCM 태그]
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -249,6 +258,11 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -268,6 +282,10 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -288,6 +306,10 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -308,6 +330,10 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -328,6 +354,11 @@ namespace CalculateForSea
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -844,6 +875,35 @@ namespace CalculateForSea
                 dm_alram_status_update(gridModels_DCM[indexM].스프레이시간, topic.Split('/')[1]);
                
             }
+            if (topic.Contains("_TAG_D3704"))
+            {
+                models[indexM].getDtOkCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
+                checkDt(indexM);
+            }
+            if (topic.Contains("_TAG_D3705"))
+            {
+                models[indexM].getDtErrCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
+                checkDt(indexM);
+
+            }
+            if (topic.Contains("_TAG_D3706"))
+            {
+                models[indexM].getDtWarmCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
+                checkDt(indexM);
+            }
+        }
+        private void checkDt(int i) 
+        {
+            if (models[i].getDtOkCnt != 0.001 && models[i].getDtErrCnt != 0.001 && models[i].getDtWarmCnt != 0.001) 
+            {
+                bool checkFirst = models[i].getDtTotalCount == 0.001;
+                models[i].getDtTotalCount = models[i].getDtOkCnt + models[i].getDtErrCnt + models[i].getDtWarmCnt;
+
+                if (!checkFirst)
+                {
+                    models[i].dt = DateTime.Now;
+                };
+            }
         }
 
         private void GET_AC(string topic, byte[] message)
@@ -1271,6 +1331,8 @@ namespace CalculateForSea
                                 sqlcmd.Connection = sqlconn;
                                 sqlcmd.CommandType = CommandType.StoredProcedure;
                                 sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
+                                string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
+                                sqlcmd.Parameters.AddWithValue("@Date", dtValue);
                                 sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
                                 sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
                                 sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
