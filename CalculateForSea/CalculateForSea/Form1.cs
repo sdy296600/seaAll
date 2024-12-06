@@ -135,35 +135,9 @@ namespace CalculateForSea
         public void GetPlcAsync(string address, FEnetClient LSClient)
         {
 
-            string data = "";
+         
             try
             {
-                var cts = new CancellationTokenSource();
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
-
-
-                // Open 작업을 별도 실행
-                //var openTask = Task.Run(async () => await LSClient.Read(), cts.Token);
-
-                // Open과 타임아웃을 동시에 실행
-                //var completedTask = await Task.WhenAny(openTask, timeoutTask);
-                //if (completedTask == timeoutTask)
-                //{
-                //    cts.Cancel(); // 타임아웃 발생 시 작업 취소
-                //    throw new TimeoutException("PLC 연결이 2초 내에 완료되지 않았습니다.");
-                //}
-
-                cts.Cancel(); // Open이 완료되었으면 타임아웃 취소
-
-                //if (LSClient.Connected)
-                //{
-                // 비동기 메서드 호출
-                //byte[] results = await LSClient.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 442, 1);
-                //if (results != null && results.Length >= 2) // 워드 값은 2바이트
-                //{
-                // Little-Endian 방식으로 변환
-
-
                 List<string> datas = new List<string>();
                 foreach (var item in LSClient.Read(address))
                 {
@@ -174,7 +148,6 @@ namespace CalculateForSea
                     var item = LSClient.Read("%DW816", 4);
                     foreach (int readItem in item.Cast(DataType.Word))
                     {
-                        // byte를 문자열로 변환
                         datas.Add(readItem.ToString());
                     }
 
@@ -188,7 +161,6 @@ namespace CalculateForSea
                         gridModels_DCM[i].탱크진공 = datas[4];
                     }
                     int machine_id;
-                    //여기에 
                     switch (i)
                     {
                         case 0:
@@ -224,23 +196,7 @@ namespace CalculateForSea
                     dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
                 }
 
-                //}
-                //string connectionString = "User Id=BZUSER;Password=BZUSER123;Data Source=211.38.193.145:1521/ECMDB1;";
-
-
-                //DataBase_Class db = new DataBase_Class(new Oracle_DB(connectionString));
-                //string dateTime = DateTime.Now.ToString("yyyy-MM-dd");
-                //DataSet ds = db.GetAllData($"SELECT * FROM PLC_DATA WHERE DATETIME = '{dateTime}'");
-                //if (ds.Tables[0].Rows.Count > 0)
-                //{
-                //    db.ExecuteData($"UPDATE PLC_DATA SET VALUE = '{data.ToString()}' WHERE DATETIME ='{dateTime}'");
-                //}
-                //else
-                //{
-                //    string sql = $"INSERT INTO PLC_DATA(DATETIME, VALUE) VALUES('{dateTime}', '{data.ToString()}')";
-                //    db.ExecuteData(sql);
-                //}
-                //}
+           
             }
             catch (TimeoutException ex)
             {
@@ -250,10 +206,7 @@ namespace CalculateForSea
             }
             finally
             {
-                //if (LSClient.Connected)
-                //{
-                //    LSClient.Close();
-                //}
+                
             }
            
         }
