@@ -195,8 +195,6 @@ namespace CalculateForSea
                     dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
                     dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
                 }
-
-           
             }
             catch (TimeoutException ex)
             {
@@ -1108,20 +1106,175 @@ namespace CalculateForSea
 
                     if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
+                        int machine_id;
+                        //여기에 
+                        switch (i)
+                        {
+                            case 0:
+                                machine_id = 13;
+                                break;
+                            case 1:
+                                machine_id = 21;
 
+                                break;
+                            case 2:
+                                machine_id = 22;
+
+                                break;
+                            case 3:
+                                machine_id = 23;
+
+                                break;
+                            case 4:
+                                machine_id = 24;
+
+                                break;
+                            case 5:
+                                machine_id = 25;
+
+                                break;
+                            default:
+                                return;
+
+                        }
+
+                        string mysqlString =
+                                                $"INSERT INTO data_for_grid                                                                      " +
+                                                $"(                                                                                              " +
+                                                $"`date`,                                                                                        " +
+                                                $"machine_no,                                                                                    " +
+                                                $"V1,                                                                                            " +
+                                                $"V2,                                                                                            " +
+                                                $"V3,                                                                                            " +
+                                                $"V4,                                                                                            " +
+                                                $"acceleration_pos,                                                                              " +
+                                                $"deceleration_pos,                                                                              " +
+                                                $"metal_pressure,                                                                                " +
+                                                $"swap_time,                                                                                     " +
+                                                $"biskit_thickness,                                                                              " +
+                                                $"physical_strength_per,                                                                         " +
+                                                $"physical_strength_mn,                                                                          " +
+                                                $"cycle_time,                                                                                    " +
+                                                $"type_weight_enrty_time,                                                                        " +
+                                                $"bath_time,                                                                                     " +
+                                                $"forward_time,                                                                                  " +
+                                                $"freezing_time,                                                                                 " +
+                                                $"type_weight_back_time,                                                                         " +
+                                                $"extrusion_time,                                                                                " +
+                                                $"extraction_time,                                                                               " +
+                                                $"spray_time,                                                                                    " +
+                                                $"cavity_core,                                                                                   " +
+                                                $"A_Pollution_degree,                                                                            " +
+                                                $"B_Pollution_degree                                                                             " +
+                                                $", vacuum                                                                                       " +
+                                                $")                                                                                              " +
+                                                $"VALUES                                                                                         " +
+                                                $"(                                                                                              " +
+                                                $"now(),                                                                                         " +
+                                                $"'WCI_D{machine_id}',                                                                                     " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
+                                                $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
+                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
+                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
+                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
+                                                (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
+                                                $");                                                                                             ";
+                        MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                        using (conn2)
+                        {
+                            conn2.Open();
+
+                            MySqlCommand cmd = new MySqlCommand();
+                            cmd.CommandText = mysqlString;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Connection = conn2;
+                            cmd.ExecuteNonQuery();
+                        }
+                        DataSet gridDs = new DataSet();
+                        MySqlConnection conn = new MySqlConnection(ConnectionString);
+                        using (conn)
+                        {
+                            conn.Open();
+
+                            MySqlCommand cmd = new MySqlCommand();
+                            cmd.CommandText = "SelectGridHistory";
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Connection = conn;
+                            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                            adapter.Fill(gridDs);
+                        }
+
+                        for (int id = 0; id < gridDs.Tables.Count; id++)
+                        {
+                            gridModels[id] = new List<GridModel>();
+                            if (gridDs.Tables[id].Rows.Count > 0)
+                            {
+                                for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
+                                {
+                                    gridModels[id].Add(new GridModel()
+                                    {
+                                        Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
+                                        설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
+                                        V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
+                                        V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
+                                        V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
+                                        V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
+                                        가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
+                                        감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
+                                        메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
+                                        승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
+                                        비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
+                                        형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
+                                        형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
+                                        사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
+                                        형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
+                                        주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
+                                        사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
+                                        제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
+                                        형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
+                                        압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
+                                        취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
+                                        스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
+                                        금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
+                                        오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
+                                        오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
+                                        탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
+                                    });
+                                }
+                            }
+                        }
                         using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                         {
                             sqlconn.Open();
                             using (SqlCommand sqlcmd = new SqlCommand())
                             {
+
                                 // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
                                 sqlcmd.Connection = sqlconn;
                                 sqlcmd.CommandType = CommandType.StoredProcedure;
                                 sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
                                 sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{gridDs.Tables[i].Rows[0]["ORDER_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{gridDs.Tables[i].Rows[0]["RESOURCE_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{gridDs.Tables[i].Rows[0]["LOT_NO"]}");
                                 sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
                                 sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
                                 sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
@@ -1159,107 +1312,7 @@ namespace CalculateForSea
                             models[i].NowShotKW = (models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW;
                         }
 
-                        int machine_id;
-                        //여기에 
-                        switch (i)
-                        {
-                            case 0:
-                                machine_id = 13;
-                                break;
-                            case 1:
-                                machine_id = 21;
-
-                                break;
-                            case 2:
-                                machine_id = 22;
-
-                                break;
-                            case 3:
-                                machine_id = 23;
-
-                                break;
-                            case 4:
-                                machine_id = 24;
-
-                                break;
-                            case 5:
-                                machine_id = 25;
-
-                                break;
-                            default:
-                                return;
-
-                        }
-                        string mysqlString =
-                                                       $"INSERT INTO data_for_grid                                                                      " +
-                                                       $"(                                                                                              " +
-                                                       $"`date`,                                                                                        " +
-                                                       $"machine_no,                                                                                    " +
-                                                       $"V1,                                                                                            " +
-                                                       $"V2,                                                                                            " +
-                                                       $"V3,                                                                                            " +
-                                                       $"V4,                                                                                            " +
-                                                       $"acceleration_pos,                                                                              " +
-                                                       $"deceleration_pos,                                                                              " +
-                                                       $"metal_pressure,                                                                                " +
-                                                       $"swap_time,                                                                                     " +
-                                                       $"biskit_thickness,                                                                              " +
-                                                       $"physical_strength_per,                                                                         " +
-                                                       $"physical_strength_mn,                                                                          " +
-                                                       $"cycle_time,                                                                                    " +
-                                                       $"type_weight_enrty_time,                                                                        " +
-                                                       $"bath_time,                                                                                     " +
-                                                       $"forward_time,                                                                                  " +
-                                                       $"freezing_time,                                                                                 " +
-                                                       $"type_weight_back_time,                                                                         " +
-                                                       $"extrusion_time,                                                                                " +
-                                                       $"extraction_time,                                                                               " +
-                                                       $"spray_time,                                                                                    " +
-                                                       $"cavity_core,                                                                                   " +
-                                                       $"A_Pollution_degree,                                                                            " +
-                                                       $"B_Pollution_degree                                                                             " +
-                                                       $", vacuum                                                                                       " +
-                                                       $")                                                                                              " +
-                                                       $"VALUES                                                                                         " +
-                                                       $"(                                                                                              " +
-                                                       $"now(),                                                                                         " +
-                                                       $"'WCI_D{machine_id}',                                                                                     " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
-                                                       $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
-                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
-                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
-                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
-                                                       (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
-                                                       $");                                                                                             ";
-                        MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                        using (conn2)
-                        {
-                            conn2.Open();
-
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = mysqlString;
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn2;
-                            cmd.ExecuteNonQuery();
-                        }
+                      
                         models[i].Totalcnt = nowtotalcnt;
                         models[i].PROD_CNT = nowPordCnt;
                     }
@@ -1655,59 +1708,6 @@ namespace CalculateForSea
         {
             try
             {
-                DataSet ds = new DataSet();
-                MySqlConnection conn = new MySqlConnection(ConnectionString);
-                using (conn)
-                {
-                    conn.Open();
-
-                    MySqlCommand cmd = new MySqlCommand();
-                    cmd.CommandText = "SelectGridHistory";
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = conn;
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                    adapter.Fill(ds);
-                }
-
-                for (int i = 0; i < ds.Tables.Count; i++)
-                {
-                    gridModels[i] = new List<GridModel>();
-                    if (ds.Tables[i].Rows.Count > 0)
-                    {
-                        for (int j = 0; j < ds.Tables[i].Rows.Count; j++)
-                        {
-                            gridModels[i].Add(new GridModel()
-                            {
-                                Date = ds.Tables[i].Rows[j]["date"].ToString(),
-                                설비No = ds.Tables[i].Rows[j]["machine_no"].ToString(),
-                                V1 = ds.Tables[i].Rows[j]["V1"].ToString(),
-                                V2 = ds.Tables[i].Rows[j]["V2"].ToString(),
-                                V3 = ds.Tables[i].Rows[j]["V3"].ToString(),
-                                V4 = ds.Tables[i].Rows[j]["V4"].ToString(),
-                                가속위치 = ds.Tables[i].Rows[j]["acceleration_pos"].ToString(),
-                                감속위치 = ds.Tables[i].Rows[j]["deceleration_pos"].ToString(),
-                                메탈압력 = ds.Tables[i].Rows[j]["metal_pressure"].ToString(),
-                                승압시간 = ds.Tables[i].Rows[j]["swap_time"].ToString(),
-                                비스켓두께 = ds.Tables[i].Rows[j]["biskit_thickness"].ToString(),
-                                형체력 = ds.Tables[i].Rows[j]["physical_strength_per"].ToString(),
-                                형체력MN = ds.Tables[i].Rows[j]["physical_strength_mn"].ToString(),
-                                사이클타임 = ds.Tables[i].Rows[j]["cycle_time"].ToString(),
-                                형체중자입시간 = ds.Tables[i].Rows[j]["type_weight_enrty_time"].ToString(),
-                                주탕시간 = ds.Tables[i].Rows[j]["bath_time"].ToString(),
-                                사출전진시간 = ds.Tables[i].Rows[j]["forward_time"].ToString(),
-                                제품냉각시간 = ds.Tables[i].Rows[j]["freezing_time"].ToString(),
-                                형개중자후퇴시간 = ds.Tables[i].Rows[j]["type_weight_back_time"].ToString(),
-                                압출시간 = ds.Tables[i].Rows[j]["extrusion_time"].ToString(),
-                                취출시간 = ds.Tables[i].Rows[j]["extraction_time"].ToString(),
-                                스프레이시간 = ds.Tables[i].Rows[j]["spray_time"].ToString(),
-                                금형내부 = ds.Tables[i].Rows[j]["cavity_core"].ToString(),
-                                오염도A = ds.Tables[i].Rows[j]["A_Pollution_degree"].ToString(),
-                                오염도B = ds.Tables[i].Rows[j]["B_Pollution_degree"].ToString(),
-                                탱크진공 = ds.Tables[i].Rows[j]["vacuum"].ToString(),
-                            });
-                        }
-                    }
-                }
                            //0; 0 < 5; 1++
                 for (int i = 0; i < gridModels.Count -1; i++)
                 {
