@@ -1273,9 +1273,9 @@ namespace CalculateForSea
                                 sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
                                 sqlcmd.Parameters.AddWithValue("@DATE", gridModels[i][0].Date);
                                 sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{gridDs.Tables[i].Rows[0]["ORDER_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{gridDs.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{gridDs.Tables[i].Rows[0]["LOT_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
+                                sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
                                 sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
                                 sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
                                 sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
