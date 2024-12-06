@@ -46,6 +46,7 @@ namespace CalculateForSea
             public bool K_OK { get; set; } = false;
             public bool M_OK { get; set; } = false;
             public bool R_OK { get; set; } = false;
+            public double All_Active_Power { get; set; } = 0; // 유효전력
         }
 
         public class DataModel2
@@ -986,7 +987,7 @@ namespace CalculateForSea
             double unitAmount = 0;
             double unitPower = 0;
 
-            double allActivePw = 0;
+   
 
             if (ds.Tables[0].Rows.Count > 0) 
             {
@@ -1005,7 +1006,7 @@ namespace CalculateForSea
 
      
             DataModel2 model2 = models2[0];
-            allActivePw = model.Active_Power + model2.tmActive_Power + model2.FnActive_Power; // 현재 사용전력
+            model.All_Active_Power = model.Active_Power + model2.tmActive_Power + model2.FnActive_Power; // 현재 사용전력
 
             DataSet ds2 = new DataSet();
 
@@ -1049,7 +1050,7 @@ namespace CalculateForSea
                 // 누적 사용량  Casting_162_Cumulative_Power
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Cumulative_Power", Encoding.UTF8.GetBytes(Cumulative_Power.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 // 모든 전력량계 현재사용량
-                _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_All_Active_Power", Encoding.UTF8.GetBytes(allActivePw.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_All_Active_Power", Encoding.UTF8.GetBytes(model.All_Active_Power.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Month_Power_Amount", Encoding.UTF8.GetBytes(monthlyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Load_Power_Consumption_Today_Conversion", Encoding.UTF8.GetBytes(monthConversion.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 _mqttClient.Publish($"/event/c/data_collection_digit/Casting_{160 + machineId}_Daily_Power_Amount", Encoding.UTF8.GetBytes(dailyAmount.ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
@@ -1168,7 +1169,7 @@ namespace CalculateForSea
                                 sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
                                 sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
                                 sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].Active_Power).ToString("F2"));
+                                sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
                                 sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
                                 sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
                                 sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
