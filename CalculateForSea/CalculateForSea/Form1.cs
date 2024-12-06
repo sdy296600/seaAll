@@ -897,12 +897,16 @@ namespace CalculateForSea
             if (models[i].getDtOkCnt != 0.001 && models[i].getDtErrCnt != 0.001 && models[i].getDtWarmCnt != 0.001) 
             {
                 bool checkFirst = models[i].getDtTotalCount == 0.001;
-                models[i].getDtTotalCount = models[i].getDtOkCnt + models[i].getDtErrCnt + models[i].getDtWarmCnt;
-
-                if (!checkFirst)
+                if (checkFirst)
+                {
+                    models[i].getDtTotalCount = models[i].getDtOkCnt + models[i].getDtErrCnt + models[i].getDtWarmCnt;
+                    return;
+                };
+                if (models[i].getDtTotalCount < models[i].getDtOkCnt + models[i].getDtErrCnt + models[i].getDtWarmCnt) 
                 {
                     models[i].dt = DateTime.Now;
-                };
+                }
+                models[i].getDtTotalCount = models[i].getDtOkCnt + models[i].getDtErrCnt + models[i].getDtWarmCnt;
             }
         }
 
