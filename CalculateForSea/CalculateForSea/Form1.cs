@@ -559,7 +559,7 @@ namespace CalculateForSea
                 models.AddRange(new[] { model13, model21, model22, model23, model24, model25 });
                 gridModels.AddRange(new[] { list_13, list_21, list_22, list_23, list_24, list_25 });
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
-                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 3000);//3000
+                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 500);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
             }
             catch (Exception)
@@ -1145,7 +1145,6 @@ namespace CalculateForSea
                         ThreadMethod(ds, index);
                     });
                     tasks.Add(task);
-                    Task.WhenAll(tasks).Wait();
                 }
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_13", Encoding.UTF8.GetBytes((model13.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_21", Encoding.UTF8.GetBytes((model21.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
