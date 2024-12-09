@@ -1208,7 +1208,7 @@ namespace CalculateForSea
                     nowPordCnt = Convert.ToInt32(WORK_OKCNT)
                         + Convert.ToInt32(WORK_ERRCOUNT);
 
-                    if (models[i].Totalcnt != nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
+                    if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
                         Thread.Sleep(1000);
                         int machine_id;
