@@ -150,7 +150,7 @@ namespace CalculateForSea
                 }
                 if (datas[0] == "1")
                 {
-                    Thread.Sleep(20);
+                    //Thread.Sleep(20);
                     var item = LSClient.Read("%DW816", 4);
                     foreach (int readItem in item.Cast(DataType.Word))
                     {
@@ -560,7 +560,7 @@ namespace CalculateForSea
                 models.AddRange(new[] { model13, model21, model22, model23, model24, model25 });
                 gridModels.AddRange(new[] { list_13, list_21, list_22, list_23, list_24, list_25 });
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
-                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 500);//3000
+                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 2000);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
             }
             catch (Exception)
