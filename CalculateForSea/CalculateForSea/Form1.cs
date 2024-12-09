@@ -1147,6 +1147,8 @@ namespace CalculateForSea
                     });
                     tasks.Add(task);
                 }
+                Task.WaitAll(tasks.ToArray());
+
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_13", Encoding.UTF8.GetBytes((model13.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_21", Encoding.UTF8.GetBytes((model21.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_22", Encoding.UTF8.GetBytes((model22.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
@@ -1210,7 +1212,7 @@ namespace CalculateForSea
 
                     if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(10000);
                         int machine_id;
                         //여기에 
                         switch (i)
