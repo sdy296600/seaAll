@@ -1402,7 +1402,7 @@ namespace CalculateForSea
                                 sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
                                 sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
                                 sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].스프레이시간);
+                                sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
                                 sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
                                 sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
                                 sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
