@@ -150,7 +150,7 @@ namespace CalculateForSea
                 }
                 if (datas[0] == "1")
                 {
-                    Thread.Sleep(200);
+                    Thread.Sleep(20);
                     var item = LSClient.Read("%DW816", 4);
                     foreach (int readItem in item.Cast(DataType.Word))
                     {
@@ -222,7 +222,7 @@ namespace CalculateForSea
                 while (true) // 반복적으로 실행
                 {
                     GetPlcAsync("%MX830", LSClient);
-                    Task.Delay(30);
+                    Task.Delay(10);
                 }
             });
         }
