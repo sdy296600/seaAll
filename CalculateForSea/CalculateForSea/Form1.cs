@@ -158,13 +158,18 @@ namespace CalculateForSea
                     }
                     TcpChannel ch = LSClient.Channel as TcpChannel;
                     int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1].ToString());
-                    lock (gridModels_DCM[i]) 
+                    lock (gridModels_DCM[i])
                     {
                         gridModels_DCM[i].금형내부 = datas[1];
                         gridModels_DCM[i].오염도A = datas[2];
                         gridModels_DCM[i].오염도B = datas[3];
                         gridModels_DCM[i].탱크진공 = datas[4];
                     }
+                    string data = $@"
+                    {datas[0]} {datas[1]} {datas[2]} {datas[3]} {datas[4]}  
+
+                    ";
+                
                     int machine_id;
                     switch (i)
                     {
@@ -190,6 +195,7 @@ namespace CalculateForSea
                         default:
                             return;
                     }
+                    WriteLog(machine_id +" "+ data);
                     dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
                     dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
                     dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
@@ -1441,33 +1447,52 @@ namespace CalculateForSea
 
 
 
-                    work_performanceSql = $@"    UPDATE work_performance                                                                        
-                                                    SET work_power = IFNULL((
-                                                        SELECT WORK_POWER - LAST_POWER 
-                                                        FROM WORK_DATA 
-                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                    ), 0),                                                                                                 
-                                                    work_okcnt = IFNULL((
-                                                        SELECT (WORK_OKCNT - START_OKCNT) - (WORK_ERRCOUNT - START_ERRCOUNT) 
-                                                        FROM WORK_DATA 
-                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                    ), 0) * {cavity},                                                          
-                                                    work_errcount = IFNULL((
-                                                        SELECT WORK_ERRCOUNT - START_ERRCOUNT 
-                                                        FROM WORK_DATA 
-                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                    ), 0) * {cavity},                                                          
-                                                    work_warmupcnt = IFNULL((
-                                                        SELECT WORK_WARMUPCNT - START_WARMUPCNT 
-                                                        FROM WORK_DATA 
-                                                        WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                    ), 0)
-                                                    WHERE end_time = start_time                                                                   
-                                                        AND WORK_PERFORMANCE_ID = '{models[i].ID}'                                                               
-                                                    ORDER BY ID DESC LIMIT 1;
-                                                    UPDATE WORK_DATA SET
-                                                        LAST_POWER = WORK_POWER
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                    work_performanceSql = $@"   UPDATE work_performance
+                                            SET work_power = IFNULL((
+                                                    SELECT 
+                                                        CASE 
+                                                            WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER
+                                                            ELSE WORK_POWER - LAST_POWER
+                                                        END
+                                                    FROM WORK_DATA
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                ), 0),
+                                                work_okcnt = IFNULL((
+                                                    SELECT 
+                                                        CASE 
+                                                            WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
+                                                            ELSE WORK_OKCNT - START_OKCNT
+                                                        END - 
+                                                        CASE 
+                                                            WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT
+                                                        END
+                                                    FROM WORK_DATA
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                ), 0) * {cavity},
+                                                work_errcount = IFNULL((
+                                                    SELECT 
+                                                        CASE 
+                                                            WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT
+                                                        END
+                                                    FROM WORK_DATA
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                ), 0) * {cavity},
+                                                work_warmupcnt = IFNULL((
+                                                    SELECT 
+                                                        CASE 
+                                                            WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
+                                                            ELSE WORK_WARMUPCNT - START_WARMUPCNT
+                                                        END
+                                                    FROM WORK_DATA
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                ), 0)
+                                            WHERE end_time = start_time
+                                              AND WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                            ORDER BY ID DESC
+                                            LIMIT 1;
+
                                                     ";
 
                     MySqlConnection conn3 = new MySqlConnection(ConnectionString);
