@@ -19,12 +19,12 @@ using System.Reflection;
 using VagabondK.Protocols.LSElectric.FEnet;
 using VagabondK.Protocols.Channels;
 using VagabondK.Protocols.LSElectric;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace CalculateForSea
 {
     public partial class Form1 : Form
     {
-        
 
         #region 모델
         public class DataModel
@@ -53,6 +53,8 @@ namespace CalculateForSea
             public double getDtOkCnt { get; set; } = 0.001;
             public double getDtErrCnt { get; set; } = 0.001;
             public double getDtWarmCnt { get; set; } = 0.001;
+
+            public bool is_Running = false;
 
         }
 
@@ -554,7 +556,7 @@ namespace CalculateForSea
                 models.AddRange(new[] { model13, model21, model22, model23, model24, model25 });
                 gridModels.AddRange(new[] { list_13, list_21, list_22, list_23, list_24, list_25 });
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
-                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 2000);//3000
+                _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 1000);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
             }
             catch (Exception)
@@ -1139,9 +1141,7 @@ namespace CalculateForSea
                     {
                         ThreadMethod(ds, index);
                     });
-                    tasks.Add(task);
                 }
-                Task.WaitAll(tasks.ToArray());
 
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_13", Encoding.UTF8.GetBytes((model13.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_21", Encoding.UTF8.GetBytes((model21.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
@@ -1158,6 +1158,8 @@ namespace CalculateForSea
 
         private void ThreadMethod(DataSet ds ,int i)
         {
+            if (models[i].is_Running) return;
+            models[i].is_Running = true;
             WriteLog("Data Received");
 
             int nowPordCnt = 0;
@@ -1542,6 +1544,7 @@ namespace CalculateForSea
                     break;
             }
             CalculateAndPublishPowerConsumption(models[i], i);
+            models[i].is_Running = false;
             Thread.Sleep(20);
         }
         #region SEND_MQTT
@@ -1638,6 +1641,7 @@ namespace CalculateForSea
             {
                 WriteLog("21호기 값 없음");
             }
+
         }
 
         private void SendMQTT_22(DataSet ds, int i)
