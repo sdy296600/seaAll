@@ -165,10 +165,7 @@ namespace CalculateForSea
                         gridModels_DCM[i].오염도B = datas[3];
                         gridModels_DCM[i].탱크진공 = datas[4];
                     }
-                    string data = $@"
-                    {datas[0]} {datas[1]} {datas[2]} {datas[3]} {datas[4]}  
-
-                    ";
+                
                 
                     int machine_id;
                     switch (i)
@@ -195,7 +192,6 @@ namespace CalculateForSea
                         default:
                             return;
                     }
-                    WriteLog(machine_id +" "+ data);
                     dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
                     dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
                     dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
@@ -210,9 +206,7 @@ namespace CalculateForSea
             }
             finally
             {
-                
             }
-           
         }
 
         public void StartPlcMonitoring(FEnetClient LSClient)
@@ -1212,7 +1206,7 @@ namespace CalculateForSea
 
                     if (models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
-                        Thread.Sleep(10000);
+                        Thread.Sleep(3000);
                         int machine_id;
                         //여기에 
                         switch (i)
