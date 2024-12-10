@@ -1449,7 +1449,7 @@ namespace CalculateForSea
                                             SET work_power = IFNULL((
                                                     SELECT 
                                                         CASE 
-                                                            WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER
+                                                            WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
                                                             ELSE WORK_POWER - LAST_POWER
                                                         END
                                                     FROM WORK_DATA
@@ -1490,7 +1490,9 @@ namespace CalculateForSea
                                               AND WORK_PERFORMANCE_ID = '{models[i].ID}'
                                             ORDER BY ID DESC
                                             LIMIT 1;
-
+                                            UPDATE WORK_DATA SET
+                                                LAST_POWER = WORK_POWER
+                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
                                                     ";
 
                     MySqlConnection conn3 = new MySqlConnection(ConnectionString);
