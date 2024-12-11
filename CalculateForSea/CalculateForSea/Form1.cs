@@ -1059,7 +1059,7 @@ namespace CalculateForSea
 
      
             DataModel2 model2 = models2[machineId];
-            model.All_Active_Power = model.Active_Power + model2.tmActive_Power + model2.FnActive_Power; // 현재 사용전력
+            //model.All_Active_Power = model.Active_Power + model2.tmActive_Power + model2.FnActive_Power; // 현재 사용전력
 
             DataSet ds2 = new DataSet();
 
