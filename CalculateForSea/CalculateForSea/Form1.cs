@@ -30,7 +30,7 @@ namespace CalculateForSea
         #region 모델
         public class DataModel
         {
-            public double NowShotKW { get; set; } = 0; // 현재 누적전력량
+            public double NowShotKW { get; set; } = -1; // 현재 누적전력량
             public double Consumption_K { get; set; } = 0; // 누적 ESG (kWh)
             public double Consumption_M { get; set; } = 0; // 누적 ESG (MWh)
             public double ConsumptionRETI { get; set; } = 0; // 누적 RETI
@@ -1328,7 +1328,7 @@ namespace CalculateForSea
                                              $"cavity_core,                                                                                   " +
                                              $"A_Pollution_degree,                                                                            " +
                                              $"B_Pollution_degree                                                                             " +
-                                             $", vacuum" +
+                                             $", vacuum                                                                                         " +
                                              $", SHOTCNT                                                                                       " +
                                              $")                                                                                              " +
                                              $"VALUES                                                                                         " +
@@ -1472,6 +1472,7 @@ namespace CalculateForSea
                                 sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
                                 sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
                                 sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
                                 sqlcmd.ExecuteNonQuery();
 
                                 WriteLog("SHOT Data Processed");
@@ -1622,10 +1623,8 @@ namespace CalculateForSea
                                     sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
                                     sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
                                     sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                    sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
-                                    sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
-                                    sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
-                                    sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                    sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
+
                                     sqlcmd.ExecuteNonQuery();
 
                                     WriteLog("SHOT Data Processed");
@@ -1634,8 +1633,11 @@ namespace CalculateForSea
                             }
                         }
                     }
-                        
 
+                    if (models[i].NowShotKW == -1) 
+                    {
+                        models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
+                    }
 
                     models[i].Totalcnt = nowtotalcnt;
                     models[i].PROD_CNT = nowPordCnt;
