@@ -1221,6 +1221,9 @@ namespace CalculateForSea
                                                     WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
                                                 ), 0)
                                             WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                            UPDATE WORK_DATA SET
+                                                LAST_POWER = WORK_POWER
+                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
                                                     ";
                         MySqlConnection conn4 = new MySqlConnection(ConnectionString);
                         using (conn4)
@@ -1249,7 +1252,7 @@ namespace CalculateForSea
                             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                             adapter.Fill(ds2);
                         }
-                        string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[i].Rows[0]["WORK_POWER"].ToString();
+                        string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[0].Rows[0]["WORK_POWER"].ToString();
                         int machine_id;
                         //여기에 
                         switch (i)
@@ -1737,9 +1740,7 @@ namespace CalculateForSea
                                               AND WORK_PERFORMANCE_ID = '{models[i].ID}'
                                             ORDER BY ID DESC
                                             LIMIT 1;
-                                            UPDATE WORK_DATA SET
-                                                LAST_POWER = WORK_POWER
-                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                        
                                                     ";
 
                     MySqlConnection conn3 = new MySqlConnection(ConnectionString);
