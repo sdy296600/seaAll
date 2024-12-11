@@ -1634,8 +1634,6 @@ namespace CalculateForSea
                         }
                     }
 
-                    models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
-
                     models[i].Totalcnt = nowtotalcnt;
                     models[i].PROD_CNT = nowPordCnt;
                
