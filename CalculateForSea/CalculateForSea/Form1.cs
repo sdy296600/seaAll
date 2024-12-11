@@ -1242,66 +1242,66 @@ namespace CalculateForSea
 
                         }
                         string mysqlString =
-                                            $"INSERT INTO data_for_grid                                                                      " +
-                                            $"(                                                                                              " +
-                                            $"`date`,                                                                                        " +
-                                            $"machine_no,                                                                                    " +
-                                            $"V1,                                                                                            " +
-                                            $"V2,                                                                                            " +
-                                            $"V3,                                                                                            " +
-                                            $"V4,                                                                                            " +
-                                            $"acceleration_pos,                                                                              " +
-                                            $"deceleration_pos,                                                                              " +
-                                            $"metal_pressure,                                                                                " +
-                                            $"swap_time,                                                                                     " +
-                                            $"biskit_thickness,                                                                              " +
-                                            $"physical_strength_per,                                                                         " +
-                                            $"physical_strength_mn,                                                                          " +
-                                            $"cycle_time,                                                                                    " +
-                                            $"type_weight_enrty_time,                                                                        " +
-                                            $"bath_time,                                                                                     " +
-                                            $"forward_time,                                                                                  " +
-                                            $"freezing_time,                                                                                 " +
-                                            $"type_weight_back_time,                                                                         " +
-                                            $"extrusion_time,                                                                                " +
-                                            $"extraction_time,                                                                               " +
-                                            $"spray_time,                                                                                    " +
-                                            $"cavity_core,                                                                                   " +
-                                            $"A_Pollution_degree,                                                                            " +
-                                            $"B_Pollution_degree                                                                             " +
-                                            $", vacuum                                                                                       " +
-                                            $")                                                                                              " +
-                                            $"VALUES                                                                                         " +
-                                            $"(                                                                                              " +
-                                            $"now(),                                                                                         " +
-                                            $"'WCI_D{machine_id}',                                                                                     " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
-                                            $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
-                                            (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
-                                            (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
-                                            (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
-                                            (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
-                                            $");                                                                                             " +
+                                            //$"INSERT INTO data_for_grid                                                                      " +
+                                            //$"(                                                                                              " +
+                                            //$"`date`,                                                                                        " +
+                                            //$"machine_no,                                                                                    " +
+                                            //$"V1,                                                                                            " +
+                                            //$"V2,                                                                                            " +
+                                            //$"V3,                                                                                            " +
+                                            //$"V4,                                                                                            " +
+                                            //$"acceleration_pos,                                                                              " +
+                                            //$"deceleration_pos,                                                                              " +
+                                            //$"metal_pressure,                                                                                " +
+                                            //$"swap_time,                                                                                     " +
+                                            //$"biskit_thickness,                                                                              " +
+                                            //$"physical_strength_per,                                                                         " +
+                                            //$"physical_strength_mn,                                                                          " +
+                                            //$"cycle_time,                                                                                    " +
+                                            //$"type_weight_enrty_time,                                                                        " +
+                                            //$"bath_time,                                                                                     " +
+                                            //$"forward_time,                                                                                  " +
+                                            //$"freezing_time,                                                                                 " +
+                                            //$"type_weight_back_time,                                                                         " +
+                                            //$"extrusion_time,                                                                                " +
+                                            //$"extraction_time,                                                                               " +
+                                            //$"spray_time,                                                                                    " +
+                                            //$"cavity_core,                                                                                   " +
+                                            //$"A_Pollution_degree,                                                                            " +
+                                            //$"B_Pollution_degree                                                                             " +
+                                            //$", vacuum                                                                                       " +
+                                            //$")                                                                                              " +
+                                            //$"VALUES                                                                                         " +
+                                            //$"(                                                                                              " +
+                                            //$"now(),                                                                                         " +
+                                            //$"'WCI_D{machine_id}',                                                                                     " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
+                                            //$"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
+                                            //(machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
+                                            //(machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
+                                            //(machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
+                                            //(machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
+                                            //$");                                                                                             " +
 
-                                            "INSERT INTO data_for_grid2                                                                      " +
+                                            $"INSERT INTO data_for_grid                                                                      " +
                                              $"(                                                                                              " +
                                              $"`date`,                                                                                        " +
                                              $"machine_no,                                                                                    " +
@@ -1518,12 +1518,12 @@ namespace CalculateForSea
                             string mysqlString =
                                                 $@"CREATE TEMPORARY TABLE TempData AS
                                                 SELECT id
-                                                FROM data_for_grid2
+                                                FROM data_for_grid
                                                 WHERE machine_no = 'WCI_D{machine_id}'
                                                 ORDER BY id DESC
                                                 LIMIT 3;
 
-                                            UPDATE data_for_grid2
+                                            UPDATE data_for_grid
                                                     SET
                                         cycle_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'),
                                         type_weight_enrty_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'),
