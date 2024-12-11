@@ -1358,7 +1358,7 @@ namespace CalculateForSea
                                              (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
                                              (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
                                              (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
-                                             (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819')") +
+                                             (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819'),") +
                                              $"'{nowtotalcnt}'"+
                                              $");                                                                                             ";
                         MySqlConnection conn2 = new MySqlConnection(ConnectionString);
@@ -1481,69 +1481,72 @@ namespace CalculateForSea
                     }
                     else 
                     {
-                        int machine_id;
-                        //여기에 
-                        switch (i)
+                        if (models[i].Totalcnt != -1) 
                         {
-                            case 0:
-                                machine_id = 13;
-                                break;
-                            case 1:
-                                machine_id = 21;
+                            int machine_id;
+                            //여기에 
+                            switch (i)
+                            {
+                                case 0:
+                                    machine_id = 13;
+                                    break;
+                                case 1:
+                                    machine_id = 21;
 
-                                break;
-                            case 2:
-                                machine_id = 22;
+                                    break;
+                                case 2:
+                                    machine_id = 22;
 
-                                break;
-                            case 3:
-                                machine_id = 23;
+                                    break;
+                                case 3:
+                                    machine_id = 23;
 
-                                break;
-                            case 4:
-                                machine_id = 24;
+                                    break;
+                                case 4:
+                                    machine_id = 24;
 
-                                break;
-                            case 5:
-                                machine_id = 25;
+                                    break;
+                                case 5:
+                                    machine_id = 25;
 
-                                break;
-                            default:
-                                return;
+                                    break;
+                                default:
+                                    return;
 
-                        }
-                        string mysqlString =
-                                            $@"CREATE TEMPORARY TABLE TempData AS
+                            }
+                            string mysqlString =
+                                                $@"CREATE TEMPORARY TABLE TempData AS
                                                 SELECT id
-                                                FROM data_for_grid
+                                                FROM data_for_grid2
                                                 WHERE machine_no = 'WCI_D{machine_id}'
                                                 ORDER BY id DESC
                                                 LIMIT 3;
 
-                                            UPDATE data_for_grid
+                                            UPDATE data_for_grid2
                                                     SET
                                         cycle_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'),
-                                        type_weight_enrty_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled')',
-                                        bath_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled')',
-                                        forward_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled')',
-                                        freezing_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled')',
-                                        type_weight_back_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled')',
-                                        extrusion_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled')',
-                                        extraction_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled')',
-                                        spray_time = '(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled')'
+                                        type_weight_enrty_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'),
+                                        bath_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'),
+                                        forward_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'),
+                                        freezing_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'),
+                                        type_weight_back_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'),
+                                        extrusion_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'),
+                                        extraction_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'),
+                                        spray_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled')
                                         WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{models[i].Totalcnt}';
 
                             DROP TEMPORARY TABLE TempData;";
-                        MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                        using (conn2)
-                        {
-                            conn2.Open();
+                            MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                            using (conn2)
+                            {
+                                conn2.Open();
 
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = mysqlString;
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn2;
-                            cmd.ExecuteNonQuery();
+                                MySqlCommand cmd = new MySqlCommand();
+                                cmd.CommandText = mysqlString;
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Connection = conn2;
+                                cmd.ExecuteNonQuery();
+                            }
                         }
                     }
                         
