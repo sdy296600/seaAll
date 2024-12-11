@@ -1195,7 +1195,6 @@ namespace CalculateForSea
                     string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
                     string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
                     string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
-                    string WORK_POWER = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_POWER"].ToString();
 
                     if (WORK_PERFORMANCE_ID != models[i].ID)
                     {
@@ -1210,6 +1209,47 @@ namespace CalculateForSea
 
                     if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
+
+                        string workSql = $@"   UPDATE work_performance
+                                            SET work_power = IFNULL((
+                                                    SELECT 
+                                                        CASE 
+                                                            WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
+                                                            ELSE WORK_POWER - LAST_POWER
+                                                        END
+                                                    FROM WORK_DATA
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                ), 0)
+                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                                    ";
+                        MySqlConnection conn4 = new MySqlConnection(ConnectionString);
+                        using (conn4)
+                        {
+                            conn4.Open();
+
+                            MySqlCommand cmd = new MySqlCommand();
+                            cmd.CommandText = workSql;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Connection = conn4;
+                            cmd.ExecuteNonQuery();
+                        }
+                        string WORK_POWERsql = $@"   SELECT WORK_POWER FROM WORK_PERFORMANCE
+                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                                    ";
+                        DataSet ds2 = new DataSet();
+                        MySqlConnection conn5 = new MySqlConnection(ConnectionString);
+                        using (conn5)
+                        {
+                            conn5.Open();
+
+                            MySqlCommand cmd = new MySqlCommand();
+                            cmd.CommandText = WORK_POWERsql;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Connection = conn5;
+                            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                            adapter.Fill(ds2);
+                        }
+                        string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[i].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[i].Rows[0]["WORK_POWER"].ToString();
                         int machine_id;
                         //여기에 
                         switch (i)
@@ -1661,15 +1701,7 @@ namespace CalculateForSea
 
 
                     work_performanceSql = $@"   UPDATE work_performance
-                                            SET work_power = IFNULL((
-                                                    SELECT 
-                                                        CASE 
-                                                            WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
-                                                            ELSE WORK_POWER - LAST_POWER
-                                                        END
-                                                    FROM WORK_DATA
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                ), 0),
+                                            SET
                                                 work_okcnt = IFNULL((
                                                     SELECT 
                                                         CASE 
