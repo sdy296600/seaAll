@@ -1425,8 +1425,7 @@ namespace CalculateForSea
                                 }
                             }
                         }
-                        models[i].All_Active_Power = (models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW;
-
+                        models[i].All_Active_Power = Convert.ToDouble(WORK_POWER);
                         if ((models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW > 0)
                         {
                             models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
@@ -1635,10 +1634,7 @@ namespace CalculateForSea
                         }
                     }
 
-                    if (models[i].NowShotKW == -1) 
-                    {
-                        models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
-                    }
+                    models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
 
                     models[i].Totalcnt = nowtotalcnt;
                     models[i].PROD_CNT = nowPordCnt;
