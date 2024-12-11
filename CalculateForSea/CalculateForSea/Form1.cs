@@ -1209,7 +1209,6 @@ namespace CalculateForSea
 
                     if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
                     {
-                        Thread.Sleep(3000);
                         int machine_id;
                         //여기에 
                         switch (i)
