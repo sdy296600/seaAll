@@ -145,6 +145,8 @@ namespace CalculateForSea
 
         public void GetPlcAsync(string address, FEnetClient LSClient)
         {
+            TcpChannel ch = LSClient.Channel as TcpChannel;
+            int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1].ToString());
             try
             {
                 List<string> datas = new List<string>();
@@ -160,8 +162,7 @@ namespace CalculateForSea
                     {
                         datas.Add(readItem.ToString());
                     }
-                    TcpChannel ch = LSClient.Channel as TcpChannel;
-                    int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1].ToString());
+                 
                     lock (gridModels_DCM[i])
                     {
                         gridModels_DCM[i].금형내부 = datas[1];
@@ -204,9 +205,24 @@ namespace CalculateForSea
             }
             catch (TimeoutException ex)
             {
+                lock (gridModels_DCM[i])
+                {
+                    gridModels_DCM[i].금형내부 = "0";
+                    gridModels_DCM[i].오염도A = "0";
+                    gridModels_DCM[i].오염도B = "0";
+                    gridModels_DCM[i].탱크진공 = "0";
+                }
+
             }
             catch (Exception ex)
             {
+                lock (gridModels_DCM[i])
+                {
+                    gridModels_DCM[i].금형내부 = "0";
+                    gridModels_DCM[i].오염도A = "0";
+                    gridModels_DCM[i].오염도B = "0";
+                    gridModels_DCM[i].탱크진공 = "0";
+                }
             }
             finally
             {
