@@ -1336,30 +1336,30 @@ namespace CalculateForSea
                                              $"(                                                                                              " +
                                              $"now(),                                                                                         " +
                                              $"'WCI_D{machine_id}',                                                                                     " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6900_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6902_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6904_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6906_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6908'),       " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6910'),       " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6912_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6914'),       " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6916'),       " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6918'),       " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6920_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'), " +
-                                             $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled'), " +
-                                             (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW816'),") +
-                                             (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW817'),") +
-                                             (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW818'),") +
-                                             (machine_id == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id}_DW819'),") +
+                                             $"'{gridModels_DCM[i].V1}', " +
+                                             $"'{gridModels_DCM[i].V2}', " +
+                                             $"'{gridModels_DCM[i].V3}', " +
+                                             $"'{gridModels_DCM[i].V4}', " +
+                                             $"'{gridModels_DCM[i].가속위치}',       " +
+                                             $"'{gridModels_DCM[i].감속위치}',       " +
+                                             $"'{gridModels_DCM[i].메탈압력}',       " +
+                                             $"'{gridModels_DCM[i].승압시간}',       " +
+                                             $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                             $"'{gridModels_DCM[i].형체력}',       " +
+                                             $"'{gridModels_DCM[i].형체력MN}', " +
+                                             $"'{gridModels_DCM[i].사이클타임}', " +
+                                             $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                             $"'{gridModels_DCM[i].주탕시간}', " +
+                                             $"'{gridModels_DCM[i].사출전진시간}', " +
+                                             $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                             $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                             $"'{gridModels_DCM[i].압출시간}', " +
+                                             $"'{gridModels_DCM[i].취출시간}', " +
+                                             $"'{gridModels_DCM[i].스프레이시간}', " +
+                                             $"'{gridModels_DCM[i].금형내부}', " +
+                                             $"'{gridModels_DCM[i].오염도A}', " +
+                                             $"'{gridModels_DCM[i].오염도B}', " +
+                                             $"'{gridModels_DCM[i].탱크진공}', " +
                                              $"'{nowtotalcnt}'"+
                                              $");                                                                                             ";
                         MySqlConnection conn2 = new MySqlConnection(ConnectionString);
@@ -1525,16 +1525,17 @@ namespace CalculateForSea
                                                 LIMIT 3;
 
                                             UPDATE data_for_grid
+
                                                     SET
-                                        cycle_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6936_Ruled'),
-                                        type_weight_enrty_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6938_Ruled'),
-                                        bath_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6940_Ruled'),
-                                        forward_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6942_Ruled'),
-                                        freezing_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6944_Ruled'),
-                                        type_weight_back_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6946_Ruled'),
-                                        extrusion_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6948_Ruled'),
-                                        extraction_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6950_Ruled'),
-                                        spray_time = (select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id}_TAG_D6952_Ruled')
+                                        cycle_time = '{gridModels_DCM[i].사이클타임}',
+                                        type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
+                                        bath_time = '{gridModels_DCM[i].주탕시간}',
+                                        forward_time = '{gridModels_DCM[i].사출전진시간}',
+                                        freezing_time = '{gridModels_DCM[i].제품냉각시간}',
+                                        type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
+                                        extrusion_time = '{gridModels_DCM[i].압출시간}',
+                                        extraction_time = '{gridModels_DCM[i].취출시간}',
+                                        spray_time = '{gridModels_DCM[i].스프레이시간}'
                                         WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
 
                             DROP TEMPORARY TABLE TempData;";
@@ -1781,30 +1782,30 @@ namespace CalculateForSea
                                                $"(                                                                                              " +
                                                $"now(),                                                                                         " +
                                                $"'WCI_D{machine_id2}',                                                                                     " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6900_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6902_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6904_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6906_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6908'),       " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6910'),       " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6912_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6914'),       " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6916'),       " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6918'),       " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6920_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6936_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6938_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6940_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6942_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6944_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6946_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6948_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6950_Ruled'), " +
-                                               $"(select collection_value from dm_alarm_status where resource_code = 'DCM_{machine_id2}_TAG_D6952_Ruled'), " +
-                                               (machine_id2 == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id2}_DW816'),") +
-                                               (machine_id2 == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id2}_DW817'),") +
-                                               (machine_id2 == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id2}_DW818'),") +
-                                               (machine_id2 == 13 ? "0," : $"(select collection_value from dm_alarm_status where resource_code = 'LS_{machine_id2}_DW819'),") +
+                                                $"'{gridModels_DCM[i].V1}', " +
+                                                 $"'{gridModels_DCM[i].V2}', " +
+                                                 $"'{gridModels_DCM[i].V3}', " +
+                                                 $"'{gridModels_DCM[i].V4}', " +
+                                                 $"'{gridModels_DCM[i].가속위치}',       " +
+                                                 $"'{gridModels_DCM[i].감속위치}',       " +
+                                                 $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                 $"'{gridModels_DCM[i].승압시간}',       " +
+                                                 $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                 $"'{gridModels_DCM[i].형체력}',       " +
+                                                 $"'{gridModels_DCM[i].형체력MN}', " +
+                                                 $"'{gridModels_DCM[i].사이클타임}', " +
+                                                 $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                 $"'{gridModels_DCM[i].주탕시간}', " +
+                                                 $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                 $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                 $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                 $"'{gridModels_DCM[i].압출시간}', " +
+                                                 $"'{gridModels_DCM[i].취출시간}', " +
+                                                 $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                 $"'{gridModels_DCM[i].금형내부}', " +
+                                                 $"'{gridModels_DCM[i].오염도A}', " +
+                                                 $"'{gridModels_DCM[i].오염도B}', " +
+                                                 $"'{gridModels_DCM[i].탱크진공}', " +
                                                $"'{nowtotalcnt}'" +
                                                $");                                                                                             ";
                         MySqlConnection conn10 = new MySqlConnection(ConnectionString);
