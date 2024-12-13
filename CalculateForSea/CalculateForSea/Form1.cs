@@ -927,13 +927,13 @@ namespace CalculateForSea
             if (topic.Contains("_TAG_D3704"))
             {
                 models[indexM].getDtOkCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
-                SaveWorkData($"UPDATE WORK_DATA SET WORK_OKCNT = '{models[indexM].getDtOkCnt}'", indexM);
+                //SaveWorkData($"UPDATE WORK_DATA SET WORK_OKCNT = '{models[indexM].getDtOkCnt}'", indexM);
                 checkDt(indexM);
             }
             if (topic.Contains("_TAG_D3705"))
             {
                 models[indexM].getDtErrCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
-                SaveWorkData($"UPDATE WORK_DATA SET WORK_ERRCOUNT = '{models[indexM].getDtErrCnt}'", indexM);
+                //SaveWorkData($"UPDATE WORK_DATA SET WORK_ERRCOUNT = '{models[indexM].getDtErrCnt}'", indexM);
                 checkDt(indexM);
 
 
@@ -941,7 +941,7 @@ namespace CalculateForSea
             if (topic.Contains("_TAG_D3706"))
             {
                 models[indexM].getDtWarmCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
-                SaveWorkData($"UPDATE WORK_DATA SET WORK_WARMUPCNT = '{models[indexM].getDtWarmCnt}'", indexM);
+                //SaveWorkData($"UPDATE WORK_DATA SET WORK_WARMUPCNT = '{models[indexM].getDtWarmCnt}'", indexM);
                 checkDt(indexM);
             }
         }
@@ -964,7 +964,7 @@ namespace CalculateForSea
             }
         }
 
-        private void SaveWorkData(string sql, int id) 
+        private void SaveWorkData(string sql, int id)
         {
 
             string mysqlString = sql + $@" WHERE WORK_PERFORMANCE_ID = '{models[id].ID}'";
@@ -1182,7 +1182,7 @@ namespace CalculateForSea
             {
 
                 GET_DCM gET = new GET_DCM(i);
-                await gET.GetPlcAsync(gridModels_DCM[i]);
+                await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
 
                 DataSet ds = new DataSet();
                 DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
