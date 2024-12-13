@@ -1455,59 +1455,59 @@ namespace CalculateForSea
                                 cmd.Connection = conn2;
                                 cmd.ExecuteNonQuery();
                             }
-                            DataSet gridDs = new DataSet();
-                            MySqlConnection conn = new MySqlConnection(ConnectionString);
-                            using (conn)
-                            {
-                                conn.Open();
+                            //DataSet gridDs = new DataSet();
+                            //MySqlConnection conn = new MySqlConnection(ConnectionString);
+                            //using (conn)
+                            //{
+                            //    conn.Open();
 
-                                MySqlCommand cmd = new MySqlCommand();
-                                cmd.CommandText = "SelectGridHistory";
-                                cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Connection = conn;
-                                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                                adapter.Fill(gridDs);
-                            }
+                            //    MySqlCommand cmd = new MySqlCommand();
+                            //    cmd.CommandText = "SelectGridHistory";
+                            //    cmd.CommandType = CommandType.StoredProcedure;
+                            //    cmd.Connection = conn;
+                            //    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                            //    adapter.Fill(gridDs);
+                            //}
 
-                            for (int id = 0; id < gridDs.Tables.Count; id++)
-                            {
-                                gridModels[id] = new List<GridModel>();
-                                if (gridDs.Tables[id].Rows.Count > 0)
-                                {
-                                    for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
-                                    {
-                                        gridModels[id].Add(new GridModel()
-                                        {
-                                            Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
-                                            설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
-                                            V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
-                                            V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
-                                            V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
-                                            V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
-                                            가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
-                                            감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
-                                            메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
-                                            승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
-                                            비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
-                                            형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
-                                            형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
-                                            사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
-                                            형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
-                                            주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
-                                            사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
-                                            제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
-                                            형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
-                                            압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
-                                            취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
-                                            스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
-                                            금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
-                                            오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
-                                            오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
-                                            탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
-                                        });
-                                    }
-                                }
-                            }
+                            //for (int id = 0; id < gridDs.Tables.Count; id++)
+                            //{
+                            //    gridModels[id] = new List<GridModel>();
+                            //    if (gridDs.Tables[id].Rows.Count > 0)
+                            //    {
+                            //        for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
+                            //        {
+                            //            gridModels[id].Add(new GridModel()
+                            //            {
+                            //                Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
+                            //                설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
+                            //                V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
+                            //                V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
+                            //                V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
+                            //                V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
+                            //                가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
+                            //                감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
+                            //                메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
+                            //                승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
+                            //                비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
+                            //                형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
+                            //                형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
+                            //                사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
+                            //                형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
+                            //                주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
+                            //                사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
+                            //                제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
+                            //                형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
+                            //                압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
+                            //                취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
+                            //                스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
+                            //                금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
+                            //                오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
+                            //                오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
+                            //                탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
+                            //            });
+                            //        }
+                            //    }
+                            //}
                             models[i].All_Active_Power = Convert.ToDouble(WORK_POWER);
                             if ((models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW > 0)
                             {
@@ -1528,35 +1528,35 @@ namespace CalculateForSea
                                         //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
                                         string dtValue = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                         sqlcmd.Parameters.AddWithValue("@Date", dtValue);
-                                        sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
+                                        sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels_DCM[i].설비No);
                                         sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
                                         sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
                                         sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
                                         sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
-                                        sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
-                                        sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
-                                        sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
-                                        sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
-                                        sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
-                                        sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
-                                        sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
-                                        sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
-                                        sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
-                                        sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
-                                        sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
-                                        sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                        sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                        sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                        sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                        sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                        sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                        sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                        sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
-                                        sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                        sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
-                                        sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
-                                        sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
-                                        sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                        sqlcmd.Parameters.AddWithValue("@V1", gridModels_DCM[i].V1);
+                                        sqlcmd.Parameters.AddWithValue("@V2", gridModels_DCM[i].V2);
+                                        sqlcmd.Parameters.AddWithValue("@V3", gridModels_DCM[i].V3);
+                                        sqlcmd.Parameters.AddWithValue("@V4", gridModels_DCM[i].V4);
+                                        sqlcmd.Parameters.AddWithValue("@가속위치", gridModels_DCM[i].가속위치);
+                                        sqlcmd.Parameters.AddWithValue("@감속위치", gridModels_DCM[i].감속위치);
+                                        sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels_DCM[i].메탈압력);
+                                        sqlcmd.Parameters.AddWithValue("@승압시간", gridModels_DCM[i].승압시간);
+                                        sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels_DCM[i].비스켓두께);
+                                        sqlcmd.Parameters.AddWithValue("@형체력", gridModels_DCM[i].형체력);
+                                        sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels_DCM[i].형체력MN);
+                                        sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels_DCM[i].사이클타임);
+                                        sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels_DCM[i].형체중자입시간);
+                                        sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels_DCM[i].주탕시간);
+                                        sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels_DCM[i].사출전진시간);
+                                        sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels_DCM[i].제품냉각시간);
+                                        sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels_DCM[i].형개중자후퇴시간);
+                                        sqlcmd.Parameters.AddWithValue("@압출시간", gridModels_DCM[i].압출시간);
+                                        sqlcmd.Parameters.AddWithValue("@취출시간", gridModels_DCM[i].취출시간);
+                                        sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels_DCM[i].스프레이시간);
+                                        sqlcmd.Parameters.AddWithValue("@금형내부", gridModels_DCM[i].금형내부);
+                                        sqlcmd.Parameters.AddWithValue("@오염도A", gridModels_DCM[i].오염도A);
+                                        sqlcmd.Parameters.AddWithValue("@오염도B", gridModels_DCM[i].오염도B);
+                                        sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels_DCM[i].탱크진공);
                                         sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
                                         sqlcmd.ExecuteNonQuery();
 
@@ -1636,59 +1636,59 @@ namespace CalculateForSea
                                     cmd.Connection = conn2;
                                     cmd.ExecuteNonQuery();
                                 }
-                                DataSet gridDs = new DataSet();
-                                MySqlConnection conn6 = new MySqlConnection(ConnectionString);
-                                using (conn6)
-                                {
-                                    conn6.Open();
+                                //DataSet gridDs = new DataSet();
+                                //MySqlConnection conn6 = new MySqlConnection(ConnectionString);
+                                //using (conn6)
+                                //{
+                                //    conn6.Open();
 
-                                    MySqlCommand cmd = new MySqlCommand();
-                                    cmd.CommandText = "SelectGridHistory";
-                                    cmd.CommandType = CommandType.StoredProcedure;
-                                    cmd.Connection = conn6;
-                                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                                    adapter.Fill(gridDs);
-                                }
+                                //    MySqlCommand cmd = new MySqlCommand();
+                                //    cmd.CommandText = "SelectGridHistory";
+                                //    cmd.CommandType = CommandType.StoredProcedure;
+                                //    cmd.Connection = conn6;
+                                //    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                                //    adapter.Fill(gridDs);
+                                //}
 
-                                for (int id = 0; id < gridDs.Tables.Count; id++)
-                                {
-                                    gridModels[id] = new List<GridModel>();
-                                    if (gridDs.Tables[id].Rows.Count > 0)
-                                    {
-                                        for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
-                                        {
-                                            gridModels[id].Add(new GridModel()
-                                            {
-                                                Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
-                                                설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
-                                                V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
-                                                V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
-                                                V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
-                                                V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
-                                                가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
-                                                감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
-                                                메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
-                                                승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
-                                                비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
-                                                형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
-                                                형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
-                                                사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
-                                                형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
-                                                주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
-                                                사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
-                                                제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
-                                                형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
-                                                압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
-                                                취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
-                                                스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
-                                                금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
-                                                오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
-                                                오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
-                                                탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
-                                            });
-                                        }
-                                    }
-                                }
+                                //for (int id = 0; id < gridDs.Tables.Count; id++)
+                                //{
+                                //    gridModels[id] = new List<GridModel>();
+                                //    if (gridDs.Tables[id].Rows.Count > 0)
+                                //    {
+                                //        for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
+                                //        {
+                                //            gridModels[id].Add(new GridModel()
+                                //            {
+                                //                Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
+                                //                설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
+                                //                V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
+                                //                V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
+                                //                V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
+                                //                V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
+                                //                가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
+                                //                감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
+                                //                메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
+                                //                승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
+                                //                비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
+                                //                형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
+                                //                형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
+                                //                사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
+                                //                형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
+                                //                주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
+                                //                사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
+                                //                제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
+                                //                형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
+                                //                압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
+                                //                취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
+                                //                스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
+                                //                금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
+                                //                오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
+                                //                오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
+                                //                탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
+                                //            });
+                                //        }
+                                //    }
+                                //}
 
                                 if(gridModels[i].Count > 0) 
                                 {
@@ -1703,16 +1703,16 @@ namespace CalculateForSea
                                             sqlcmd.CommandType = CommandType.StoredProcedure;
                                             sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A30";
                                             //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
-                                            sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                            sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                            sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                            sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                            sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                            sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                            sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                            sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                            sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
-                                            sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
+                                            sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels_DCM[i].설비No);
+                                            sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels_DCM[i].사이클타임);
+                                            sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels_DCM[i].형체중자입시간);
+                                            sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels_DCM[i].주탕시간);
+                                            sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels_DCM[i].사출전진시간);
+                                            sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels_DCM[i].제품냉각시간);
+                                            sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels_DCM[i].형개중자후퇴시간);
+                                            sqlcmd.Parameters.AddWithValue("@압출시간", gridModels_DCM[i].압출시간);
+                                            sqlcmd.Parameters.AddWithValue("@취출시간", gridModels_DCM[i].취출시간);
+                                            sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels_DCM[i].스프레이시간);
                                             sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
 
                                             sqlcmd.ExecuteNonQuery();
