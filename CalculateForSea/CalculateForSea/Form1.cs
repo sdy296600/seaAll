@@ -1803,117 +1803,110 @@ namespace CalculateForSea
                             cmd.Connection = conn3;
                             cmd.ExecuteNonQuery();
                         }
-                        models[i].Count++;
-                        if (models[i].Count == 3)
+                        
+                        int machine_id2;
+                        //여기에 
+                        switch (i)
                         {
-                            int machine_id2;
-                            //여기에 
-                            switch (i)
-                            {
-                                case 0:
-                                    machine_id2 = 13;
-                                    break;
-                                case 1:
-                                    machine_id2 = 21;
+                            case 0:
+                                machine_id2 = 13;
+                                break;
+                            case 1:
+                                machine_id2 = 21;
 
-                                    break;
-                                case 2:
-                                    machine_id2 = 22;
+                                break;
+                            case 2:
+                                machine_id2 = 22;
 
-                                    break;
-                                case 3:
-                                    machine_id2 = 23;
+                                break;
+                            case 3:
+                                machine_id2 = 23;
 
-                                    break;
-                                case 4:
-                                    machine_id2 = 24;
+                                break;
+                            case 4:
+                                machine_id2 = 24;
 
-                                    break;
-                                case 5:
-                                    machine_id2 = 25;
+                                break;
+                            case 5:
+                                machine_id2 = 25;
 
-                                    break;
-                                default:
-                                    return;
+                                break;
+                            default:
+                                return;
 
-                            }
-                            string mysqlString2 =
-                                                  $"INSERT INTO data_for_grid3                                                                     " +
-                                                   $"(                                                                                              " +
-                                                   $"`date`,                                                                                        " +
-                                                   $"machine_no,                                                                                    " +
-                                                   $"V1,                                                                                            " +
-                                                   $"V2,                                                                                            " +
-                                                   $"V3,                                                                                            " +
-                                                   $"V4,                                                                                            " +
-                                                   $"acceleration_pos,                                                                              " +
-                                                   $"deceleration_pos,                                                                              " +
-                                                   $"metal_pressure,                                                                                " +
-                                                   $"swap_time,                                                                                     " +
-                                                   $"biskit_thickness,                                                                              " +
-                                                   $"physical_strength_per,                                                                         " +
-                                                   $"physical_strength_mn,                                                                          " +
-                                                   $"cycle_time,                                                                                    " +
-                                                   $"type_weight_enrty_time,                                                                        " +
-                                                   $"bath_time,                                                                                     " +
-                                                   $"forward_time,                                                                                  " +
-                                                   $"freezing_time,                                                                                 " +
-                                                   $"type_weight_back_time,                                                                         " +
-                                                   $"extrusion_time,                                                                                " +
-                                                   $"extraction_time,                                                                               " +
-                                                   $"spray_time,                                                                                    " +
-                                                   $"cavity_core,                                                                                   " +
-                                                   $"A_Pollution_degree,                                                                            " +
-                                                   $"B_Pollution_degree                                                                             " +
-                                                   $", vacuum                                                                                         " +
-                                                   $", SHOTCNT                                                                                       " +
-                                                   $")                                                                                              " +
-                                                   $"VALUES                                                                                         " +
-                                                   $"(                                                                                              " +
-                                                   $"now(),                                                                                         " +
-                                                   $"'WCI_D{machine_id2}',                                                                                     " +
-                                                    $"'{gridModels_DCM[i].V1}', " +
-                                                     $"'{gridModels_DCM[i].V2}', " +
-                                                     $"'{gridModels_DCM[i].V3}', " +
-                                                     $"'{gridModels_DCM[i].V4}', " +
-                                                     $"'{gridModels_DCM[i].가속위치}',       " +
-                                                     $"'{gridModels_DCM[i].감속위치}',       " +
-                                                     $"'{gridModels_DCM[i].메탈압력}',       " +
-                                                     $"'{gridModels_DCM[i].승압시간}',       " +
-                                                     $"'{gridModels_DCM[i].비스켓두께}',       " +
-                                                     $"'{gridModels_DCM[i].형체력}',       " +
-                                                     $"'{gridModels_DCM[i].형체력MN}', " +
-                                                     $"'{gridModels_DCM[i].사이클타임}', " +
-                                                     $"'{gridModels_DCM[i].형체중자입시간}', " +
-                                                     $"'{gridModels_DCM[i].주탕시간}', " +
-                                                     $"'{gridModels_DCM[i].사출전진시간}', " +
-                                                     $"'{gridModels_DCM[i].제품냉각시간}', " +
-                                                     $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
-                                                     $"'{gridModels_DCM[i].압출시간}', " +
-                                                     $"'{gridModels_DCM[i].취출시간}', " +
-                                                     $"'{gridModels_DCM[i].스프레이시간}', " +
-                                                     $"'{gridModels_DCM[i].금형내부}', " +
-                                                     $"'{gridModels_DCM[i].오염도A}', " +
-                                                     $"'{gridModels_DCM[i].오염도B}', " +
-                                                     $"'{gridModels_DCM[i].탱크진공}', " +
-                                                   $"'{nowtotalcnt}'" +
-                                                   $");                                                                                             ";
-                            MySqlConnection conn10 = new MySqlConnection(ConnectionString);
-                            using (conn10)
-                            {
-                                conn10.Open();
-
-                                MySqlCommand cmd = new MySqlCommand();
-                                cmd.CommandText = mysqlString2;
-                                cmd.CommandType = CommandType.Text;
-                                cmd.Connection = conn10;
-                                cmd.ExecuteNonQuery();
-                            }
-                            models[i].Count = 0;
                         }
+                        string mysqlString2 =
+                                                $"INSERT INTO data_for_grid3                                                                     " +
+                                                $"(                                                                                              " +
+                                                $"`date`,                                                                                        " +
+                                                $"machine_no,                                                                                    " +
+                                                $"V1,                                                                                            " +
+                                                $"V2,                                                                                            " +
+                                                $"V3,                                                                                            " +
+                                                $"V4,                                                                                            " +
+                                                $"acceleration_pos,                                                                              " +
+                                                $"deceleration_pos,                                                                              " +
+                                                $"metal_pressure,                                                                                " +
+                                                $"swap_time,                                                                                     " +
+                                                $"biskit_thickness,                                                                              " +
+                                                $"physical_strength_per,                                                                         " +
+                                                $"physical_strength_mn,                                                                          " +
+                                                $"cycle_time,                                                                                    " +
+                                                $"type_weight_enrty_time,                                                                        " +
+                                                $"bath_time,                                                                                     " +
+                                                $"forward_time,                                                                                  " +
+                                                $"freezing_time,                                                                                 " +
+                                                $"type_weight_back_time,                                                                         " +
+                                                $"extrusion_time,                                                                                " +
+                                                $"extraction_time,                                                                               " +
+                                                $"spray_time,                                                                                    " +
+                                                $"cavity_core,                                                                                   " +
+                                                $"A_Pollution_degree,                                                                            " +
+                                                $"B_Pollution_degree                                                                             " +
+                                                $", vacuum                                                                                         " +
+                                                $", SHOTCNT                                                                                       " +
+                                                $")                                                                                              " +
+                                                $"VALUES                                                                                         " +
+                                                $"(                                                                                              " +
+                                                $"now(),                                                                                         " +
+                                                $"'WCI_D{machine_id2}',                                                                                     " +
+                                                $"'{gridModels_DCM[i].V1}', " +
+                                                    $"'{gridModels_DCM[i].V2}', " +
+                                                    $"'{gridModels_DCM[i].V3}', " +
+                                                    $"'{gridModels_DCM[i].V4}', " +
+                                                    $"'{gridModels_DCM[i].가속위치}',       " +
+                                                    $"'{gridModels_DCM[i].감속위치}',       " +
+                                                    $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                    $"'{gridModels_DCM[i].승압시간}',       " +
+                                                    $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                    $"'{gridModels_DCM[i].형체력}',       " +
+                                                    $"'{gridModels_DCM[i].형체력MN}', " +
+                                                    $"'{gridModels_DCM[i].사이클타임}', " +
+                                                    $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                    $"'{gridModels_DCM[i].주탕시간}', " +
+                                                    $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                    $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                    $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                    $"'{gridModels_DCM[i].압출시간}', " +
+                                                    $"'{gridModels_DCM[i].취출시간}', " +
+                                                    $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                    $"'{gridModels_DCM[i].금형내부}', " +
+                                                    $"'{gridModels_DCM[i].오염도A}', " +
+                                                    $"'{gridModels_DCM[i].오염도B}', " +
+                                                    $"'{gridModels_DCM[i].탱크진공}', " +
+                                                $"'{nowtotalcnt}'" +
+                                                $");                                                                                             ";
+                        MySqlConnection conn10 = new MySqlConnection(ConnectionString);
+                        using (conn10)
+                        {
+                            conn10.Open();
 
-
-
+                            MySqlCommand cmd = new MySqlCommand();
+                            cmd.CommandText = mysqlString2;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Connection = conn10;
+                            cmd.ExecuteNonQuery();
+                        }
                     }
                     catch (Exception ex)
                     {
