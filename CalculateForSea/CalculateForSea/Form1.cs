@@ -1513,8 +1513,8 @@ namespace CalculateForSea
                             {
                                 models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
                             }
-                            if (gridModels[i].Count > 0) 
-                            {
+                            //if (gridModels_DCM[i].Count > 0) 
+                            //{
                                 using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                                 {
                                     sqlconn.Open();
@@ -1566,7 +1566,7 @@ namespace CalculateForSea
                                 }
                             }
                           
-                        }
+                        //}
                         else
                         {
                             if (models[i].Totalcnt != -1)
@@ -1690,8 +1690,8 @@ namespace CalculateForSea
                                 //    }
                                 //}
 
-                                if(gridModels[i].Count > 0) 
-                                {
+                                //if(gridModels[i].Count > 0) 
+                                //{
                                     using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                                     {
                                         sqlconn.Open();
@@ -1721,7 +1721,7 @@ namespace CalculateForSea
                                         }
 
                                     }
-                                }
+                                //}
                            
                             }
                         }
