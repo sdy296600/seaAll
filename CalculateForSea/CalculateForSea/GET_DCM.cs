@@ -68,28 +68,28 @@ namespace CalculateForSea
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6900, 1);
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.V1 = BitConverter.ToInt16(results, 0).ToString();
+                        model.V1 = (BitConverter.ToInt16(results, 0)/100).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6902, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.V2 = BitConverter.ToInt16(results, 0).ToString();
+                        model.V2 = (BitConverter.ToInt16(results, 0) / 100).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6904, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.V3 = BitConverter.ToInt16(results, 0).ToString();
+                        model.V3 = (BitConverter.ToInt16(results, 0) / 100).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6906, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.V4 = BitConverter.ToInt16(results, 0).ToString();
+                        model.V4 = (BitConverter.ToInt16(results, 0) / 100).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6908, 1);
@@ -110,7 +110,7 @@ namespace CalculateForSea
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.메탈압력 = BitConverter.ToInt16(results, 0).ToString();
+                        model.메탈압력 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6914, 1);
@@ -132,76 +132,75 @@ namespace CalculateForSea
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
                         model.형체력 = BitConverter.ToInt16(results, 0).ToString();
-
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6920, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.형체력MN = BitConverter.ToInt16(results, 0).ToString();
+                        model.형체력MN = (BitConverter.ToInt16(results, 0) / 100).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6936, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.사이클타임 = BitConverter.ToInt16(results, 0).ToString();
+                        model.사이클타임 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6938, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.형체중자입시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.형체중자입시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6940, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.주탕시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.주탕시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6942, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.사출전진시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.사출전진시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6944, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.제품냉각시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.제품냉각시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6946, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.형개중자후퇴시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.형개중자후퇴시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6948, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.압출시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.압출시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6950, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.취출시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.취출시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 6952, 1);
 
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
-                        model.스프레이시간 = BitConverter.ToInt16(results, 0).ToString();
+                        model.스프레이시간 = (BitConverter.ToInt16(results, 0) / 10).ToString();
 
                     }
                 }
