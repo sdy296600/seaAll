@@ -30,7 +30,15 @@ namespace CalculateForSea
                 var cts = new CancellationTokenSource();
                 var timeoutTask = Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
 
-                mcProtocolTcp.HostName = $"172.1.100.18{no}";
+                if (no != 0)
+                {
+                    mcProtocolTcp.HostName = $"172.1.100.18{no}";
+                }
+                else 
+                {
+                    mcProtocolTcp.HostName = $"172.1.100.102";
+                }
+
                 mcProtocolTcp.PortNumber = 5001;
                 mcProtocolTcp.CommandFrame = Mitsubishi.McFrame.MC3E;
                 // Open 작업을 별도 실행

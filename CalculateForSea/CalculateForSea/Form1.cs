@@ -149,6 +149,7 @@ namespace CalculateForSea
             StartPlcMonitoring(LSClient5);
             List<Task> tasks = new List<Task>
             {
+                Task.Run(async () => { await ThreadMethodAsync(0, 1, cts1.Token); }),
                 Task.Run(async () => { await ThreadMethodAsync(1, 1, cts1.Token); }),
                 Task.Run(async () => { await ThreadMethodAsync(2, 1, cts2.Token); }),
                 Task.Run(async () => { await ThreadMethodAsync(3, 1, cts3.Token); }),
