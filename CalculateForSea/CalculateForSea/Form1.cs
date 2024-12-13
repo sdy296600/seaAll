@@ -121,6 +121,11 @@ namespace CalculateForSea
         GridModel list_24_DCM = new GridModel() { 트리거 = "0", 탱크진공 = "0", V1 = "0", V2 = "0", V3 = "0", V4 = "0", 형체중자입시간 = "0", 형체력MN = "0", 형체력 = "0", 형개중자후퇴시간 = "0", 오염도B = "0", 가속위치 = "0", 감속위치 = "0", 메탈압력 = "0", 비스켓두께 = "0", 사이클타임 = "0", Date = "0", 사출전진시간 = "0", 설비No = "0", 스프레이시간 = "0", 승압시간 = "0", 압출시간 = "0", 금형내부 = "0", 제품냉각시간 = "0", 주탕시간 = "0", 오염도A = "0", 취출시간 = "0" };
         GridModel list_25_DCM = new GridModel() { 트리거 = "0", 탱크진공 = "0", V1 = "0", V2 = "0", V3 = "0", V4 = "0", 형체중자입시간 = "0", 형체력MN = "0", 형체력 = "0", 형개중자후퇴시간 = "0", 오염도B = "0", 가속위치 = "0", 감속위치 = "0", 메탈압력 = "0", 비스켓두께 = "0", 사이클타임 = "0", Date = "0", 사출전진시간 = "0", 설비No = "0", 스프레이시간 = "0", 승압시간 = "0", 압출시간 = "0", 금형내부 = "0", 제품냉각시간 = "0", 주탕시간 = "0", 오염도A = "0", 취출시간 = "0" };
         List<string> IDS = new List<string>();
+        CancellationTokenSource cts1 = new CancellationTokenSource();
+        CancellationTokenSource cts2 = new CancellationTokenSource();
+        CancellationTokenSource cts3 = new CancellationTokenSource();
+        CancellationTokenSource cts4 = new CancellationTokenSource();
+        CancellationTokenSource cts5 = new CancellationTokenSource();
 
         #endregion
 
@@ -142,6 +147,15 @@ namespace CalculateForSea
             StartPlcMonitoring(LSClient3);
             StartPlcMonitoring(LSClient4);
             StartPlcMonitoring(LSClient5);
+            List<Task> tasks = new List<Task>
+            {
+                Task.Run(async () => { await ThreadMethodAsync(1, 1, cts1.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(2, 1, cts2.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(3, 1, cts3.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(4, 1, cts4.Token); }),
+                Task.Run(async() => { await ThreadMethodAsync(5, 1, cts5.Token); })
+            };
+
         }
 
         public void GetPlcAsync(string address, FEnetClient LSClient)
@@ -250,151 +264,151 @@ namespace CalculateForSea
 
                 _mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived;
                 #region [DCM 태그]
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_13_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_21_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_22_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_23_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_24_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3704" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3705" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D3706" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6920_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6946_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/DCM_25_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
 
 
 
@@ -1137,30 +1151,17 @@ namespace CalculateForSea
         {
             try
             {
-                DataSet ds = new DataSet();
-                DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
-                MySqlConnection conn = new MySqlConnection(ConnectionString);
-                using (conn)
-                {
-                    conn.Open();
-                    // work_performance조회 ( start_time = end_time 인것)
-                    MySqlCommand cmd = new MySqlCommand();
-                    cmd.CommandText = "calculateForSEA_R";
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = conn;
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                    adapter.Fill(ds);
-                }
 
-                List<Task> tasks = new List<Task>();
-                for (int i = 0; i < ds.Tables.Count; i++)
-                {
-                    int index = i;  // i를 캡처하여 Task에 전달
-                    var task = Task.Run(() =>
-                    {
-                        ThreadMethod(ds, index);
-                    });
-                }
+
+                //List<Task> tasks = new List<Task>();
+                //for (int i = 0; i < ds.Tables.Count; i++)
+                //{
+                //    int index = i;  // i를 캡처하여 Task에 전달
+                //    var task = Task.Run(() =>
+                //    {
+                //        ThreadMethod(ds, index);
+                //    });
+                //}
 
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_13", Encoding.UTF8.GetBytes((model13.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/SHOTKW_21", Encoding.UTF8.GetBytes((model21.NowShotKW).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
@@ -1175,59 +1176,79 @@ namespace CalculateForSea
             }
         }
 
-        private void ThreadMethod(DataSet ds ,int i)
+        public async Task ThreadMethodAsync(int i,int timer, CancellationToken token)
         {
-            if (models[i].is_Running) return;
-            models[i].is_Running = true;
-            WriteLog("Data Received");
-
-            int nowPordCnt = 0;
-
-            if (ds.Tables[i].Rows.Count > 0)
+            while (!token.IsCancellationRequested) 
             {
-                try
+
+                GET_DCM gET = new GET_DCM(i);
+                await gET.GetPlcAsync(gridModels_DCM[i]);
+
+                DataSet ds = new DataSet();
+                DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
+                MySqlConnection connnect = new MySqlConnection(ConnectionString);
+                using (connnect)
                 {
+                    connnect.Open();
+                    // work_performance조회 ( start_time = end_time 인것)
+                    MySqlCommand cmd = new MySqlCommand();
+                    cmd.CommandText = "calculateForSEA_R";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection = connnect;
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+                }
+                if (models[i].is_Running) return;
+                models[i].is_Running = true;
+                WriteLog("Data Received");
 
-                    Get_DCM(i, gridModels_DCM[i]); //값 보내주기
-                    int cavity = 1;
-                    string cavitySql = $"SELECT CAVITY FROM SEA_MFG.DBO.MD_MST WHERE CODE_MD =  (select CODE_MD from [sea_mfg].dbo.demand_mstr_ext WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
+                int nowPordCnt = 0;
 
-                    using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
+                if (ds.Tables[i].Rows.Count > 0)
+                {
+                    try
                     {
-                        sqlconn.Open();
-                        using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
+
+                        Get_DCM(i, gridModels_DCM[i]); //값 보내주기
+                        int cavity = 1;
+                        string cavitySql = $"SELECT CAVITY FROM SEA_MFG.DBO.MD_MST WHERE CODE_MD =  (select CODE_MD from [sea_mfg].dbo.demand_mstr_ext WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
+
+                        using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
                         {
-                            using (SqlDataReader reader = sqlcmd.ExecuteReader())
+                            sqlconn.Open();
+                            using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
                             {
-                                if (reader.Read())
+                                using (SqlDataReader reader = sqlcmd.ExecuteReader())
                                 {
-                                    cavity = Convert.ToInt32(reader["CAVITY"].ToString());
+                                    if (reader.Read())
+                                    {
+                                        cavity = Convert.ToInt32(reader["CAVITY"].ToString());
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
+                        string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
 
-                    string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
-                    string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
-                    string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
+                        string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
+                        string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
+                        string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
 
-                    if (WORK_PERFORMANCE_ID != models[i].ID)
-                    {
-                        models[i] = new DataModel() { ID = WORK_PERFORMANCE_ID };
-                    }
-                    int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT) / cavity)
-                        + Convert.ToInt32(WORK_WARMUPCNT)
-                        + (Convert.ToInt32(WORK_ERRCOUNT) / cavity);
+                        if (WORK_PERFORMANCE_ID != models[i].ID)
+                        {
+                            models[i] = new DataModel() { ID = WORK_PERFORMANCE_ID };
+                        }
+                        int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT) / cavity)
+                            + Convert.ToInt32(WORK_WARMUPCNT)
+                            + (Convert.ToInt32(WORK_ERRCOUNT) / cavity);
 
-                    nowPordCnt = Convert.ToInt32(WORK_OKCNT)
-                        + Convert.ToInt32(WORK_ERRCOUNT);
+                        nowPordCnt = Convert.ToInt32(WORK_OKCNT)
+                            + Convert.ToInt32(WORK_ERRCOUNT);
 
-                    if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
-                    {
+                        if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
+                        {
 
-                        string workSql = $@"   UPDATE work_performance
+                            string workSql = $@"   UPDATE work_performance
                                             SET work_power = IFNULL((
                                                     SELECT 
                                                         CASE 
@@ -1242,249 +1263,34 @@ namespace CalculateForSea
                                                 LAST_POWER = WORK_POWER
                                             WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
                                                     ";
-                        MySqlConnection conn4 = new MySqlConnection(ConnectionString);
-                        using (conn4)
-                        {
-                            conn4.Open();
+                            MySqlConnection conn4 = new MySqlConnection(ConnectionString);
+                            using (conn4)
+                            {
+                                conn4.Open();
 
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = workSql;
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn4;
-                            cmd.ExecuteNonQuery();
-                        }
-                        string WORK_POWERsql = $@"   SELECT WORK_POWER FROM WORK_PERFORMANCE
+                                MySqlCommand cmd = new MySqlCommand();
+                                cmd.CommandText = workSql;
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Connection = conn4;
+                                cmd.ExecuteNonQuery();
+                            }
+                            string WORK_POWERsql = $@"   SELECT WORK_POWER FROM WORK_PERFORMANCE
                                             WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
                                                     ";
-                        DataSet ds2 = new DataSet();
-                        MySqlConnection conn5 = new MySqlConnection(ConnectionString);
-                        using (conn5)
-                        {
-                            conn5.Open();
-
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = WORK_POWERsql;
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn5;
-                            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                            adapter.Fill(ds2);
-                        }
-                        string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[0].Rows[0]["WORK_POWER"].ToString();
-                        int machine_id;
-                        //여기에 
-                        switch (i)
-                        {
-                            case 0:
-                                machine_id = 13;
-                                break;
-                            case 1:
-                                machine_id = 21;
-
-                                break;
-                            case 2:
-                                machine_id = 22;
-
-                                break;
-                            case 3:
-                                machine_id = 23;
-
-                                break;
-                            case 4:
-                                machine_id = 24;
-
-                                break;
-                            case 5:
-                                machine_id = 25;
-
-                                break;
-                            default:
-                                return;
-
-                        }
-                        string mysqlString =
-                                            $"INSERT INTO data_for_grid                                                                      " +
-                                             $"(                                                                                              " +
-                                             $"`date`,                                                                                        " +
-                                             $"machine_no,                                                                                    " +
-                                             $"V1,                                                                                            " +
-                                             $"V2,                                                                                            " +
-                                             $"V3,                                                                                            " +
-                                             $"V4,                                                                                            " +
-                                             $"acceleration_pos,                                                                              " +
-                                             $"deceleration_pos,                                                                              " +
-                                             $"metal_pressure,                                                                                " +
-                                             $"swap_time,                                                                                     " +
-                                             $"biskit_thickness,                                                                              " +
-                                             $"physical_strength_per,                                                                         " +
-                                             $"physical_strength_mn,                                                                          " +
-                                             $"cycle_time,                                                                                    " +
-                                             $"type_weight_enrty_time,                                                                        " +
-                                             $"bath_time,                                                                                     " +
-                                             $"forward_time,                                                                                  " +
-                                             $"freezing_time,                                                                                 " +
-                                             $"type_weight_back_time,                                                                         " +
-                                             $"extrusion_time,                                                                                " +
-                                             $"extraction_time,                                                                               " +
-                                             $"spray_time,                                                                                    " +
-                                             $"cavity_core,                                                                                   " +
-                                             $"A_Pollution_degree,                                                                            " +
-                                             $"B_Pollution_degree                                                                             " +
-                                             $", vacuum                                                                                         " +
-                                             $", SHOTCNT                                                                                       " +
-                                             $")                                                                                              " +
-                                             $"VALUES                                                                                         " +
-                                             $"(                                                                                              " +
-                                             $"now(),                                                                                         " +
-                                             $"'WCI_D{machine_id}',                                                                                     " +
-                                             $"'{gridModels_DCM[i].V1}', " +
-                                             $"'{gridModels_DCM[i].V2}', " +
-                                             $"'{gridModels_DCM[i].V3}', " +
-                                             $"'{gridModels_DCM[i].V4}', " +
-                                             $"'{gridModels_DCM[i].가속위치}',       " +
-                                             $"'{gridModels_DCM[i].감속위치}',       " +
-                                             $"'{gridModels_DCM[i].메탈압력}',       " +
-                                             $"'{gridModels_DCM[i].승압시간}',       " +
-                                             $"'{gridModels_DCM[i].비스켓두께}',       " +
-                                             $"'{gridModels_DCM[i].형체력}',       " +
-                                             $"'{gridModels_DCM[i].형체력MN}', " +
-                                             $"'{gridModels_DCM[i].사이클타임}', " +
-                                             $"'{gridModels_DCM[i].형체중자입시간}', " +
-                                             $"'{gridModels_DCM[i].주탕시간}', " +
-                                             $"'{gridModels_DCM[i].사출전진시간}', " +
-                                             $"'{gridModels_DCM[i].제품냉각시간}', " +
-                                             $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
-                                             $"'{gridModels_DCM[i].압출시간}', " +
-                                             $"'{gridModels_DCM[i].취출시간}', " +
-                                             $"'{gridModels_DCM[i].스프레이시간}', " +
-                                             $"'{gridModels_DCM[i].금형내부}', " +
-                                             $"'{gridModels_DCM[i].오염도A}', " +
-                                             $"'{gridModels_DCM[i].오염도B}', " +
-                                             $"'{gridModels_DCM[i].탱크진공}', " +
-                                             $"'{nowtotalcnt}'"+
-                                             $");                                                                                             ";
-                        MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                        using (conn2)
-                        {
-                            conn2.Open();
-
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = mysqlString;
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn2;
-                            cmd.ExecuteNonQuery();
-                        }
-                        DataSet gridDs = new DataSet();
-                        MySqlConnection conn = new MySqlConnection(ConnectionString);
-                        using (conn)
-                        {
-                            conn.Open();
-
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = "SelectGridHistory";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Connection = conn;
-                            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                            adapter.Fill(gridDs);
-                        }
-
-                        for (int id = 0; id < gridDs.Tables.Count; id++)
-                        {
-                            gridModels[id] = new List<GridModel>();
-                            if (gridDs.Tables[id].Rows.Count > 0)
+                            DataSet ds2 = new DataSet();
+                            MySqlConnection conn5 = new MySqlConnection(ConnectionString);
+                            using (conn5)
                             {
-                                for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
-                                {
-                                    gridModels[id].Add(new GridModel()
-                                    {
-                                        Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
-                                        설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
-                                        V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
-                                        V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
-                                        V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
-                                        V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
-                                        가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
-                                        감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
-                                        메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
-                                        승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
-                                        비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
-                                        형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
-                                        형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
-                                        사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
-                                        형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
-                                        주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
-                                        사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
-                                        제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
-                                        형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
-                                        압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
-                                        취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
-                                        스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
-                                        금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
-                                        오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
-                                        오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
-                                        탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
-                                    });
-                                }
+                                conn5.Open();
+
+                                MySqlCommand cmd = new MySqlCommand();
+                                cmd.CommandText = WORK_POWERsql;
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Connection = conn5;
+                                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                                adapter.Fill(ds2);
                             }
-                        }
-                        models[i].All_Active_Power = Convert.ToDouble(WORK_POWER);
-                        if ((models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW > 0)
-                        {
-                            models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
-                        }
-                        using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                        {
-                            sqlconn.Open();
-                            using (SqlCommand sqlcmd = new SqlCommand())
-                            {
-
-                                // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
-                                sqlcmd.Connection = sqlconn;
-                                sqlcmd.CommandType = CommandType.StoredProcedure;
-                                sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
-                                //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
-                                string dtValue = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                sqlcmd.Parameters.AddWithValue("@Date", dtValue);
-                                sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
-                                sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
-                                sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
-                                sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
-                                sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
-                                sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
-                                sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
-                                sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
-                                sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
-                                sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
-                                sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
-                                sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
-                                sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
-                                sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
-                                sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
-                                sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
-                                sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
-                                sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
-                                sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
-                                sqlcmd.ExecuteNonQuery();
-
-                                WriteLog("SHOT Data Processed");
-                            }
-
-                        }
-                    }
-                    else 
-                    {
-                        if (models[i].Totalcnt != -1) 
-                        {
+                            string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[0].Rows[0]["WORK_POWER"].ToString();
                             int machine_id;
                             //여기에 
                             switch (i)
@@ -1517,28 +1323,127 @@ namespace CalculateForSea
 
                             }
                             string mysqlString =
-                                                $@"CREATE TEMPORARY TABLE TempData AS
-                                                SELECT id
-                                                FROM data_for_grid
-                                                WHERE machine_no = 'WCI_D{machine_id}'
-                                                ORDER BY id DESC
-                                                LIMIT 3;
-
-                                            UPDATE data_for_grid
-
-                                                    SET
-                                        cycle_time = '{gridModels_DCM[i].사이클타임}',
-                                        type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
-                                        bath_time = '{gridModels_DCM[i].주탕시간}',
-                                        forward_time = '{gridModels_DCM[i].사출전진시간}',
-                                        freezing_time = '{gridModels_DCM[i].제품냉각시간}',
-                                        type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
-                                        extrusion_time = '{gridModels_DCM[i].압출시간}',
-                                        extraction_time = '{gridModels_DCM[i].취출시간}',
-                                        spray_time = '{gridModels_DCM[i].스프레이시간}'
-                                        WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
-
-                            DROP TEMPORARY TABLE TempData;";
+                                                $"INSERT INTO data_for_grid                                                                      " +
+                                                 $"(                                                                                              " +
+                                                 $"`date`,                                                                                        " +
+                                                 $"machine_no,                                                                                    " +
+                                                 $"V1,                                                                                            " +
+                                                 $"V2,                                                                                            " +
+                                                 $"V3,                                                                                            " +
+                                                 $"V4,                                                                                            " +
+                                                 $"acceleration_pos,                                                                              " +
+                                                 $"deceleration_pos,                                                                              " +
+                                                 $"metal_pressure,                                                                                " +
+                                                 $"swap_time,                                                                                     " +
+                                                 $"biskit_thickness,                                                                              " +
+                                                 $"physical_strength_per,                                                                         " +
+                                                 $"physical_strength_mn,                                                                          " +
+                                                 $"cycle_time,                                                                                    " +
+                                                 $"type_weight_enrty_time,                                                                        " +
+                                                 $"bath_time,                                                                                     " +
+                                                 $"forward_time,                                                                                  " +
+                                                 $"freezing_time,                                                                                 " +
+                                                 $"type_weight_back_time,                                                                         " +
+                                                 $"extrusion_time,                                                                                " +
+                                                 $"extraction_time,                                                                               " +
+                                                 $"spray_time,                                                                                    " +
+                                                 $"cavity_core,                                                                                   " +
+                                                 $"A_Pollution_degree,                                                                            " +
+                                                 $"B_Pollution_degree                                                                             " +
+                                                 $", vacuum                                                                                         " +
+                                                 $", SHOTCNT                                                                                       " +
+                                                 $")                                                                                              " +
+                                                 $"VALUES                                                                                         " +
+                                                 $"(                                                                                              " +
+                                                 $"now(),                                                                                         " +
+                                                 $"'WCI_D{machine_id}',                                                                                     " +
+                                                 $"'{gridModels_DCM[i].V1}', " +
+                                                 $"'{gridModels_DCM[i].V2}', " +
+                                                 $"'{gridModels_DCM[i].V3}', " +
+                                                 $"'{gridModels_DCM[i].V4}', " +
+                                                 $"'{gridModels_DCM[i].가속위치}',       " +
+                                                 $"'{gridModels_DCM[i].감속위치}',       " +
+                                                 $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                 $"'{gridModels_DCM[i].승압시간}',       " +
+                                                 $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                 $"'{gridModels_DCM[i].형체력}',       " +
+                                                 $"'{gridModels_DCM[i].형체력MN}', " +
+                                                 $"'{gridModels_DCM[i].사이클타임}', " +
+                                                 $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                 $"'{gridModels_DCM[i].주탕시간}', " +
+                                                 $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                 $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                 $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                 $"'{gridModels_DCM[i].압출시간}', " +
+                                                 $"'{gridModels_DCM[i].취출시간}', " +
+                                                 $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                 $"'{gridModels_DCM[i].금형내부}', " +
+                                                 $"'{gridModels_DCM[i].오염도A}', " +
+                                                 $"'{gridModels_DCM[i].오염도B}', " +
+                                                 $"'{gridModels_DCM[i].탱크진공}', " +
+                                                 $"'{nowtotalcnt}'" +
+                                                 $");                                                                                             "+
+                                                 
+                                                 $"INSERT INTO data_for_grid2                                                                      " +
+                                                 $"(                                                                                              " +
+                                                 $"`date`,                                                                                        " +
+                                                 $"machine_no,                                                                                    " +
+                                                 $"V1,                                                                                            " +
+                                                 $"V2,                                                                                            " +
+                                                 $"V3,                                                                                            " +
+                                                 $"V4,                                                                                            " +
+                                                 $"acceleration_pos,                                                                              " +
+                                                 $"deceleration_pos,                                                                              " +
+                                                 $"metal_pressure,                                                                                " +
+                                                 $"swap_time,                                                                                     " +
+                                                 $"biskit_thickness,                                                                              " +
+                                                 $"physical_strength_per,                                                                         " +
+                                                 $"physical_strength_mn,                                                                          " +
+                                                 $"cycle_time,                                                                                    " +
+                                                 $"type_weight_enrty_time,                                                                        " +
+                                                 $"bath_time,                                                                                     " +
+                                                 $"forward_time,                                                                                  " +
+                                                 $"freezing_time,                                                                                 " +
+                                                 $"type_weight_back_time,                                                                         " +
+                                                 $"extrusion_time,                                                                                " +
+                                                 $"extraction_time,                                                                               " +
+                                                 $"spray_time,                                                                                    " +
+                                                 $"cavity_core,                                                                                   " +
+                                                 $"A_Pollution_degree,                                                                            " +
+                                                 $"B_Pollution_degree                                                                             " +
+                                                 $", vacuum                                                                                         " +
+                                                 $", SHOTCNT                                                                                       " +
+                                                 $")                                                                                              " +
+                                                 $"VALUES                                                                                         " +
+                                                 $"(                                                                                              " +
+                                                 $"now(),                                                                                         " +
+                                                 $"'WCI_D{machine_id}',                                                                                     " +
+                                                 $"'{gridModels_DCM[i].V1}', " +
+                                                 $"'{gridModels_DCM[i].V2}', " +
+                                                 $"'{gridModels_DCM[i].V3}', " +
+                                                 $"'{gridModels_DCM[i].V4}', " +
+                                                 $"'{gridModels_DCM[i].가속위치}',       " +
+                                                 $"'{gridModels_DCM[i].감속위치}',       " +
+                                                 $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                 $"'{gridModels_DCM[i].승압시간}',       " +
+                                                 $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                 $"'{gridModels_DCM[i].형체력}',       " +
+                                                 $"'{gridModels_DCM[i].형체력MN}', " +
+                                                 $"'{gridModels_DCM[i].사이클타임}', " +
+                                                 $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                 $"'{gridModels_DCM[i].주탕시간}', " +
+                                                 $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                 $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                 $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                 $"'{gridModels_DCM[i].압출시간}', " +
+                                                 $"'{gridModels_DCM[i].취출시간}', " +
+                                                 $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                 $"'{gridModels_DCM[i].금형내부}', " +
+                                                 $"'{gridModels_DCM[i].오염도A}', " +
+                                                 $"'{gridModels_DCM[i].오염도B}', " +
+                                                 $"'{gridModels_DCM[i].탱크진공}', " +
+                                                 $"'{nowtotalcnt}'" +
+                                                 $");                                                                                             ";
                             MySqlConnection conn2 = new MySqlConnection(ConnectionString);
                             using (conn2)
                             {
@@ -1603,66 +1508,251 @@ namespace CalculateForSea
                                     }
                                 }
                             }
-
-                            using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                            models[i].All_Active_Power = Convert.ToDouble(WORK_POWER);
+                            if ((models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW > 0)
                             {
-                                sqlconn.Open();
-                                using (SqlCommand sqlcmd = new SqlCommand())
+                                models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
+                            }
+                            if (gridModels[i].Count > 0) 
+                            {
+                                using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                                 {
+                                    sqlconn.Open();
+                                    using (SqlCommand sqlcmd = new SqlCommand())
+                                    {
 
-                                    // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
-                                    sqlcmd.Connection = sqlconn;
-                                    sqlcmd.CommandType = CommandType.StoredProcedure;
-                                    sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A30";
-                                    //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
-                                    sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
-                                    sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
-                                    sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
-                                    sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
-                                    sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
-                                    sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
-                                    sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
-                                    sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
-                                    sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
-                                    sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
-                                    sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
+                                        // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
+                                        sqlcmd.Connection = sqlconn;
+                                        sqlcmd.CommandType = CommandType.StoredProcedure;
+                                        sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
+                                        //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
+                                        string dtValue = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                        sqlcmd.Parameters.AddWithValue("@Date", dtValue);
+                                        sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
+                                        sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
+                                        sqlcmd.Parameters.AddWithValue("@V1", gridModels[i][0].V1);
+                                        sqlcmd.Parameters.AddWithValue("@V2", gridModels[i][0].V2);
+                                        sqlcmd.Parameters.AddWithValue("@V3", gridModels[i][0].V3);
+                                        sqlcmd.Parameters.AddWithValue("@V4", gridModels[i][0].V4);
+                                        sqlcmd.Parameters.AddWithValue("@가속위치", gridModels[i][0].가속위치);
+                                        sqlcmd.Parameters.AddWithValue("@감속위치", gridModels[i][0].감속위치);
+                                        sqlcmd.Parameters.AddWithValue("@메탈압력", gridModels[i][0].메탈압력);
+                                        sqlcmd.Parameters.AddWithValue("@승압시간", gridModels[i][0].승압시간);
+                                        sqlcmd.Parameters.AddWithValue("@비스켓두께", gridModels[i][0].비스켓두께);
+                                        sqlcmd.Parameters.AddWithValue("@형체력", gridModels[i][0].형체력);
+                                        sqlcmd.Parameters.AddWithValue("@형체력MN", gridModels[i][0].형체력MN);
+                                        sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
+                                        sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
+                                        sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
+                                        sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
+                                        sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
+                                        sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
+                                        sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
+                                        sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
+                                        sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
+                                        sqlcmd.Parameters.AddWithValue("@금형내부", gridModels[i][0].금형내부);
+                                        sqlcmd.Parameters.AddWithValue("@오염도A", gridModels[i][0].오염도A);
+                                        sqlcmd.Parameters.AddWithValue("@오염도B", gridModels[i][0].오염도B);
+                                        sqlcmd.Parameters.AddWithValue("@탱크진공", gridModels[i][0].탱크진공);
+                                        sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
+                                        sqlcmd.ExecuteNonQuery();
 
-                                    sqlcmd.ExecuteNonQuery();
+                                        WriteLog("SHOT Data Processed");
+                                    }
 
-                                    WriteLog("SHOT Data Processed");
+                                }
+                            }
+                          
+                        }
+                        else
+                        {
+                            if (models[i].Totalcnt != -1)
+                            {
+                                int machine_id;
+                                //여기에 
+                                switch (i)
+                                {
+                                    case 0:
+                                        machine_id = 13;
+                                        break;
+                                    case 1:
+                                        machine_id = 21;
+
+                                        break;
+                                    case 2:
+                                        machine_id = 22;
+
+                                        break;
+                                    case 3:
+                                        machine_id = 23;
+
+                                        break;
+                                    case 4:
+                                        machine_id = 24;
+
+                                        break;
+                                    case 5:
+                                        machine_id = 25;
+
+                                        break;
+                                    default:
+                                        return;
+
+                                }
+                                string mysqlString =
+                                                    $@"CREATE TEMPORARY TABLE TempData AS
+                                                SELECT id
+                                                FROM data_for_grid
+                                                WHERE machine_no = 'WCI_D{machine_id}'
+                                                ORDER BY id DESC
+                                                LIMIT 3;
+
+                                            UPDATE data_for_grid
+
+                                                    SET
+                                        cycle_time = '{gridModels_DCM[i].사이클타임}',
+                                        type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
+                                        bath_time = '{gridModels_DCM[i].주탕시간}',
+                                        forward_time = '{gridModels_DCM[i].사출전진시간}',
+                                        freezing_time = '{gridModels_DCM[i].제품냉각시간}',
+                                        type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
+                                        extrusion_time = '{gridModels_DCM[i].압출시간}',
+                                        extraction_time = '{gridModels_DCM[i].취출시간}',
+                                        spray_time = '{gridModels_DCM[i].스프레이시간}'
+                                        WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
+
+                            DROP TEMPORARY TABLE TempData;";
+                                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                                using (conn2)
+                                {
+                                    conn2.Open();
+
+                                    MySqlCommand cmd = new MySqlCommand();
+                                    cmd.CommandText = mysqlString;
+                                    cmd.CommandType = CommandType.Text;
+                                    cmd.Connection = conn2;
+                                    cmd.ExecuteNonQuery();
+                                }
+                                DataSet gridDs = new DataSet();
+                                MySqlConnection conn6 = new MySqlConnection(ConnectionString);
+                                using (conn6)
+                                {
+                                    conn6.Open();
+
+                                    MySqlCommand cmd = new MySqlCommand();
+                                    cmd.CommandText = "SelectGridHistory";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Connection = conn6;
+                                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                                    adapter.Fill(gridDs);
                                 }
 
+                                for (int id = 0; id < gridDs.Tables.Count; id++)
+                                {
+                                    gridModels[id] = new List<GridModel>();
+                                    if (gridDs.Tables[id].Rows.Count > 0)
+                                    {
+                                        for (int j = 0; j < gridDs.Tables[id].Rows.Count; j++)
+                                        {
+                                            gridModels[id].Add(new GridModel()
+                                            {
+                                                Date = gridDs.Tables[id].Rows[j]["date"].ToString(),
+                                                설비No = gridDs.Tables[id].Rows[j]["machine_no"].ToString(),
+                                                V1 = gridDs.Tables[id].Rows[j]["V1"].ToString(),
+                                                V2 = gridDs.Tables[id].Rows[j]["V2"].ToString(),
+                                                V3 = gridDs.Tables[id].Rows[j]["V3"].ToString(),
+                                                V4 = gridDs.Tables[id].Rows[j]["V4"].ToString(),
+                                                가속위치 = gridDs.Tables[id].Rows[j]["acceleration_pos"].ToString(),
+                                                감속위치 = gridDs.Tables[id].Rows[j]["deceleration_pos"].ToString(),
+                                                메탈압력 = gridDs.Tables[id].Rows[j]["metal_pressure"].ToString(),
+                                                승압시간 = gridDs.Tables[id].Rows[j]["swap_time"].ToString(),
+                                                비스켓두께 = gridDs.Tables[id].Rows[j]["biskit_thickness"].ToString(),
+                                                형체력 = gridDs.Tables[id].Rows[j]["physical_strength_per"].ToString(),
+                                                형체력MN = gridDs.Tables[id].Rows[j]["physical_strength_mn"].ToString(),
+                                                사이클타임 = gridDs.Tables[id].Rows[j]["cycle_time"].ToString(),
+                                                형체중자입시간 = gridDs.Tables[id].Rows[j]["type_weight_enrty_time"].ToString(),
+                                                주탕시간 = gridDs.Tables[id].Rows[j]["bath_time"].ToString(),
+                                                사출전진시간 = gridDs.Tables[id].Rows[j]["forward_time"].ToString(),
+                                                제품냉각시간 = gridDs.Tables[id].Rows[j]["freezing_time"].ToString(),
+                                                형개중자후퇴시간 = gridDs.Tables[id].Rows[j]["type_weight_back_time"].ToString(),
+                                                압출시간 = gridDs.Tables[id].Rows[j]["extrusion_time"].ToString(),
+                                                취출시간 = gridDs.Tables[id].Rows[j]["extraction_time"].ToString(),
+                                                스프레이시간 = gridDs.Tables[id].Rows[j]["spray_time"].ToString(),
+                                                금형내부 = gridDs.Tables[id].Rows[j]["cavity_core"].ToString(),
+                                                오염도A = gridDs.Tables[id].Rows[j]["A_Pollution_degree"].ToString(),
+                                                오염도B = gridDs.Tables[id].Rows[j]["B_Pollution_degree"].ToString(),
+                                                탱크진공 = gridDs.Tables[id].Rows[j]["vacuum"].ToString(),
+                                            });
+                                        }
+                                    }
+                                }
+
+                                if(gridModels[i].Count > 0) 
+                                {
+                                    using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                                    {
+                                        sqlconn.Open();
+                                        using (SqlCommand sqlcmd = new SqlCommand())
+                                        {
+
+                                            // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
+                                            sqlcmd.Connection = sqlconn;
+                                            sqlcmd.CommandType = CommandType.StoredProcedure;
+                                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A30";
+                                            //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
+                                            sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels[i][0].설비No);
+                                            sqlcmd.Parameters.AddWithValue("@사이클타임", gridModels[i][0].사이클타임);
+                                            sqlcmd.Parameters.AddWithValue("@형체중자입시간", gridModels[i][0].형체중자입시간);
+                                            sqlcmd.Parameters.AddWithValue("@주탕시간", gridModels[i][0].주탕시간);
+                                            sqlcmd.Parameters.AddWithValue("@사출전진시간", gridModels[i][0].사출전진시간);
+                                            sqlcmd.Parameters.AddWithValue("@제품냉각시간", gridModels[i][0].제품냉각시간);
+                                            sqlcmd.Parameters.AddWithValue("@형개중자후퇴시간", gridModels[i][0].형개중자후퇴시간);
+                                            sqlcmd.Parameters.AddWithValue("@압출시간", gridModels[i][0].압출시간);
+                                            sqlcmd.Parameters.AddWithValue("@취출시간", gridModels[i][0].취출시간);
+                                            sqlcmd.Parameters.AddWithValue("@스프레이시간", gridModels[i][0].스프레이시간);
+                                            sqlcmd.Parameters.AddWithValue("@TotalCnt", nowtotalcnt);
+
+                                            sqlcmd.ExecuteNonQuery();
+
+                                            WriteLog("SHOT Data Processed");
+                                        }
+
+                                    }
+                                }
+                           
                             }
                         }
-                    }
 
-                    models[i].Totalcnt = nowtotalcnt;
-                    models[i].PROD_CNT = nowPordCnt;
-               
-          
+                        models[i].Totalcnt = nowtotalcnt;
+                        models[i].PROD_CNT = nowPordCnt;
 
-                    // MSSQL 전달
-                    using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                    {
-                        sqlconn.Open();
-                        using (SqlCommand sqlcmd = new SqlCommand())
+
+
+                        // MSSQL 전달
+                        using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                         {
-                            sqlcmd.Connection = sqlconn;
-                            sqlcmd.CommandType = CommandType.StoredProcedure;
-                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
-                            sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
-                            sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
-                            sqlcmd.Parameters.AddWithValue("@ELEC_USE", ds.Tables[i].Rows[0]["WORK_POWER"].ToString());
-                            sqlcmd.ExecuteNonQuery();
+                            sqlconn.Open();
+                            using (SqlCommand sqlcmd = new SqlCommand())
+                            {
+                                sqlcmd.Connection = sqlconn;
+                                sqlcmd.CommandType = CommandType.StoredProcedure;
+                                sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
+                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
+                                sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
+                                sqlcmd.Parameters.AddWithValue("@ELEC_USE", ds.Tables[i].Rows[0]["WORK_POWER"].ToString());
+                                sqlcmd.ExecuteNonQuery();
+                            }
                         }
-                    }
-                    WriteLog("Data MSSQL Processed");
+                        WriteLog("Data MSSQL Processed");
 
-                    string work_performanceSql;
-
+                        string work_performanceSql;
 
 
-                    work_performanceSql = $@"   UPDATE work_performance
+
+                        work_performanceSql = $@"   UPDATE work_performance
                                             SET
                                                 work_okcnt = IFNULL((
                                                     SELECT 
@@ -1702,167 +1792,169 @@ namespace CalculateForSea
                                         
                                                     ";
 
-                    MySqlConnection conn3 = new MySqlConnection(ConnectionString);
-                    using (conn3)
-                    {
-                        conn3.Open();
-
-                        MySqlCommand cmd = new MySqlCommand();
-                        cmd.CommandText = work_performanceSql;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.Connection = conn3;
-                        cmd.ExecuteNonQuery();
-                    }
-                    models[i].Count++;
-                    if (models[i].Count == 3) 
-                    {
-                        int machine_id2;
-                        //여기에 
-                        switch (i)
+                        MySqlConnection conn3 = new MySqlConnection(ConnectionString);
+                        using (conn3)
                         {
-                            case 0:
-                                machine_id2 = 13;
-                                break;
-                            case 1:
-                                machine_id2 = 21;
-
-                                break;
-                            case 2:
-                                machine_id2 = 22;
-
-                                break;
-                            case 3:
-                                machine_id2 = 23;
-
-                                break;
-                            case 4:
-                                machine_id2 = 24;
-
-                                break;
-                            case 5:
-                                machine_id2 = 25;
-
-                                break;
-                            default:
-                                return;
-
-                        }
-                        string mysqlString2 =
-                                              $"INSERT INTO data_for_grid3                                                                     " +
-                                               $"(                                                                                              " +
-                                               $"`date`,                                                                                        " +
-                                               $"machine_no,                                                                                    " +
-                                               $"V1,                                                                                            " +
-                                               $"V2,                                                                                            " +
-                                               $"V3,                                                                                            " +
-                                               $"V4,                                                                                            " +
-                                               $"acceleration_pos,                                                                              " +
-                                               $"deceleration_pos,                                                                              " +
-                                               $"metal_pressure,                                                                                " +
-                                               $"swap_time,                                                                                     " +
-                                               $"biskit_thickness,                                                                              " +
-                                               $"physical_strength_per,                                                                         " +
-                                               $"physical_strength_mn,                                                                          " +
-                                               $"cycle_time,                                                                                    " +
-                                               $"type_weight_enrty_time,                                                                        " +
-                                               $"bath_time,                                                                                     " +
-                                               $"forward_time,                                                                                  " +
-                                               $"freezing_time,                                                                                 " +
-                                               $"type_weight_back_time,                                                                         " +
-                                               $"extrusion_time,                                                                                " +
-                                               $"extraction_time,                                                                               " +
-                                               $"spray_time,                                                                                    " +
-                                               $"cavity_core,                                                                                   " +
-                                               $"A_Pollution_degree,                                                                            " +
-                                               $"B_Pollution_degree                                                                             " +
-                                               $", vacuum                                                                                         " +
-                                               $", SHOTCNT                                                                                       " +
-                                               $")                                                                                              " +
-                                               $"VALUES                                                                                         " +
-                                               $"(                                                                                              " +
-                                               $"now(),                                                                                         " +
-                                               $"'WCI_D{machine_id2}',                                                                                     " +
-                                                $"'{gridModels_DCM[i].V1}', " +
-                                                 $"'{gridModels_DCM[i].V2}', " +
-                                                 $"'{gridModels_DCM[i].V3}', " +
-                                                 $"'{gridModels_DCM[i].V4}', " +
-                                                 $"'{gridModels_DCM[i].가속위치}',       " +
-                                                 $"'{gridModels_DCM[i].감속위치}',       " +
-                                                 $"'{gridModels_DCM[i].메탈압력}',       " +
-                                                 $"'{gridModels_DCM[i].승압시간}',       " +
-                                                 $"'{gridModels_DCM[i].비스켓두께}',       " +
-                                                 $"'{gridModels_DCM[i].형체력}',       " +
-                                                 $"'{gridModels_DCM[i].형체력MN}', " +
-                                                 $"'{gridModels_DCM[i].사이클타임}', " +
-                                                 $"'{gridModels_DCM[i].형체중자입시간}', " +
-                                                 $"'{gridModels_DCM[i].주탕시간}', " +
-                                                 $"'{gridModels_DCM[i].사출전진시간}', " +
-                                                 $"'{gridModels_DCM[i].제품냉각시간}', " +
-                                                 $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
-                                                 $"'{gridModels_DCM[i].압출시간}', " +
-                                                 $"'{gridModels_DCM[i].취출시간}', " +
-                                                 $"'{gridModels_DCM[i].스프레이시간}', " +
-                                                 $"'{gridModels_DCM[i].금형내부}', " +
-                                                 $"'{gridModels_DCM[i].오염도A}', " +
-                                                 $"'{gridModels_DCM[i].오염도B}', " +
-                                                 $"'{gridModels_DCM[i].탱크진공}', " +
-                                               $"'{nowtotalcnt}'" +
-                                               $");                                                                                             ";
-                        MySqlConnection conn10 = new MySqlConnection(ConnectionString);
-                        using (conn10)
-                        {
-                            conn10.Open();
+                            conn3.Open();
 
                             MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = mysqlString2;
+                            cmd.CommandText = work_performanceSql;
                             cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn10;
+                            cmd.Connection = conn3;
                             cmd.ExecuteNonQuery();
                         }
-                        models[i].Count = 0;
+                        models[i].Count++;
+                        if (models[i].Count == 3)
+                        {
+                            int machine_id2;
+                            //여기에 
+                            switch (i)
+                            {
+                                case 0:
+                                    machine_id2 = 13;
+                                    break;
+                                case 1:
+                                    machine_id2 = 21;
+
+                                    break;
+                                case 2:
+                                    machine_id2 = 22;
+
+                                    break;
+                                case 3:
+                                    machine_id2 = 23;
+
+                                    break;
+                                case 4:
+                                    machine_id2 = 24;
+
+                                    break;
+                                case 5:
+                                    machine_id2 = 25;
+
+                                    break;
+                                default:
+                                    return;
+
+                            }
+                            string mysqlString2 =
+                                                  $"INSERT INTO data_for_grid3                                                                     " +
+                                                   $"(                                                                                              " +
+                                                   $"`date`,                                                                                        " +
+                                                   $"machine_no,                                                                                    " +
+                                                   $"V1,                                                                                            " +
+                                                   $"V2,                                                                                            " +
+                                                   $"V3,                                                                                            " +
+                                                   $"V4,                                                                                            " +
+                                                   $"acceleration_pos,                                                                              " +
+                                                   $"deceleration_pos,                                                                              " +
+                                                   $"metal_pressure,                                                                                " +
+                                                   $"swap_time,                                                                                     " +
+                                                   $"biskit_thickness,                                                                              " +
+                                                   $"physical_strength_per,                                                                         " +
+                                                   $"physical_strength_mn,                                                                          " +
+                                                   $"cycle_time,                                                                                    " +
+                                                   $"type_weight_enrty_time,                                                                        " +
+                                                   $"bath_time,                                                                                     " +
+                                                   $"forward_time,                                                                                  " +
+                                                   $"freezing_time,                                                                                 " +
+                                                   $"type_weight_back_time,                                                                         " +
+                                                   $"extrusion_time,                                                                                " +
+                                                   $"extraction_time,                                                                               " +
+                                                   $"spray_time,                                                                                    " +
+                                                   $"cavity_core,                                                                                   " +
+                                                   $"A_Pollution_degree,                                                                            " +
+                                                   $"B_Pollution_degree                                                                             " +
+                                                   $", vacuum                                                                                         " +
+                                                   $", SHOTCNT                                                                                       " +
+                                                   $")                                                                                              " +
+                                                   $"VALUES                                                                                         " +
+                                                   $"(                                                                                              " +
+                                                   $"now(),                                                                                         " +
+                                                   $"'WCI_D{machine_id2}',                                                                                     " +
+                                                    $"'{gridModels_DCM[i].V1}', " +
+                                                     $"'{gridModels_DCM[i].V2}', " +
+                                                     $"'{gridModels_DCM[i].V3}', " +
+                                                     $"'{gridModels_DCM[i].V4}', " +
+                                                     $"'{gridModels_DCM[i].가속위치}',       " +
+                                                     $"'{gridModels_DCM[i].감속위치}',       " +
+                                                     $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                     $"'{gridModels_DCM[i].승압시간}',       " +
+                                                     $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                     $"'{gridModels_DCM[i].형체력}',       " +
+                                                     $"'{gridModels_DCM[i].형체력MN}', " +
+                                                     $"'{gridModels_DCM[i].사이클타임}', " +
+                                                     $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                     $"'{gridModels_DCM[i].주탕시간}', " +
+                                                     $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                     $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                     $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                     $"'{gridModels_DCM[i].압출시간}', " +
+                                                     $"'{gridModels_DCM[i].취출시간}', " +
+                                                     $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                     $"'{gridModels_DCM[i].금형내부}', " +
+                                                     $"'{gridModels_DCM[i].오염도A}', " +
+                                                     $"'{gridModels_DCM[i].오염도B}', " +
+                                                     $"'{gridModels_DCM[i].탱크진공}', " +
+                                                   $"'{nowtotalcnt}'" +
+                                                   $");                                                                                             ";
+                            MySqlConnection conn10 = new MySqlConnection(ConnectionString);
+                            using (conn10)
+                            {
+                                conn10.Open();
+
+                                MySqlCommand cmd = new MySqlCommand();
+                                cmd.CommandText = mysqlString2;
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Connection = conn10;
+                                cmd.ExecuteNonQuery();
+                            }
+                            models[i].Count = 0;
+                        }
+
+
+
                     }
-                    
-
-
+                    catch (Exception ex)
+                    {
+                        //여기서 입력문자열 예외 발생
+                        WriteLog(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    //여기서 입력문자열 예외 발생
-                    WriteLog(ex.Message);
+                    Get_DCM(i); //작업지시 없으면 0으로 초기화
+                    WaitOrder();
                 }
-            }
-            else
-            {
-                Get_DCM(i); //작업지시 없으면 0으로 초기화
-                WaitOrder();
-            }
 
-            switch (i)
-            {
-                case 0:
-                    SendMQTT_13(ds, i);
-                    break;
-                case 1:
-                    SendMQTT_21(ds, i);
-                    break;
-                case 2:
-                    SendMQTT_22(ds, i);
-                    break;
-                case 3:
-                    SendMQTT_23(ds, i);
-                    break;
-                case 4:
-                    SendMQTT_24(ds, i);
-                    break;
-                case 5:
-                    SendMQTT_25(ds, i);
-                    break;
-                default:
-                    break;
+                switch (i)
+                {
+                    case 0:
+                        SendMQTT_13(ds, i);
+                        break;
+                    case 1:
+                        SendMQTT_21(ds, i);
+                        break;
+                    case 2:
+                        SendMQTT_22(ds, i);
+                        break;
+                    case 3:
+                        SendMQTT_23(ds, i);
+                        break;
+                    case 4:
+                        SendMQTT_24(ds, i);
+                        break;
+                    case 5:
+                        SendMQTT_25(ds, i);
+                        break;
+                    default:
+                        break;
+                }
+                CalculateAndPublishPowerConsumption(models[i], i);
+                models[i].is_Running = false;
+                Thread.Sleep(timer * 1000);
             }
-            CalculateAndPublishPowerConsumption(models[i], i);
-            models[i].is_Running = false;
-            Thread.Sleep(20);
+           
         }
         #region SEND_MQTT
 
@@ -2361,6 +2453,16 @@ namespace CalculateForSea
                     }
                 }
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            cts1.Cancel();
+            cts2.Cancel();
+            cts3.Cancel();
+            cts4.Cancel();
+            cts5.Cancel();
+
         }
     }
   

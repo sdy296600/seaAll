@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CalculateForSea
 {
-    internal class GridModel
+    public class GridModel
     {
         public string Date { get; set; }
         public string 설비No { get; set; }
