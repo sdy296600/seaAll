@@ -1603,41 +1603,43 @@ namespace CalculateForSea
                                         return;
 
                                 }
-                                string mysqlString =
-                                                    $@"CREATE TEMPORARY TABLE TempData AS
-                                                SELECT id
-                                                FROM data_for_grid
-                                                WHERE machine_no = 'WCI_D{machine_id}'
-                                                ORDER BY id DESC
-                                                LIMIT 3;
 
-                                            UPDATE data_for_grid
+                                //    string mysqlString =
+                                //                        $@"CREATE TEMPORARY TABLE TempData AS
+                                //                    SELECT id
+                                //                    FROM data_for_grid
+                                //                    WHERE machine_no = 'WCI_D{machine_id}'
+                                //                    ORDER BY id DESC
+                                //                    LIMIT 3;
 
-                                                    SET
-                                        date = now(),
-                                        cycle_time = '{gridModels_DCM[i].사이클타임}',
-                                        type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
-                                        bath_time = '{gridModels_DCM[i].주탕시간}',
-                                        forward_time = '{gridModels_DCM[i].사출전진시간}',
-                                        freezing_time = '{gridModels_DCM[i].제품냉각시간}',
-                                        type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
-                                        extrusion_time = '{gridModels_DCM[i].압출시간}',
-                                        extraction_time = '{gridModels_DCM[i].취출시간}',
-                                        spray_time = '{gridModels_DCM[i].스프레이시간}'
-                                        WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
+                                //                UPDATE data_for_grid
 
-                            DROP TEMPORARY TABLE TempData;";
-                                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                                using (conn2)
-                                {
-                                    conn2.Open();
+                                //                        SET
 
-                                    MySqlCommand cmd = new MySqlCommand();
-                                    cmd.CommandText = mysqlString;
-                                    cmd.CommandType = CommandType.Text;
-                                    cmd.Connection = conn2;
-                                    cmd.ExecuteNonQuery();
-                                }
+                                //            date = now(),
+                                //            cycle_time = '{gridModels_DCM[i].사이클타임}',
+                                //            type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
+                                //            bath_time = '{gridModels_DCM[i].주탕시간}',
+                                //            forward_time = '{gridModels_DCM[i].사출전진시간}',
+                                //            freezing_time = '{gridModels_DCM[i].제품냉각시간}',
+                                //            type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
+                                //            extrusion_time = '{gridModels_DCM[i].압출시간}',
+                                //            extraction_time = '{gridModels_DCM[i].취출시간}',
+                                //            spray_time = '{gridModels_DCM[i].스프레이시간}'
+                                //            WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
+
+                                //DROP TEMPORARY TABLE TempData;";
+                                //    MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                                //    using (conn2)
+                                //    {
+                                //        conn2.Open();
+
+                                //        MySqlCommand cmd = new MySqlCommand();
+                                //        cmd.CommandText = mysqlString;
+                                //        cmd.CommandType = CommandType.Text;
+                                //        cmd.Connection = conn2;
+                                //        cmd.ExecuteNonQuery();
+                                //    }
                                 //DataSet gridDs = new DataSet();
                                 //MySqlConnection conn6 = new MySqlConnection(ConnectionString);
                                 //using (conn6)
@@ -1694,7 +1696,7 @@ namespace CalculateForSea
 
                                 //if(gridModels[i].Count > 0) 
                                 //{
-                                    using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                                using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                                     {
                                         sqlconn.Open();
                                         using (SqlCommand sqlcmd = new SqlCommand())
@@ -1837,8 +1839,7 @@ namespace CalculateForSea
                                 return;
 
                         }
-                        string mysqlString2 =
-                                                $"INSERT INTO data_for_grid3                                                                     " +
+                        string mysqlString2 =  $"INSERT INTO data_for_grid3                                                                     " +
                                                 $"(                                                                                              " +
                                                 $"`date`,                                                                                        " +
                                                 $"machine_no,                                                                                    " +
