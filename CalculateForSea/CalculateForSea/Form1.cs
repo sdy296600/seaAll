@@ -1614,6 +1614,7 @@ namespace CalculateForSea
                                             UPDATE data_for_grid
 
                                                     SET
+                                        date = now(),
                                         cycle_time = '{gridModels_DCM[i].사이클타임}',
                                         type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
                                         bath_time = '{gridModels_DCM[i].주탕시간}',
