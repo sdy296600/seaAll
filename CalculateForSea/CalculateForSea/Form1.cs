@@ -308,6 +308,7 @@ namespace CalculateForSea
                 {
                     datas.Add(item.Value.WordValue.ToString());
                 }
+
                 if (datas[0] == "1")
                 {
                     var item = LSClient.Read("%DW816", 4);
@@ -323,7 +324,6 @@ namespace CalculateForSea
                         gridModels_DCM[i].오염도B = datas[3];
                         gridModels_DCM[i].탱크진공 = datas[4];
                     }
-
 
                     int machine_id;
                     switch (i)
@@ -350,6 +350,7 @@ namespace CalculateForSea
                         default:
                             return;
                     }
+
                     dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
                     dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
                     dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
@@ -377,9 +378,6 @@ namespace CalculateForSea
                     gridModels_DCM[i].탱크진공 = "0";
                 }
             }
-            finally
-            {
-            }
         }
 
         public void StartPlcMonitoring(FEnetClient LSClient)
@@ -393,6 +391,7 @@ namespace CalculateForSea
                 }
             });
         }
+
         private void Init()
         {
             try
