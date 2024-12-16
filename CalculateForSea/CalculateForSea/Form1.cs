@@ -1045,8 +1045,12 @@ namespace CalculateForSea
             // MySQL 연결 및 데이터 조회
             using (MySqlConnection conn2 = new MySqlConnection(ConnectionString))
             {
-                string sql = $"SELECT START_POWER, WORK_POWER FROM WORK_DATA WHERE WORK_PERFORMANCE_ID = '{model.ID}'; ";
+                string sql = $@"SELECT START_POWER
+                                     , WORK_POWER 
+                                  FROM WORK_DATA 
+                                 WHERE WORK_PERFORMANCE_ID = '{model.ID}'; ";
                 conn2.Open();
+
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn2))
                 {
                     cmd.CommandType = CommandType.Text;
@@ -1121,6 +1125,7 @@ namespace CalculateForSea
 
                 DataSet ds = new DataSet();
                 DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
+
                 MySqlConnection connnect = new MySqlConnection(ConnectionString);
                 using (connnect)
                 {
@@ -1133,6 +1138,7 @@ namespace CalculateForSea
                     MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     adapter.Fill(ds);
                 }
+
                 if (models[i].is_Running) return;
                 models[i].is_Running = true;
                 WriteLog("Data Received");
@@ -1143,10 +1149,15 @@ namespace CalculateForSea
                 {
                     try
                     {
-
                         Get_DCM(i, gridModels_DCM[i]); //값 보내주기
+
                         int cavity = 1;
-                        string cavitySql = $"SELECT CAVITY FROM SEA_MFG.DBO.MD_MST WHERE CODE_MD =  (select CODE_MD from [sea_mfg].dbo.demand_mstr_ext WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
+                        string cavitySql = $@"SELECT CAVITY 
+                                                FROM SEA_MFG.DBO.MD_MST 
+                                               WHERE CODE_MD = ( SELECT CODE_MD 
+                                                                   FROM [sea_mfg].dbo.demand_mstr_ext 
+                                                                  WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' 
+                                                                    AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
 
                         using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
                         {
@@ -1164,7 +1175,6 @@ namespace CalculateForSea
                         }
 
                         string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
-
                         string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
                         string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
                         string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
@@ -1185,20 +1195,19 @@ namespace CalculateForSea
                         {
 
                             string workSql = $@"   UPDATE work_performance
-                                            SET work_power = IFNULL((
-                                                    SELECT 
-                                                        CASE 
-                                                            WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
-                                                            ELSE WORK_POWER - LAST_POWER
-                                                        END
-                                                    FROM WORK_DATA
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                ), 0)
-                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
-                                            UPDATE WORK_DATA SET
-                                                LAST_POWER = WORK_POWER
-                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
-                                                    ";
+                                                      SET work_power = IFNULL( ( SELECT 
+                                                                                    CASE 
+                                                                                        WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
+                                                                                        ELSE WORK_POWER - LAST_POWER
+                                                                                    END
+                                                                                FROM WORK_DATA
+                                                                                WHERE WORK_PERFORMANCE_ID = '{models[i].ID}')
+                                                                             , 0)
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+
+                                                   UPDATE WORK_DATA 
+                                                      SET LAST_POWER = WORK_POWER
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'; ";
 
                             MySqlConnection conn4 = new MySqlConnection(ConnectionString);
                             using (conn4)
@@ -1219,6 +1228,7 @@ namespace CalculateForSea
                             
                             DataSet ds2 = new DataSet();
                             MySqlConnection conn5 = new MySqlConnection(ConnectionString);
+
                             using (conn5)
                             {
                                 conn5.Open();
@@ -1264,8 +1274,7 @@ namespace CalculateForSea
 
                             }
 
-                            string mysqlString =
-                                                $"INSERT INTO data_for_grid                                                                      " +
+                            string mysqlString = $"INSERT INTO data_for_grid                                                                      " +
                                                  $"(                                                                                              " +
                                                  $"`date`,                                                                                        " +
                                                  $"machine_no,                                                                                    " +
@@ -1356,9 +1365,7 @@ namespace CalculateForSea
                                                  $", vacuum                                                                                         " +
                                                  $", SHOTCNT                                                                                       " +
                                                  $")                                                                                              " +
-                                                 $"VALUES                                                                                         " +
-                                                 $"(                                                                                              " +
-                                                 $"now(),                                                                                         " +
+                                                 $"VALUES ( now(),                                                                                         " +
                                                  $"'WCI_D{machine_id}',                                                                                     " +
                                                  $"'{gridModels_DCM[i].V1}', " +
                                                  $"'{gridModels_DCM[i].V2}', " +
@@ -1411,13 +1418,11 @@ namespace CalculateForSea
                                 sqlconn.Open();
                                 using (SqlCommand sqlcmd = new SqlCommand())
                                 {
-
                                     // msSQL [ELEC_SHOT] - 작업지시가 내려져 있을때만 샷당 설비데이터 저장
+                                    string dtValue = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                     sqlcmd.Connection = sqlconn;
                                     sqlcmd.CommandType = CommandType.StoredProcedure;
                                     sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
-                                    //string dtValue = models[i].dt == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : models[i].dt?.ToString("yyyy-MM-dd HH:mm:ss");
-                                    string dtValue = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                     sqlcmd.Parameters.AddWithValue("@Date", dtValue);
                                     sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels_DCM[i].설비No);
                                     sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
@@ -1466,56 +1471,53 @@ namespace CalculateForSea
                                     case 0:
                                         machine_id = 13;
                                         break;
+
                                     case 1:
                                         machine_id = 21;
-
                                         break;
+
                                     case 2:
                                         machine_id = 22;
-
                                         break;
+
                                     case 3:
                                         machine_id = 23;
-
                                         break;
+
                                     case 4:
                                         machine_id = 24;
-
                                         break;
+
                                     case 5:
                                         machine_id = 25;
-
                                         break;
+
                                     default:
                                         return;
 
                                 }
 
-                                string mysqlString =
-                                                    $@"CREATE TEMPORARY TABLE TempData AS
-                                                    SELECT id
-                                                    FROM data_for_grid2
-                                                    WHERE machine_no = 'WCI_D{machine_id}'
-                                                    ORDER BY id DESC
-                                                    LIMIT 3;
+                                string mysqlString = $@"CREATE TEMPORARY TABLE TempData AS
+                                                        SELECT id
+                                                          FROM data_for_grid2
+                                                         WHERE machine_no = 'WCI_D{machine_id}'
+                                                         ORDER BY id DESC LIMIT 3;
 
-                                                UPDATE data_for_grid2
+                                                        UPDATE data_for_grid2
+                                                           SET date = now(),
+                                                               cycle_time = '{gridModels_DCM[i].사이클타임}',
+                                                               type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
+                                                               bath_time = '{gridModels_DCM[i].주탕시간}',
+                                                               forward_time = '{gridModels_DCM[i].사출전진시간}',
+                                                               freezing_time = '{gridModels_DCM[i].제품냉각시간}',
+                                                               type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
+                                                               extrusion_time = '{gridModels_DCM[i].압출시간}',
+                                                               extraction_time = '{gridModels_DCM[i].취출시간}',
+                                                               spray_time = '{gridModels_DCM[i].스프레이시간}'
+                                                         WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
 
-                                                        SET
+                                                          DROP TEMPORARY TABLE TempData;";
 
-                                            date = now(),
-                                            cycle_time = '{gridModels_DCM[i].사이클타임}',
-                                            type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
-                                            bath_time = '{gridModels_DCM[i].주탕시간}',
-                                            forward_time = '{gridModels_DCM[i].사출전진시간}',
-                                            freezing_time = '{gridModels_DCM[i].제품냉각시간}',
-                                            type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
-                                            extrusion_time = '{gridModels_DCM[i].압출시간}',
-                                            extraction_time = '{gridModels_DCM[i].취출시간}',
-                                            spray_time = '{gridModels_DCM[i].스프레이시간}'
-                                            WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
-
-                                             DROP TEMPORARY TABLE TempData;";
                                 MySqlConnection conn2 = new MySqlConnection(ConnectionString);
                                 using (conn2)
                                 {
@@ -1527,16 +1529,11 @@ namespace CalculateForSea
                                     cmd.Connection = conn2;
                                     cmd.ExecuteNonQuery();
                                 }
-
-
-
                             }
                         }
 
                         models[i].Totalcnt = nowtotalcnt;
                         models[i].PROD_CNT = nowPordCnt;
-
-
 
                         // MSSQL 전달
                         using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
