@@ -1124,7 +1124,6 @@ namespace CalculateForSea
                 await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
 
                 DataSet ds = new DataSet();
-                DataSet dsTSD = new DataSet(); //SelectTimeSeriesData
 
                 MySqlConnection connnect = new MySqlConnection(ConnectionString);
                 using (connnect)
@@ -1460,6 +1459,23 @@ namespace CalculateForSea
                                 }
 
                             }
+
+                            // MSSQL 전달
+                            using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                            {
+                                sqlconn.Open();
+                                using (SqlCommand sqlcmd = new SqlCommand())
+                                {
+                                    sqlcmd.Connection = sqlconn;
+                                    sqlcmd.CommandType = CommandType.StoredProcedure;
+                                    sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
+                                    sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
+                                    sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
+                                    sqlcmd.Parameters.AddWithValue("@ELEC_USE", (models[i].All_Active_Power).ToString("F2"));
+                                    sqlcmd.ExecuteNonQuery();
+                                }
+                            }
+
                         } 
                         else
                         {
@@ -1535,66 +1551,29 @@ namespace CalculateForSea
                         models[i].Totalcnt = nowtotalcnt;
                         models[i].PROD_CNT = nowPordCnt;
 
-                        // MSSQL 전달
-                        using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                        {
-                            sqlconn.Open();
-                            using (SqlCommand sqlcmd = new SqlCommand())
-                            {
-                                sqlcmd.Connection = sqlconn;
-                                sqlcmd.CommandType = CommandType.StoredProcedure;
-                                sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
-                                sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
-                                sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
-                                sqlcmd.Parameters.AddWithValue("@ELEC_USE", ds.Tables[i].Rows[0]["WORK_POWER"].ToString());
-                                sqlcmd.ExecuteNonQuery();
-                            }
-                        }
-                        WriteLog("Data MSSQL Processed");
-
-                        string work_performanceSql;
 
 
-
-                        work_performanceSql = $@"   UPDATE work_performance
-                                            SET
-                                                work_okcnt = IFNULL((
-                                                    SELECT 
-                                                        CASE 
-                                                            WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
-                                                            ELSE WORK_OKCNT - START_OKCNT
-                                                        END - 
-                                                        CASE 
-                                                            WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
-                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT
-                                                        END
-                                                    FROM WORK_DATA
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                ), 0) * {cavity},
-                                                work_errcount = IFNULL((
-                                                    SELECT 
-                                                        CASE 
-                                                            WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
-                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT
-                                                        END
-                                                    FROM WORK_DATA
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                ), 0) * {cavity},
-                                                work_warmupcnt = IFNULL((
-                                                    SELECT 
-                                                        CASE 
-                                                            WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
-                                                            ELSE WORK_WARMUPCNT - START_WARMUPCNT
-                                                        END
-                                                    FROM WORK_DATA
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                ), 0)
-                                            WHERE end_time = start_time
-                                              AND WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                            ORDER BY ID DESC
-                                            LIMIT 1;
-                                        
-                                                    ";
+                        string work_performanceSql = $@" UPDATE work_performance
+                                                            SET work_okcnt = IFNULL((SELECT CASE WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
+                                                                                            ELSE WORK_OKCNT - START_OKCNT END 
+                                                                                          - CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT END
+                                                                                       FROM WORK_DATA
+                                                                                      WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                   , 0) * {cavity},
+                                                                work_errcount = IFNULL(( SELECT CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                                                                ELSE WORK_ERRCOUNT - START_ERRCOUNT END
+                                                                                           FROM WORK_DATA
+                                                                                          WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                      , 0) * {cavity},
+                                                                work_warmupcnt = IFNULL(( SELECT CASE WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
+                                                                                                 ELSE WORK_WARMUPCNT - START_WARMUPCNT END
+                                                                                            FROM WORK_DATA
+                                                                                           WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                       , 0)
+                                                          WHERE end_time = start_time
+                                                            AND WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                          ORDER BY ID DESC LIMIT 1; ";
 
                         MySqlConnection conn3 = new MySqlConnection(ConnectionString);
                         using (conn3)
@@ -1605,109 +1584,6 @@ namespace CalculateForSea
                             cmd.CommandText = work_performanceSql;
                             cmd.CommandType = CommandType.Text;
                             cmd.Connection = conn3;
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        int machine_id2;
-                        //여기에 
-                        switch (i)
-                        {
-                            case 0:
-                                machine_id2 = 13;
-                                break;
-                            case 1:
-                                machine_id2 = 21;
-
-                                break;
-                            case 2:
-                                machine_id2 = 22;
-
-                                break;
-                            case 3:
-                                machine_id2 = 23;
-
-                                break;
-                            case 4:
-                                machine_id2 = 24;
-
-                                break;
-                            case 5:
-                                machine_id2 = 25;
-
-                                break;
-                            default:
-                                return;
-
-                        }
-                        string mysqlString2 = $"INSERT INTO data_for_grid3                                                                     " +
-                                                $"(                                                                                              " +
-                                                $"`date`,                                                                                        " +
-                                                $"machine_no,                                                                                    " +
-                                                $"V1,                                                                                            " +
-                                                $"V2,                                                                                            " +
-                                                $"V3,                                                                                            " +
-                                                $"V4,                                                                                            " +
-                                                $"acceleration_pos,                                                                              " +
-                                                $"deceleration_pos,                                                                              " +
-                                                $"metal_pressure,                                                                                " +
-                                                $"swap_time,                                                                                     " +
-                                                $"biskit_thickness,                                                                              " +
-                                                $"physical_strength_per,                                                                         " +
-                                                $"physical_strength_mn,                                                                          " +
-                                                $"cycle_time,                                                                                    " +
-                                                $"type_weight_enrty_time,                                                                        " +
-                                                $"bath_time,                                                                                     " +
-                                                $"forward_time,                                                                                  " +
-                                                $"freezing_time,                                                                                 " +
-                                                $"type_weight_back_time,                                                                         " +
-                                                $"extrusion_time,                                                                                " +
-                                                $"extraction_time,                                                                               " +
-                                                $"spray_time,                                                                                    " +
-                                                $"cavity_core,                                                                                   " +
-                                                $"A_Pollution_degree,                                                                            " +
-                                                $"B_Pollution_degree                                                                             " +
-                                                $", vacuum                                                                                         " +
-                                                $", SHOTCNT                                                                                       " +
-                                                $")                                                                                              " +
-                                                $"VALUES                                                                                         " +
-                                                $"(                                                                                              " +
-                                                $"now(),                                                                                         " +
-                                                $"'WCI_D{machine_id2}',                                                                                     " +
-                                                $"'{gridModels_DCM[i].V1}', " +
-                                                    $"'{gridModels_DCM[i].V2}', " +
-                                                    $"'{gridModels_DCM[i].V3}', " +
-                                                    $"'{gridModels_DCM[i].V4}', " +
-                                                    $"'{gridModels_DCM[i].가속위치}',       " +
-                                                    $"'{gridModels_DCM[i].감속위치}',       " +
-                                                    $"'{gridModels_DCM[i].메탈압력}',       " +
-                                                    $"'{gridModels_DCM[i].승압시간}',       " +
-                                                    $"'{gridModels_DCM[i].비스켓두께}',       " +
-                                                    $"'{gridModels_DCM[i].형체력}',       " +
-                                                    $"'{gridModels_DCM[i].형체력MN}', " +
-                                                    $"'{gridModels_DCM[i].사이클타임}', " +
-                                                    $"'{gridModels_DCM[i].형체중자입시간}', " +
-                                                    $"'{gridModels_DCM[i].주탕시간}', " +
-                                                    $"'{gridModels_DCM[i].사출전진시간}', " +
-                                                    $"'{gridModels_DCM[i].제품냉각시간}', " +
-                                                    $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
-                                                    $"'{gridModels_DCM[i].압출시간}', " +
-                                                    $"'{gridModels_DCM[i].취출시간}', " +
-                                                    $"'{gridModels_DCM[i].스프레이시간}', " +
-                                                    $"'{gridModels_DCM[i].금형내부}', " +
-                                                    $"'{gridModels_DCM[i].오염도A}', " +
-                                                    $"'{gridModels_DCM[i].오염도B}', " +
-                                                    $"'{gridModels_DCM[i].탱크진공}', " +
-                                                $"'{nowtotalcnt}'" +
-                                                $");                                                                                             ";
-                        MySqlConnection conn10 = new MySqlConnection(ConnectionString);
-                        using (conn10)
-                        {
-                            conn10.Open();
-
-                            MySqlCommand cmd = new MySqlCommand();
-                            cmd.CommandText = mysqlString2;
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Connection = conn10;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -1752,6 +1628,8 @@ namespace CalculateForSea
             }
 
         }
+
+
         #region SEND_MQTT
 
         private void SendMQTT_13(DataSet ds, int i)
@@ -2045,43 +1923,35 @@ namespace CalculateForSea
                 {
                     if (gridModels[i].Count > 0 && gridModels[i] != null)
                     {
-                        try
+                        switch (i.ToString())
                         {
-
-                            switch (i.ToString())
-                            {
-                                case "0":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_13_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "1":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_21_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "2":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_22_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "3":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_23_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "4":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_24_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "5":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_25_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                default:
-                                    Thread.Sleep(100);
-                                    break;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            WriteLog(ex.Message);
+                            case "0":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_13_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "1":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_21_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "2":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_22_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "3":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_23_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "4":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_24_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "5":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_25_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            default:
+                                Thread.Sleep(100);
+                                break;
                         }
                     }
                 }
@@ -2186,6 +2056,7 @@ namespace CalculateForSea
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW819", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
 
         }
+
         private void SetElec(DataModel model, DataModel2 model2, int index)
         {
             if (model.K_OK && model.M_OK && (index == 0 && model.R_OK) || (index != 0 && model2.T_K_OK && model2.T_M_OK && model2.F_K_OK && model2.F_M_OK))
@@ -2195,10 +2066,9 @@ namespace CalculateForSea
                     DataSet ds = new DataSet();
                     conn.Open();
                     // 다중 SELECT 쿼리
-                    string sql = @"
-                    SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
-                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
-                ";
+                    string sql = @" SELECT Count(*) AS Count FROM elec_day WHERE DATETIME = @dateDay AND MACHINE_ID = @machineNo;
+                                    SELECT Count(*) AS Count FROM elec_month WHERE DATETIME = @dateMonth AND MACHINE_ID = @machineNo;
+                                ";
                     int machineid = index != 0 ? index + 20 : 13;
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -2214,15 +2084,15 @@ namespace CalculateForSea
                             adapter.Fill(ds); // 두 SELECT 결과를 DataSet에 채움
                         }
                     }
+
                     double data = model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
 
                     // `elec_day`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[0].Rows.Count > 0 && Convert.ToInt32(ds.Tables[0].Rows[0]["Count"]) == 0)
                     {
-                        string insertDaySql = @"
-                            INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateDay, @value, @machineNo)
-                        ";
+                        string insertDaySql = @" INSERT INTO elec_day (DATETIME, VALUE, MACHINE_ID)
+                                                 VALUES (@dateDay, @value, @machineNo)
+                                               ";
                         using (MySqlCommand cmd = new MySqlCommand(insertDaySql, conn))
                         {
                             cmd.Parameters.AddWithValue("@dateDay", DateTime.Now.ToString("yyyy-MM-dd"));
@@ -2235,10 +2105,9 @@ namespace CalculateForSea
                     // `elec_month`에 데이터가 없으면 INSERT 실행
                     if (ds.Tables[1].Rows.Count > 0 && Convert.ToInt32(ds.Tables[1].Rows[0]["Count"]) == 0)
                     {
-                        string insertMonthSql = @"
-                            INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
-                            VALUES (@dateMonth, @value, @machineNo)
-                        ";
+                        string insertMonthSql = @" INSERT INTO elec_month (DATETIME, VALUE, MACHINE_ID)
+                                                   VALUES (@dateMonth, @value, @machineNo)
+                                                ";
                         using (MySqlCommand cmd = new MySqlCommand(insertMonthSql, conn))
                         {
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
