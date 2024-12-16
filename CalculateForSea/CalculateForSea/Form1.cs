@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq;
 
+using EasyModbus;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -21,6 +22,8 @@ using VagabondK.Protocols.Channels;
 using VagabondK.Protocols.LSElectric;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Runtime.Remoting;
+using DevExpress.XtraEditors.Filtering;
 
 namespace CalculateForSea
 {
@@ -127,6 +130,26 @@ namespace CalculateForSea
         CancellationTokenSource cts4 = new CancellationTokenSource();
         CancellationTokenSource cts5 = new CancellationTokenSource();
 
+        //ModbusClient castingClient0 = new ModbusClient("172.1.100.112",502);
+        //ModbusClient castingClient1 = new ModbusClient("172.1.100.161", 502);
+        //ModbusClient castingClient2 = new ModbusClient("172.1.100.162", 502);
+        //ModbusClient castingClient3 = new ModbusClient("172.1.100.163", 502);
+        //ModbusClient castingClient4 = new ModbusClient("172.1.100.164", 502);
+        //ModbusClient castingClient5 = new ModbusClient("172.1.100.165", 502);
+
+        //ModbusClient trimmingClient1 = new ModbusClient("172.1.100.171", 502);
+        //ModbusClient trimmingClient2 = new ModbusClient("172.1.100.172", 502);
+        //ModbusClient trimmingClient3 = new ModbusClient("172.1.100.173", 502);
+        //ModbusClient trimmingClient4 = new ModbusClient("172.1.100.174", 502);
+        //ModbusClient trimmingClient5 = new ModbusClient("172.1.100.175", 502);
+
+
+        //ModbusClient furnaceClient1 = new ModbusClient("172.1.100.151", 502);
+        //ModbusClient furnaceClient2 = new ModbusClient("172.1.100.152", 502);
+        //ModbusClient furnaceClient3 = new ModbusClient("172.1.100.153", 502);
+        //ModbusClient furnaceClient4 = new ModbusClient("172.1.100.154", 502);
+        //ModbusClient furnaceClient5 = new ModbusClient("172.1.100.155", 502);
+
         #endregion
 
         public Form1()
@@ -156,9 +179,132 @@ namespace CalculateForSea
                 Task.Run(async () => { await ThreadMethodAsync(4, 1, cts4.Token); }),
                 Task.Run(async() => { await ThreadMethodAsync(5, 1, cts5.Token); })
             };
+            List<Task> tasks2 = new List<Task>
+            {
+                Task.Run(() => { RunGetElec(0); }),
+                Task.Run(() => { RunGetElec(1); }),
+                Task.Run(() => { RunGetElec(2); }),
+                Task.Run(() => { RunGetElec(3); }),
+                Task.Run(() => { RunGetElec(4); }),
+                Task.Run(() => { RunGetElec(5); })
+            };
 
         }
 
+        public void RunGetElec(int machine_no) 
+        {
+            string ip = "";
+            double data = 0;
+            List<ModbusClient> clients = new List<ModbusClient>();
+            if (machine_no == 0)
+            {
+                ip = "172.1.100.112";
+                clients.Add(new ModbusClient(ip, 502));
+                foreach (ModbusClient client in clients) 
+                {
+                    Get_Elec(client);
+                }
+                data = models[machine_no].Consumption_K + models[machine_no].Consumption_M + models[machine_no].ConsumptionRETI + models2[machine_no].F_ESG_K + models2[machine_no].F_ESG_M + models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K;
+                SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
+                SetElec(models[machine_no], models2[machine_no], machine_no);
+                WriteLog(data.ToString());
+                return;
+            }
+
+            ip = $"172.1.100.15{machine_no}";
+            clients.Add(new ModbusClient(ip, 502));
+            ip = $"172.1.100.16{machine_no}";
+            clients.Add(new ModbusClient(ip, 502));
+            ip = $"172.1.100.17{machine_no}";
+            clients.Add(new ModbusClient(ip, 502));
+            foreach (ModbusClient client in clients)
+            {
+                Get_Elec(client);
+            }
+            data = models[machine_no].Consumption_K + models[machine_no].Consumption_M + models[machine_no].ConsumptionRETI + models2[machine_no].F_ESG_K + models2[machine_no].F_ESG_M + models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K;
+            SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
+            SetElec(models[machine_no], models2[machine_no], machine_no);
+            //ModbusClient client = new ModbusClient(ip,502);
+            WriteLog(data.ToString());
+            Task.Delay(50);
+        }
+        public void Get_Elec(ModbusClient client) 
+        {
+            try
+            {
+                string[] ips = client.IPAddress.Split('_');
+                int ipLast = Convert.ToInt32(ips[ips.Length - 1]);
+                int machine_index = 0;
+                int type = 0;
+                client.Connect();
+                if (ipLast - 170 > 0)
+                {
+                    machine_index = ipLast - 170;
+                    type = 2; //트리밍
+                }
+                else if (ipLast - 160 > 0)
+                {
+                    machine_index = ipLast - 160;
+                    type = 0; // 주조기
+                }
+                else if (ipLast - 150 > 0)
+                {
+                    machine_index = ipLast - 150;
+                    type = 1; //용해로
+                }
+                int mhours = client.ReadInputRegisters(1312, 1)[0] * 1000;
+                int khours = client.ReadInputRegisters(1331, 1)[0];
+                DataModel model;
+                DataModel2 model2;
+                model = models[machine_index];
+                model2 = models2[machine_index];
+
+                //if (topic.Contains("P_Active_Khours"))
+                //{
+                switch (type)
+                {
+                    case 0:
+                        {
+                            model.Consumption_K = double.Parse(khours.ToString());
+                            model.K_OK = true;
+                            model.Consumption_M = double.Parse(mhours.ToString());
+                            model.M_OK = true;
+                        }
+                        break;
+                    case 1:
+                        {
+                            model2.F_ESG_K = double.Parse(khours.ToString());
+                            model2.F_K_OK = true;
+                            model2.F_ESG_M = double.Parse(mhours.ToString());
+                            model2.F_M_OK = true;
+                        }
+                        break;
+                    case 2:
+                        {
+                            model2.T_ESG_K = double.Parse(khours.ToString());
+                            model2.T_K_OK = true;
+                            model2.T_ESG_M = double.Parse(mhours.ToString());
+                            model2.T_M_OK = true;
+                        }
+                        break;
+                }
+                client.Disconnect();
+            }
+            catch (Exception ex) 
+            {
+                WriteLog(ex.Message);
+            }
+           
+
+            //else if (topic.Contains("Load_Total_Power_Consumption"))
+            //{
+            //    model.ConsumptionRETI = double.Parse(Encoding.UTF8.GetString(message));
+            //    model.R_OK = true;
+            //    double data = models[index].Consumption_K + models[index].Consumption_M + models[index].ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
+            //    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", index);
+            //    SetElec(model, model2, index);
+            //}
+        }
         public void GetPlcAsync(string address, FEnetClient LSClient)
         {
             TcpChannel ch = LSClient.Channel as TcpChannel;
@@ -418,38 +564,38 @@ namespace CalculateForSea
                 #region [Casting]
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_161_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });// 현재  
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });// 구동 일수
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_161_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });// 구동 시간
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_162_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_163_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_163_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_163_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_163_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_164_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_164_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_164_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_164_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Casting_165_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_165_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_165_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Casting_165_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -458,38 +604,38 @@ namespace CalculateForSea
                 #region [Furnace]
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_151_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_151_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_152_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_153_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_153_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_154_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Furnace_155_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Furnace_155_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -498,38 +644,38 @@ namespace CalculateForSea
                 #region [Trimming]
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_171_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_171_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_171_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_172_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_173_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_173_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_173_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_174_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_P_Active_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_P_ReActive_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_175_P_Active_Khours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //_mqttClient.Subscribe(new string[] { "DPS/Trimming_175_P_Active_Mhours" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_Current_Motor_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_Motor_LIFE_Day" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 _mqttClient.Subscribe(new string[] { "DPS/Trimming_175_Motor_LIFE_Hour" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -1733,7 +1879,7 @@ namespace CalculateForSea
                 }
                 CalculateAndPublishPowerConsumption(models[i], i);
                 models[i].is_Running = false;
-                Thread.Sleep(timer * 1000);
+                await Task.Delay(timer * 1000);
             }
            
         }
