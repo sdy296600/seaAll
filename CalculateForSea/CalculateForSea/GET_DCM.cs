@@ -61,18 +61,22 @@ namespace CalculateForSea
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
                         cnt = BitConverter.ToUInt16(results, 0);
+                        model2.getDtOkCnt = cnt;
                         SaveWorkData($"UPDATE WORK_DATA SET WORK_OKCNT = '{cnt}'", model2);
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 3705, 1);
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
                         errCnt = BitConverter.ToUInt16(results, 0);
+                        model2.getDtErrCnt = errCnt;
+
                         SaveWorkData($"UPDATE WORK_DATA SET WORK_ERRCOUNT = '{errCnt}'", model2);
                     }
                     results = await mcProtocolTcp.ReadDeviceBlock(Mitsubishi.PlcDeviceType.D, 3706, 1);
                     if (results != null && results.Length >= 2) // 워드 값은 2바이트
                     {
                         warmCnt = BitConverter.ToUInt16(results, 0);
+                        model2.getDtWarmCnt = warmCnt;
                         SaveWorkData($"UPDATE WORK_DATA SET WORK_WARMUPCNT = '{warmCnt}'", model2);
                     }
 

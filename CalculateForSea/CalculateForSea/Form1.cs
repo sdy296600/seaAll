@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Media3D;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using VagabondK.Protocols.Channels;
 using VagabondK.Protocols.LSElectric;
@@ -137,6 +138,7 @@ namespace CalculateForSea
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             Init();
             FEnetClient LSClient = new FEnetClient(new TcpChannel("172.1.100.141", 2004));
             FEnetClient LSClient2 = new FEnetClient(new TcpChannel("172.1.100.142", 2004));
@@ -231,8 +233,8 @@ namespace CalculateForSea
                 SetElec(models[machine_no], models2[machine_no], machine_no);
 
                 WriteLog(machine_no + "호기 : " + data.ToString());
-
-                await Task.Delay(50);
+                    
+                await Task.Delay(1000);
             }
         
         }
@@ -585,6 +587,29 @@ namespace CalculateForSea
                 models.AddRange(new[] { model13, model21, model22, model23, model24, model25 });
                 gridModels.AddRange(new[] { list_13, list_21, list_22, list_23, list_24, list_25 });
                 gridModels_DCM.AddRange(new[] { list_13_DCM, list_21_DCM, list_22_DCM, list_23_DCM, list_24_DCM, list_25_DCM });
+                DataSet ds = new DataSet();
+
+                MySqlConnection connnect = new MySqlConnection(ConnectionString);
+                using (connnect)
+                {
+                    connnect.Open();
+                    // work_performance조회 ( start_time = end_time 인것)
+                    MySqlCommand cmd = new MySqlCommand();
+                    cmd.CommandText = "calculateForSEA_R";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection = connnect;
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+                }
+                int model_index = 0;
+                foreach (DataModel model in models) 
+                {
+                    if (ds.Tables[model_index].Rows.Count > 0) 
+                    {
+                        models[model_index].ID = ds.Tables[model_index].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
+                    }
+                    model_index++;
+                }
                 _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 1000);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
             }
@@ -1191,6 +1216,24 @@ namespace CalculateForSea
                         if (WORK_PERFORMANCE_ID != models[i].ID)
                         {
                             models[i] = new DataModel() { ID = WORK_PERFORMANCE_ID };
+                            double power = models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_K + models2[i].T_ESG_M + models[i].Consumption_M + models[i].Consumption_K + models[i].ConsumptionRETI;
+                            double okcnt = models[i].getDtOkCnt;
+                            double errcnt = models[i].getDtErrCnt;
+                            double warmcnt = models[i].getDtWarmCnt;
+
+                            string sql = $@"  UPDATE WORK_DATA  
+                                                SET 
+                                                    START_POWER = {power},
+                                                    WORK_POWER = {power},
+                                                    LAST_POWER = {power},
+                                                    START_OKCNT = {okcnt},
+                                                    START_WARMUPCNT = {warmcnt},
+                                                    START_ERRCOUNT = {errcnt},
+                                                    WORK_OKCNT = {okcnt},
+                                                    WORK_WARMUPCNT = {warmcnt},
+                                                    WORK_ERRCOUNT = {errcnt}
+                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';";
+                            //여기 수정해야함
                         }
 
                         int nowtotalcnt = (Convert.ToInt32(WORK_OKCNT) / cavity)

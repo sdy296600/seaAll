@@ -1177,115 +1177,84 @@ namespace CoFAS.NEW.MES.POP
 
                 if (no == "13") 
                 {
-                    sql = $@"
-                        SELECT 
-                                    CATEGORY, 
-                                    MAX(TIMESTAMP) AS MAX_TIMESTAMP,
-                                    VALUE
+            //        sql = $@"
+            //            SELECT 
+            //                        CATEGORY, 
+            //                        MAX(TIMESTAMP) AS MAX_TIMESTAMP,
+            //                        VALUE
             
-                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
-                               WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
-                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                               OR CATEGORY LIKE 'ESG_P_Active_Khours'
-                                GROUP BY D.CATEGORY
-            ";
+            //                    FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
+            //                   WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+            //                   OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'
+            //                   OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+            //                   OR CATEGORY LIKE 'ESG_P_Active_Khours'
+            //                    GROUP BY D.CATEGORY
+            //";
 
-                    DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
 
                     string START_POWER = "0";
                     string START_ERRCOUNT = "0";
                     string START_WARMUPCNT = "0";
                     string START_OKCNT = "0";
 
-                    if (pDataTable6 != null)
-                    {
-                        foreach (DataRow rowdata in pDataTable6.Rows)
-                        {
-                            if (rowdata["Category"].ToString().Contains("D3704"))
-                            {
-                                START_OKCNT = rowdata["VALUE"].ToString();
-                            }
-                            if (rowdata["Category"].ToString().Contains("D3705"))
-                            {
-                                START_ERRCOUNT = rowdata["VALUE"].ToString();
-                            }
-                            if (rowdata["Category"].ToString().Contains("D3706"))
-                            {
-                                START_WARMUPCNT = rowdata["VALUE"].ToString();
-                            }
-                            if (rowdata["Category"].ToString().Contains("ESG_P_Active_Khours"))
-                            {
-                                START_POWER = (Convert.ToDouble(rowdata["VALUE"].ToString())) .ToString();
-                            }
-                        }
-                    }
 
                     sql = $@"INSERT INTO WORK_DATA ( WORK_PERFORMANCE_ID
-                                                   , START_POWER
-                                                   , START_OKCNT 
-                                                   , START_ERRCOUNT
-                                                   , START_WARMUPCNT
-                                                   , WORK_POWER
-                                                   , LAST_POWER
-                                                   , WORK_OKCNT
-                                                   , WORK_ERRCOUNT
-                                                   , WORK_WARMUPCNT) 
-                                           VALUES ( {id},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT},{START_POWER},{START_POWER},{START_OKCNT},{START_ERRCOUNT},{START_WARMUPCNT})";
+                                                  ) 
+                                           VALUES ( {id})";
                      //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                     DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
                 }
                 else if (no == "21" || no == "22" || no == "23" || no == "24" || no == "25") 
                 {
-                    sql = $@"
-                     SELECT ROUND(SUM(RESULT_TABLE.TOTAL_VALUE),2) AS VALUE, RESULT_TABLE.CATEGORY AS CATEGORY FROM (SELECT SUM(
-								        CASE 
-								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3704' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3705' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3706' THEN VALUE
-							                WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Khours' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Mhours' THEN VALUE * 1000
-								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Khours' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Mhours' THEN VALUE * 1000
-								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Khours' THEN VALUE
-								            WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Mhours' THEN VALUE * 1000
-								            WHEN T2.CATEGORY LIKE 'ESG_P_Active_Khours' THEN VALUE
-								            ELSE T2.VALUE
-								        END
-								    ) AS TOTAL_VALUE,
-								    CASE
-										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%151%' OR LEFT(T2.CATEGORY,12) LIKE '%161%' OR LEFT(T2.CATEGORY,12) LIKE '%171%')
-										 THEN '21_P_Active'
-										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%152%' OR LEFT(T2.CATEGORY,12) LIKE '%162%' OR LEFT(T2.CATEGORY,12) LIKE '%172%')
-										 THEN '22_P_Active'
-										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%153%' OR LEFT(T2.CATEGORY,12) LIKE '%163%' OR LEFT(T2.CATEGORY,12) LIKE '%173%')
-										 THEN '23_P_Active'
-										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%154%' OR LEFT(T2.CATEGORY,12) LIKE '%164%' OR LEFT(T2.CATEGORY,12) LIKE '%174%')
-										 THEN '24_P_Active'
-										 when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%155%' OR LEFT(T2.CATEGORY,12) LIKE '%165%' OR LEFT(T2.CATEGORY,12) LIKE '%175%')
-										 THEN '25_P_Active'
-									 ELSE T2.CATEGORY
-									 END AS CATEGORY
-									 FROM
-            					(SELECT 
-                                    CATEGORY, 
-                                    MAX(TIMESTAMP) AS MAX_TIMESTAMP,
-                                    VALUE
-                                FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
-                               WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
-                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'	
-                               OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
-                               OR CATEGORY LIKE 'Casting_{no2}_P_Active_Khours'
-                               OR CATEGORY LIKE 'Casting_{no2}_P_Active_Mhours'
-                               OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Khours'
-                               OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Mhours'
-                               OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Khours'
-                               OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Mhours'
-                                GROUP BY D.CATEGORY) AS T2
-                                GROUP BY T2.CATEGORY) AS RESULT_TABLE
-                              	GROUP BY RESULT_TABLE.CATEGORY
-                                ;                                
-            ";
+          //          sql = $@"
+          //           SELECT ROUND(SUM(RESULT_TABLE.TOTAL_VALUE),2) AS VALUE, RESULT_TABLE.CATEGORY AS CATEGORY FROM (SELECT SUM(
+								  //      CASE 
+								  //          WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3704' THEN VALUE
+								  //          WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3705' THEN VALUE
+								  //          WHEN T2.CATEGORY LIKE 'DCM_%_TAG_D3706' THEN VALUE
+							   //             WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Khours' THEN VALUE
+								  //          WHEN T2.CATEGORY LIKE 'Casting_%_P_Active_Mhours' THEN VALUE * 1000
+								  //          WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Khours' THEN VALUE
+								  //          WHEN T2.CATEGORY LIKE 'Furnace_%_P_Active_Mhours' THEN VALUE * 1000
+								  //          WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Khours' THEN VALUE
+								  //          WHEN T2.CATEGORY LIKE 'Trimming_%_P_Active_Mhours' THEN VALUE * 1000
+								  //          WHEN T2.CATEGORY LIKE 'ESG_P_Active_Khours' THEN VALUE
+								  //          ELSE T2.VALUE
+								  //      END
+								  //  ) AS TOTAL_VALUE,
+								  //  CASE
+										// when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%151%' OR LEFT(T2.CATEGORY,12) LIKE '%161%' OR LEFT(T2.CATEGORY,12) LIKE '%171%')
+										// THEN '21_P_Active'
+										// when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%152%' OR LEFT(T2.CATEGORY,12) LIKE '%162%' OR LEFT(T2.CATEGORY,12) LIKE '%172%')
+										// THEN '22_P_Active'
+										// when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%153%' OR LEFT(T2.CATEGORY,12) LIKE '%163%' OR LEFT(T2.CATEGORY,12) LIKE '%173%')
+										// THEN '23_P_Active'
+										// when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%154%' OR LEFT(T2.CATEGORY,12) LIKE '%164%' OR LEFT(T2.CATEGORY,12) LIKE '%174%')
+										// THEN '24_P_Active'
+										// when RIGHT(T2.CATEGORY,4) = 'ours' AND (LEFT(T2.CATEGORY,12) LIKE '%155%' OR LEFT(T2.CATEGORY,12) LIKE '%165%' OR LEFT(T2.CATEGORY,12) LIKE '%175%')
+										// THEN '25_P_Active'
+									 //ELSE T2.CATEGORY
+									 //END AS CATEGORY
+									 //FROM
+          //  					(SELECT 
+          //                          CATEGORY, 
+          //                          MAX(TIMESTAMP) AS MAX_TIMESTAMP,
+          //                          VALUE
+          //                      FROM (SELECT * FROM timeseriesdata ORDER BY ID DESC LIMIT 300000) AS D
+          //                     WHERE CATEGORY LIKE 'DCM_{no}_TAG_D3704'
+          //                     OR CATEGORY LIKE 'DCM_{no}_TAG_D3705'	
+          //                     OR CATEGORY LIKE 'DCM_{no}_TAG_D3706'
+          //                     OR CATEGORY LIKE 'Casting_{no2}_P_Active_Khours'
+          //                     OR CATEGORY LIKE 'Casting_{no2}_P_Active_Mhours'
+          //                     OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Khours'
+          //                     OR CATEGORY LIKE 'Furnace_{no2 - 10}_P_Active_Mhours'
+          //                     OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Khours'
+          //                     OR CATEGORY LIKE 'Trimming_{no2 + 10}_P_Active_Mhours'
+          //                      GROUP BY D.CATEGORY) AS T2
+          //                      GROUP BY T2.CATEGORY) AS RESULT_TABLE
+          //                    	GROUP BY RESULT_TABLE.CATEGORY
+          //                      ;                                
+          //  ";
                         
 
 
@@ -1309,44 +1278,36 @@ namespace CoFAS.NEW.MES.POP
                     //        FROM GET_VALUES
                     //        WHERE rn = 1
                     //        GROUP BY CATEGORY
-                    DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
+                    //DataTable pDataTable6 = new MY_DBClass().SELECT_DataTable(sql);
                     string START_POWER = "0";
                     string START_ERRCOUNT = "0";
                     string START_WARMUPCNT = "0";
                     string START_OKCNT = "0";
 
-                    if (pDataTable6 != null) 
-                    {
-                        foreach (DataRow rowdata in pDataTable6.Rows)
-                        {
-                            if (rowdata["CATEGORY"].ToString().Contains("D3704"))
-                                START_OKCNT = rowdata["VALUE"].ToString();
+                    //if (pDataTable6 != null) 
+                    //{
+                    //    foreach (DataRow rowdata in pDataTable6.Rows)
+                    //    {
+                    //        if (rowdata["CATEGORY"].ToString().Contains("D3704"))
+                    //            START_OKCNT = rowdata["VALUE"].ToString();
 
-                            else if (rowdata["CATEGORY"].ToString().Contains("D3705"))
-                                START_ERRCOUNT = rowdata["VALUE"].ToString();
+                    //        else if (rowdata["CATEGORY"].ToString().Contains("D3705"))
+                    //            START_ERRCOUNT = rowdata["VALUE"].ToString();
 
-                            else if (rowdata["CATEGORY"].ToString().Contains("D3706"))
-                                START_WARMUPCNT = rowdata["VALUE"].ToString();
-                            else if (rowdata["CATEGORY"].ToString().Contains("P_Active")) 
-                            {
-                                START_POWER =  rowdata["VALUE"].ToString();
-                            }
+                    //        else if (rowdata["CATEGORY"].ToString().Contains("D3706"))
+                    //            START_WARMUPCNT = rowdata["VALUE"].ToString();
+                    //        else if (rowdata["CATEGORY"].ToString().Contains("P_Active")) 
+                    //        {
+                    //            START_POWER =  rowdata["VALUE"].ToString();
+                    //        }
 
-                        }
-                    }
+                    //    }
+                    //}
 
                     //START_OKCNT = (Convert.ToInt32(START_OKCNT) - Convert.ToInt32(START_ERRCOUNT)).ToString();
 
-                    sql = $@"INSERT INTO WORK_DATA ( WORK_PERFORMANCE_ID
-                                                   , START_POWER
-                                                   , START_OKCNT 
-                                                   , START_ERRCOUNT
-                                                   , START_WARMUPCNT
-                                                   , WORK_POWER
-                                                   , WORK_OKCNT
-                                                   , WORK_ERRCOUNT
-                                                   , WORK_WARMUPCNT) 
-                                            VALUES ( '{id}','{START_POWER}','{START_OKCNT}','{START_ERRCOUNT}','{START_WARMUPCNT}','{START_POWER}','{START_OKCNT}','{START_ERRCOUNT}','{START_WARMUPCNT}')";
+                    sql = $@"INSERT INTO WORK_DATA ( WORK_PERFORMANCE_ID) 
+                                            VALUES ( '{id}')";
                     
                     //여기에 cavity 추가 해서 처리 ? 하는게 가장 깔끔하지 않을까? 싶음
                     DataTable pDataTable7 = new MY_DBClass().SELECT_DataTable(sql);
