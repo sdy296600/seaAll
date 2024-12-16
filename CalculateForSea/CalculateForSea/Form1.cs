@@ -1789,8 +1789,7 @@ namespace CalculateForSea
         private async void GridTimerCallback(object state)
         {
             try
-            {
-                           //0; 0 < 5; 1++
+            {             //0; 0 < 5; 1++
                 for (int i = 0; i < gridModels.Count -1; i++)
                 {
                     if (gridModels[i].Count > 0 && gridModels[i] != null)
@@ -1929,6 +1928,7 @@ namespace CalculateForSea
             Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW819", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(0)), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
        
         }
+        
         private void SetElec(DataModel model, DataModel2 model2, int index)
         {
             if (model.K_OK && model.M_OK &&(index == 0 && model.R_OK) || (index != 0 && model2.T_K_OK && model2.T_M_OK && model2.F_K_OK && model2.F_M_OK))
