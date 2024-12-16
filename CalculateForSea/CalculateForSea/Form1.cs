@@ -14,6 +14,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using VagabondK.Protocols.Channels;
 using VagabondK.Protocols.LSElectric;
 using VagabondK.Protocols.LSElectric.FEnet;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CalculateForSea
 {
@@ -127,26 +128,6 @@ namespace CalculateForSea
         CancellationTokenSource elecToken4 = new CancellationTokenSource();
         CancellationTokenSource elecToken5 = new CancellationTokenSource();
 
-        //ModbusClient castingClient0 = new ModbusClient("172.1.100.112",502);
-        //ModbusClient castingClient1 = new ModbusClient("172.1.100.161", 502);
-        //ModbusClient castingClient2 = new ModbusClient("172.1.100.162", 502);
-        //ModbusClient castingClient3 = new ModbusClient("172.1.100.163", 502);
-        //ModbusClient castingClient4 = new ModbusClient("172.1.100.164", 502);
-        //ModbusClient castingClient5 = new ModbusClient("172.1.100.165", 502);
-
-        //ModbusClient trimmingClient1 = new ModbusClient("172.1.100.171", 502);
-        //ModbusClient trimmingClient2 = new ModbusClient("172.1.100.172", 502);
-        //ModbusClient trimmingClient3 = new ModbusClient("172.1.100.173", 502);
-        //ModbusClient trimmingClient4 = new ModbusClient("172.1.100.174", 502);
-        //ModbusClient trimmingClient5 = new ModbusClient("172.1.100.175", 502);
-
-
-        //ModbusClient furnaceClient1 = new ModbusClient("172.1.100.151", 502);
-        //ModbusClient furnaceClient2 = new ModbusClient("172.1.100.152", 502);
-        //ModbusClient furnaceClient3 = new ModbusClient("172.1.100.153", 502);
-        //ModbusClient furnaceClient4 = new ModbusClient("172.1.100.154", 502);
-        //ModbusClient furnaceClient5 = new ModbusClient("172.1.100.155", 502);
-
         #endregion
 
         public Form1()
@@ -222,6 +203,23 @@ namespace CalculateForSea
                 clients.Add(new ModbusClient(ip, 502));
                 ip = $"172.1.100.17{machine_no}";
                 clients.Add(new ModbusClient(ip, 502));
+                string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                string mn = machine_no == 0 ? "13" : $"2{machine_no}";
+                string mysqlString = $@"insert into trimming_elec(machine_no,value,date) values('{mn}','{models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K} M {models2[machine_no].T_ESG_M/1000} K {models2[machine_no].T_ESG_K}','{dateTime}');
+                                        insert into furnace_elec(machine_no,value,date) values('{mn}','{models2[machine_no].F_ESG_M + models2[machine_no].F_ESG_K} M {models2[machine_no].F_ESG_M / 1000} K {models2[machine_no].F_ESG_K}','{dateTime}');
+                                        insert into casting_elec(machine_no,value,date) values('{mn}','{models[machine_no].Consumption_M + models[machine_no].Consumption_K} M {models[machine_no].Consumption_M / 1000} K {models[machine_no].Consumption_K}','{dateTime}');";
+
+                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                using (conn2)
+                {
+                    conn2.Open();
+
+                    MySqlCommand cmd = new MySqlCommand();
+                    cmd.CommandText = mysqlString;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = conn2;
+                    cmd.ExecuteNonQuery();
+                }
 
                 foreach (ModbusClient client in clients)
                 {
