@@ -68,7 +68,15 @@ namespace CoFAS.NEW.MES.Core
         /// <summary>Form Load 이후 발생하는 이벤트 입니다. 화면을 초기화 합니다.</summary>
         public override void Form_Show()
         {
-            
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                MessageBoxPanel.Show(ex.ToString(), MessageType.Warning);
+            }
+
         }
 
     }
