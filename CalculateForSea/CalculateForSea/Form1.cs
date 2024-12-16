@@ -207,21 +207,21 @@ namespace CalculateForSea
                 clients.Add(new ModbusClient(ip, 502));
                 string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 string mn = machine_no == 0 ? "13" : $"2{machine_no}";
-                string mysqlString = $@"insert into trimming_elec(machine_no,value,date) values('{mn}','{models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K} M {models2[machine_no].T_ESG_M/1000} K {models2[machine_no].T_ESG_K}','{dateTime}');
-                                        insert into furnace_elec(machine_no,value,date) values('{mn}','{models2[machine_no].F_ESG_M + models2[machine_no].F_ESG_K} M {models2[machine_no].F_ESG_M / 1000} K {models2[machine_no].F_ESG_K}','{dateTime}');
-                                        insert into casting_elec(machine_no,value,date) values('{mn}','{models[machine_no].Consumption_M + models[machine_no].Consumption_K} M {models[machine_no].Consumption_M / 1000} K {models[machine_no].Consumption_K}','{dateTime}');";
+                    //string mysqlString = $@"insert into trimming_elec(machine_no,value,date) values('{mn}','{models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K} M {models2[machine_no].T_ESG_M/1000} K {models2[machine_no].T_ESG_K}','{dateTime}');
+                    //                        insert into furnace_elec(machine_no,value,date) values('{mn}','{models2[machine_no].F_ESG_M + models2[machine_no].F_ESG_K} M {models2[machine_no].F_ESG_M / 1000} K {models2[machine_no].F_ESG_K}','{dateTime}');
+                    //                        insert into casting_elec(machine_no,value,date) values('{mn}','{models[machine_no].Consumption_M + models[machine_no].Consumption_K} M {models[machine_no].Consumption_M / 1000} K {models[machine_no].Consumption_K}','{dateTime}');";
 
-                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                using (conn2)
-                {
-                    conn2.Open();
+                    //MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                    //using (conn2)
+                    //{
+                    //    conn2.Open();
 
-                    MySqlCommand cmd = new MySqlCommand();
-                    cmd.CommandText = mysqlString;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Connection = conn2;
-                    cmd.ExecuteNonQuery();
-                }
+                    //    MySqlCommand cmd = new MySqlCommand();
+                    //    cmd.CommandText = mysqlString;
+                    //    cmd.CommandType = CommandType.Text;
+                    //    cmd.Connection = conn2;
+                    //    cmd.ExecuteNonQuery();
+                    //}
 
                 foreach (ModbusClient client in clients)
                 {
