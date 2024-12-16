@@ -231,7 +231,7 @@ namespace CalculateForSea
         {
             try
             {
-                string[] ips = client.IPAddress.Split('_');
+                string[] ips = client.IPAddress.Split('.');
                 client.Connect();
                 
                 int ipLast = Convert.ToInt32(ips[ips.Length - 1]);
