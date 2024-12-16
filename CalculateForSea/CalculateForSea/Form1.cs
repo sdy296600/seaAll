@@ -1,4 +1,5 @@
-﻿using EasyModbus;
+﻿using DevExpress.Utils.OAuth;
+using EasyModbus;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -113,11 +114,18 @@ namespace CalculateForSea
         GridModel list_24_DCM = new GridModel() { 트리거 = "0", 탱크진공 = "0", V1 = "0", V2 = "0", V3 = "0", V4 = "0", 형체중자입시간 = "0", 형체력MN = "0", 형체력 = "0", 형개중자후퇴시간 = "0", 오염도B = "0", 가속위치 = "0", 감속위치 = "0", 메탈압력 = "0", 비스켓두께 = "0", 사이클타임 = "0", Date = "0", 사출전진시간 = "0", 설비No = "WCI_D24", 스프레이시간 = "0", 승압시간 = "0", 압출시간 = "0", 금형내부 = "0", 제품냉각시간 = "0", 주탕시간 = "0", 오염도A = "0", 취출시간 = "0" };
         GridModel list_25_DCM = new GridModel() { 트리거 = "0", 탱크진공 = "0", V1 = "0", V2 = "0", V3 = "0", V4 = "0", 형체중자입시간 = "0", 형체력MN = "0", 형체력 = "0", 형개중자후퇴시간 = "0", 오염도B = "0", 가속위치 = "0", 감속위치 = "0", 메탈압력 = "0", 비스켓두께 = "0", 사이클타임 = "0", Date = "0", 사출전진시간 = "0", 설비No = "WCI_D25", 스프레이시간 = "0", 승압시간 = "0", 압출시간 = "0", 금형내부 = "0", 제품냉각시간 = "0", 주탕시간 = "0", 오염도A = "0", 취출시간 = "0" };
         List<string> IDS = new List<string>();
+        CancellationTokenSource cts0 = new CancellationTokenSource();
         CancellationTokenSource cts1 = new CancellationTokenSource();
         CancellationTokenSource cts2 = new CancellationTokenSource();
         CancellationTokenSource cts3 = new CancellationTokenSource();
         CancellationTokenSource cts4 = new CancellationTokenSource();
         CancellationTokenSource cts5 = new CancellationTokenSource();
+        CancellationTokenSource elecToken0 = new CancellationTokenSource();
+        CancellationTokenSource elecToken1 = new CancellationTokenSource();
+        CancellationTokenSource elecToken2 = new CancellationTokenSource();
+        CancellationTokenSource elecToken3 = new CancellationTokenSource();
+        CancellationTokenSource elecToken4 = new CancellationTokenSource();
+        CancellationTokenSource elecToken5 = new CancellationTokenSource();
 
         //ModbusClient castingClient0 = new ModbusClient("172.1.100.112",502);
         //ModbusClient castingClient1 = new ModbusClient("172.1.100.161", 502);
@@ -163,7 +171,7 @@ namespace CalculateForSea
 
             List<Task> tasks = new List<Task>
             {
-                Task.Run(async () => { await ThreadMethodAsync(0, 1, cts1.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(0, 1, cts0.Token); }),
                 Task.Run(async () => { await ThreadMethodAsync(1, 1, cts1.Token); }),
                 Task.Run(async () => { await ThreadMethodAsync(2, 1, cts2.Token); }),
                 Task.Run(async () => { await ThreadMethodAsync(3, 1, cts3.Token); }),
@@ -173,58 +181,62 @@ namespace CalculateForSea
 
             List<Task> tasks2 = new List<Task>
             {
-                Task.Run(async () => { await RunGetElec(0); }),
-                Task.Run(async () => { await RunGetElec(1); }),
-                Task.Run(async () => { await RunGetElec(2); }),
-                Task.Run(async () => { await RunGetElec(3); }),
-                Task.Run(async () => { await RunGetElec(4); }),
-                Task.Run(async () => { await RunGetElec(5); })
+                Task.Run(async () => { await RunGetElec(0, elecToken0.Token); }),
+                Task.Run(async () => { await RunGetElec(1,elecToken1.Token); }),
+                Task.Run(async () => { await RunGetElec(2,elecToken2.Token); }),
+                Task.Run(async () => { await RunGetElec(3,elecToken3.Token); }),
+                Task.Run(async () => { await RunGetElec(4,elecToken4.Token); }),
+                Task.Run(async () => { await RunGetElec(5,elecToken5.Token); })
             };
 
         }
 
-        public async Task RunGetElec(int machine_no)
+        public async Task RunGetElec(int machine_no,CancellationToken token)
         {
-            string ip = "";
-            double data = 0;
-            List<ModbusClient> clients = new List<ModbusClient>();
-
-            if (machine_no == 0)
+            while (!token.IsCancellationRequested) 
             {
-                ip = "172.1.100.112";
+                string ip = "";
+                double data = 0;
+                List<ModbusClient> clients = new List<ModbusClient>();
+
+                if (machine_no == 0)
+                {
+                    ip = "172.1.100.112";
+                    clients.Add(new ModbusClient(ip, 502));
+                    foreach (ModbusClient client in clients)
+                    {
+                        Get_Elec(client);
+                    }
+                    data = models[machine_no].Consumption_K + models[machine_no].Consumption_M + models[machine_no].ConsumptionRETI + models2[machine_no].F_ESG_K + models2[machine_no].F_ESG_M + models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K;
+                    SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
+                    SetElec(models[machine_no], models2[machine_no], machine_no);
+
+                    WriteLog(machine_no + "호기 : " + data.ToString());
+
+                    return;
+                }
+
+                ip = $"172.1.100.15{machine_no}";
                 clients.Add(new ModbusClient(ip, 502));
+                ip = $"172.1.100.16{machine_no}";
+                clients.Add(new ModbusClient(ip, 502));
+                ip = $"172.1.100.17{machine_no}";
+                clients.Add(new ModbusClient(ip, 502));
+
                 foreach (ModbusClient client in clients)
                 {
                     Get_Elec(client);
                 }
+
                 data = models[machine_no].Consumption_K + models[machine_no].Consumption_M + models[machine_no].ConsumptionRETI + models2[machine_no].F_ESG_K + models2[machine_no].F_ESG_M + models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K;
                 SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
                 SetElec(models[machine_no], models2[machine_no], machine_no);
 
                 WriteLog(machine_no + "호기 : " + data.ToString());
 
-                return;
+                await Task.Delay(50);
             }
-
-            ip = $"172.1.100.15{machine_no}";
-            clients.Add(new ModbusClient(ip, 502));
-            ip = $"172.1.100.16{machine_no}";
-            clients.Add(new ModbusClient(ip, 502));
-            ip = $"172.1.100.17{machine_no}";
-            clients.Add(new ModbusClient(ip, 502));
-
-            foreach (ModbusClient client in clients)
-            {
-                Get_Elec(client);
-            }
-
-            data = models[machine_no].Consumption_K + models[machine_no].Consumption_M + models[machine_no].ConsumptionRETI + models2[machine_no].F_ESG_K + models2[machine_no].F_ESG_M + models2[machine_no].T_ESG_M + models2[machine_no].T_ESG_K;
-            SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
-            SetElec(models[machine_no], models2[machine_no], machine_no);
-
-            WriteLog(machine_no + "호기 : " + data.ToString());
-
-            await Task.Delay(50);
+        
         }
 
         public void Get_Elec(ModbusClient client)
@@ -2122,11 +2134,19 @@ namespace CalculateForSea
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
+            cts0.Cancel();
             cts1.Cancel();
             cts2.Cancel();
             cts3.Cancel();
             cts4.Cancel();
             cts5.Cancel();
+            elecToken0.Cancel();
+            elecToken1.Cancel();
+            elecToken2.Cancel();
+            elecToken3.Cancel();
+            elecToken4.Cancel();
+            elecToken5.Cancel();
+
 
         }
     }
