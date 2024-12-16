@@ -181,17 +181,17 @@ namespace CalculateForSea
             };
             List<Task> tasks2 = new List<Task>
             {
-                Task.Run(() => { RunGetElec(0); }),
-                Task.Run(() => { RunGetElec(1); }),
-                Task.Run(() => { RunGetElec(2); }),
-                Task.Run(() => { RunGetElec(3); }),
-                Task.Run(() => { RunGetElec(4); }),
-                Task.Run(() => { RunGetElec(5); })
+                Task.Run(async () => { await RunGetElec(0); }),
+                Task.Run(async () => { await RunGetElec(1); }),
+                Task.Run(async () => { await RunGetElec(2); }),
+                Task.Run(async () => { await RunGetElec(3); }),
+                Task.Run(async () => { await RunGetElec(4); }),
+                Task.Run(async () => { await RunGetElec(5); })
             };
 
         }
 
-        public void RunGetElec(int machine_no) 
+        public async Task RunGetElec(int machine_no) 
         {
             string ip = "";
             double data = 0;
@@ -226,7 +226,7 @@ namespace CalculateForSea
             SetElec(models[machine_no], models2[machine_no], machine_no);
             //ModbusClient client = new ModbusClient(ip,502);
             WriteLog(data.ToString());
-            Task.Delay(50);
+            await Task.Delay(50);
         }
         public void Get_Elec(ModbusClient client) 
         {
