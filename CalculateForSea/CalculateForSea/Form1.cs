@@ -253,8 +253,8 @@ namespace CalculateForSea
                     type = 1; //용해로
                 }
 
-                int mhours = client.ReadInputRegisters(1312, 1)[0] * 1000;
-                int khours = client.ReadInputRegisters(1331, 1)[0];
+                int mhours = client.ReadHoldingRegisters(1312, 1)[0] * 1000;
+                int khours = client.ReadHoldingRegisters(1331, 1)[0];
                 DataModel model;
                 DataModel2 model2;
                 model = models[machine_index];
