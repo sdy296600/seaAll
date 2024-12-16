@@ -1501,6 +1501,7 @@ namespace CalculateForSea
             }
            
         }
+
         #region SEND_MQTT
 
         private void SendMQTT_13(DataSet ds, int i)
@@ -1794,43 +1795,36 @@ namespace CalculateForSea
                 {
                     if (gridModels[i].Count > 0 && gridModels[i] != null)
                     {
-                        try
-                        {
 
-                            switch (i.ToString())
-                            {
-                                case "0":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_13_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "1":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_21_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "2":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_22_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "3":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_23_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "4":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_24_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                case "5":
-                                    Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_25_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                                    Thread.Sleep(100);
-                                    break;
-                                default:
-                                    Thread.Sleep(100);
-                                    break;
-                            }
-                        }
-                        catch (Exception ex)
+                        switch (i.ToString())
                         {
-                            WriteLog(ex.Message);
+                            case "0":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_13_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "1":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_21_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "2":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_22_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "3":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_23_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "4":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_24_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            case "5":
+                                Task.Run(() => _mqttClient.Publish($"/event/c/DataGrid/A_25_DATAGRID", Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(gridModels[i])), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                                Thread.Sleep(100);
+                                break;
+                            default:
+                                Thread.Sleep(100);
+                                break;
                         }
                     }
                 }
