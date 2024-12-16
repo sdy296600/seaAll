@@ -343,23 +343,11 @@
     <Compile Include="View\base\BaseForm2.Designer.cs">
       <DependentUpon>BaseForm2.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\SI\BaseForm1\DATA_MON.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\SI\BaseForm1\DATA_MON.Designer.cs">
-      <DependentUpon>DATA_MON.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\SI\BaseForm1\수집데이터조회.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\SI\BaseForm1\수집데이터조회.Designer.cs">
       <DependentUpon>수집데이터조회.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\SI\BaseForm1\DataMonitoring.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\SI\BaseForm1\DataMonitoring.Designer.cs">
-      <DependentUpon>DataMonitoring.cs</DependentUpon>
     </Compile>
     <Compile Include="View\SI\BaseForm1\작업지시조회.cs">
       <SubType>Form</SubType>
@@ -1129,14 +1117,8 @@
     <EmbeddedResource Include="View\base\BaseForm2.resx">
       <DependentUpon>BaseForm2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\SI\BaseForm1\DATA_MON.resx">
-      <DependentUpon>DATA_MON.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\SI\BaseForm1\수집데이터조회.resx">
       <DependentUpon>수집데이터조회.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\SI\BaseForm1\DataMonitoring.resx">
-      <DependentUpon>DataMonitoring.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\SI\BaseForm1\작업지시조회.resx">
       <DependentUpon>작업지시조회.cs</DependentUpon>
