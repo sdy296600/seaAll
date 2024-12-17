@@ -381,7 +381,7 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
-                WriteErrorLog(ex.Message);
+                WriteErrorLog(i +ex.Message);
 
 
             }
@@ -394,7 +394,7 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
-                WriteErrorLog(ex.Message);
+                WriteErrorLog(i + ex.Message);
 
             }
         }
@@ -1776,9 +1776,13 @@ namespace CalculateForSea
 
             }
         }
-        private void WriteErrorLog(string data) 
+        private void WriteErrorLog(string data)
         {
-            using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() + "\\Error.log", FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToString("yyyy-MM-dd,HH"))) 
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToString("yyyy-MM-dd,HH"));
+            }
+            using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() +"\\"+DateTime.Now.ToString("yyyy-MM-dd,HH")+ "\\Error.log", FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
             {
                 using (StreamWriter writer = new StreamWriter(fs))
                 {
