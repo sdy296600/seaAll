@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -1784,6 +1785,7 @@ namespace CalculateForSea
             catch (Exception)
             {
                 WriteLog("13호기 값 없음");
+                StreamWriter file = new StreamWriter(Directory.GetCurrentDirectory() + "\\")
             }
         }
 
