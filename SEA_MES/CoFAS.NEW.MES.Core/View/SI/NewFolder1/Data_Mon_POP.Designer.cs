@@ -39,11 +39,6 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.lbl_품번 = new System.Windows.Forms.Label();
             this.lbl_품목명 = new System.Windows.Forms.Label();
             this.lbl_지시수량 = new System.Windows.Forms.Label();
@@ -189,11 +184,6 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.47619F));
             this.tableLayoutPanel5.Controls.Add(this.button1, 1, 4);
             this.tableLayoutPanel5.Controls.Add(this.button5, 0, 5);
-            this.tableLayoutPanel5.Controls.Add(this.label3, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.label4, 0, 1);
-            this.tableLayoutPanel5.Controls.Add(this.label5, 0, 2);
-            this.tableLayoutPanel5.Controls.Add(this.label6, 0, 3);
-            this.tableLayoutPanel5.Controls.Add(this.label2, 0, 4);
             this.tableLayoutPanel5.Controls.Add(this.lbl_품번, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.lbl_품목명, 1, 1);
             this.tableLayoutPanel5.Controls.Add(this.lbl_지시수량, 1, 2);
@@ -210,61 +200,6 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(1318, 598);
             this.tableLayoutPanel5.TabIndex = 1;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(5, 2);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(578, 50);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "품번";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(5, 54);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(578, 50);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "품목명";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(5, 106);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(578, 50);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "지시수량";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(5, 158);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(578, 50);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "양품수량";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(5, 210);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(578, 21);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "포장수량";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbl_품번
             // 
@@ -326,7 +261,7 @@ namespace CoFAS.NEW.MES.POP
             this.button1.Location = new System.Drawing.Point(591, 213);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(722, 15);
-            this.button1.TabIndex = 29;
+            this.button1.TabIndex = 30;
             this.button1.Text = "닫기";
             this.button1.UseVisualStyleBackColor = true;
             // 
@@ -368,11 +303,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbl_품번;
         private System.Windows.Forms.Label lbl_품목명;
         private System.Windows.Forms.Label lbl_지시수량;
