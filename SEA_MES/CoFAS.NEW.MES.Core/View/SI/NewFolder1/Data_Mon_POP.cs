@@ -137,8 +137,8 @@ namespace CoFAS.NEW.MES.POP
         {
             try
             {
-                txt_포장수량.Font = new Font("맑은 고딕", 18, FontStyle.Bold);
-                txt_비고.Font = new Font("맑은 고딕", 18, FontStyle.Bold);
+                //txt_포장수량.Font = new Font("맑은 고딕", 18, FontStyle.Bold);
+                //txt_비고.Font = new Font("맑은 고딕", 18, FontStyle.Bold);
 
                //DataTable pDataTable1 =  new CoreBusiness().BASE_MENU_SETTING_R10(this.Name,fpMain,"PRODUCT_BARCODE");
 
@@ -173,11 +173,11 @@ namespace CoFAS.NEW.MES.POP
                 int 포장수량 = 0;
                 prodBcdQty = "0";
 
-                if (!int.TryParse(txt_포장수량.Text, out 포장수량))
-                {
-                    CustomMsg.ShowMessage("포장할 양품이 없습니다.");
-                    return;
-                }
+                //if (!int.TryParse(txt_포장수량.Text, out 포장수량))
+                //{
+                //    CustomMsg.ShowMessage("포장할 양품이 없습니다.");
+                //    return;
+                //}
 
                 if (Convert.ToInt32(lbl_양품수량.Text) <= 0 || Convert.ToInt32(lbl_양품수량.Text) < 포장수량 )
                 {
@@ -354,7 +354,15 @@ namespace CoFAS.NEW.MES.POP
             }
         }
 
-      
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 
     public class 공정이동표
