@@ -4010,16 +4010,16 @@ ORDER BY
                     for (int i = 0; i < _DataTable.Rows.Count; i++)
                     {
                         //sheet.Cells[2, 2].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "거래처").ToString()); //거래처
-                        int rowIndex_성능가동률 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "12")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_직접노무비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "13")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_종합가동률 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "15")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_성능가동률 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "12")?.Field<int>("순서") ?? -1;
+                        int rowIndex_직접노무비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "13")?.Field<int>("순서") ?? -1;
+                        int rowIndex_종합가동률 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "15")?.Field<int>("순서") ?? -1;
 
-                        int rowIndex_설비감상비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "16")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_건물감상비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "17")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_수선비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "18")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_전력비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "19")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_간접경비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "20")?.Field<int>("IndexColumn") ?? -1;
-                        int rowIndex_재료비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "21")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_설비감상비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "16")?.Field<int>("순서") ?? -1;
+                        int rowIndex_건물감상비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "17")?.Field<int>("순서") ?? -1;
+                        int rowIndex_수선비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "18")?.Field<int>("순서") ?? -1;
+                        int rowIndex_전력비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "19")?.Field<int>("순서") ?? -1;
+                        int rowIndex_간접경비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "20")?.Field<int>("순서") ?? -1;
+                        int rowIndex_재료비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "21")?.Field<int>("순서") ?? -1;
 
 
                         sheet.Cells[5, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()); //품번
