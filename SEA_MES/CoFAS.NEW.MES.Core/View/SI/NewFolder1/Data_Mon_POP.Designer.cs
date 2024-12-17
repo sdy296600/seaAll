@@ -55,16 +55,12 @@ namespace CoFAS.NEW.MES.POP
             this.label8 = new System.Windows.Forms.Label();
             this.txt_비고 = new CoFAS.NEW.MES.Core.ucTextEdit();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.fpMain = new CoFAS.NEW.MES.Core.xFpSpread();
-            this.fpMain_Sheet1 = new FarPoint.Win.Spread.SheetView();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fpMain)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fpMain_Sheet1)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -148,7 +144,6 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.fpMain, 1, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -426,25 +421,6 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel6.Size = new System.Drawing.Size(754, 433);
             this.tableLayoutPanel6.TabIndex = 3;
             // 
-            // fpMain
-            // 
-            this.fpMain._menu_name = null;
-            this.fpMain._user_account = null;
-            this.fpMain.AccessibleDescription = "";
-            this.fpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fpMain.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.fpMain.Location = new System.Drawing.Point(513, 107);
-            this.fpMain.Name = "fpMain";
-            this.fpMain.Sheets.AddRange(new FarPoint.Win.Spread.SheetView[] {
-            this.fpMain_Sheet1});
-            this.fpMain.Size = new System.Drawing.Size(754, 432);
-            this.fpMain.TabIndex = 4;
-            // 
-            // fpMain_Sheet1
-            // 
-            this.fpMain_Sheet1.Reset();
-            fpMain_Sheet1.SheetName = "Sheet1";
-            // 
             // Data_Mon_POP
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -467,8 +443,6 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fpMain)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fpMain_Sheet1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -498,8 +472,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label lbl_품목명;
         private System.Windows.Forms.Label lbl_지시수량;
         private System.Windows.Forms.Label lbl_양품수량;
-        private Core.xFpSpread fpMain;
-        private FarPoint.Win.Spread.SheetView fpMain_Sheet1;
         private System.Windows.Forms.Label label8;
         private Core.ucTextEdit txt_비고;
     }

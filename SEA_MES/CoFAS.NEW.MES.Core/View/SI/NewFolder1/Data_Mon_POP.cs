@@ -140,14 +140,14 @@ namespace CoFAS.NEW.MES.POP
                 txt_포장수량.Font = new Font("맑은 고딕", 18, FontStyle.Bold);
                 txt_비고.Font = new Font("맑은 고딕", 18, FontStyle.Bold);
 
-                DataTable pDataTable1 =  new CoreBusiness().BASE_MENU_SETTING_R10(this.Name,fpMain,"PRODUCT_BARCODE");
+               //DataTable pDataTable1 =  new CoreBusiness().BASE_MENU_SETTING_R10(this.Name,fpMain,"PRODUCT_BARCODE");
 
-                if (pDataTable1 != null)
-                {
+                //if (pDataTable1 != null)
+                //{
 
-                    CoFAS.NEW.MES.Core.Function.Core.initializeSpread(pDataTable1, fpMain, this.Name, "admin");
+                    //CoFAS.NEW.MES.Core.Function.Core.initializeSpread(pDataTable1, fpMain, this.Name, "admin");
                     //Function.Core.InitializeControl(pDataTable1, fpMain, this, panel1, _MenuSettingEntity);
-                }
+                //}
 
             }
             catch (Exception pExcption)
@@ -282,27 +282,6 @@ namespace CoFAS.NEW.MES.POP
 
         }
 
-        private void button7_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < fpMain.Sheets[0].RowCount; i++)
-            {
-                if (fpMain.Sheets[0].GetValue(i, "CK".Trim()).ToString() == "True")
-                {
-                    공정이동표 라벨 = new 공정이동표();
-
-                    라벨.LOT_NO           = fpMain.Sheets[0].GetValue(i, "LOT_NO      ".Trim()).ToString();
-                    라벨.품목명            = fpMain.Sheets[0].GetValue(i, "DESCRIPTION ".Trim()).ToString();
-                    라벨.BARCODE_DATE     = Convert.ToDateTime(fpMain.Sheets[0].GetValue(i, "BARCODE_DATE").ToString()).ToString("yyyy-MM-dd");
-                    라벨.MOVE_DATE        = Convert.ToDateTime(fpMain.Sheets[0].GetValue(i, "MOVE_DATE").ToString()).ToString("yyyy-MM-dd");
-                    라벨.ID               = fpMain.Sheets[0].GetValue(i, "ID          ".Trim()).ToString();
-                    라벨.P_QTY            = fpMain.Sheets[0].GetValue(i, "P_QTY       ".Trim()).ToString();
-                    라벨.RESOURCE_NO      = fpMain.Sheets[0].GetValue(i, "RESOURCE_NO ".Trim()).ToString();
-                    라벨.BARCODE_NO       = fpMain.Sheets[0].GetValue(i, "BARCODE_NO  ".Trim()).ToString();
-
-                    print(라벨);
-                }
-            }
-        }
 
         private void print(공정이동표 라벨)
         {
