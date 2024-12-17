@@ -1778,8 +1778,13 @@ namespace CalculateForSea
         }
         private void WriteErrorLog(string data) 
         {
-            StreamWriter file = new StreamWriter(Directory.GetCurrentDirectory() + "\\Error.log", true);
-            file.WriteLine(data + " " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:s"));
+            using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() + "\\Error.log", FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            {
+                using (StreamWriter writer = new StreamWriter(fs))
+                {
+                    writer.WriteLine(data + " " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:s"));
+                }
+            } // using 블록이 끝나면 자동으로 파일이 닫힙니다.
         }
         #endregion
 
