@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -4009,6 +4010,17 @@ ORDER BY
                     for (int i = 0; i < _DataTable.Rows.Count; i++)
                     {
                         //sheet.Cells[2, 2].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "거래처").ToString()); //거래처
+                        int rowIndex_성능가동률 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "12")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_직접노무비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "13")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_종합가동률 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "15")?.Field<int>("IndexColumn") ?? -1;
+
+                        int rowIndex_설비감상비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "16")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_건물감상비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "17")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_수선비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "18")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_전력비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "19")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_간접경비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "20")?.Field<int>("IndexColumn") ?? -1;
+                        int rowIndex_재료비 = _DataTable.AsEnumerable().FirstOrDefault(row => row["순서"].ToString() == "21")?.Field<int>("IndexColumn") ?? -1;
+
 
                         sheet.Cells[5, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()); //품번
                         sheet.Cells[6, 3].SetValueFromText(order_mst_NAME); //품명
@@ -4016,16 +4028,30 @@ ORDER BY
                         //원재료
                         for (int num = 1; num <= 12; num++)
                         {
-                            //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
-                            sheet.Cells[11, num + 4].SetValueFromText(_DataTable.Rows[2][$"{num}월"].ToString()); //3월 성능가동률
-                            sheet.Cells[12, num + 4].SetValueFromText(_DataTable.Rows[3][$"{num}월"].ToString()); //3월 직접노무비
-                            sheet.Cells[14, num + 4].SetValueFromText(_DataTable.Rows[5][$"{num}월"].ToString()); //3월 종합가동률
-                            sheet.Cells[15, num + 4].SetValueFromText(_DataTable.Rows[6][$"{num}월"].ToString()); //3월 설비감상비
-                            sheet.Cells[16, num + 4].SetValueFromText(_DataTable.Rows[7][$"{num}월"].ToString()); //3월 건물감상비
-                            sheet.Cells[17, num + 4].SetValueFromText(_DataTable.Rows[8][$"{num}월"].ToString()); //3월 수선비
-                            sheet.Cells[18, num + 4].SetValueFromText(_DataTable.Rows[9][$"{num}월"].ToString()); //3월 전력비
-                            sheet.Cells[19, num + 4].SetValueFromText(_DataTable.Rows[10][$"{num}월"].ToString()); //3월 간접경비
-                            sheet.Cells[7, num + 4].SetValueFromText(_DataTable.Rows[21][$"{num}월"].ToString()); //3월 원재료);
+                            if (rowIndex_성능가동률 != -1)  // 해당 row가 존재하면
+                                sheet.Cells[11, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_성능가동률][$"{num}월"].ToString());//성능가동률
+                            if (rowIndex_직접노무비 != -1)  // 해당 row가 존재하면
+                                //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
+                                sheet.Cells[12, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_직접노무비][$"{num}월"].ToString());  //직접노무비
+                            if (rowIndex_종합가동률 != -1)  // 해당 row가 존재하면
+                                sheet.Cells[13, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_종합가동률][$"{num}월"].ToString()); //종합가동률
+                            if (rowIndex_설비감상비 != -1)  // 해당 row가 존재하면
+
+                                sheet.Cells[14, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_설비감상비][$"{num}월"].ToString()); //설비감상비
+                            if (rowIndex_건물감상비 != -1)  // 해당 row가 존재하면
+
+                                sheet.Cells[15, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_건물감상비][$"{num}월"].ToString()); //건물감상비
+                            if (rowIndex_수선비 != -1)  // 해당 row가 존재하면
+
+                                sheet.Cells[16, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_수선비][$"{num}월"].ToString()); //수선비
+                            if (rowIndex_전력비 != -1)  // 해당 row가 존재하면
+
+                                sheet.Cells[17, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_전력비][$"{num}월"].ToString());  //전력비
+
+                            if (rowIndex_간접경비 != -1)  // 해당 row가 존재하면
+                                sheet.Cells[18, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_간접경비][$"{num}월"].ToString());//간접경비
+                            if (rowIndex_재료비 != -1)  // 해당 row가 존재하면
+                                sheet.Cells[19, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_재료비][$"{num}월"].ToString()); //원재료);
                         }
 
                         //sheet.Cells[7, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "평균").ToString()); //평균
