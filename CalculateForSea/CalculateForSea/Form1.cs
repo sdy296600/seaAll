@@ -242,13 +242,14 @@ namespace CalculateForSea
 
         public void Get_Elec(ModbusClient client)
         {
+            int machine_index = 0;
             try
             {
                 string[] ips = client.IPAddress.Split('.');
                 client.Connect();
                 
                 int ipLast = Convert.ToInt32(ips[ips.Length - 1]);
-                int machine_index = 0;
+                
                 int type = 0;
                 if (ipLast - 170 > 0)
                 {
@@ -307,7 +308,7 @@ namespace CalculateForSea
             catch (Exception ex)
             {
                 WriteLog(ex.Message);
-                WriteErrorLog(ex.Message);
+                WriteErrorLog(machine_index + " " +ex.Message);
 
             }
         }
@@ -381,7 +382,7 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
-                WriteErrorLog(i +ex.Message);
+                WriteErrorLog(i + " "+ex.Message);
 
 
             }
@@ -1710,7 +1711,7 @@ namespace CalculateForSea
                 catch (Exception e) 
                 {
                     WriteLog(e.Message.ToString());
-                    WriteErrorLog(e.Message);
+                    WriteErrorLog(i +" " + e.Message);
 
                 }
 
