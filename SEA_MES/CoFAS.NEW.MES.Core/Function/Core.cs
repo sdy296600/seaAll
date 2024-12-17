@@ -3523,370 +3523,318 @@ UNION ALL
 		UNION ALL
 
 	
-SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '22' AS 순서, 
-    '성능가동률_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	(3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0')  AS D_VALUE
-	
+SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '22' AS 순서, 
+        '성능가동률_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 0으로 나누는 오류 방지를 위해 NULLIF 사용
+        (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) * NULLIF(ISNULL(F.cavity, '0'), 0) AS D_VALUE
 
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], F.cavity, J.QTY_COMPLETE, J.WORK_TIME
+) AS A
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
 
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
 
   UNION ALL 
 
-  SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '23' AS 순서, 
-    '종합가동률_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	(3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1  AS D_VALUE
-	
+SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '23' AS 순서, 
+        '종합가동률_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 0으로 나누는 오류 방지를 위해 NULLIF 사용
+        (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) * NULLIF(ISNULL(F.cavity, '0'), 0) * 1 AS D_VALUE
 
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], F.cavity, J.QTY_COMPLETE, J.WORK_TIME
+) AS A
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
-
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
-  UNION ALL
-  
-SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '24' AS 순서, 
-    '직접노무비_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	(16900 /((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0'))) *1   AS D_VALUE
-	
-
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
-
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
-
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
-
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
-  UNION ALL
-  SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '25' AS 순서, 
-    '간접노무비_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	(16900 /((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0'))) *1*0.81  AS D_VALUE
-	
-
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
-
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
-
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
-
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
 
   UNION ALL
-  SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '26' AS 순서, 
-    '설비감상비_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	convert(int,H.EQUIPMENT_COST) /12/22/260/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1)  AS D_VALUE
-	
+  SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '24' AS 순서, 
+        '직접노무비_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 0으로 나누는 오류 방지를 위해 NULLIF 사용
+        (16900 / NULLIF(
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0)) * 0.85 * ISNULL(F.cavity, '0'), 
+            0
+        )) * 1 AS D_VALUE
 
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], F.cavity, J.QTY_COMPLETE, J.WORK_TIME
+) AS A
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
-
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ,H.EQUIPMENT_COST
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
 
   UNION ALL
-  SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '27' AS 순서, 
-    '건물감상비_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	(((((109 * convert(int,H.UNIT_PRICE_PER_PYEONG) )*5.5)/ 40) /convert(int,H.EQUIPMENT_OPERATION_DAY))/convert(int,H.EQUIPMENT_OPERATION))/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1)   AS D_VALUE
-	
+SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '25' AS 순서, 
+        '간접노무비_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 0으로 나누는 오류 방지를 위해 NULLIF 사용
+        (16900 / NULLIF(
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0)) * 0.85 * ISNULL(F.cavity, '0'), 
+            0
+        )) * 1 * 0.81 AS D_VALUE
 
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], F.cavity, J.QTY_COMPLETE, J.WORK_TIME
+) AS A
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
-
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]    
-  ,H.UNIT_PRICE_PER_PYEONG
-  
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ,H.EQUIPMENT_USE_YEAR
-  ,H.EQUIPMENT_OPERATION_DAY
-  ,H.EQUIPMENT_OPERATION
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
 
   UNION ALL
-  SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '28' AS 순서, 
-    '수선비_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	((convert(int,H.EQUIPMENT_COST) /convert(int,H.EQUIPMENT_USE_YEAR)/convert(int,H.EQUIPMENT_OPERATION_DAY)/convert(int,H.EQUIPMENT_OPERATION)/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1)) + ((((((109 *convert(int,H.UNIT_PRICE_PER_PYEONG))*5.5)/ 40) /convert(int,H.EQUIPMENT_OPERATION_DAY))/convert(int,H.EQUIPMENT_OPERATION))/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1))) * 0.049   AS D_VALUE
-	
+SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '26' AS 순서, 
+        '설비감상비_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 0으로 나누는 오류 방지를 위해 NULLIF 사용
+        -- EQUIPMENT_COST가 0인 경우 나누기 오류를 방지
+        -- CYCLE_TIME이 0인 경우를 고려하여 NULLIF 사용
+        convert(int, H.EQUIPMENT_COST) / NULLIF(12 * 22 * 260, 0) / NULLIF(
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0)) * 0.85 * ISNULL(F.cavity, '0') * 1, 
+            0
+        ) AS D_VALUE
 
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], F.cavity, J.QTY_COMPLETE, J.WORK_TIME, H.EQUIPMENT_COST
+) AS A
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
 
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  ,H.UNIT_PRICE_PER_PYEONG
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ,H.EQUIPMENT_COST
-  ,H.EQUIPMENT_USE_YEAR
-  ,H.EQUIPMENT_OPERATION_DAY
-  ,H.EQUIPMENT_OPERATION
-  ) AS A
+  UNION ALL
+  SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '27' AS 순서, 
+        '건물감상비_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 0으로 나누는 오류 방지를 위해 NULLIF 사용
+        (((((109 * convert(int, H.UNIT_PRICE_PER_PYEONG)) * 5.5) / 40) / convert(int, H.EQUIPMENT_OPERATION_DAY)) / convert(int, H.EQUIPMENT_OPERATION))
+        / NULLIF((3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) * NULLIF(ISNULL(F.cavity, '0'), 0) * 1, 0) AS D_VALUE
 
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
+
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], H.UNIT_PRICE_PER_PYEONG, F.cavity, 
+             J.QTY_COMPLETE, J.WORK_TIME, H.EQUIPMENT_USE_YEAR, 
+             H.EQUIPMENT_OPERATION_DAY, H.EQUIPMENT_OPERATION
+) AS A
+
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
+ 
+
+  UNION ALL
+SELECT RESOURCE_NO, 순서, 구분, AVG(D_VALUE) D_VALUE, [YEAR], [MONTH]
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '28' AS 순서, 
+        '수선비_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
+        
+        -- 분모에 0을 방지하기 위해 NULLIF 사용
+        (
+            convert(int, H.EQUIPMENT_COST) / 
+            NULLIF(convert(int, H.EQUIPMENT_USE_YEAR), 0) / 
+            NULLIF(convert(int, H.EQUIPMENT_OPERATION_DAY), 0) / 
+            NULLIF(convert(int, H.EQUIPMENT_OPERATION), 0) / 
+            NULLIF(
+                (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0)) * 0.85 * ISNULL(F.cavity, '1') * 1, 
+                0
+            )
+        ) + 
+        (
+            (
+                ((109 * convert(int, H.UNIT_PRICE_PER_PYEONG) * 5.5) / 40) / 
+                NULLIF(convert(int, H.EQUIPMENT_OPERATION_DAY), 0)
+            ) / 
+            NULLIF(convert(int, H.EQUIPMENT_OPERATION), 0)
+        ) / 
+        NULLIF(
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0)) * 0.85 * ISNULL(F.cavity, '1') * 1, 
+            0
+        )
+        * 0.049 AS D_VALUE
+
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, SUM(QTY_COMPLETE) QTY_COMPLETE, 
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER, 
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME 
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK) ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK) ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK) ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK) ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK) ON E.code_md = F.code_md
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I ON A.RESOURCE_NO = I.RESOURCE_NO
+    
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
+
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], H.UNIT_PRICE_PER_PYEONG, F.cavity, J.QTY_COMPLETE, 
+             J.WORK_TIME, H.EQUIPMENT_COST, H.EQUIPMENT_USE_YEAR, H.EQUIPMENT_OPERATION_DAY, 
+             H.EQUIPMENT_OPERATION
+) AS A
+
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
+
 
   UNION ALL
   SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
@@ -3944,62 +3892,99 @@ SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
   GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
 
   UNION ALL
-  SELECT RESOURCE_NO, 순서 , 구분 , AVG(D_VALUE) D_VALUE,[YEAR],[MONTH] FROM
-(SELECT 
-	 
-    A.[RESOURCE_NO]  AS 'RESOURCE_NO',
-    '30' AS 순서, 
-    '간접경비_BEST' AS 구분,
-   
-	YEAR(A.REG_DATE) AS [YEAR],
-	MONTH(A.REG_DATE) AS [MONTH],
-	
-	((convert(int,H.EQUIPMENT_COST) /convert(int,H.EQUIPMENT_USE_YEAR)/convert(int,H.EQUIPMENT_OPERATION_DAY)/convert(int,H.EQUIPMENT_OPERATION)/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1))+((((((109 *convert(int,H.UNIT_PRICE_PER_PYEONG))*5.5)/ 40) /convert(int,H.EQUIPMENT_OPERATION_DAY))/convert(int,H.EQUIPMENT_OPERATION))/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1))+((( convert(int,H.EQUIPMENT_COST)  /convert(int,H.EQUIPMENT_USE_YEAR)/convert(int,H.EQUIPMENT_OPERATION_DAY)/convert(int,H.EQUIPMENT_OPERATION)/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1)) + ((((((109 *convert(int,H.UNIT_PRICE_PER_PYEONG))*5.5)/ 40) /convert(int,H.EQUIPMENT_OPERATION_DAY))/convert(int,H.EQUIPMENT_OPERATION))/ ((3600/AVG(CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) *0.85)* ISNULL(F.cavity,'0') *1))) * 0.049)+(CONVERT(DECIMAL(18,2),sum(ISNULL((CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(int,(H.[EQUIPMENT_POWER_RATIO])) ),0))))/J.QTY_COMPLETE) *0.206 AS D_VALUE
-	
+SELECT 
+    RESOURCE_NO, 
+    순서,
+    구분,
+    AVG(D_VALUE) AS D_VALUE,
+    [YEAR],
+    [MONTH] 
+FROM
+(
+    SELECT 
+        A.[RESOURCE_NO] AS 'RESOURCE_NO',
+        '30' AS 순서, 
+        '간접경비_BEST' AS 구분,
+        YEAR(A.REG_DATE) AS [YEAR],
+        MONTH(A.REG_DATE) AS [MONTH],
 
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+        (
+            -- 첫 번째 계산식: CYCLE_TIME이 0일 경우 처리
+            (CONVERT(INT, H.EQUIPMENT_COST) / 
+            CONVERT(INT, H.EQUIPMENT_USE_YEAR) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION_DAY) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION) / 
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) *
+            NULLIF(ISNULL(F.cavity, 0), 0) * 1)
+        ) 
+        + 
+        (
+            -- 두 번째 계산식: CYCLE_TIME이 0일 경우 처리
+            (((109 * CONVERT(INT, H.UNIT_PRICE_PER_PYEONG) * 5.5) / 40) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION_DAY) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION)) / 
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) * 
+            NULLIF(ISNULL(F.cavity, 0), 0) * 1
+        ) 
+        + 
+        (
+            -- 세 번째 계산식: CYCLE_TIME이 0일 경우 처리
+            (((CONVERT(INT, H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION_DAY) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION) / 
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) * 
+            NULLIF(ISNULL(F.cavity, 0), 0) * 1) + 
+            (((109 * CONVERT(INT, H.UNIT_PRICE_PER_PYEONG) * 5.5) / 40) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION_DAY) / 
+            CONVERT(INT, H.EQUIPMENT_OPERATION)) / 
+            (3600 / NULLIF(AVG(CONVERT(DECIMAL(18,2), A.CYCLE_TIME)), 0) * 0.85) * 
+            NULLIF(ISNULL(F.cavity, 0), 0) * 1
+            )
+        ) 
+        * 0.049
+        +
+        -- 전기 에너지 계산식
+        (
+            CONVERT(DECIMAL(18,2), SUM(ISNULL((CONVERT(DECIMAL(18,2), ISNULL(ELECTRICAL_ENERGY, 0)) * CONVERT(INT, (H.[EQUIPMENT_POWER_RATIO]))), 0)))) / 
+            J.QTY_COMPLETE
+        ) * 0.206 AS D_VALUE
 
-  INNER JOIN (SELECT RESOURCE_NO , LOT_NO, CASE 
-        WHEN SUM(QTY_COMPLETE) = 0 THEN 1 
-        ELSE SUM(QTY_COMPLETE) 
-    END AS QTY_COMPLETE  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY RESOURCE_NO, LOT_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
+    FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+    INNER JOIN 
+    (
+        SELECT RESOURCE_NO, LOT_NO, 
+               CASE WHEN SUM(QTY_COMPLETE) = 0 THEN 1 ELSE SUM(QTY_COMPLETE) END AS QTY_COMPLETE,
+               SUM(CONVERT(DECIMAL(18,2), IN_PER)) AS IN_PER,
+               SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) AS WORK_TIME  
+        FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+        GROUP BY RESOURCE_NO, LOT_NO
+    ) AS J
+    ON A.RESOURCE_NO = J.RESOURCE_NO AND A.LOT_NO = J.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
+    ON B.resource_no = A.resource_no
+    INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C WITH (NOLOCK)
+    ON C.order_no = A.resource_no AND C.lot = A.LOT_NO
+    INNER JOIN [sea_mfg].[dbo].[resource] AS D WITH (NOLOCK)
+    ON C.workcenter = D.resource_no
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E WITH (NOLOCK)
+    ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F WITH (NOLOCK)
+    ON E.code_md = F.code_md 
+    LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
+    ON G.PROCESS_ID = '주조'
+    INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
+    ON H.EQUIPMENT_ID = '설비850TON'
+    LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
+    ON A.RESOURCE_NO = I.RESOURCE_NO
+    WHERE CONVERT(DECIMAL(18,2), ELECTRICAL_ENERGY) < 100
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN HS_MES.dbo.MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-   
-  WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100
+    GROUP BY A.REG_DATE, A.[RESOURCE_NO], F.cavity, J.QTY_COMPLETE, 
+             J.WORK_TIME, H.UNIT_PRICE_PER_PYEONG, H.EQUIPMENT_COST, 
+             H.EQUIPMENT_USE_YEAR, H.EQUIPMENT_OPERATION_DAY, 
+             H.EQUIPMENT_OPERATION
+) AS A
+GROUP BY RESOURCE_NO, 순서, 구분, [YEAR], [MONTH]
 
-  group by A.REG_DATE
-  ,A.[RESOURCE_NO]     
-  ,F.cavity 
-  ,J.QTY_COMPLETE
-  ,J.WORK_TIME
-  ,H.UNIT_PRICE_PER_PYEONG
-  ,H.EQUIPMENT_COST
-  ,H.EQUIPMENT_USE_YEAR
-  ,H.EQUIPMENT_OPERATION_DAY
-  ,H.EQUIPMENT_OPERATION
-  ) AS A
-
-  GROUP BY  RESOURCE_NO, 순서, 구분,[YEAR], [MONTH]
 
 
 
@@ -4032,19 +4017,19 @@ ORDER BY
                         for (int num = 1; num <= 12; num++)
                         {
                             //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
-                            sheet.Cells[11, num + 5].SetValueFromText(_DataTable.Rows[2][$"{num}월"].ToString()); //3월 성능가동률
-                            sheet.Cells[12, num + 5].SetValueFromText(_DataTable.Rows[3][$"{num}월"].ToString()); //3월 직접노무비
-                            sheet.Cells[14, num + 5].SetValueFromText(_DataTable.Rows[5][$"{num}월"].ToString()); //3월 종합가동률
-                            sheet.Cells[15, num + 5].SetValueFromText(_DataTable.Rows[6][$"{num}월"].ToString()); //3월 설비감상비
-                            sheet.Cells[16, num + 5].SetValueFromText(_DataTable.Rows[7][$"{num}월"].ToString()); //3월 건물감상비
-                            sheet.Cells[17, num + 5].SetValueFromText(_DataTable.Rows[8][$"{num}월"].ToString()); //3월 수선비
-                            sheet.Cells[18, num + 5].SetValueFromText(_DataTable.Rows[9][$"{num}월"].ToString()); //3월 전력비
-                            sheet.Cells[19, num + 5].SetValueFromText(_DataTable.Rows[10][$"{num}월"].ToString()); //3월 간접경비
-                            sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[21][$"{num}월"].ToString()); //3월 원재료);
+                            sheet.Cells[11, num + 4].SetValueFromText(_DataTable.Rows[2][$"{num}월"].ToString()); //3월 성능가동률
+                            sheet.Cells[12, num + 4].SetValueFromText(_DataTable.Rows[3][$"{num}월"].ToString()); //3월 직접노무비
+                            sheet.Cells[14, num + 4].SetValueFromText(_DataTable.Rows[5][$"{num}월"].ToString()); //3월 종합가동률
+                            sheet.Cells[15, num + 4].SetValueFromText(_DataTable.Rows[6][$"{num}월"].ToString()); //3월 설비감상비
+                            sheet.Cells[16, num + 4].SetValueFromText(_DataTable.Rows[7][$"{num}월"].ToString()); //3월 건물감상비
+                            sheet.Cells[17, num + 4].SetValueFromText(_DataTable.Rows[8][$"{num}월"].ToString()); //3월 수선비
+                            sheet.Cells[18, num + 4].SetValueFromText(_DataTable.Rows[9][$"{num}월"].ToString()); //3월 전력비
+                            sheet.Cells[19, num + 4].SetValueFromText(_DataTable.Rows[10][$"{num}월"].ToString()); //3월 간접경비
+                            sheet.Cells[7, num + 4].SetValueFromText(_DataTable.Rows[21][$"{num}월"].ToString()); //3월 원재료);
                         }
 
-                        sheet.Cells[7, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "평균").ToString()); //평균
-                        sheet.Cells[7, 19].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "비고").ToString()); //비고
+                        //sheet.Cells[7, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "평균").ToString()); //평균
+                        //sheet.Cells[7, 19].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "비고").ToString()); //비고
 
                         //sheet.Cells[11, 20].SetValueFromText(_DataTable.Rows[12]["6월"].ToString()); //성능가동율
                         //sheet.Cells[12, 20].SetValueFromText(_DataTable.Rows[14]["6월"].ToString()); //비고
