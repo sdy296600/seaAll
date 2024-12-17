@@ -1164,6 +1164,36 @@ namespace CalculateForSea
             {
                 try
                 {
+                    int machine_id;
+                    switch (i)
+                    {
+                        case 0:
+                            machine_id = 13;
+                            break;
+                        case 1:
+                            machine_id = 21;
+
+                            break;
+                        case 2:
+                            machine_id = 22;
+
+                            break;
+                        case 3:
+                            machine_id = 23;
+
+                            break;
+                        case 4:
+                            machine_id = 24;
+
+                            break;
+                        case 5:
+                            machine_id = 25;
+
+                            break;
+                        default:
+                            return;
+
+                    }
                     GET_DCM gET = new GET_DCM(i);
                     await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
 
@@ -1175,8 +1205,13 @@ namespace CalculateForSea
                         connnect.Open();
                         // work_performance조회 ( start_time = end_time 인것)
                         MySqlCommand cmd = new MySqlCommand();
-                        cmd.CommandText = "calculateForSEA_R";
-                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = $@"  SELECT * 
+                          FROM work_performance 
+                         WHERE start_time  = end_time 
+                           AND machine_no  = 'WCI_D{machine_id}' 
+                      ORDER BY id DESC 
+                         LIMIT 1;";
+                        cmd.CommandType = CommandType.Text;
                         cmd.Connection = connnect;
                         MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                         adapter.Fill(ds);
@@ -1273,7 +1308,7 @@ namespace CalculateForSea
                             nowPordCnt = intwork_okcnt
                                 + intwork_errcnt;
 
-                            if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt && (models[i].Totalcnt == 0 || (models[i].Totalcnt * 3) > nowtotalcnt))
+                            if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt)
                             {
 
                                 string workSql = $@"   UPDATE work_performance
@@ -1325,36 +1360,7 @@ namespace CalculateForSea
 
                                 string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[0].Rows[0]["WORK_POWER"].ToString();
 
-                                int machine_id;
-                                switch (i)
-                                {
-                                    case 0:
-                                        machine_id = 13;
-                                        break;
-                                    case 1:
-                                        machine_id = 21;
-
-                                        break;
-                                    case 2:
-                                        machine_id = 22;
-
-                                        break;
-                                    case 3:
-                                        machine_id = 23;
-
-                                        break;
-                                    case 4:
-                                        machine_id = 24;
-
-                                        break;
-                                    case 5:
-                                        machine_id = 25;
-
-                                        break;
-                                    default:
-                                        return;
-
-                                }
+                    
 
                                 string mysqlString = $"INSERT INTO data_for_grid                                                                      " +
                                                      $"(                                                                                              " +
