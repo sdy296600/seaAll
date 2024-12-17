@@ -307,6 +307,8 @@ namespace CalculateForSea
             catch (Exception ex)
             {
                 WriteLog(ex.Message);
+                WriteErrorLog(ex.Message);
+
             }
         }
 
@@ -379,6 +381,8 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
+                WriteErrorLog(ex.Message);
+
 
             }
             catch (Exception ex)
@@ -390,6 +394,8 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
+                WriteErrorLog(ex.Message);
+
             }
         }
 
@@ -614,9 +620,11 @@ namespace CalculateForSea
                 _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 1000);//3000
                 _tmrFOrGrid = new System.Threading.Timer(new TimerCallback(GridTimerCallback), null, 0, 15000);//15000
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 WriteLog("Form1_Loads");
+                WriteErrorLog(ex.Message);
+
                 throw;
             }
         }
@@ -635,6 +643,8 @@ namespace CalculateForSea
             catch (Exception ex)
             {
                 WriteLog(ex.Message);
+                WriteErrorLog(ex.Message);
+
             }
         }
 
@@ -1023,6 +1033,8 @@ namespace CalculateForSea
             catch (Exception e)
             {
                 WriteLog($"Error: {e.Message}");
+                WriteErrorLog(e.Message);
+
             }
 
         }
@@ -1156,6 +1168,8 @@ namespace CalculateForSea
             catch (Exception ex)
             {
                 WriteLog($"Error : {ex.Message}");
+                WriteErrorLog(ex.Message);
+
             }
         }
 
@@ -1224,7 +1238,7 @@ namespace CalculateForSea
 
                     int nowPordCnt = 0;
 
-                    if (ds.Tables[i].Rows.Count > 0)
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
                         try
                         {
@@ -1235,8 +1249,8 @@ namespace CalculateForSea
                                                 FROM SEA_MFG.DBO.MD_MST 
                                                WHERE CODE_MD = ( SELECT CODE_MD 
                                                                    FROM [sea_mfg].dbo.demand_mstr_ext 
-                                                                  WHERE LOT='{ds.Tables[i].Rows[0]["LOT_NO"].ToString()}' 
-                                                                    AND order_no ='{ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString()}')";
+                                                                  WHERE LOT='{ds.Tables[0].Rows[0]["LOT_NO"].ToString()}' 
+                                                                    AND order_no ='{ds.Tables[0].Rows[0]["RESOURCE_NO"].ToString()}')";
 
                             using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
                             {
@@ -1254,10 +1268,10 @@ namespace CalculateForSea
                                 }
                             }
 
-                            string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[i].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
-                            string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString();
-                            string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString();
-                            string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString();
+                            string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[0].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
+                            string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[0].Rows[0]["WORK_OKCNT"].ToString();
+                            string WORK_WARMUPCNT = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0]["WORK_WARMUPCNT"].ToString()) ? "0" : ds.Tables[0].Rows[0]["WORK_WARMUPCNT"].ToString();
+                            string WORK_ERRCOUNT = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0]["WORK_ERRCOUNT"].ToString()) ? "0" : ds.Tables[0].Rows[0]["WORK_ERRCOUNT"].ToString();
                             double power = models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_K + models2[i].T_ESG_M + models[i].Consumption_M + models[i].Consumption_K + models[i].ConsumptionRETI;
                             double okcnt = models[i].getDtOkCnt;
                             double errcnt = models[i].getDtErrCnt;
@@ -1516,9 +1530,9 @@ namespace CalculateForSea
                                         sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A20";
                                         sqlcmd.Parameters.AddWithValue("@Date", dtValue);
                                         sqlcmd.Parameters.AddWithValue("@MACHINE_NO", gridModels_DCM[i].설비No);
-                                        sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[i].Rows[0]["ORDER_NO"]}");
-                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}");
-                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[i].Rows[0]["LOT_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@ORDER_NO", $"{ds.Tables[0].Rows[0]["ORDER_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", $"{ds.Tables[0].Rows[0]["RESOURCE_NO"]}");
+                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", $"{ds.Tables[0].Rows[0]["LOT_NO"]}");
                                         sqlcmd.Parameters.AddWithValue("@ELECTRICAL_ENERGY", (models[i].All_Active_Power).ToString("F2"));
                                         sqlcmd.Parameters.AddWithValue("@V1", gridModels_DCM[i].V1);
                                         sqlcmd.Parameters.AddWithValue("@V2", gridModels_DCM[i].V2);
@@ -1561,8 +1575,8 @@ namespace CalculateForSea
                                         sqlcmd.Connection = sqlconn;
                                         sqlcmd.CommandType = CommandType.StoredProcedure;
                                         sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
-                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[i].Rows[0]["RESOURCE_NO"].ToString());
-                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[i].Rows[0]["LOT_NO"].ToString());
+                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[0].Rows[0]["RESOURCE_NO"].ToString());
+                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[0].Rows[0]["LOT_NO"].ToString());
                                         sqlcmd.Parameters.AddWithValue("@ELEC_USE", (models[i].All_Active_Power).ToString("F2"));
                                         sqlcmd.ExecuteNonQuery();
                                     }
@@ -1573,38 +1587,6 @@ namespace CalculateForSea
                             {
                                 if (models[i].Totalcnt != -1)
                                 {
-                                    int machine_id;
-                                    switch (i)
-                                    {
-                                        case 0:
-                                            machine_id = 13;
-                                            break;
-
-                                        case 1:
-                                            machine_id = 21;
-                                            break;
-
-                                        case 2:
-                                            machine_id = 22;
-                                            break;
-
-                                        case 3:
-                                            machine_id = 23;
-                                            break;
-
-                                        case 4:
-                                            machine_id = 24;
-                                            break;
-
-                                        case 5:
-                                            machine_id = 25;
-                                            break;
-
-                                        default:
-                                            return;
-
-                                    }
-
                                     string mysqlString = $@"CREATE TEMPORARY TABLE TempData AS
                                                         SELECT id
                                                           FROM data_for_grid2
@@ -1683,6 +1665,8 @@ namespace CalculateForSea
                         {
                             //여기서 입력문자열 예외 발생
                             WriteLog(ex.Message);
+                            WriteErrorLog(ex.Message);
+
                         }
                     }
                     else
@@ -1726,8 +1710,10 @@ namespace CalculateForSea
                 catch (Exception e) 
                 {
                     WriteLog(e.Message.ToString());
+                    WriteErrorLog(e.Message);
+
                 }
-                
+
             }
 
         }
@@ -1739,27 +1725,27 @@ namespace CalculateForSea
         {
             try
             {
-                if (ds.Tables[i].Rows.Count > 0)
+                if (ds.Tables[0].Rows.Count > 0)
                 {
                     int ok_cnt = 0;
                     int plan = 1;
-                    Int32.TryParse(ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0], out plan);
-                    Int32.TryParse(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString(), out ok_cnt);
+                    Int32.TryParse(ds.Tables[0].Rows[0]["PLAN_PERFORMANCE"].ToString().Split('.')[0], out plan);
+                    Int32.TryParse(ds.Tables[0].Rows[0]["WORK_OKCNT"].ToString(), out ok_cnt);
 
                     //퍼센트 계산 
                     // (양품개수 / 지시수량 )*100
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/ORDER_NO_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[i].Rows[0]["ORDER_NO"]}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PRODUCT_NAME_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[i].Rows[0]["RESOURCE_NO"]}_{ds.Tables[i].Rows[0]["LOT_NO"]}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_POWER_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["WORK_POWER"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_ERRCOUNT_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["WORK_ERRCOUNT"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_WARMUPCNT_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["WORK_WARMUPCNT"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_OKCNT_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["WORK_OKCNT"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/ORDER_NO_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[0].Rows[0]["ORDER_NO"]}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PRODUCT_NAME_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[0].Rows[0]["RESOURCE_NO"]}_{ds.Tables[0].Rows[0]["LOT_NO"]}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_POWER_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[0].Rows[0]["WORK_POWER"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_ERRCOUNT_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[0].Rows[0]["WORK_ERRCOUNT"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_WARMUPCNT_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[0].Rows[0]["WORK_WARMUPCNT"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/WORK_OKCNT_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[0].Rows[0]["WORK_OKCNT"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/TOTAL_CNT_{machine_no}", Encoding.UTF8.GetBytes(models[i].Totalcnt.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_PERFORMANCE_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[i].Rows[0]["WORK_OKCNT"]}".ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PLAN_PERFORMANCE_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[i].Rows[0]["PLAN_PERFORMANCE"]} / {ds.Tables[i].Rows[0]["WORK_OKCNT"]}".ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_PERFORMANCE_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[0].Rows[0]["WORK_OKCNT"]}".ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PLAN_PERFORMANCE_{machine_no}", Encoding.UTF8.GetBytes($"{ds.Tables[0].Rows[0]["PLAN_PERFORMANCE"]} / {ds.Tables[0].Rows[0]["WORK_OKCNT"]}".ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PER_PERFORMANCE_{machine_no}", Encoding.UTF8.GetBytes($"{(ok_cnt / plan * 10000).ToString("F2")}"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[i].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
-                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_{machine_no}", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[i].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/IS_WORKING_{machine_no}", Encoding.UTF8.GetBytes(ds.Tables[0].Rows[0]["IS_WORKING"].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
+                    Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/CYCLE_TIME_{machine_no}", Encoding.UTF8.GetBytes(DateTime.Now.Subtract(Convert.ToDateTime(ds.Tables[0].Rows[0]["START_TIME"])).ToString(@"dd\.hh\:mm\:ss")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_{machine_no}", Encoding.UTF8.GetBytes((models[i].NowESG + models[i].NowRETI + (models2[i].F_ESG_K + models2[i].F_ESG_M) + (models2[i].T_ESG_K + models2[i].T_ESG_M)).ToString("F2")), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_{machine_no}", Encoding.UTF8.GetBytes(models[i].PROD_CNT.ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
@@ -1780,15 +1766,21 @@ namespace CalculateForSea
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/NOW_KW_{machine_no}", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                     Task.Run(() => _mqttClient.Publish($"/event/c/data_collection_digit/PROD_CNT_{machine_no}", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false));
                 }
-                WriteLog("13호기 MQTT Send");
+                WriteLog($"{machine_no}호기 MQTT Send");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                WriteLog("13호기 값 없음");
-                StreamWriter file = new StreamWriter(Directory.GetCurrentDirectory() + "\\")
+                WriteLog($"{machine_no}호기 값 없음");
+                WriteErrorLog(e.Message + $"{machine_no}호기 값 없음");
+
+
             }
         }
-
+        private void WriteErrorLog(string data) 
+        {
+            StreamWriter file = new StreamWriter(Directory.GetCurrentDirectory() + "\\Error.log", true);
+            file.WriteLine(data + " " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:s"));
+        }
         #endregion
 
         private async void GridTimerCallback(object state)
@@ -1836,6 +1828,8 @@ namespace CalculateForSea
             catch (Exception ex)
             {
                 WriteLog(ex.Message);
+                WriteErrorLog(ex.Message);
+
             }
         }
 
