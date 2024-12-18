@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
+using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using VagabondK.Protocols.Channels;
 using VagabondK.Protocols.LSElectric;
@@ -411,7 +412,6 @@ namespace CalculateForSea
                 }
             });
         }
-
         private void Init()
         {
             try
@@ -1233,13 +1233,14 @@ namespace CalculateForSea
                         adapter.Fill(ds);
                     }
 
+
                     if (models[i].is_Running) return;
                     models[i].is_Running = true;
                     WriteLog("Data Received");
 
                     int nowPordCnt = 0;
 
-                    if (ds.Tables[0].Rows.Count > 0)
+                    if (ds != null&& ds.Tables[0].Rows.Count > 0)
                     {
                         try
                         {
@@ -1373,130 +1374,128 @@ namespace CalculateForSea
                                     MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                                     adapter.Fill(ds2);
                                 }
-
+                                if (ds2.Tables[0].Rows.Count <= 0) continue; 
                                 string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[0].Rows[0]["WORK_POWER"].ToString();
 
-                    
-
                                 string mysqlString = $"INSERT INTO data_for_grid                                                                      " +
-                                                     $"(                                                                                              " +
-                                                     $"`date`,                                                                                        " +
-                                                     $"machine_no,                                                                                    " +
-                                                     $"V1,                                                                                            " +
-                                                     $"V2,                                                                                            " +
-                                                     $"V3,                                                                                            " +
-                                                     $"V4,                                                                                            " +
-                                                     $"acceleration_pos,                                                                              " +
-                                                     $"deceleration_pos,                                                                              " +
-                                                     $"metal_pressure,                                                                                " +
-                                                     $"swap_time,                                                                                     " +
-                                                     $"biskit_thickness,                                                                              " +
-                                                     $"physical_strength_per,                                                                         " +
-                                                     $"physical_strength_mn,                                                                          " +
-                                                     $"cycle_time,                                                                                    " +
-                                                     $"type_weight_enrty_time,                                                                        " +
-                                                     $"bath_time,                                                                                     " +
-                                                     $"forward_time,                                                                                  " +
-                                                     $"freezing_time,                                                                                 " +
-                                                     $"type_weight_back_time,                                                                         " +
-                                                     $"extrusion_time,                                                                                " +
-                                                     $"extraction_time,                                                                               " +
-                                                     $"spray_time,                                                                                    " +
-                                                     $"cavity_core,                                                                                   " +
-                                                     $"A_Pollution_degree,                                                                            " +
-                                                     $"B_Pollution_degree                                                                             " +
-                                                     $", vacuum                                                                                         " +
-                                                     $", SHOTCNT                                                                                       " +
-                                                     $")                                                                                              " +
-                                                     $"VALUES                                                                                         " +
-                                                     $"(                                                                                              " +
-                                                     $"now(),                                                                                         " +
-                                                     $"'WCI_D{machine_id}',                                                                                     " +
-                                                     $"'{gridModels_DCM[i].V1}', " +
-                                                     $"'{gridModels_DCM[i].V2}', " +
-                                                     $"'{gridModels_DCM[i].V3}', " +
-                                                     $"'{gridModels_DCM[i].V4}', " +
-                                                     $"'{gridModels_DCM[i].가속위치}',       " +
-                                                     $"'{gridModels_DCM[i].감속위치}',       " +
-                                                     $"'{gridModels_DCM[i].메탈압력}',       " +
-                                                     $"'{gridModels_DCM[i].승압시간}',       " +
-                                                     $"'{gridModels_DCM[i].비스켓두께}',       " +
-                                                     $"'{gridModels_DCM[i].형체력}',       " +
-                                                     $"'{gridModels_DCM[i].형체력MN}', " +
-                                                     $"'{gridModels_DCM[i].사이클타임}', " +
-                                                     $"'{gridModels_DCM[i].형체중자입시간}', " +
-                                                     $"'{gridModels_DCM[i].주탕시간}', " +
-                                                     $"'{gridModels_DCM[i].사출전진시간}', " +
-                                                     $"'{gridModels_DCM[i].제품냉각시간}', " +
-                                                     $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
-                                                     $"'{gridModels_DCM[i].압출시간}', " +
-                                                     $"'{gridModels_DCM[i].취출시간}', " +
-                                                     $"'{gridModels_DCM[i].스프레이시간}', " +
-                                                     $"'{gridModels_DCM[i].금형내부}', " +
-                                                     $"'{gridModels_DCM[i].오염도A}', " +
-                                                     $"'{gridModels_DCM[i].오염도B}', " +
-                                                     $"'{gridModels_DCM[i].탱크진공}', " +
-                                                     $"'{nowtotalcnt}'" +
-                                                     $");                                                                                             " +
+                                                        $"(                                                                                              " +
+                                                        $"`date`,                                                                                        " +
+                                                        $"machine_no,                                                                                    " +
+                                                        $"V1,                                                                                            " +
+                                                        $"V2,                                                                                            " +
+                                                        $"V3,                                                                                            " +
+                                                        $"V4,                                                                                            " +
+                                                        $"acceleration_pos,                                                                              " +
+                                                        $"deceleration_pos,                                                                              " +
+                                                        $"metal_pressure,                                                                                " +
+                                                        $"swap_time,                                                                                     " +
+                                                        $"biskit_thickness,                                                                              " +
+                                                        $"physical_strength_per,                                                                         " +
+                                                        $"physical_strength_mn,                                                                          " +
+                                                        $"cycle_time,                                                                                    " +
+                                                        $"type_weight_enrty_time,                                                                        " +
+                                                        $"bath_time,                                                                                     " +
+                                                        $"forward_time,                                                                                  " +
+                                                        $"freezing_time,                                                                                 " +
+                                                        $"type_weight_back_time,                                                                         " +
+                                                        $"extrusion_time,                                                                                " +
+                                                        $"extraction_time,                                                                               " +
+                                                        $"spray_time,                                                                                    " +
+                                                        $"cavity_core,                                                                                   " +
+                                                        $"A_Pollution_degree,                                                                            " +
+                                                        $"B_Pollution_degree                                                                             " +
+                                                        $", vacuum                                                                                         " +
+                                                        $", SHOTCNT                                                                                       " +
+                                                        $")                                                                                              " +
+                                                        $"VALUES                                                                                         " +
+                                                        $"(                                                                                              " +
+                                                        $"now(),                                                                                         " +
+                                                        $"'WCI_D{machine_id}',                                                                                     " +
+                                                        $"'{gridModels_DCM[i].V1}', " +
+                                                        $"'{gridModels_DCM[i].V2}', " +
+                                                        $"'{gridModels_DCM[i].V3}', " +
+                                                        $"'{gridModels_DCM[i].V4}', " +
+                                                        $"'{gridModels_DCM[i].가속위치}',       " +
+                                                        $"'{gridModels_DCM[i].감속위치}',       " +
+                                                        $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                        $"'{gridModels_DCM[i].승압시간}',       " +
+                                                        $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                        $"'{gridModels_DCM[i].형체력}',       " +
+                                                        $"'{gridModels_DCM[i].형체력MN}', " +
+                                                        $"'{gridModels_DCM[i].사이클타임}', " +
+                                                        $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                        $"'{gridModels_DCM[i].주탕시간}', " +
+                                                        $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                        $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                        $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                        $"'{gridModels_DCM[i].압출시간}', " +
+                                                        $"'{gridModels_DCM[i].취출시간}', " +
+                                                        $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                        $"'{gridModels_DCM[i].금형내부}', " +
+                                                        $"'{gridModels_DCM[i].오염도A}', " +
+                                                        $"'{gridModels_DCM[i].오염도B}', " +
+                                                        $"'{gridModels_DCM[i].탱크진공}', " +
+                                                        $"'{nowtotalcnt}'" +
+                                                        $");                                                                                             " +
 
-                                                     $"INSERT INTO data_for_grid2                                                                      " +
-                                                     $"(                                                                                              " +
-                                                     $"`date`,                                                                                        " +
-                                                     $"machine_no,                                                                                    " +
-                                                     $"V1,                                                                                            " +
-                                                     $"V2,                                                                                            " +
-                                                     $"V3,                                                                                            " +
-                                                     $"V4,                                                                                            " +
-                                                     $"acceleration_pos,                                                                              " +
-                                                     $"deceleration_pos,                                                                              " +
-                                                     $"metal_pressure,                                                                                " +
-                                                     $"swap_time,                                                                                     " +
-                                                     $"biskit_thickness,                                                                              " +
-                                                     $"physical_strength_per,                                                                         " +
-                                                     $"physical_strength_mn,                                                                          " +
-                                                     $"cycle_time,                                                                                    " +
-                                                     $"type_weight_enrty_time,                                                                        " +
-                                                     $"bath_time,                                                                                     " +
-                                                     $"forward_time,                                                                                  " +
-                                                     $"freezing_time,                                                                                 " +
-                                                     $"type_weight_back_time,                                                                         " +
-                                                     $"extrusion_time,                                                                                " +
-                                                     $"extraction_time,                                                                               " +
-                                                     $"spray_time,                                                                                    " +
-                                                     $"cavity_core,                                                                                   " +
-                                                     $"A_Pollution_degree,                                                                            " +
-                                                     $"B_Pollution_degree                                                                             " +
-                                                     $", vacuum                                                                                         " +
-                                                     $", SHOTCNT                                                                                       " +
-                                                     $")                                                                                              " +
-                                                     $"VALUES ( now(),                                                                                         " +
-                                                     $"'WCI_D{machine_id}',                                                                                     " +
-                                                     $"'{gridModels_DCM[i].V1}', " +
-                                                     $"'{gridModels_DCM[i].V2}', " +
-                                                     $"'{gridModels_DCM[i].V3}', " +
-                                                     $"'{gridModels_DCM[i].V4}', " +
-                                                     $"'{gridModels_DCM[i].가속위치}',       " +
-                                                     $"'{gridModels_DCM[i].감속위치}',       " +
-                                                     $"'{gridModels_DCM[i].메탈압력}',       " +
-                                                     $"'{gridModels_DCM[i].승압시간}',       " +
-                                                     $"'{gridModels_DCM[i].비스켓두께}',       " +
-                                                     $"'{gridModels_DCM[i].형체력}',       " +
-                                                     $"'{gridModels_DCM[i].형체력MN}', " +
-                                                     $"'{gridModels_DCM[i].사이클타임}', " +
-                                                     $"'{gridModels_DCM[i].형체중자입시간}', " +
-                                                     $"'{gridModels_DCM[i].주탕시간}', " +
-                                                     $"'{gridModels_DCM[i].사출전진시간}', " +
-                                                     $"'{gridModels_DCM[i].제품냉각시간}', " +
-                                                     $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
-                                                     $"'{gridModels_DCM[i].압출시간}', " +
-                                                     $"'{gridModels_DCM[i].취출시간}', " +
-                                                     $"'{gridModels_DCM[i].스프레이시간}', " +
-                                                     $"'{gridModels_DCM[i].금형내부}', " +
-                                                     $"'{gridModels_DCM[i].오염도A}', " +
-                                                     $"'{gridModels_DCM[i].오염도B}', " +
-                                                     $"'{gridModels_DCM[i].탱크진공}', " +
-                                                     $"'{nowtotalcnt}'" +
-                                                     $");                                                                                             ";
+                                                        $"INSERT INTO data_for_grid2                                                                      " +
+                                                        $"(                                                                                              " +
+                                                        $"`date`,                                                                                        " +
+                                                        $"machine_no,                                                                                    " +
+                                                        $"V1,                                                                                            " +
+                                                        $"V2,                                                                                            " +
+                                                        $"V3,                                                                                            " +
+                                                        $"V4,                                                                                            " +
+                                                        $"acceleration_pos,                                                                              " +
+                                                        $"deceleration_pos,                                                                              " +
+                                                        $"metal_pressure,                                                                                " +
+                                                        $"swap_time,                                                                                     " +
+                                                        $"biskit_thickness,                                                                              " +
+                                                        $"physical_strength_per,                                                                         " +
+                                                        $"physical_strength_mn,                                                                          " +
+                                                        $"cycle_time,                                                                                    " +
+                                                        $"type_weight_enrty_time,                                                                        " +
+                                                        $"bath_time,                                                                                     " +
+                                                        $"forward_time,                                                                                  " +
+                                                        $"freezing_time,                                                                                 " +
+                                                        $"type_weight_back_time,                                                                         " +
+                                                        $"extrusion_time,                                                                                " +
+                                                        $"extraction_time,                                                                               " +
+                                                        $"spray_time,                                                                                    " +
+                                                        $"cavity_core,                                                                                   " +
+                                                        $"A_Pollution_degree,                                                                            " +
+                                                        $"B_Pollution_degree                                                                             " +
+                                                        $", vacuum                                                                                         " +
+                                                        $", SHOTCNT                                                                                       " +
+                                                        $")                                                                                              " +
+                                                        $"VALUES ( now(),                                                                                         " +
+                                                        $"'WCI_D{machine_id}',                                                                                     " +
+                                                        $"'{gridModels_DCM[i].V1}', " +
+                                                        $"'{gridModels_DCM[i].V2}', " +
+                                                        $"'{gridModels_DCM[i].V3}', " +
+                                                        $"'{gridModels_DCM[i].V4}', " +
+                                                        $"'{gridModels_DCM[i].가속위치}',       " +
+                                                        $"'{gridModels_DCM[i].감속위치}',       " +
+                                                        $"'{gridModels_DCM[i].메탈압력}',       " +
+                                                        $"'{gridModels_DCM[i].승압시간}',       " +
+                                                        $"'{gridModels_DCM[i].비스켓두께}',       " +
+                                                        $"'{gridModels_DCM[i].형체력}',       " +
+                                                        $"'{gridModels_DCM[i].형체력MN}', " +
+                                                        $"'{gridModels_DCM[i].사이클타임}', " +
+                                                        $"'{gridModels_DCM[i].형체중자입시간}', " +
+                                                        $"'{gridModels_DCM[i].주탕시간}', " +
+                                                        $"'{gridModels_DCM[i].사출전진시간}', " +
+                                                        $"'{gridModels_DCM[i].제품냉각시간}', " +
+                                                        $"'{gridModels_DCM[i].형개중자후퇴시간}', " +
+                                                        $"'{gridModels_DCM[i].압출시간}', " +
+                                                        $"'{gridModels_DCM[i].취출시간}', " +
+                                                        $"'{gridModels_DCM[i].스프레이시간}', " +
+                                                        $"'{gridModels_DCM[i].금형내부}', " +
+                                                        $"'{gridModels_DCM[i].오염도A}', " +
+                                                        $"'{gridModels_DCM[i].오염도B}', " +
+                                                        $"'{gridModels_DCM[i].탱크진공}', " +
+                                                        $"'{nowtotalcnt}'" +
+                                                        $");                                                                                             ";
 
 
                                 MySqlConnection conn2 = new MySqlConnection(ConnectionString);
@@ -1512,7 +1511,7 @@ namespace CalculateForSea
                                 }
 
                                 double parseWorkPower = 0;
-                                double.TryParse(WORK_POWER,out parseWorkPower);
+                                double.TryParse(WORK_POWER, out parseWorkPower);
                                 models[i].All_Active_Power = parseWorkPower;
                                 if ((models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW > 0)
                                 {
@@ -1565,23 +1564,26 @@ namespace CalculateForSea
                                         WriteLog("SHOT Data Processed");
                                     }
 
+
+                                    // MSSQL 전달
+                                    using (SqlConnection sqlconn2 = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
+                                    {
+                                        sqlconn2.Open();
+                                        using (SqlCommand sqlcmd = new SqlCommand())
+                                        {
+                                            sqlcmd.Connection = sqlconn2;
+                                            sqlcmd.CommandType = CommandType.StoredProcedure;
+                                            sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
+                                            sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[0].Rows[0]["RESOURCE_NO"].ToString());
+                                            sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[0].Rows[0]["LOT_NO"].ToString());
+                                            sqlcmd.Parameters.AddWithValue("@ELEC_USE", (models[i].All_Active_Power).ToString("F2"));
+                                            sqlcmd.ExecuteNonQuery();
+                                        }
+                                    }
+
                                 }
 
-                                // MSSQL 전달
-                                using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
-                                {
-                                    sqlconn.Open();
-                                    using (SqlCommand sqlcmd = new SqlCommand())
-                                    {
-                                        sqlcmd.Connection = sqlconn;
-                                        sqlcmd.CommandType = CommandType.StoredProcedure;
-                                        sqlcmd.CommandText = "USP_ELECTRIC_USE_DPS_A10";
-                                        sqlcmd.Parameters.AddWithValue("@RESOURCE_NO", ds.Tables[0].Rows[0]["RESOURCE_NO"].ToString());
-                                        sqlcmd.Parameters.AddWithValue("@LOT_NO", ds.Tables[0].Rows[0]["LOT_NO"].ToString());
-                                        sqlcmd.Parameters.AddWithValue("@ELEC_USE", (models[i].All_Active_Power).ToString("F2"));
-                                        sqlcmd.ExecuteNonQuery();
-                                    }
-                                }
+
 
                             }
                             else
