@@ -1311,6 +1311,39 @@ namespace CalculateForSea
                                     cmd.ExecuteNonQuery();
                                 }
                             }
+                            string work_performanceSql = $@" UPDATE work_performance
+                                                            SET work_okcnt = IFNULL((SELECT CASE WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
+                                                                                            ELSE WORK_OKCNT - START_OKCNT END 
+                                                                                          - CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT END
+                                                                                       FROM WORK_DATA
+                                                                                      WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                   , 0) * {cavity},
+                                                                work_errcount = IFNULL(( SELECT CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                                                                ELSE WORK_ERRCOUNT - START_ERRCOUNT END
+                                                                                           FROM WORK_DATA
+                                                                                          WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                      , 0) * {cavity},
+                                                                work_warmupcnt = IFNULL(( SELECT CASE WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
+                                                                                                 ELSE WORK_WARMUPCNT - START_WARMUPCNT END
+                                                                                            FROM WORK_DATA
+                                                                                           WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                       , 0)
+                                                          WHERE end_time = start_time
+                                                            AND WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                          ORDER BY ID DESC LIMIT 1; ";
+
+                            MySqlConnection conn3 = new MySqlConnection(ConnectionString);
+                            using (conn3)
+                            {
+                                conn3.Open();
+
+                                MySqlCommand cmd = new MySqlCommand();
+                                cmd.CommandText = work_performanceSql;
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Connection = conn3;
+                                cmd.ExecuteNonQuery();
+                            }
                             int intwork_okcnt = 0;
                             int intwork_errcnt = 0;
                             int intwork_warmcnt = 0;
@@ -1622,47 +1655,12 @@ namespace CalculateForSea
                                         cmd.Connection = conn2;
                                         cmd.ExecuteNonQuery();
                                     }
+                                    continue;
                                 }
                             }
 
                             models[i].Totalcnt = nowtotalcnt;
                             models[i].PROD_CNT = nowPordCnt;
-
-
-
-                            string work_performanceSql = $@" UPDATE work_performance
-                                                            SET work_okcnt = IFNULL((SELECT CASE WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
-                                                                                            ELSE WORK_OKCNT - START_OKCNT END 
-                                                                                          - CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
-                                                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT END
-                                                                                       FROM WORK_DATA
-                                                                                      WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
-                                                                                   , 0) * {cavity},
-                                                                work_errcount = IFNULL(( SELECT CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
-                                                                                                ELSE WORK_ERRCOUNT - START_ERRCOUNT END
-                                                                                           FROM WORK_DATA
-                                                                                          WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
-                                                                                      , 0) * {cavity},
-                                                                work_warmupcnt = IFNULL(( SELECT CASE WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
-                                                                                                 ELSE WORK_WARMUPCNT - START_WARMUPCNT END
-                                                                                            FROM WORK_DATA
-                                                                                           WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
-                                                                                       , 0)
-                                                          WHERE end_time = start_time
-                                                            AND WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                          ORDER BY ID DESC LIMIT 1; ";
-
-                            MySqlConnection conn3 = new MySqlConnection(ConnectionString);
-                            using (conn3)
-                            {
-                                conn3.Open();
-
-                                MySqlCommand cmd = new MySqlCommand();
-                                cmd.CommandText = work_performanceSql;
-                                cmd.CommandType = CommandType.Text;
-                                cmd.Connection = conn3;
-                                cmd.ExecuteNonQuery();
-                            }
                         }
                         catch (Exception ex)
                         {
