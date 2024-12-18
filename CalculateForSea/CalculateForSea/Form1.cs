@@ -1096,13 +1096,13 @@ namespace CalculateForSea
             if (ds.Tables[1].Rows.Count > 0)
             {
                 double parsePower = 0;
-                double.TryParse(ds.Tables[0].Rows[0]["VALUE"].ToString(), out parsePower);
-                dailyPower = model.NowShotKW - parsePower;
-                dailyAmount = dailyPower * electricityRate;
+                double.TryParse(ds.Tables[1].Rows[0]["VALUE"].ToString(), out parsePower);
+                monthConversion = model.NowShotKW - parsePower;
+                monthlyAmount = dailyPower * electricityRate;
             }
 
-            unitPower = model.NowShotKW;
-            unitAmount = model.NowShotKW * electricityRate;
+            unitPower = model.All_Active_Power;
+            unitAmount = unitPower * electricityRate;
 
             DataModel2 model2 = models2[machineId];
             DataSet ds2 = new DataSet();
@@ -1813,6 +1813,7 @@ namespace CalculateForSea
         {
             try
             {
+              
                 //0; 0 < 5; 1++
                 for (int i = 0; i < gridModels.Count - 1; i++)
                 {
