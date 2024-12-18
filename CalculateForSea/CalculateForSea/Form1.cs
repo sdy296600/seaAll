@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -56,6 +57,7 @@ namespace CalculateForSea
             public bool is_First = true;
             public int Count = 0;
             public bool Update = false;
+            public int cavity = 1;
 
         }
 
@@ -157,12 +159,12 @@ namespace CalculateForSea
             
             List<Task> tasks = new List<Task>
             {
-                Task.Run(async () => { await ThreadMethodAsync(0, 1, cts0.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(1, 1, cts1.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(2, 1, cts2.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(3, 1, cts3.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(5, 1, cts5.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(4, 1, cts4.Token); })
+                Task.Run(async () => { await ThreadMethodAsync(0, 3, cts0.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(1, 3, cts1.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(2, 3, cts2.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(3, 3, cts3.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(5, 3, cts5.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(4, 3, cts4.Token); })
             };
             List<Task> tasks2 = new List<Task>
             {
@@ -616,7 +618,29 @@ namespace CalculateForSea
                     if (ds.Tables[model_index].Rows.Count > 0) 
                     {
                         models[model_index].ID = ds.Tables[model_index].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
+                        string cavitySql = $@"SELECT CAVITY 
+                                                FROM SEA_MFG.DBO.MD_MST 
+                                               WHERE CODE_MD = ( SELECT CODE_MD 
+                                                                   FROM [sea_mfg].dbo.demand_mstr_ext 
+                                                                  WHERE LOT='{ds.Tables[model_index].Rows[0]["LOT_NO"].ToString()}' 
+                                                                    AND order_no ='{ds.Tables[model_index].Rows[0]["RESOURCE_NO"].ToString()}')";
+
+                        using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
+                        {
+                            sqlconn.Open();
+                            using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
+                            {
+                                using (SqlDataReader reader = sqlcmd.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        Int32.TryParse(reader["CAVITY"].ToString(), out models[model_index].cavity);
+                                    }
+                                }
+                            }
+                        }
                     }
+                 
                     model_index++;
                 }
                 _tmr = new System.Threading.Timer(new TimerCallback(DataTimerCallback), null, 0, 1000);//3000
@@ -1211,6 +1235,40 @@ namespace CalculateForSea
                             return;
 
                     }
+
+                    string work_performanceSql = $@" UPDATE work_performance
+                                                            SET work_okcnt = IFNULL((SELECT CASE WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
+                                                                                            ELSE WORK_OKCNT - START_OKCNT END 
+                                                                                          - CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT END
+                                                                                       FROM WORK_DATA
+                                                                                      WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                   , 0) * {models[i].cavity},
+                                                                work_errcount = IFNULL(( SELECT CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
+                                                                                                ELSE WORK_ERRCOUNT - START_ERRCOUNT END
+                                                                                           FROM WORK_DATA
+                                                                                          WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                      , 0) * {models[i].cavity},
+                                                                work_warmupcnt = IFNULL(( SELECT CASE WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
+                                                                                                 ELSE WORK_WARMUPCNT - START_WARMUPCNT END
+                                                                                            FROM WORK_DATA
+                                                                                           WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
+                                                                                       , 0)
+                                                          WHERE end_time = start_time
+                                                            AND WORK_PERFORMANCE_ID = '{models[i].ID}'
+                                                          ORDER BY ID DESC LIMIT 1; ";
+
+                    MySqlConnection conn3 = new MySqlConnection(ConnectionString);
+                    using (conn3)
+                    {
+                        conn3.Open();
+
+                        MySqlCommand cmd = new MySqlCommand();
+                        cmd.CommandText = work_performanceSql;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = conn3;
+                        cmd.ExecuteNonQuery();
+                    }
                     GET_DCM gET = new GET_DCM(i);
                     await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
 
@@ -1226,14 +1284,13 @@ namespace CalculateForSea
                           FROM work_performance 
                          WHERE start_time  = end_time 
                            AND machine_no  = 'WCI_D{machine_id}' 
-                      ORDER BY id DESC 
+                        ORDER BY id DESC 
                          LIMIT 1;";
                         cmd.CommandType = CommandType.Text;
                         cmd.Connection = connnect;
                         MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                         adapter.Fill(ds);
-                    }
-
+                    }//작업지시 가져오기
 
                     if (models[i].is_Running) return;
                     models[i].is_Running = true;
@@ -1246,30 +1303,6 @@ namespace CalculateForSea
                         try
                         {
                             Get_DCM(i, gridModels_DCM[i]); //값 보내주기
-
-                            int cavity = 1;
-                            string cavitySql = $@"SELECT CAVITY 
-                                                FROM SEA_MFG.DBO.MD_MST 
-                                               WHERE CODE_MD = ( SELECT CODE_MD 
-                                                                   FROM [sea_mfg].dbo.demand_mstr_ext 
-                                                                  WHERE LOT='{ds.Tables[0].Rows[0]["LOT_NO"].ToString()}' 
-                                                                    AND order_no ='{ds.Tables[0].Rows[0]["RESOURCE_NO"].ToString()}')";
-
-                            using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
-                            {
-                                sqlconn.Open();
-                                using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
-                                {
-                                    using (SqlDataReader reader = sqlcmd.ExecuteReader())
-                                    {
-                                        if (reader.Read())
-                                        {
-                                            cavity = 1;
-                                            Int32.TryParse(reader["CAVITY"].ToString(), out cavity);
-                                        }
-                                    }
-                                }
-                            }
 
                             string WORK_PERFORMANCE_ID = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0]["WORK_PERFORMANCE_ID"].ToString()) ? "" : ds.Tables[0].Rows[0]["WORK_PERFORMANCE_ID"].ToString();
                             string WORK_OKCNT = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0]["WORK_OKCNT"].ToString()) ? "0" : ds.Tables[0].Rows[0]["WORK_OKCNT"].ToString();
@@ -1299,7 +1332,6 @@ namespace CalculateForSea
                                                     WORK_WARMUPCNT = {warmcnt}, 
                                                     WORK_ERRCOUNT = {errcnt}
                                             WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';";
-                                //여기 수정해야함
                                 MySqlConnection conn4 = new MySqlConnection(ConnectionString);
                                 using (conn4)
                                 {
@@ -1311,40 +1343,29 @@ namespace CalculateForSea
                                     cmd.Connection = conn4;
                                     cmd.ExecuteNonQuery();
                                 }
-                            }
-                            string work_performanceSql = $@" UPDATE work_performance
-                                                            SET work_okcnt = IFNULL((SELECT CASE WHEN WORK_OKCNT < START_OKCNT THEN ((WORK_OKCNT + 65535) - START_OKCNT)+1
-                                                                                            ELSE WORK_OKCNT - START_OKCNT END 
-                                                                                          - CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
-                                                                                            ELSE WORK_ERRCOUNT - START_ERRCOUNT END
-                                                                                       FROM WORK_DATA
-                                                                                      WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
-                                                                                   , 0) * {cavity},
-                                                                work_errcount = IFNULL(( SELECT CASE WHEN WORK_ERRCOUNT < START_ERRCOUNT THEN ((WORK_ERRCOUNT + 65535) - START_ERRCOUNT)+1
-                                                                                                ELSE WORK_ERRCOUNT - START_ERRCOUNT END
-                                                                                           FROM WORK_DATA
-                                                                                          WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
-                                                                                      , 0) * {cavity},
-                                                                work_warmupcnt = IFNULL(( SELECT CASE WHEN WORK_WARMUPCNT < START_WARMUPCNT THEN ((WORK_WARMUPCNT + 65535) - START_WARMUPCNT)+1
-                                                                                                 ELSE WORK_WARMUPCNT - START_WARMUPCNT END
-                                                                                            FROM WORK_DATA
-                                                                                           WHERE WORK_PERFORMANCE_ID = '{models[i].ID}' )
-                                                                                       , 0)
-                                                          WHERE end_time = start_time
-                                                            AND WORK_PERFORMANCE_ID = '{models[i].ID}'
-                                                          ORDER BY ID DESC LIMIT 1; ";
+                                string cavitySql = $@"SELECT CAVITY 
+                                                FROM SEA_MFG.DBO.MD_MST 
+                                               WHERE CODE_MD = ( SELECT CODE_MD 
+                                                                   FROM [sea_mfg].dbo.demand_mstr_ext 
+                                                                  WHERE LOT='{ds.Tables[0].Rows[0]["LOT_NO"].ToString()}' 
+                                                                    AND order_no ='{ds.Tables[0].Rows[0]["RESOURCE_NO"].ToString()}')";
 
-                            MySqlConnection conn3 = new MySqlConnection(ConnectionString);
-                            using (conn3)
-                            {
-                                conn3.Open();
-
-                                MySqlCommand cmd = new MySqlCommand();
-                                cmd.CommandText = work_performanceSql;
-                                cmd.CommandType = CommandType.Text;
-                                cmd.Connection = conn3;
-                                cmd.ExecuteNonQuery();
+                                using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;"))
+                                {
+                                    sqlconn.Open();
+                                    using (SqlCommand sqlcmd = new SqlCommand(cavitySql, sqlconn))
+                                    {
+                                        using (SqlDataReader reader = sqlcmd.ExecuteReader())
+                                        {
+                                            if (reader.Read())
+                                            {
+                                                Int32.TryParse(reader["CAVITY"].ToString(), out models[i].cavity);
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                         
                             int intwork_okcnt = 0;
                             int intwork_errcnt = 0;
                             int intwork_warmcnt = 0;
@@ -1352,9 +1373,9 @@ namespace CalculateForSea
                             Int32.TryParse(WORK_WARMUPCNT, out intwork_warmcnt);
                             Int32.TryParse(WORK_ERRCOUNT, out intwork_errcnt);
 
-                            int nowtotalcnt = (intwork_okcnt / cavity)
+                            int nowtotalcnt = (intwork_okcnt / models[i].cavity)
                                 + intwork_warmcnt
-                                + (intwork_errcnt / cavity);
+                                + (intwork_errcnt / models[i].cavity);
 
                             nowPordCnt = intwork_okcnt
                                 + intwork_errcnt;
@@ -1596,6 +1617,7 @@ namespace CalculateForSea
 
                                         WriteLog("SHOT Data Processed");
                                     }
+                                    models[i].Update = false;
 
 
                                     // MSSQL 전달
@@ -1616,7 +1638,6 @@ namespace CalculateForSea
 
                                 }
 
-                            models[i].Update = false;
 
                             }
                             else
