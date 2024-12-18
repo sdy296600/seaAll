@@ -55,6 +55,7 @@ namespace CalculateForSea
             public bool is_Running = false;
             public bool is_First = true;
             public int Count = 0;
+            public bool Update = false;
 
         }
 
@@ -383,7 +384,7 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
-                WriteErrorLog(i + " "+ex.Message);
+                //WriteErrorLog(i + " "+ex.Message);
 
 
             }
@@ -396,7 +397,7 @@ namespace CalculateForSea
                     gridModels_DCM[i].오염도B = "0";
                     gridModels_DCM[i].탱크진공 = "0";
                 }
-                WriteErrorLog(i + ex.Message);
+                //WriteErrorLog(i + ex.Message);
 
             }
         }
@@ -1240,7 +1241,7 @@ namespace CalculateForSea
 
                     int nowPordCnt = 0;
 
-                    if (ds != null&& ds.Tables[0].Rows.Count > 0)
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         try
                         {
@@ -1263,8 +1264,8 @@ namespace CalculateForSea
                                     {
                                         if (reader.Read())
                                         {
-                                            cavity = 1; 
-                                            Int32.TryParse(reader["CAVITY"].ToString(),out cavity);
+                                            cavity = 1;
+                                            Int32.TryParse(reader["CAVITY"].ToString(), out cavity);
                                         }
                                     }
                                 }
@@ -1295,7 +1296,7 @@ namespace CalculateForSea
                                                     START_WARMUPCNT = {warmcnt},
                                                     START_ERRCOUNT = {errcnt},
                                                     WORK_OKCNT = {okcnt},
-                                                    WORK_WARMUPCNT = {warmcnt},
+                                                    WORK_WARMUPCNT = {warmcnt}, 
                                                     WORK_ERRCOUNT = {errcnt}
                                             WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';";
                                 //여기 수정해야함
@@ -1358,23 +1359,22 @@ namespace CalculateForSea
                             nowPordCnt = intwork_okcnt
                                 + intwork_errcnt;
 
-                            if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt)
+                            if (models[i].Update == true)
                             {
-
                                 string workSql = $@"   UPDATE work_performance
-                                                      SET work_power = IFNULL( ( SELECT 
-                                                                                    CASE 
-                                                                                        WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
-                                                                                        ELSE WORK_POWER - LAST_POWER
-                                                                                    END
-                                                                                FROM WORK_DATA
-                                                                                WHERE WORK_PERFORMANCE_ID = '{models[i].ID}')
-                                                                             , 0)
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                                    SET work_power = IFNULL( ( SELECT 
+                                                                                CASE 
+                                                                                    WHEN WORK_POWER < LAST_POWER THEN (WORK_POWER + 65535) - LAST_POWER +1
+                                                                                    ELSE WORK_POWER - LAST_POWER
+                                                                                END
+                                                                            FROM WORK_DATA
+                                                                            WHERE WORK_PERFORMANCE_ID = '{models[i].ID}')
+                                                                            , 0)
+                                                WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
 
-                                                   UPDATE WORK_DATA 
-                                                      SET LAST_POWER = WORK_POWER
-                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'; ";
+                                                UPDATE WORK_DATA 
+                                                    SET LAST_POWER = WORK_POWER
+                                                WHERE WORK_PERFORMANCE_ID = '{models[i].ID}'; ";
 
                                 MySqlConnection conn4 = new MySqlConnection(ConnectionString);
                                 using (conn4)
@@ -1389,9 +1389,9 @@ namespace CalculateForSea
                                 }
 
                                 string WORK_POWERsql = $@"SELECT WORK_POWER 
-                                                        FROM WORK_PERFORMANCE
-                                                       WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
-                                                     ";
+                                                    FROM WORK_PERFORMANCE
+                                                    WHERE WORK_PERFORMANCE_ID = '{models[i].ID}';
+                                                    ";
 
                                 DataSet ds2 = new DataSet();
                                 MySqlConnection conn5 = new MySqlConnection(ConnectionString);
@@ -1407,7 +1407,7 @@ namespace CalculateForSea
                                     MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                                     adapter.Fill(ds2);
                                 }
-                                if (ds2.Tables[0].Rows.Count <= 0) continue; 
+                                if (ds2.Tables[0].Rows.Count <= 0) { continue; }
                                 string WORK_POWER = string.IsNullOrWhiteSpace(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString()) ? "0" : ds2.Tables[0].Rows[0]["WORK_POWER"].ToString();
 
                                 string mysqlString = $"INSERT INTO data_for_grid                                                                      " +
@@ -1616,7 +1616,7 @@ namespace CalculateForSea
 
                                 }
 
-
+                            models[i].Update = false;
 
                             }
                             else
@@ -1655,8 +1655,12 @@ namespace CalculateForSea
                                         cmd.Connection = conn2;
                                         cmd.ExecuteNonQuery();
                                     }
-                                    continue;
+
                                 }
+                            }
+                            if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt)
+                            {
+                                models[i].Update = true;
                             }
 
                             models[i].Totalcnt = nowtotalcnt;
@@ -1706,12 +1710,16 @@ namespace CalculateForSea
                     }
                     CalculateAndPublishPowerConsumption(models[i], i);
                     models[i].is_Running = false;
-                    await Task.Delay(timer * 1000);
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     WriteLog(e.Message.ToString());
-                    WriteErrorLog(i +" " + e.Message);
+                    WriteErrorLog(i + " " + e.Message);
+
+                }
+                finally 
+                { 
+                    await Task.Delay(timer * 1000);
 
                 }
 
