@@ -317,22 +317,25 @@ namespace CalculateForSea
             }
         }
 
-        public void GetPlcAsync(string address, FEnetClient LSClient)
+        public async Task GetPlcAsync(string address, FEnetClient LSClient)
         {
             TcpChannel ch = LSClient.Channel as TcpChannel;
             int i = Convert.ToInt16(ch.Host[ch.Host.Length - 1].ToString());
+
             try
             {
                 List<string> datas = new List<string>();
-                foreach (var item in LSClient.Read(address))
+
+                // 비동기적으로 데이터를 읽음
+                foreach (var item in await LSClient.ReadAsync(address)) // ReadAsync로 비동기 호출
                 {
                     datas.Add(item.Value.WordValue.ToString());
                 }
 
                 if (datas[0] == "1")
                 {
-                    var item = LSClient.Read("%DW816", 4);
-                    foreach (int readItem in item.Cast(DataType.Word))
+                    var item = await LSClient.ReadAsync("%DW816", 4); // 비동기 호출로 데이터 읽기
+                    foreach (int readItem in item.Cast<DataType.Word>())
                     {
                         datas.Add(readItem.ToString());
                     }
@@ -348,33 +351,20 @@ namespace CalculateForSea
                     int machine_id;
                     switch (i)
                     {
-                        case 0:
-                            machine_id = 13;
-                            break;
-                        case 1:
-                            machine_id = 21;
-                            break;
-                        case 2:
-                            machine_id = 22;
-
-                            break;
-                        case 3:
-                            machine_id = 23;
-                            break;
-                        case 4:
-                            machine_id = 24;
-                            break;
-                        case 5:
-                            machine_id = 25;
-                            break;
-                        default:
-                            return;
+                        case 0: machine_id = 13; break;
+                        case 1: machine_id = 21; break;
+                        case 2: machine_id = 22; break;
+                        case 3: machine_id = 23; break;
+                        case 4: machine_id = 24; break;
+                        case 5: machine_id = 25; break;
+                        default: return;
                     }
 
-                    dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
-                    dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
-                    dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
-                    dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
+                    // 비동기 방식으로 알람 상태 업데이트
+                    await dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
+                    await dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
+                    await dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
+                    await dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
                 }
             }
             catch (TimeoutException ex)
@@ -387,8 +377,6 @@ namespace CalculateForSea
                     gridModels_DCM[i].탱크진공 = "0";
                 }
                 //WriteErrorLog(i + " "+ex.Message);
-
-
             }
             catch (Exception ex)
             {
@@ -400,18 +388,18 @@ namespace CalculateForSea
                     gridModels_DCM[i].탱크진공 = "0";
                 }
                 //WriteErrorLog(i + ex.Message);
-
             }
         }
 
-        public void StartPlcMonitoring(FEnetClient LSClient)
+
+        public async void StartPlcMonitoring(FEnetClient LSClient)
         {
-            Task.Run(() =>
+            await Task.Run(async () =>
             {
                 while (true) // 반복적으로 실행
                 {
-                    GetPlcAsync("%MX830", LSClient);
-                    Task.Delay(10);
+                    await GetPlcAsync("%MX830", LSClient); // 비동기 호출
+                    await Task.Delay(10); // 10ms 지연
                 }
             });
         }
