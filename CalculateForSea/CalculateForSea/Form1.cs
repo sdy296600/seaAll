@@ -327,15 +327,15 @@ namespace CalculateForSea
                 List<string> datas = new List<string>();
 
                 // 비동기적으로 데이터를 읽음
-                foreach (var item in await LSClient.ReadAsync(address)) // ReadAsync로 비동기 호출
+                foreach (var item in LSClient.Read(address))
                 {
                     datas.Add(item.Value.WordValue.ToString());
                 }
 
-                if (datas[0] == "1")
+                if (datas.Count > 0 && datas[0] == "1")
                 {
-                    var item = await LSClient.ReadAsync("%DW816", 4); // 비동기 호출로 데이터 읽기
-                    foreach (int readItem in item.Cast<DataType.Word>())
+                    var item = LSClient.Read("%DW816", 4);
+                    foreach (int readItem in item.Cast(DataType.Word))
                     {
                         datas.Add(readItem.ToString());
                     }
@@ -360,11 +360,10 @@ namespace CalculateForSea
                         default: return;
                     }
 
-                    // 비동기 방식으로 알람 상태 업데이트
-                    await dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
-                    await dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
-                    await dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
-                    await dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
+                    dm_alram_status_update(datas[1], $"LS_{machine_id}_DW816");
+                    dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
+                    dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
+                    dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
                 }
             }
             catch (TimeoutException ex)
