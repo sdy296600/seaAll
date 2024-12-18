@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace CoFAS.NEW.MES.POP
 {
-    public partial class Data_Mon_POP : Form
+    public partial class Data_Mon_POP2 : Form
     {
         #region .. Double Buffered function ..
         public static void SetDoubleBuffered(System.Windows.Forms.Control c)
@@ -89,7 +89,7 @@ namespace CoFAS.NEW.MES.POP
 
         #region ○ 생성자
 
-        public Data_Mon_POP(UserEntity pUserEntity,
+        public Data_Mon_POP2(UserEntity pUserEntity,
              string 품번
             ,string 품목명
             ,string 지시수량
@@ -115,7 +115,7 @@ namespace CoFAS.NEW.MES.POP
             this.WindowState = FormWindowState.Maximized;
             this.MinimumSize = this.Size;
         }
-        public Data_Mon_POP( )
+        public Data_Mon_POP2( )
         {
             InitializeComponent();
           
@@ -171,6 +171,7 @@ namespace CoFAS.NEW.MES.POP
             {
                 
                 int 포장수량 = 0;
+                prodBcdQty = "0";
 
                 //if (!int.TryParse(txt_포장수량.Text, out 포장수량))
                 //{
@@ -288,7 +289,6 @@ namespace CoFAS.NEW.MES.POP
             string printerName1 = "ZDesigner ZD230-203dpi ZPL";
             string zplCommand = string.Empty;
 
-           
             try
             {
                 //PrintServer printServer = new PrintServer();
@@ -325,17 +325,20 @@ namespace CoFAS.NEW.MES.POP
         }
     }
 
-    public class 공정이동표
-    {
-        public string LOT_NO        { get; set; }
-        public string 품목명        { get; set; }
-        public string BARCODE_DATE { get; set; }
-        public string MOVE_DATE    { get; set; }
-        public string ID           { get; set; }
-        public string P_QTY         {  get; set; }
-        public string RESOURCE_NO   { get; set; }
-        public string BARCODE_NO   { get; set; }
-    }
+    //public class 공정이동표
+    //{
+    //    public string LOT_NO        { get; set; }
+    //    public string 품목명        { get; set; }
+    //    public string BARCODE_DATE { get; set; }
+    //    public string MOVE_DATE    { get; set; }
+    //    public string ID           { get; set; }
+    //    public string P_QTY         {  get; set; }
+    //    public string RESOURCE_NO   { get; set; }
+    //    public string BARCODE_NO   { get; set; }
+    //}
+
+
+
 }
 
 

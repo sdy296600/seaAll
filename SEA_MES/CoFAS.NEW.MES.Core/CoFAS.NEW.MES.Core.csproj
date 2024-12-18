@@ -367,6 +367,12 @@
     <Compile Include="View\SI\NewFolder1\Data_Mon_POP.Designer.cs">
       <DependentUpon>Data_Mon_POP.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SI\NewFolder1\Data_Mon_POP2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SI\NewFolder1\Data_Mon_POP2.Designer.cs">
+      <DependentUpon>Data_Mon_POP2.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\이앤아이비\생산관리\압출조건현황.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1134,6 +1140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\SI\NewFolder1\Data_Mon_POP.resx">
       <DependentUpon>Data_Mon_POP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SI\NewFolder1\Data_Mon_POP2.resx">
+      <DependentUpon>Data_Mon_POP2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\이앤아이비\생산관리\압출조건현황.resx">
       <DependentUpon>압출조건현황.cs</DependentUpon>
