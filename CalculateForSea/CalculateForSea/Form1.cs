@@ -1087,7 +1087,8 @@ namespace CalculateForSea
             {
                 double parsePower = 0;
                 double.TryParse(ds.Tables[0].Rows[0]["VALUE"].ToString(), out parsePower);
-                dailyPower = model.NowShotKW - parsePower;
+                dailyPower = model.NowShotKW - parsePower > 0 ? model.NowShotKW - parsePower : 0;
+                if (dailyPower < 0) dailyPower = 0;
                 dailyAmount = dailyPower * electricityRate;
             }
 
@@ -1095,7 +1096,7 @@ namespace CalculateForSea
             {
                 double parsePower = 0;
                 double.TryParse(ds.Tables[1].Rows[0]["VALUE"].ToString(), out parsePower);
-                monthConversion = model.NowShotKW - parsePower;
+                monthConversion = model.NowShotKW - parsePower > 0 ? model.NowShotKW - parsePower : 0;
                 monthlyAmount = dailyPower * electricityRate;
             }
 
