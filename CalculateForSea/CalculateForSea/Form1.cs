@@ -159,12 +159,12 @@ namespace CalculateForSea
             
             List<Task> tasks = new List<Task>
             {
-                Task.Run(async () => { await ThreadMethodAsync(0, 3, cts0.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(1, 3, cts1.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(2, 3, cts2.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(3, 3, cts3.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(5, 3, cts5.Token); }),
-                Task.Run(async () => { await ThreadMethodAsync(4, 3, cts4.Token); })
+                Task.Run(async () => { await ThreadMethodAsync(0, 1500, cts0.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(1, 1500, cts1.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(2, 1500, cts2.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(3, 1500, cts3.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(5, 1500, cts5.Token); }),
+                Task.Run(async () => { await ThreadMethodAsync(4, 1500, cts4.Token); })
             };
             List<Task> tasks2 = new List<Task>
             {
@@ -1744,7 +1744,7 @@ namespace CalculateForSea
                 finally 
                 {
                     models[i].is_Running = false;
-                    await Task.Delay(timer * 1000);
+                    await Task.Delay(timer);
                 }
 
             }
