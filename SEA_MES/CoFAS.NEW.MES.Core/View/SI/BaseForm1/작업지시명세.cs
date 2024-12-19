@@ -24,8 +24,7 @@ namespace CoFAS.NEW.MES.Core
 
 
 
-SELECT *, MST.[주조1(기본)]*MATERIAL_M_COST/100 AS '재료관리비'  , OUT_M_COST AS '외주관리비' 
---, MST.공정비 * GENERAL_M_COST / 100 AS  '일반관리비' 
+SELECT *, , MATERIAL_M_COST  AS '재료관리비'  , OUT_M_COST AS '외주관리비' , GENERAL_M_COST AS  '일반관리비' 
 FROM  (
 
 SELECT * FROM 
