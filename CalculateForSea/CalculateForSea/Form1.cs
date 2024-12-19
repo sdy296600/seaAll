@@ -1390,7 +1390,7 @@ namespace CalculateForSea
 
                             nowPordCnt = intwork_okcnt
                                 + intwork_errcnt;
-                            if (nowtotalcnt <= models[i].Totalcnt)
+                            if (models[i].Totalcnt != -1  && nowtotalcnt <= models[i].Totalcnt)
                             {
                                 // 중복 또는 비정상 데이터로 판단하여 처리 스킵
                                 models[i].is_Running = false;
