@@ -364,101 +364,115 @@ namespace CoFAS.NEW.MES.Core
 
                 fpMain.Sheets[0].Rows.Count = 0;
 
-                string str = $@"SELECT 
-		ROW_NUMBER() OVER (ORDER BY A.ID) AS RowNum,
-	   D.[description]   AS 'D.description'
-      ,J.[RESOURCE_NO]  AS 'J.RESOURCE_NO'
-      ,J.[LOT_NO]       AS 'J.LOT_NO'
-      ,B.[description]  AS 'B.설비명'
-      ,A.REG_DATE   AS 'A.REG_DATE'
-      ,J.REG_DATE   AS 'J.REG_DATE'
-      ,ISNULL(F.cavity,'0')          AS 'F.CAVITY'   
-      ,A.[ELECTRICAL_ENERGY] AS 'A.전력사용량'
-      ,A.[CYCLE_TIME] AS 'A.CYCLE_TIME'
-	  ,CONVERT(NUMERIC(18,2), ROUND(ISNULL(J.WORK_TIME,0)/60,2)) AS 'WORK_TIME'
-	  ,ISNULL(FORMAT(ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(int,J.IN_PER) /CONVERT(INT,F.cavity)),2),'0.00'),0) AS '직접노무비'
-     ,ISNULL(FORMAT(ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(int,J.IN_PER) /CONVERT(INT,F.cavity)),2) * ((CONVERT(decimal(18,4) ,G.INDIRECT_LABOR_RATIO)) / 100   ),'0.00'),0)      AS '간접노무비'
+                string str = $@"SELECT ROW_NUMBER() OVER (ORDER BY A.ID) AS RowNum
+                                    , D.[description]   AS 'D.description'
+                                    , J.[RESOURCE_NO]   AS 'J.RESOURCE_NO'
+                                    , J.[LOT_NO]        AS 'J.LOT_NO'
+                                    , B.[description]   AS 'B.설비명' 
+	                                , A.REG_DATE  
+	                                , J.REG_DATE  
+	                                , A.REG_DATE    AS 'A.REG_DATE'
+	                                , J.REG_DATE    AS 'J.REG_DATE' 
+                                    , ISNULL(F.cavity,'0')          AS 'F.CAVITY'   
+                                    , A.[ELECTRICAL_ENERGY] AS 'A.전력사용량'
+                                    , A.[CYCLE_TIME] AS 'A.CYCLE_TIME'
+	                                , CONVERT(NUMERIC(18,2), ROUND(ISNULL(J.WORK_TIME,0)/60,2)) AS 'WORK_TIME'
+	                                , ISNULL(FORMAT(ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(DECIMAL(18,2),J.IN_PER) ),2),'0'),0) AS '직접노무비'
+                                    , ISNULL(FORMAT(ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(DECIMAL(18,2),J.IN_PER) ),2) * (CONVERT(decimal(18,4) ,G.INDIRECT_LABOR_RATIO) / 100   ),'0'),0)      AS '간접노무비'
+          
+                                    , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0'),0)         AS '설비감상비'
+                                    , ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0') ,0)        AS '건물감상비'
+          
+                                    ,	FORMAT((CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) )  )) * ISNULL(CONVERT(DECIMAL(18,2), G.REPAIR_RATE)/100,0), '0')
+	                                    AS '수선비'
+                                    , ISNULL(FORMAT(CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(DECIMAL(18,2),(H.[EQUIPMENT_POWER_RATIO]))  ,'0'),0)    AS '개별전력비'
+                                    , ISNULL(FORMAT(CONVERT(DECIMAL(18,2),ISNULL(NULLIF(I.ELEC_USE, ''), '0')) * convert(DECIMAL(18,2),(H.[EQUIPMENT_POWER_RATIO]))  ,'0.00') ,0)   AS '전체전력비'
+                            
 
-     ,ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity),'0.00'),0)         AS '설비감상비'
-     ,ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity),'0.00') ,0)        AS '건물감상비'
-     ,(CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity),'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity),'0.00') ,0) )  )) * ISNULL(CONVERT(DECIMAL(18,2), G.REPAIR_RATE)/100,0)
- AS '수선비'
-     ,ISNULL(FORMAT(CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(int,(H.[EQUIPMENT_POWER_RATIO]))  ,'0.00'),0)    AS '개별전력비'
-	  ,ISNULL(FORMAT(CONVERT(DECIMAL(18,2),ISNULL(NULLIF(I.ELEC_USE, ''), '0')) * convert(int,(H.[EQUIPMENT_POWER_RATIO]))  ,'0.00') ,0)   AS '전체전력비'
-     ,ISNULL(FORMAT((CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity)
-+ 
-CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity)
-+
-(CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity)
-+
-CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity)
-* CONVERT(DECIMAL(18,2),G.REPAIR_RATE)/100)
-+
-CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(int,(H.[EQUIPMENT_POWER_RATIO]))) 
-*
-CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100 , '0.00'),0)
-	 
-   AS '간접경비'
-     ,ISNULL(FORMAT((ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(int,J.IN_PER) /CONVERT(INT,F.cavity)),2))
-+
-(ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(int,J.IN_PER) /CONVERT(INT,F.cavity)),2) *  ((CONVERT(decimal(18,4) ,G.INDIRECT_LABOR_RATIO)) / 100   ))
-+
-(CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity))
-+
-(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity))
-+
-(CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity)
-+
-CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity)
-* CONVERT(DECIMAL(18,2),G.REPAIR_RATE)/100)
-+
-(CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(int,(H.[EQUIPMENT_POWER_RATIO])))
-+
-((CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity)
-+ 
-CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity)
-+
-(CONVERT(INT ,H.EQUIPMENT_COST) / CONVERT(INT, H.EQUIPMENT_USE_YEAR) / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) /   CONVERT(INT,F.cavity)
-+
-CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(INT, H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(INT,H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) /   CONVERT(INT,F.cavity)
-* CONVERT(DECIMAL(18,2),G.REPAIR_RATE)/100)
-+
-CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(int,(H.[EQUIPMENT_POWER_RATIO]))) 
-*
-CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
-	 AS '공정비'
-	,A.REG_DATE  
-	,J.REG_DATE  
-	,convert(decimal(18,2),(CONVERT(decimal(18,2),isnull((SELECT  top 1 [qty_per]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A' ),'0'))) * CONVERT(int,isnull((SELECT TOP 1 [price] FROM [sea_mfg].[dbo].[prices] where resource_no = (SELECT  top 1 [resource_used]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A') order by update_date desc),'0')) * (   (convert(int,G.MATERIAL_COST_PER) /100.0 +1) )  ) AS '재료비'
-  FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+                                    ,  ISNULL(
+	                                FORMAT(CONVERT(DECIMAL(18,3),
+		                                (
+			                            CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) )  ))
 
-  INNER JOIN (SELECT ORDER_NO,REG_DATE, RESOURCE_NO , LOT_NO  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] GROUP BY REG_DATE, RESOURCE_NO, LOT_NO,ORDER_NO  ) AS J
-  ON A.RESOURCE_NO = J.RESOURCE_NO
-  AND A.LOT_NO = J.LOT_NO
-  AND A.ORDER_NO = J.ORDER_NO
+			                            + 
+			                            (CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) )  )) * ISNULL(CONVERT(DECIMAL(18,2), G.REPAIR_RATE)/100,0)
 
-   INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
-  ON B.resource_no  = A.resource_no
-  INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
-  ON C.order_no = A.resource_no 
-  AND C.lot = A.LOT_NO
-  INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
-  ON C.workcenter =D.resource_no
-  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
-  ON A.RESOURCE_NO = E.order_no
-  AND A.LOT_NO = E.lot
-  LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
-  ON E.code_md = F.code_md 
-  LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
-  ON G.PROCESS_ID = '주조'
-  INNER JOIN MATERIALCOST_EQUIPMENT AS H
-  ON H.EQUIPMENT_ID ='설비850TON'
-  LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
-  ON A.RESOURCE_NO = I.RESOURCE_NO
-  AND A.LOT_NO = I.LOT_NO
-  WHERE 1=1";
+			                            +
+			                            CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(DECIMAL(18,2),(H.[EQUIPMENT_POWER_RATIO])
+		                                )
+		                            )   
+		
+                                *   convert(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO) /100  , '0') --MATERIALCOST_PROCESS 테이블 / 공정별 재료비 등록 기준정보
+                                ,0) 
+                                AS '간접경비'
+                                
+                           
+                                 --공정비
+                                   ,  FORMAT((ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(int,J.IN_PER)),2))
+	                                  +
+	                                  (ROUND((CONVERT(decimal(18,4), G.HOURLY_WAGE_PER_SECOND) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) * convert(int,J.IN_PER)),2) *  ((CONVERT(decimal(18,4) ,G.INDIRECT_LABOR_RATIO)) / 100   ))
+	                                  +
+	                                  (CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) ) ))
+	                                  +
+	                                  (CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) )  )) * ISNULL(CONVERT(DECIMAL(18,2), G.REPAIR_RATE)/100,0)
+	                                  +
+	                                  --전력비
+	                                  ((CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(DECIMAL(18,2),(H.[EQUIPMENT_POWER_RATIO]))
+	                                  +
+	                                  --간접경비
+	                                  FORMAT(CONVERT(DECIMAL(18,3),
+	                                   ( -- 설비감상비 + 건물 감상비
+	  	                                CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) )  ))
+	  	                                + 
+	  	                                --수선비
+	  	                                (CONVERT(DECIMAL(18,2) , ISNULL(FORMAT(CONVERT(DECIMAL(18,2) ,H.EQUIPMENT_COST) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_USE_YEAR) / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),CONVERT(DECIMAL(18,2),A.CYCLE_TIME)) ,'0.00'),0)  )  + CONVERT(DECIMAL(18,2), (ISNULL(FORMAT(CONVERT(DECIMAL(18,2),H.EQUIPMENT_AREA) * CONVERT(DECIMAL(18,2),H.UNIT_PRICE_PER_PYEONG) * 5.5 /40 / CONVERT(DECIMAL(18,2), H.EQUIPMENT_OPERATION) /CONVERT(INT,H.EQUIPMENT_OPERATION_DAY) /CONVERT(DECIMAL(18,2),H.EQUIPMENT_OPERATION_TIME) * CONVERT(DECIMAL(18,2),A.CYCLE_TIME) ,'0.00') ,0) )  )) * ISNULL(CONVERT(DECIMAL(18,2), G.REPAIR_RATE)/100,0)
+	  	                                +
+	  	                                --전력비
+	  	                                CONVERT(DECIMAL(18,2),ISNULL(ELECTRICAL_ENERGY,0)) * convert(DECIMAL(18,2),(H.[EQUIPMENT_POWER_RATIO])
+	                                   ))  *   convert(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO) /100  , '0') --MATERIALCOST_PROCESS 테이블 / 공정별 재료비 등록 기준정보
+   	  
+	                                   )) ,'0')  
+	                                   AS '합계'
+
+                                   -- 주조품 생산 중량 (개당)	
+                                	, FORMAT(( ISNULL((SELECT  top 1 [qty_per]  
+									FROM [sea_mfg].[dbo].[cproduct_defn] 
+									where resource_no = A.RESOURCE_NO 
+									and ENG_CHG_CODE ='A' ) , 0)  * CONVERT(INT, F.cavity)
+							        -- 원재료 kg당 단가
+							        ) * CONVERT(decimal(18,2),ISNULL(   (SELECT TOP 1 [price] FROM [sea_mfg].[dbo].[prices] where resource_no = (SELECT  top 1 [resource_used]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A') order by update_date desc),'0')) *    (convert(decimal(18,2),G.MATERIAL_COST_PER) /100.0 +1)  ,  '0'	)
+	
+	                            AS '재료비'
+
+                                 FROM [HS_MES].[dbo].[ELEC_SHOT] AS A
+                                INNER JOIN ( SELECT ORDER_NO,REG_DATE, RESOURCE_NO , LOT_NO  ,SUM(CONVERT(DECIMAL(18,2),IN_PER)) AS IN_PER  , SUM( CONVERT(DECIMAL(18,2),WORK_TIME)) AS WORK_TIME  
+                                               FROM [HS_MES].[dbo].[WORK_PERFORMANCE] 
+                                              GROUP BY REG_DATE, RESOURCE_NO, LOT_NO,ORDER_NO  ) AS J
+                                   ON A.RESOURCE_NO = J.RESOURCE_NO
+                                  AND A.LOT_NO = J.LOT_NO
+                                  AND A.ORDER_NO = J.ORDER_NO
+
+                                INNER JOIN [sea_mfg].[dbo].[resource] AS B WITH (NOLOCK)
+                                   ON B.resource_no  = A.resource_no
+                                INNER JOIN [sea_mfg].[dbo].[schedrtg] AS C  WITH (NOLOCK)
+                                   ON C.order_no = A.resource_no 
+                                  AND C.lot = A.LOT_NO
+                                INNER JOIN [sea_mfg].[dbo].[resource] AS D  WITH (NOLOCK)
+                                    ON C.workcenter =D.resource_no
+                                INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E  WITH (NOLOCK)
+                                    ON A.RESOURCE_NO = E.order_no
+                                    AND A.LOT_NO = E.lot
+                                LEFT OUTER JOIN [sea_mfg].[dbo].[md_mst] AS F  WITH (NOLOCK)
+                                    ON E.code_md = F.code_md 
+                                LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
+                                    ON G.PROCESS_ID = '주조'
+                                INNER JOIN MATERIALCOST_EQUIPMENT AS H
+                                  ON H.EQUIPMENT_ID ='설비850TON'
+                                LEFT OUTER JOIN [HS_MES].[dbo].[ELECTRIC_USE] AS I
+                                  ON A.RESOURCE_NO = I.RESOURCE_NO
+                                 AND A.LOT_NO = I.LOT_NO
+                          WHERE 1=1";
    
-  //WHERE    CONVERT(DECIMAL(18,2),ELECTRICAL_ENERGY) <100 AND A.REG_DATE > '2024-11-05 23:59:59' 
 
                 StringBuilder sb = new StringBuilder();
                 Function.Core.GET_WHERE(this._PAN_WHERE, sb);
@@ -496,6 +510,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
                         }
 
                     }
+
                     Function.Core._AddItemSUM(fpMain);
                     //Function.Core._AddItemAGV(fpMain);
                     fpMain.Sheets[0].Visible = true;
@@ -512,8 +527,9 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
                     //{
                     //string name = "";
                     //name = mac_dt.Rows[i]["D.호기"].ToString();
+
                     Series series_first = new Series();
-                    series_first.Name = "공정비";
+                    series_first.Name = "합계";
 
                     Series series_second = new Series();
                     series_second.Name = "개별전력비";
@@ -564,7 +580,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
                     {
                         for (int i = 0; i < _DataTable.Rows.Count; i++)
                         {
-                            chartControl1.Series[0].Points.Add(new SeriesPoint(_DataTable.Rows[i]["RowNum"].ToString(), _DataTable.Rows[i]["공정비"].ToString()));
+                            chartControl1.Series[0].Points.Add(new SeriesPoint(_DataTable.Rows[i]["RowNum"].ToString(), _DataTable.Rows[i]["합계"].ToString()));
                             chartControl1.Series[1].Points.Add(new SeriesPoint(_DataTable.Rows[i]["RowNum"].ToString(), _DataTable.Rows[i]["개별전력비"].ToString()));
                             chartControl1.Series[2].Points.Add(new SeriesPoint(_DataTable.Rows[i]["RowNum"].ToString(), _DataTable.Rows[i]["재료비"].ToString()));
                             //chartControl1.Series[0].Points.Add(new SeriesPoint(_DataTable.Rows[i]["REG_DATE"].ToString(), _DataTable.Rows[i]["직접노무비"].ToString()));
@@ -626,6 +642,7 @@ CONVERT(DECIMAL(18,2),INDIRECT_EXPENSE_RATIO)/100) ,'0,00')  ,0)
                 DevExpressManager.SetCursor(this, Cursors.Default);
             }
         }
+
         public static void RemoveDuplicateRows(DataTable table, string[] columnsToCompare)
         {
             var distinctRows = table.AsEnumerable()
