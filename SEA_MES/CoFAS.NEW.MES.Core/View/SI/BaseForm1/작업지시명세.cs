@@ -24,7 +24,10 @@ namespace CoFAS.NEW.MES.Core
 
 
 
-SELECT *, , MATERIAL_M_COST  AS '재료관리비'  , OUT_M_COST AS '외주관리비' , GENERAL_M_COST AS  '일반관리비' 
+SELECT *
+, MATERIAL_M_COST  AS '재료관리비'  
+,  OUT_M_COST AS '외주관리비' 
+, GENERAL_M_COST AS  '일반관리비' 
 FROM  (
 
 SELECT * FROM 
