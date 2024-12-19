@@ -1688,6 +1688,7 @@ namespace CalculateForSea
                             if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt)
                             {
                                 models[i].Update = true;
+                                WriteDataLog($"{i} models[i].Totalcnt:{models[i].Totalcnt} nowtotalcnt : {nowtotalcnt}");
                             }
                             models[i].Totalcnt = nowtotalcnt;
                             models[i].PROD_CNT = nowPordCnt;
@@ -1816,6 +1817,20 @@ namespace CalculateForSea
                 Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToString("yyyy-MM-dd,HH"));
             }
             using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() +"\\"+DateTime.Now.ToString("yyyy-MM-dd,HH")+ "\\Error.log", FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            {
+                using (StreamWriter writer = new StreamWriter(fs))
+                {
+                    writer.WriteLine(data + " " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:s"));
+                }
+            } // using 블록이 끝나면 자동으로 파일이 닫힙니다.
+        }
+        private void WriteDataLog(string data)
+        {
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToString("yyyy-MM-dd,HH")))
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToString("yyyy-MM-dd,HH"));
+            }
+            using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToString("yyyy-MM-dd,HH") + "\\Data.log", FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
             {
                 using (StreamWriter writer = new StreamWriter(fs))
                 {
