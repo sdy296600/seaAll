@@ -3397,31 +3397,30 @@ CT_INDIRECT_EXPENSE AS
 
 -- CTE: 재료비 계산
 CT_MATERIAL_COST AS (
-   
-    SELECT 
-        A.RESOURCE_NO,
-        CONVERT(DECIMAL(18,2),
-            ISNULL((SELECT TOP 1 [qty_per] 
-                    FROM [sea_mfg].[dbo].[cproduct_defn] 
-                    WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A'), 0) *
-            ISNULL((SELECT TOP 1 [price] 
-                    FROM [sea_mfg].[dbo].[prices] 
-                    WHERE resource_no = (SELECT TOP 1 [resource_used] 
-                                         FROM [sea_mfg].[dbo].[cproduct_defn] 
-                                         WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A') 
-                    ORDER BY update_date DESC), 0) * 1.05 *
-           　ISNULL((SELECT COUNT(*) FROM [HS_MES].[dbo].[ELEC_SHOT] WHERE RESOURCE_NO = A.RESOURCE_NO), 0)
-			*
-			ISNULL(F.cavity, 1) -- cavity 값을 곱함, NULL인 경우 1로 처리
-        ) AS D_VALUE,
-        YEAR(A.ORDER_DATE) AS [YEAR],
-        MONTH(A.ORDER_DATE) AS [MONTH]
-    FROM [HS_MES].[dbo].[WORK_PERFORMANCE] AS A
-    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E 
-        ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
-    LEFT JOIN [sea_mfg].[dbo].[md_mst] AS F 
-        ON E.code_md = F.code_md
-    GROUP BY YEAR(A.ORDER_DATE), MONTH(A.ORDER_DATE), A.RESOURCE_NO, F.cavity
+ SELECT 
+     A.RESOURCE_NO,
+     CONVERT(DECIMAL(18,2),
+         ISNULL((SELECT TOP 1 [qty_per] 
+                 FROM [sea_mfg].[dbo].[cproduct_defn] 
+                 WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A'), 0) *
+         ISNULL((SELECT TOP 1 [price] 
+                 FROM [sea_mfg].[dbo].[prices] 
+                 WHERE resource_no = (SELECT TOP 1 [resource_used] 
+                                      FROM [sea_mfg].[dbo].[cproduct_defn] 
+                                      WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A') 
+                 ORDER BY update_date DESC), 0) * 1.05 *
+		ISNULL(SUM(A.QTY_COMPLETE),1)
+*
+ISNULL(F.cavity, 1) -- cavity 값을 곱함, NULL인 경우 1로 처리
+     ) AS D_VALUE,
+     YEAR(A.ORDER_DATE) AS [YEAR],
+     MONTH(A.ORDER_DATE) AS [MONTH]
+ FROM [HS_MES].[dbo].[WORK_PERFORMANCE] AS A
+ INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E 
+     ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+ LEFT JOIN [sea_mfg].[dbo].[md_mst] AS F 
+     ON E.code_md = F.code_md
+ GROUP BY YEAR(A.ORDER_DATE), MONTH(A.ORDER_DATE), A.RESOURCE_NO, F.cavity
 
 ),
 
@@ -3704,13 +3703,17 @@ ORDER BY 순서";
                         //원재료
                         for (int num = 1; num <= 12; num++)
                         {
+                            double 성능가동률 = 0;
+                            double.TryParse(_DataTable.Rows[rowIndex_성능가동률][$"{num}월"].ToString(), out 성능가동률);
                             if (rowIndex_성능가동률 != -1)  // 해당 row가 존재하면
-                                sheet.Cells[11, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_성능가동률][$"{num}월"].ToString());//성능가동률
+                                sheet.Cells[11, num + 4].SetValueFromText((성능가동률/60).ToString());//성능가동률
                             if (rowIndex_직접노무비 != -1)  // 해당 row가 존재하면
                                 //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
                                 sheet.Cells[13, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_직접노무비][$"{num}월"].ToString());  //직접노무비
+                            double 종합가동율 = 0;
+                            double.TryParse(_DataTable.Rows[rowIndex_종합가동률][$"{num}월"].ToString(), out 종합가동율);
                             if (rowIndex_종합가동률 != -1)  // 해당 row가 존재하면
-                                sheet.Cells[14, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_종합가동률][$"{num}월"].ToString()); //종합가동률
+                                sheet.Cells[14, num + 4].SetValueFromText((종합가동율/60).ToString()); //종합가동률
                             if (rowIndex_설비감상비 != -1)  // 해당 row가 존재하면
 
                                 sheet.Cells[15, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_설비감상비][$"{num}월"].ToString()); //설비감상비
