@@ -3397,6 +3397,7 @@ CT_INDIRECT_EXPENSE AS
 
 -- CTE: 재료비 계산
 CT_MATERIAL_COST AS (
+   
     SELECT 
         A.RESOURCE_NO,
         CONVERT(DECIMAL(18,2),
@@ -3408,11 +3409,20 @@ CT_MATERIAL_COST AS (
                     WHERE resource_no = (SELECT TOP 1 [resource_used] 
                                          FROM [sea_mfg].[dbo].[cproduct_defn] 
                                          WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A') 
-                    ORDER BY update_date DESC), 0) * 1.05) AS D_VALUE,
+                    ORDER BY update_date DESC), 0) * 1.05 *
+           　ISNULL((SELECT COUNT(*) FROM [HS_MES].[dbo].[ELEC_SHOT] WHERE RESOURCE_NO = A.RESOURCE_NO), 0)
+			*
+			ISNULL(F.cavity, 1) -- cavity 값을 곱함, NULL인 경우 1로 처리
+        ) AS D_VALUE,
         YEAR(A.ORDER_DATE) AS [YEAR],
         MONTH(A.ORDER_DATE) AS [MONTH]
     FROM [HS_MES].[dbo].[WORK_PERFORMANCE] AS A
-    GROUP BY YEAR(A.ORDER_DATE), MONTH(A.ORDER_DATE), A.RESOURCE_NO
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E 
+        ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
+    LEFT JOIN [sea_mfg].[dbo].[md_mst] AS F 
+        ON E.code_md = F.code_md
+    GROUP BY YEAR(A.ORDER_DATE), MONTH(A.ORDER_DATE), A.RESOURCE_NO, F.cavity
+
 ),
 
 -- CTE: 성능가동률_BEST 계산
