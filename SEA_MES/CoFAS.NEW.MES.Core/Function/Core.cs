@@ -3191,6 +3191,7 @@ namespace CoFAS.NEW.MES.Core.Function
 
                     string str = $@"
 
+
 WITH
 -- CTE: ELEC_SHOT 데이터에서 CT(사이클 타임) 산출
 CT_CT AS
@@ -3238,6 +3239,8 @@ CT_PERFORMANCE AS
     GROUP BY A.RESOURCE_NO, YEAR(ORDER_DATE), MONTH(ORDER_DATE), F.cavity
 ),
 
+
+
 -- CTE: 직접노무비 (원문 로직 단순화, 실제 IN_PER, WORK_TIME, QTY_COMPLETE 로직 재확인 필요)
 
 CT_DIRECT_LABOR AS
@@ -3261,6 +3264,29 @@ CT_DIRECT_LABOR AS
         FROM [HS_MES].[dbo].[WORK_PERFORMANCE]
         GROUP BY RESOURCE_NO, YEAR(ORDER_DATE), MONTH(ORDER_DATE)
     ) M ON P.RESOURCE_NO = M.RESOURCE_NO AND P.[YEAR] = M.[YEAR] AND P.[MONTH] = M.[MONTH]
+),
+-- CTE: 성능가동율 계산 (원본 로직을 간소화, 실제 로직 재확인 요망)
+CT_PERFORMANCE_A AS
+(
+      SELECT
+        A.RESOURCE_NO,
+        YEAR(ORDER_DATE) AS [YEAR],
+        MONTH(ORDER_DATE) AS [MONTH],
+    CASE 
+        WHEN SUM(CONVERT(DECIMAL(18,2), WORK_TIME)) = 0 THEN 0
+        ELSE (SUM(CONVERT(DECIMAL(18,2), A.QTY_COMPLETE)) 　--양품수량 / 목표수량
+            /  (SUM(CONVERT(DECIMAL(18,2), WORK_TIME)/60/60/24 * 22.0 ) * 3600 / AVG(CONVERT(DECIMAL(18,2), CT.D_VALUE))))
+    END AS D_VALUE
+    FROM [HS_MES].[dbo].[WORK_PERFORMANCE] A
+	INNER JOIN CT_CT CT
+	ON A.RESOURCE_NO = CT.RESOURCE_NO
+
+    INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] E WITH (NOLOCK)
+       ON A.RESOURCE_NO = E.order_no
+       AND A.LOT_NO = E.lot
+    LEFT JOIN [sea_mfg].[dbo].[md_mst] F WITH (NOLOCK)
+       ON E.code_md = F.code_md
+    GROUP BY A.RESOURCE_NO, YEAR(ORDER_DATE), MONTH(ORDER_DATE), F.cavity
 ),
 CT_INDIRECT_LABOR AS
 (
@@ -3326,15 +3352,15 @@ CT_BUILDING_DEPRECIATION AS
         P.[MONTH],
         ISNULL(
             (((109 * CONVERT(INT, G.UNIT_PRICE_PER_PYEONG) * 5.5) / 40 / 260 / 22) /
-            (NULLIF(P.D_VALUE * P.WORK_DAYS / (260.0 / 12), 0))) / NULLIF(A.QTY_COMPLETE, 0),
+            (NULLIF(P.D_VALUE , 0))) ,
             0
         ) AS D_VALUE
-    FROM CT_PERFORMANCE P
+    FROM CT_OVERALL_RATE P
     INNER JOIN [HS_MES].[dbo].[WORK_PERFORMANCE] A
         ON P.RESOURCE_NO = A.RESOURCE_NO AND P.[YEAR] = YEAR(A.ORDER_DATE) AND P.[MONTH] = MONTH(A.ORDER_DATE)
     INNER JOIN [HS_MES].[dbo].[MATERIALCOST_EQUIPMENT] G
         ON G.EQUIPMENT_ID = '설비850TON'
-    GROUP BY P.RESOURCE_NO, P.[YEAR], P.[MONTH], G.UNIT_PRICE_PER_PYEONG, A.QTY_COMPLETE, P.D_VALUE, P.WORK_DAYS
+    GROUP BY P.RESOURCE_NO, P.[YEAR], P.[MONTH], G.UNIT_PRICE_PER_PYEONG, A.QTY_COMPLETE, P.D_VALUE
 
 ),
 CT_REPAIR_COST AS
@@ -3399,28 +3425,30 @@ CT_INDIRECT_EXPENSE AS
 CT_MATERIAL_COST AS (
  SELECT 
      A.RESOURCE_NO,
-     CONVERT(DECIMAL(18,2),
-         ISNULL((SELECT TOP 1 [qty_per] 
-                 FROM [sea_mfg].[dbo].[cproduct_defn] 
-                 WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A'), 0) *
-         ISNULL((SELECT TOP 1 [price] 
-                 FROM [sea_mfg].[dbo].[prices] 
-                 WHERE resource_no = (SELECT TOP 1 [resource_used] 
-                                      FROM [sea_mfg].[dbo].[cproduct_defn] 
-                                      WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A') 
-                 ORDER BY update_date DESC), 0) * 1.05 *
-		ISNULL(SUM(A.QTY_COMPLETE),1)
-*
-ISNULL(F.cavity, 1) -- cavity 값을 곱함, NULL인 경우 1로 처리
-     ) AS D_VALUE,
+  --   CONVERT(DECIMAL(18,2),
+  --       ISNULL((SELECT TOP 1 [qty_per] 
+  --               FROM [sea_mfg].[dbo].[cproduct_defn] 
+  --               WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A'), 0) *
+  --       ISNULL((SELECT TOP 1 [price] 
+  --               FROM [sea_mfg].[dbo].[prices] 
+  --               WHERE resource_no = (SELECT TOP 1 [resource_used] 
+  --                                    FROM [sea_mfg].[dbo].[cproduct_defn] 
+  --                                    WHERE resource_no = A.RESOURCE_NO AND ENG_CHG_CODE = 'A') 
+  --               ORDER BY update_date DESC), 0) * 1.05 *
+--		--ISNULL(SUM(A.QTY_COMPLETE),1)
+--*
+--ISNULL(F.cavity, 1) -- cavity 값을 곱함, NULL인 경우 1로 처리
+ convert(decimal(18,2),(CONVERT(decimal(18,2),isnull((SELECT  top 1 [qty_per]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A' ),'0'))) * CONVERT(int,isnull((SELECT TOP 1 [price] FROM [sea_mfg].[dbo].[prices] where resource_no = (SELECT  top 1 [resource_used]  FROM [sea_mfg].[dbo].[cproduct_defn] where resource_no = A.RESOURCE_NO and ENG_CHG_CODE ='A') order by update_date desc),'0')) * (   (convert(int,G.MATERIAL_COST_PER) /100.0 +1) )  ) AS D_VALUE,  -- 시간
      YEAR(A.ORDER_DATE) AS [YEAR],
      MONTH(A.ORDER_DATE) AS [MONTH]
  FROM [HS_MES].[dbo].[WORK_PERFORMANCE] AS A
+	LEFT OUTER JOIN [HS_MES].[dbo].[MATERIALCOST_PROCESS] AS G
+  ON G.PROCESS_ID = '주조'
  INNER JOIN [sea_mfg].[dbo].[demand_mstr_ext] AS E 
      ON A.RESOURCE_NO = E.order_no AND A.LOT_NO = E.lot
  LEFT JOIN [sea_mfg].[dbo].[md_mst] AS F 
      ON E.code_md = F.code_md
- GROUP BY YEAR(A.ORDER_DATE), MONTH(A.ORDER_DATE), A.RESOURCE_NO, F.cavity
+ GROUP BY YEAR(A.ORDER_DATE), MONTH(A.ORDER_DATE), A.RESOURCE_NO, F.cavity,G.MATERIAL_COST_PER
 
 ),
 
@@ -3664,6 +3692,8 @@ UNION ALL
 	SELECT RESOURCE_NO, [YEAR], [MONTH], '30' AS 순서, '간접경비_BEST' AS 구분, D_VALUE AS D_VALUE FROM CT_INDIRECT_EXPENSE_BEST
 	UNION ALL
 	SELECT RESOURCE_NO, [YEAR], [MONTH], '31' AS 순서, [구분] AS 구분, D_VALUE AS D_VALUE FROM CT_MATERIAL_COST_BEST
+	UNION ALL
+	SELECT RESOURCE_NO, [YEAR], [MONTH], '32' AS 순서, '성능가동율' AS 구분, D_VALUE AS D_VALUE FROM CT_PERFORMANCE_A
 )
 AS SourceTable
 
@@ -3672,8 +3702,9 @@ PIVOT
     SUM(D_VALUE)
     FOR [MONTH] IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12])
 ) AS PivotTable
-WHERE RESOURCE_NO = '{order_mst_id}'  -- 필요 시 파라미터화
-ORDER BY 순서";
+  -- 필요 시 파라미터화
+WHERE RESOURCE_NO ='{order_mst_id}'
+ORDER BY 순서;";
                     StringBuilder sb = new StringBuilder();
                     //Function.Core.GET_WHERE(this._PAN_WHERE, sb);
 
@@ -3706,14 +3737,16 @@ ORDER BY 순서";
                             double 성능가동률 = 0;
                             double.TryParse(_DataTable.Rows[rowIndex_성능가동률][$"{num}월"].ToString(), out 성능가동률);
                             if (rowIndex_성능가동률 != -1)  // 해당 row가 존재하면
-                                sheet.Cells[11, num + 4].SetValueFromText((성능가동률/60).ToString());//성능가동률
+                                sheet.Cells[11, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_성능가동률][$"{num}월"].ToString());//성능가동률
                             if (rowIndex_직접노무비 != -1)  // 해당 row가 존재하면
                                 //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
-                                sheet.Cells[13, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_직접노무비][$"{num}월"].ToString());  //직접노무비
-                            double 종합가동율 = 0;
-                            double.TryParse(_DataTable.Rows[rowIndex_종합가동률][$"{num}월"].ToString(), out 종합가동율);
+                                sheet.Cells[12, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_직접노무비][$"{num}월"].ToString());  //직접노무비
+                            if (rowIndex_간접노무비 != -1)  // 해당 row가 존재하면
+                                //sheet.Cells[7, num + 5].SetValueFromText(_DataTable.Rows[i]["구분"].ToString() == "재료비" ? _DataTable.Rows[i]["1월"].ToString() : "-"); //1월
+                                sheet.Cells[13, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_간접노무비][$"{num}월"].ToString());  //직접노무비
+
                             if (rowIndex_종합가동률 != -1)  // 해당 row가 존재하면
-                                sheet.Cells[14, num + 4].SetValueFromText((종합가동율/60).ToString()); //종합가동률
+                                sheet.Cells[14, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_종합가동률][$"{num}월"].ToString().ToString()); //종합가동률
                             if (rowIndex_설비감상비 != -1)  // 해당 row가 존재하면
 
                                 sheet.Cells[15, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_설비감상비][$"{num}월"].ToString()); //설비감상비
