@@ -3827,23 +3827,23 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                         //sheet.Cells[4, 14].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString() + "," + (pfpSpread.Sheets[0].GetValue(e.Row, "품명").ToString())); //품목코드,품목명 바렐 세척 검사
                         //sheet.Cells[4, 17].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString() + "," + (pfpSpread.Sheets[0].GetValue(e.Row, "품명").ToString())); //품목코드,품목명 조립검사
 
-                        sheet.Cells[6, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "주조1(기본)").ToString()); //기본 주조1
-                        sheet.Cells[6, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "주조1(BEST)").ToString()); //BEST 주조1
+                        sheet.Cells[7, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "주조1(기본)").ToString()); //기본 주조1
+                        sheet.Cells[7, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "주조1(BEST)").ToString()); //BEST 주조1
 
                         //sheet.Cells[9, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료비").ToString()); //재료비
                         //sheet.Cells[9, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료비").ToString()); //best재료비
 
-                        sheet.Cells[6, 8].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "사상1(기본)").ToString()); //기본 사상1
-                        sheet.Cells[6, 9].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "사상1(BEST)").ToString()); //BEST 사상1
-
-                        sheet.Cells[6, 11].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "가공1(기본)").ToString()); //기본 가공1
-                        sheet.Cells[6, 12].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "가공1(BEST)").ToString()); //BEST 가공1
-
-                        sheet.Cells[6, 14].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "바렐세척검사(기본)").ToString()); //기본 바렐세척검사
-                        sheet.Cells[6, 15].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "바렐세척검사(BEST)").ToString()); //BEST 바렐세척검사
-
-                        sheet.Cells[6, 17].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "조립검사(기본)").ToString()); //기본 조립검사
-                        sheet.Cells[6, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "조립검사(BEST)").ToString()); //BEST 조립검사
+                        sheet.Cells[7, 8].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "사상1(기본)").ToString()); //기본 사상1
+                        sheet.Cells[7, 9].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "사상1(BEST)").ToString()); //BEST 사상1
+                                    
+                        sheet.Cells[7, 11].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "가공1(기본)").ToString()); //기본 가공1
+                        sheet.Cells[7, 12].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "가공1(BEST)").ToString()); //BEST 가공1
+                                    
+                        sheet.Cells[7, 14].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "바렐세척검사(기본)").ToString()); //기본 바렐세척검사
+                        sheet.Cells[7, 15].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "바렐세척검사(BEST)").ToString()); //BEST 바렐세척검사
+                                    
+                        sheet.Cells[7, 17].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "조립검사(기본)").ToString()); //기본 조립검사
+                        sheet.Cells[7, 18].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "조립검사(BEST)").ToString()); //BEST 조립검사
 
                         sheet.Cells[11, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "성능가동률").ToString()); //성능가동율
                         sheet.Cells[12, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "직접노무비").ToString()); //직접노무비
@@ -3854,7 +3854,7 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                         sheet.Cells[17, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "수선비").ToString()); //수선비
                         sheet.Cells[18, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "전체전력비").ToString()); //전력비
                         sheet.Cells[19, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "간접경비").ToString()); //간접경비
-                                                                                                                     // sheet.Cells[21, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "공정비").ToString()); //공정비
+                        // sheet.Cells[21, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "공정비").ToString()); //공정비
 
                         sheet.Cells[11, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "성능가동률_BEST").ToString()); //성능가동율
                         sheet.Cells[12, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "직접노무비_BEST").ToString()); //직접노무비
@@ -3865,22 +3865,22 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
                         sheet.Cells[17, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "수선비_BEST").ToString()); //수선비
                         sheet.Cells[18, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "전체전력비_BEST").ToString()); //전력비
                         sheet.Cells[19, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "간접경비_BEST").ToString()); //간접경비
-                                                                                                                          //  sheet.Cells[21, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "공정비").ToString()); //공정비
+                         //  sheet.Cells[21, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "공정비").ToString()); //공정비
 
                         //sheet.Cells[22, 3].SetValueFromText(_DataTable.Rows[0]["MATERIAL_M_COST"].ToString()); //재료관리비
                         //sheet.Cells[23, 3].SetValueFromText(_DataTable.Rows[0]["OUT_M_COST"].ToString()); //외주관리비
                         //sheet.Cells[24, 3].SetValueFromText(_DataTable.Rows[0]["GENERAL_M_COST"].ToString()); //일반관리비
 
-                        sheet.Cells[23, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료관리비").ToString()); //재료관리비
-                        sheet.Cells[24, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "외주관리비").ToString()); //외주관리비
-                        sheet.Cells[25, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
+                       // sheet.Cells[23, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료관리비").ToString()); //재료관리비
+                        //sheet.Cells[24, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "외주관리비").ToString()); //외주관리비
+                        //sheet.Cells[25, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
 
-                        sheet.Cells[23, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료관리비").ToString()); //재료관리비
-                        sheet.Cells[24, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "외주관리비").ToString()); //외주관리비
-                        sheet.Cells[25, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
+                        //sheet.Cells[23, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료관리비").ToString()); //재료관리비
+                        //sheet.Cells[24, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "외주관리비").ToString()); //외주관리비
+                        //sheet.Cells[25, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
 
-                        sheet.Cells[7, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "QTY_COMPLETE").ToString()); //사용량
-                        sheet.Cells[6, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "원재료").ToString()); //원재료
+                        sheet.Cells[6, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "QTY_COMPLETE").ToString()); //사용량
+                        sheet.Cells[7, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "원재료").ToString()); //원재료
 
                         sheet.Cells[0, 2].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString() + "  " + pfpSpread.Sheets[0].GetValue(e.Row, "LOT_NO").ToString() + "의 작업지시명세서"); //사용량
 
