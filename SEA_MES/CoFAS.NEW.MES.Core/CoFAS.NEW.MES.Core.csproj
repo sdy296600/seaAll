@@ -1566,7 +1566,6 @@
     <Content Include="bin\Debug\DevExpress.XtraGauges.v17.2.Presets.dll" />
     <Content Include="bin\Debug\DevExpress.XtraGauges.v17.2.Win.dll" />
     <Content Include="bin\Debug\DevExpress.XtraGrid.v17.2.dll" />
-    <Content Include="bin\Debug\DevExpress.XtraLayout.v17.2.dll" />
     <Content Include="bin\Debug\DevExpress.XtraMap.v17.2.dll" />
     <Content Include="bin\Debug\DevExpress.XtraNavBar.v17.2.dll" />
     <Content Include="bin\Debug\DevExpress.XtraPivotGrid.v17.2.dll" />
@@ -1634,7 +1633,6 @@
     <Content Include="bin\Release\DevExpress.XtraGauges.v17.2.Presets.dll" />
     <Content Include="bin\Release\DevExpress.XtraGauges.v17.2.Win.dll" />
     <Content Include="bin\Release\DevExpress.XtraGrid.v17.2.dll" />
-    <Content Include="bin\Release\DevExpress.XtraLayout.v17.2.dll" />
     <Content Include="bin\Release\DevExpress.XtraMap.v17.2.dll" />
     <Content Include="bin\Release\DevExpress.XtraNavBar.v17.2.dll" />
     <Content Include="bin\Release\DevExpress.XtraPivotGrid.v17.2.dll" />
