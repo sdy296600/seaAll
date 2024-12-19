@@ -3840,14 +3840,14 @@ where RESOURCE_NO = '{pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString()}'
 
                         sheet.Cells[23, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료관리비").ToString()); //재료관리비
                         sheet.Cells[24, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "외주관리비").ToString()); //외주관리비
-                        sheet.Cells[25, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
+                        //sheet.Cells[25, 5].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
 
                         sheet.Cells[23, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "재료관리비").ToString()); //재료관리비
                         sheet.Cells[24, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "외주관리비").ToString()); //외주관리비
-                        sheet.Cells[25, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
+                        //sheet.Cells[25, 6].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "일반관리비").ToString()); //일반관리비
 
-                        sheet.Cells[7, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "QTY_COMPLETE").ToString()); //사용량
                         sheet.Cells[6, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "원재료").ToString()); //원재료
+                        sheet.Cells[7, 3].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "QTY_COMPLETE").ToString()); //사용량
 
                         sheet.Cells[0, 2].SetValueFromText(pfpSpread.Sheets[0].GetValue(e.Row, "품번").ToString() + "  " + pfpSpread.Sheets[0].GetValue(e.Row, "LOT_NO").ToString() + "의 작업지시명세서"); //사용량
 
