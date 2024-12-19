@@ -199,9 +199,8 @@ namespace CalculateForSea
                     SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
                     SetElec(models[machine_no], models2[machine_no], machine_no);
 
-                    WriteLog(machine_no + "호기 : " + data.ToString());
 
-                    return;
+                    continue;
                 }
 
                 ip = $"172.1.100.15{machine_no}";
@@ -237,7 +236,6 @@ namespace CalculateForSea
                 SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
                 SetElec(models[machine_no], models2[machine_no], machine_no);
 
-                WriteLog(machine_no + "호기 : " + data.ToString());
                     
                 await Task.Delay(1000);
             }
@@ -306,7 +304,7 @@ namespace CalculateForSea
                         }
                         break;
                 }
-
+                model.NowShotKW = model.Consumption_K + model.Consumption_M + model.ConsumptionRETI + model2.F_ESG_K + model2.F_ESG_M + model2.T_ESG_M + model2.T_ESG_K;
                 client.Disconnect();
             }
             catch (Exception ex)
@@ -1089,7 +1087,8 @@ namespace CalculateForSea
             {
                 double parsePower = 0;
                 double.TryParse(ds.Tables[0].Rows[0]["VALUE"].ToString(), out parsePower);
-                dailyPower = model.NowShotKW - parsePower;
+                dailyPower = model.NowShotKW - parsePower > 0 ? model.NowShotKW - parsePower : 0;
+                if (dailyPower < 0) dailyPower = 0;
                 dailyAmount = dailyPower * electricityRate;
             }
 
@@ -1097,7 +1096,7 @@ namespace CalculateForSea
             {
                 double parsePower = 0;
                 double.TryParse(ds.Tables[1].Rows[0]["VALUE"].ToString(), out parsePower);
-                monthConversion = model.NowShotKW - parsePower;
+                monthConversion = model.NowShotKW - parsePower > 0 ? model.NowShotKW - parsePower : 0;
                 monthlyAmount = dailyPower * electricityRate;
             }
 
@@ -1134,7 +1133,7 @@ namespace CalculateForSea
                 double work_power = 0;
                 double.TryParse(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString(), out work_power);
                 double start_power = 0;
-                double.TryParse(ds2.Tables[0].Rows[0]["WORK_POWER"].ToString(), out start_power);
+                double.TryParse(ds2.Tables[0].Rows[0]["START_POWER"].ToString(), out start_power);
                 Cumulative_Power = work_power - start_power;
             }
 
@@ -1257,7 +1256,32 @@ namespace CalculateForSea
                         cmd.ExecuteNonQuery();
                     }
                     GET_DCM gET = new GET_DCM(i);
-                    await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
+                    int retries = 3;
+                    for (int attempt = 1; attempt <= retries; attempt++)
+                    {
+                        try
+                        {
+                            await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
+
+                            break; // 성공 시 loop 탈출
+                        }
+                        catch (TimeoutException ex)
+                        {
+                            if (attempt == retries)
+                            {
+                                WriteErrorLog($"PLC 연결 재시도 {retries}회 실패: {ex.Message}");
+                            }
+                            else
+                            {
+                                await Task.Delay(1000); // 1초 후 재시도
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteErrorLog($"{ex.Message}");
+                            break;
+                        }
+                    }
 
                     DataSet ds = new DataSet();
 
@@ -1279,7 +1303,7 @@ namespace CalculateForSea
                         adapter.Fill(ds);
                     }//작업지시 가져오기
 
-                    if (models[i].is_Running) return;
+                    if (models[i].is_Running) continue;
                     models[i].is_Running = true;
                     WriteLog("Data Received");
 
@@ -1366,7 +1390,43 @@ namespace CalculateForSea
 
                             nowPordCnt = intwork_okcnt
                                 + intwork_errcnt;
+                        
+                                if (models[i].Totalcnt != -1)
+                                {
+                                    string mysqlString = $@"CREATE TEMPORARY TABLE TempData AS
+                                                        SELECT id
+                                                          FROM data_for_grid2
+                                                         WHERE machine_no = 'WCI_D{machine_id}'
+                                                         ORDER BY id DESC LIMIT 3;
 
+                                                        UPDATE data_for_grid2
+                                                           SET date = now(),
+                                                               cycle_time = '{gridModels_DCM[i].사이클타임}',
+                                                               type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
+                                                               bath_time = '{gridModels_DCM[i].주탕시간}',
+                                                               forward_time = '{gridModels_DCM[i].사출전진시간}',
+                                                               freezing_time = '{gridModels_DCM[i].제품냉각시간}',
+                                                               type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
+                                                               extrusion_time = '{gridModels_DCM[i].압출시간}',
+                                                               extraction_time = '{gridModels_DCM[i].취출시간}',
+                                                               spray_time = '{gridModels_DCM[i].스프레이시간}'
+                                                         WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
+
+                                                          DROP TEMPORARY TABLE TempData;";
+
+                                    MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                                    using (conn2)
+                                    {
+                                        conn2.Open();
+
+                                        MySqlCommand cmd = new MySqlCommand();
+                                        cmd.CommandText = mysqlString;
+                                        cmd.CommandType = CommandType.Text;
+                                        cmd.Connection = conn2;
+                                        cmd.ExecuteNonQuery();
+                                    }
+
+                                }
                             if (models[i].Update == true)
                             {
                                 string workSql = $@"   UPDATE work_performance
@@ -1554,10 +1614,7 @@ namespace CalculateForSea
                                 double parseWorkPower = 0;
                                 double.TryParse(WORK_POWER, out parseWorkPower);
                                 models[i].All_Active_Power = parseWorkPower;
-                                if ((models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K) - models[i].NowShotKW > 0)
-                                {
-                                    models[i].NowShotKW = models[i].Consumption_K + models[i].Consumption_M + models[i].ConsumptionRETI + models2[i].F_ESG_K + models2[i].F_ESG_M + models2[i].T_ESG_M + models2[i].T_ESG_K;
-                                }
+  
 
                                 using (SqlConnection sqlconn = new SqlConnection("Server = 10.10.10.180; Database = HS_MES; User Id = hansol_mes; Password = Hansol123!@#;"))
                                 {
@@ -1627,50 +1684,11 @@ namespace CalculateForSea
 
 
                             }
-                            else
-                            {
-                                if (models[i].Totalcnt != -1)
-                                {
-                                    string mysqlString = $@"CREATE TEMPORARY TABLE TempData AS
-                                                        SELECT id
-                                                          FROM data_for_grid2
-                                                         WHERE machine_no = 'WCI_D{machine_id}'
-                                                         ORDER BY id DESC LIMIT 3;
 
-                                                        UPDATE data_for_grid2
-                                                           SET date = now(),
-                                                               cycle_time = '{gridModels_DCM[i].사이클타임}',
-                                                               type_weight_enrty_time = '{gridModels_DCM[i].형체중자입시간}',
-                                                               bath_time = '{gridModels_DCM[i].주탕시간}',
-                                                               forward_time = '{gridModels_DCM[i].사출전진시간}',
-                                                               freezing_time = '{gridModels_DCM[i].제품냉각시간}',
-                                                               type_weight_back_time = '{gridModels_DCM[i].형개중자후퇴시간}',
-                                                               extrusion_time = '{gridModels_DCM[i].압출시간}',
-                                                               extraction_time = '{gridModels_DCM[i].취출시간}',
-                                                               spray_time = '{gridModels_DCM[i].스프레이시간}'
-                                                         WHERE id IN(SELECT id FROM TempData) AND SHOTCNT = '{nowtotalcnt}';
-
-                                                          DROP TEMPORARY TABLE TempData;";
-
-                                    MySqlConnection conn2 = new MySqlConnection(ConnectionString);
-                                    using (conn2)
-                                    {
-                                        conn2.Open();
-
-                                        MySqlCommand cmd = new MySqlCommand();
-                                        cmd.CommandText = mysqlString;
-                                        cmd.CommandType = CommandType.Text;
-                                        cmd.Connection = conn2;
-                                        cmd.ExecuteNonQuery();
-                                    }
-
-                                }
-                            }
                             if (models[i].Totalcnt != -1 && models[i].Totalcnt < nowtotalcnt)
                             {
                                 models[i].Update = true;
                             }
-
                             models[i].Totalcnt = nowtotalcnt;
                             models[i].PROD_CNT = nowPordCnt;
                         }
@@ -1717,18 +1735,16 @@ namespace CalculateForSea
                             break;
                     }
                     CalculateAndPublishPowerConsumption(models[i], i);
-                    models[i].is_Running = false;
                 }
                 catch (Exception e)
                 {
                     WriteLog(e.Message.ToString());
                     WriteErrorLog(i + " " + e.Message);
-
                 }
                 finally 
-                { 
+                {
+                    models[i].is_Running = false;
                     await Task.Delay(timer * 1000);
-
                 }
 
             }
