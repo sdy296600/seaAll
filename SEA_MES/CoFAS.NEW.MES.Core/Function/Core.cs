@@ -3756,12 +3756,21 @@ ORDER BY 순서;";
                             if (rowIndex_수선비 != -1)  // 해당 row가 존재하면
 
                                 sheet.Cells[17, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_수선비][$"{num}월"].ToString()); //수선비
-                            if (rowIndex_전력비 != -1)  // 해당 row가 존재하면
+                            if (rowIndex_전력비 != -1) 
+                            {
+                                double 전력비 = 0F;
+                                double.TryParse(_DataTable.Rows[rowIndex_전력비][$"{num}월"].ToString(), out 전력비);
+                                sheet.Cells[18, num + 4].SetValueFromText((전력비 / 300).ToString());  //전력비
 
-                                sheet.Cells[18, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_전력비][$"{num}월"].ToString());  //전력비
+                            }// 해당 row가 존재하면
+                             // 수정 필요 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                             if (rowIndex_간접경비 != -1)  // 해당 row가 존재하면
-                                sheet.Cells[19  , num + 4].SetValueFromText(_DataTable.Rows[rowIndex_간접경비][$"{num}월"].ToString());//간접경비
+                            {
+                                double 간접경비 = 0F;
+                                double.TryParse(_DataTable.Rows[rowIndex_간접경비][$"{num}월"].ToString(), out 간접경비);
+                                sheet.Cells[19  , num + 4].SetValueFromText((간접경비/300).ToString());//간접경비
+                            }
                             if (rowIndex_재료비 != -1)  // 해당 row가 존재하면
                                 sheet.Cells[7, num + 4].SetValueFromText(_DataTable.Rows[rowIndex_재료비][$"{num}월"].ToString()); //원재료);
                         }
