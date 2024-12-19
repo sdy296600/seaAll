@@ -201,7 +201,7 @@ namespace CalculateForSea
 
                     WriteLog(machine_no + "호기 : " + data.ToString());
 
-                    return;
+                    continue;
                 }
 
                 ip = $"172.1.100.15{machine_no}";
@@ -1279,7 +1279,7 @@ namespace CalculateForSea
                         adapter.Fill(ds);
                     }//작업지시 가져오기
 
-                    if (models[i].is_Running) return;
+                    if (models[i].is_Running) continue;
                     models[i].is_Running = true;
                     WriteLog("Data Received");
 
@@ -1717,18 +1717,16 @@ namespace CalculateForSea
                             break;
                     }
                     CalculateAndPublishPowerConsumption(models[i], i);
-                    models[i].is_Running = false;
                 }
                 catch (Exception e)
                 {
                     WriteLog(e.Message.ToString());
                     WriteErrorLog(i + " " + e.Message);
-
                 }
                 finally 
-                { 
+                {
+                    models[i].is_Running = false;
                     await Task.Delay(timer * 1000);
-
                 }
 
             }

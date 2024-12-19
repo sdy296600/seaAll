@@ -224,10 +224,12 @@ namespace CalculateForSea
             {
                 //UpdateUI("타임아웃 발생: " + ex.Message, true);
                 Console.WriteLine(ex.ToString());
+                throw;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                throw;
             }
             finally
             {
