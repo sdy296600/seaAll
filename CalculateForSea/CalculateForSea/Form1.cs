@@ -199,7 +199,6 @@ namespace CalculateForSea
                     SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
                     SetElec(models[machine_no], models2[machine_no], machine_no);
 
-                    WriteLog(machine_no + "호기 : " + data.ToString());
 
                     continue;
                 }
@@ -237,7 +236,6 @@ namespace CalculateForSea
                 SaveWorkData($"UPDATE WORK_DATA SET WORK_POWER = '{data}'", machine_no);
                 SetElec(models[machine_no], models2[machine_no], machine_no);
 
-                WriteLog(machine_no + "호기 : " + data.ToString());
                     
                 await Task.Delay(1000);
             }
@@ -1257,7 +1255,32 @@ namespace CalculateForSea
                         cmd.ExecuteNonQuery();
                     }
                     GET_DCM gET = new GET_DCM(i);
-                    await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
+                    int retries = 3;
+                    for (int attempt = 1; attempt <= retries; attempt++)
+                    {
+                        try
+                        {
+                            await gET.GetPlcAsync(gridModels_DCM[i], models[i]);
+
+                            break; // 성공 시 loop 탈출
+                        }
+                        catch (TimeoutException ex)
+                        {
+                            if (attempt == retries)
+                            {
+                                WriteErrorLog($"PLC 연결 재시도 {retries}회 실패: {ex.Message}");
+                            }
+                            else
+                            {
+                                await Task.Delay(1000); // 1초 후 재시도
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteErrorLog($"{ex.Message}");
+                            break;
+                        }
+                    }
 
                     DataSet ds = new DataSet();
 

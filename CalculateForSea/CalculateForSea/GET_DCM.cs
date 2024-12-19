@@ -28,7 +28,7 @@ namespace CalculateForSea
             try
             {
                 var cts = new CancellationTokenSource();
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
+                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
 
                 if (no != 0)
                 {
@@ -225,6 +225,7 @@ namespace CalculateForSea
                 //UpdateUI("타임아웃 발생: " + ex.Message, true);
                 Console.WriteLine(ex.ToString());
                 throw;
+
             }
             catch (Exception ex)
             {
