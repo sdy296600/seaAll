@@ -1717,7 +1717,7 @@ namespace CalculateForSea
 
                             break;
                         case 2:
-                            SendMQTT(ds, i, 23);
+                            SendMQTT(ds, i, 22);
 
                             break;
                         case 3:
