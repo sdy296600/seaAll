@@ -20,13 +20,14 @@ namespace DataMonitoringSystem
     /// <summary>
     /// Page1.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class All_Machine_View : Page
+    public partial class DetailView1 : Page
     {
-        public All_Machine_View(List<MainModel> models)
+        public DetailView1(ElecModel model, int machine_no)
         {
+            this.Title = $"{machine_no}호기 설비 계측치";
             InitializeComponent();
-            MachineListView.ItemsSource = models;
-            MachineListView.PreviewMouseLeftButtonDown += MachineListView_PreviewMouseLeftButtonDown;
+            //MachineListView.ItemsSource = models;
+            //MachineListView.PreviewMouseLeftButtonDown += MachineListView_PreviewMouseLeftButtonDown;
         }
 
    
@@ -41,8 +42,8 @@ namespace DataMonitoringSystem
                 {
                     if (listViewItem.DataContext is MainModel selectedModel)
                     {
+                        MessageBox.Show($"클릭된 행 정보:\n호기: {selectedModel.MachineNo}호기\n품명: {selectedModel.ItemNo}");
 
-                        NavigationService?.Navigate(new DetailView1(MainWindow.elecModels[selectedModel.MachineNo], selectedModel.MachineNo));
                         // 이벤트가 다른 곳에 전달되지 않도록 처리
                         e.Handled = true;
                     }

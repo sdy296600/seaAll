@@ -7,6 +7,25 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="1080" Width="1920" Loaded="Window_Loaded">
     <Grid>
-        <Frame x:Name="MainView" Content="" NavigationUIVisibility="Hidden"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="9*"/>
+
+        </Grid.RowDefinitions>
+        <!-- 타이틀 Label (모서리 둥글게) -->
+            <Border Grid.ColumnSpan="3"
+            Background="#FF2D2D2D"
+            CornerRadius="20"
+            Padding="10"
+            Grid.Row="0"
+            Margin="0,0,0,20">
+            <Label Name="Title" Content="주조 설비 가동 현황"
+           Foreground="White"
+           FontSize="24"
+           FontWeight="Bold"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"/>
+        </Border>
+        <Frame Grid.Row="1" x:Name="MainView" Content="" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>
