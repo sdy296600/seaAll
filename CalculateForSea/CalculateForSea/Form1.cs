@@ -1197,28 +1197,7 @@ namespace CalculateForSea
                         case 0:
                             machine_id = 13;
                             break;
-                        case 1:
-                            machine_id = 21;
-
-                            break;
-                        case 2:
-                            machine_id = 22;
-
-                            break;
-                        case 3:
-                            machine_id = 23;
-
-                            break;
-                        case 4:
-                            machine_id = 24;
-
-                            break;
-                        case 5:
-                            machine_id = 25;
-
-                            break;
-                        default:
-                            return;
+                        default: machine_id = 20 + i; break;
 
                     }
 
@@ -1707,34 +1686,9 @@ namespace CalculateForSea
                         WaitOrder();
                     }
 
-                    switch (i)
-                    {
-                        case 0:
-                            SendMQTT(ds, i, 13);
-                            break;
-                        case 1:
-                            SendMQTT(ds, i, 21);
+                    SendMQTT(ds, i, machine_id);
 
-                            break;
-                        case 2:
-                            SendMQTT(ds, i, 22);
 
-                            break;
-                        case 3:
-                            SendMQTT(ds, i, 23);
-
-                            break;
-                        case 4:
-                            SendMQTT(ds, i, 24);
-
-                            break;
-                        case 5:
-                            SendMQTT(ds, i, 25);
-
-                            break;
-                        default:
-                            break;
-                    }
                     CalculateAndPublishPowerConsumption(models[i], i);
                 }
                 catch (Exception e)
