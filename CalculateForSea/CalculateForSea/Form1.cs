@@ -33,7 +33,8 @@ namespace CalculateForSea
             public double Consumption_M { get; set; } = 0; // 누적 ESG (MWh)
             public double ConsumptionRETI { get; set; } = 0; // 누적 RETI
             public double NowRETI { get; set; } = 0; // 현재 RETI
-            public double NowESG { get; set; } = 0; // 현재 ESG
+            public double NowESG { get; set; }
+= 0; // 현재 ESG
             public double Totalcnt { get; set; } = -1; // 현재 총 생산량 (사타수 + 배출수 + 양품수)
             public double PROD_CNT { get; set; } = 0; // 제품 생산수 ( 배출수 + 양품수)
             public double Active_Power { get; set; } = 0; // 유효전력

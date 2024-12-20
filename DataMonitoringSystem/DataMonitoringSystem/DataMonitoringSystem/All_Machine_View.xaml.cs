@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,23 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using uPLibrary.Networking.M2Mqtt;
 
 namespace DataMonitoringSystem
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Page1.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class All_Machine_View : Page
     {
-        public MainWindow()
+        public All_Machine_View()
         {
             InitializeComponent();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            All_Machine_View machine_View = new All_Machine_View();
-            MainView.Content = machine_View;
         }
     }
 }
