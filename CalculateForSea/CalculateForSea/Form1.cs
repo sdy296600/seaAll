@@ -1996,7 +1996,7 @@ namespace CalculateForSea
                             cmd.Parameters.AddWithValue("@dateMonth", DateTime.Now.ToString("yyyy-MM"));
                             cmd.Parameters.AddWithValue("@value", data);
                             cmd.Parameters.AddWithValue("@machineNo", machineid);
-                            cmd.ExecuteNonQuery(); // INSERT 실행
+                            cmd.ExecuteNonQuery(); // INSERT 실행z
                         }
                     }
                 }
