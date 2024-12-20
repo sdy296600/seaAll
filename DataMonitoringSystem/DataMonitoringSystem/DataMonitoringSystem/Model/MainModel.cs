@@ -13,6 +13,12 @@ namespace DataMonitoringSystem.Model
 {
     public class MainModel : INotifyPropertyChanged
     {
+        private int _machineNo;
+        public int MachineNo 
+        {
+            get { return _machineNo; }
+            set { _machineNo = value; }
+        }
         private string? _itemNo;
         public string? ItemNo
         {
@@ -76,14 +82,15 @@ namespace DataMonitoringSystem.Model
         /// <param name="i"> 몇 호기 인지 넣을것</param>
         public MainModel(int i) 
         {
+            MachineNo = i;
             MqttClient mqttClient = new MqttClient("10.10.10.216", 1883, false, null, null, 0);
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/PRODUCT_NAME_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/IS_WORKING_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/CYCLE_TIME_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_OKCNT_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_ERRCOUNT_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_WARMUPCNT_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/PROD_CNT_{i}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/PRODUCT_NAME_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/IS_WORKING_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/CYCLE_TIME_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_OKCNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_ERRCOUNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_WARMUPCNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/PROD_CNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived; ;
             mqttClient.Connect(Guid.NewGuid().ToString() + "_Message_Process");
         }
