@@ -35,11 +35,8 @@
                     new MainModel(25)
                 };
 
-
                 All_Machine_View machine_View = new All_Machine_View(mainModels);
                 MainView.Content = machine_View;
-
-            
             }
         }
     }

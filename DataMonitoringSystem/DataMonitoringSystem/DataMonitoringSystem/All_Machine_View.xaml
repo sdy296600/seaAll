@@ -4,41 +4,72 @@
       Background="Black"
       Title="Page1">
 
-    <Grid>
-        <!-- 전체 화면을 비율로 나눔 -->
+    <Grid Margin="20">
+        <!-- 3개의 열 정의 -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <!-- 상단 10% -->
-            <RowDefinition Height="90*"/>
-            <!-- 하단 90% -->
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- 상단 라벨 -->
-        <Label Content="주조 설비 가동 현황"
-               Foreground="White"
-               FontSize="24"
-               FontWeight="Bold"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               Grid.Row="0"/>
+        <!-- 타이틀 Label (모서리 둥글게) -->
+        <Border Grid.ColumnSpan="3"
+                Background="#FF2D2D2D"
+                CornerRadius="20"
+                Padding="10"
+                Grid.Row="0"
+                Margin="0,0,0,20">
+            <Label Content="주조 설비 가동 현황"
+                   Foreground="White"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+        </Border>
 
-        <!-- 하단 ListView -->
-        <ListView x:Name="MachineListView"
-                  Grid.Row="1"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Margin="20">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Machine No" Width="150" DisplayMemberBinding="{Binding MachineNo}"/>
-                    <GridViewColumn Header="Is Running" Width="150" DisplayMemberBinding="{Binding IsRunning}"/>
-                    <GridViewColumn Header="Cycle Time" Width="150" DisplayMemberBinding="{Binding CycleTime}"/>
-                    <GridViewColumn Header="OK Count" Width="150" DisplayMemberBinding="{Binding OkCnt}"/>
-                    <GridViewColumn Header="Error Count" Width="150" DisplayMemberBinding="{Binding ErrCnt}"/>
-                    <GridViewColumn Header="Warm-up Count" Width="150" DisplayMemberBinding="{Binding WarmUpCnt}"/>
-                    <GridViewColumn Header="Total Count" Width="150" DisplayMemberBinding="{Binding AllCnt}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <!-- ListView를 둥글게 감싸는 Border -->
+        <Border Grid.Column="1"
+                Grid.Row="1"
+                Background="#FF2D2D2D"
+                CornerRadius="20"
+                Padding="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <ListView x:Name="MachineListView"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      Foreground="White"
+                      FontSize="24"
+                      >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Machine No" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}호기">
+                                                <Binding Path="MachineNo"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="품명" Width="100" DisplayMemberBinding="{Binding ItemNo}"/>
+                        <GridViewColumn Header="가동현황" Width="100" DisplayMemberBinding="{Binding IsRunning}"/>
+                        <GridViewColumn Header="사이클 타임" Width="100" DisplayMemberBinding="{Binding CycleTime}"/>
+                        <GridViewColumn Header="예열타" Width="100" DisplayMemberBinding="{Binding WarmUpCnt}"/>
+                        <GridViewColumn Header="양품수" Width="100" DisplayMemberBinding="{Binding OkCnt}"/>
+                        <GridViewColumn Header="불량수" Width="100" DisplayMemberBinding="{Binding ErrCnt}"/>
+                        <GridViewColumn Header="총 생산수" Width="100" DisplayMemberBinding="{Binding AllCnt}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
     </Grid>
 </Page>
