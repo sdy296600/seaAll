@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataMonitoringSystem.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,10 @@ namespace DataMonitoringSystem
     /// </summary>
     public partial class All_Machine_View : Page
     {
-        public All_Machine_View()
+        public All_Machine_View(List<MainModel> models)
         {
             InitializeComponent();
+            MachineListView.ItemsSource = models;
         }
     }
 }

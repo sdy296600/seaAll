@@ -9,7 +9,36 @@
       Background="Black"
       Title="Page1">
 
-    <Grid>
-        
+    <Grid >
+        <ListView x:Name="MachineListView" Background="White">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="Gray" Margin="2" Padding="5" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Item No: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding ItemNo}" Width="100"/>
+
+                            <TextBlock Text=" | Is Running: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding IsRunning}" Width="100"/>
+
+                            <TextBlock Text=" | Cycle Time: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding CycleTime}" Width="100"/>
+
+                            <TextBlock Text=" | OK Count: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding OkCnt}" Width="100"/>
+
+                            <TextBlock Text=" | Error Count: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding ErrCnt}" Width="100"/>
+
+                            <TextBlock Text=" | Warm-up Count: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding WarmUpCnt}" Width="100"/>
+
+                            <TextBlock Text=" | Total Count: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding AllCnt}" Width="100"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>
