@@ -23,6 +23,9 @@ namespace DataMonitoringSystem
         public MainWindow()
         {
             InitializeComponent();
+            WindowStyle = WindowStyle.None; //Window의 타이틀, 버튼(Minimized, Maximized 등) 제거
+            WindowState = WindowState.Maximized; // 모니터의 해상도 크기로 변경
+            //ResizeMode = ResizeMode.NoResize; // Window의 크기를 변경 불가
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -36,6 +39,7 @@ namespace DataMonitoringSystem
                 new MainModel(24),
                 new MainModel(25)
             };
+
             elecModels = new Dictionary<int, ElecModel>();
             foreach (MainModel model in mainModels) 
             {
@@ -45,12 +49,14 @@ namespace DataMonitoringSystem
             All_Machine_View machine_View = new All_Machine_View(mainModels);
             MainView.Content = machine_View;
         }
+
         private void MainView_ContentRendered(object? sender, EventArgs e)
         {
             // 또는 MainView에 설정된 Page의 Title 변경
             if (MainView.Content is Page page)
             {
-                this.Title.Content = page.Title;
+                this.TitleContent.Content = page.Title;
+                
             }
         }
     }

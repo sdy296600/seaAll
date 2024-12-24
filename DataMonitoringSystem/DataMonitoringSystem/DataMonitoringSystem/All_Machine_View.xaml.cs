@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,7 +26,8 @@ namespace DataMonitoringSystem
         public All_Machine_View(List<MainModel> models)
         {
             InitializeComponent();
-            MachineListView.ItemsSource = models;
+            MachineListView.DataContext = models;
+            //MachineListView.ItemsSource = models;
             MachineListView.PreviewMouseLeftButtonDown += MachineListView_PreviewMouseLeftButtonDown;
         }
 

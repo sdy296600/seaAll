@@ -9,17 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
+    <Compile Remove="ViewModel\**" />
+    <EmbeddedResource Remove="ViewModel\**" />
+    <None Remove="ViewModel\**" />
+    <Page Remove="ViewModel\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModel\" />
+    <PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="DetailView1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="back.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="sea_logo2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
