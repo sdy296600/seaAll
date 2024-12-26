@@ -337,7 +337,8 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(출탕_CLASS 라벨)
         {
-            string printerName = "ZDesigner GT800 (ZPL)"; // 프린터 이름으로 변경하세요
+            frmPrintSetting frmPrintSetting = new frmPrintSetting();
+            string printerName = frmPrintSetting.printName; //세아 라벨 프린트 원자재간판은 ZPL이고 그냥 간판은 EPL -> 무슨 기준??
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2,2.0^FS^SEE:UHANGUL.DAT^FS^CW1,E:KFONT3.FNT^CI26^FS 

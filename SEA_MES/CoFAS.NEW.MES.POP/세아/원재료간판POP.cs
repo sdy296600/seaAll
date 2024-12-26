@@ -258,8 +258,9 @@ namespace CoFAS.NEW.MES.POP
         private void print(원재료간판라벨 라벨)
         {
             //string printerName2 = "SEC842519C27EA8(C56x Series)"; // 프린터 이름으로 변경하세요
-            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
-            string printerName = "ZDesigner GT800 (ZPL)"; //세아 라벨 프린트
+            //string printerName1 = "ZDesigner ZD230-203dpi ZPL";
+            frmPrintSetting frmPrintSetting = new frmPrintSetting();
+            string printerName = frmPrintSetting.printName; //세아 라벨 프린트 원자재간판은 ZPL이고 그냥 간판은 EPL -> 무슨 기준??
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA^BY2
@@ -301,20 +302,20 @@ namespace CoFAS.NEW.MES.POP
 
                 PrintServer printServer = new PrintServer();
 
-                 if (printServer.Name.ToString() == "\\\\YOUNG")
-                {
-                    PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
-                    RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
-                    //printQueue1.Purge();  
-                }
-                else
-                {
+                // if (printServer.Name.ToString() == "\\\\YOUNG")
+                //{
+                //    PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
+                //    RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+                //    //printQueue1.Purge();  
+                //}
+                //else
+                //{
                     PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
-                    //입고라벨은 번들에 좌우로 붙일수있도록 한 바코드에 2개씩 나오게요청함
-                    RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
-                    RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                //입고라벨은 번들에 좌우로 붙일수있도록 한 바코드에 2개씩 나오게요청함
+                RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
+                RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                     //printQueue.Purge();
-                }
+                //}
 
                 //CustomMsg.ShowMessage("라벨출력이 완료되었습니다.");
             }
@@ -437,6 +438,12 @@ namespace CoFAS.NEW.MES.POP
             Bitmap bmp = new CoFAS_Label().WebImageView(urlstring); // 이미지 가져오기
 
             pictureBox1.Image = bmp; // 이미지 적용
+        }
+
+        private void btn_prtSetting_Click(object sender, EventArgs e)
+        {
+            Core.frmPrintSetting frm = new Core.frmPrintSetting();
+            frm.ShowDialog(this);
         }
     }
     public class 원재료간판라벨

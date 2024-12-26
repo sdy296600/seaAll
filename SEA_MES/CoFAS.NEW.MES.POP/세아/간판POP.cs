@@ -308,8 +308,9 @@ namespace CoFAS.NEW.MES.POP
 
         private void print(공정이동표 라벨)
         {
-            string printerName = "ZDesigner GT800 (EPL)"; //세아 라벨 프린트 원자재간판은 ZPL이고 그냥 간판은 EPL -> 무슨 기준??
-            string printerName1 = "ZDesigner ZD230-203dpi ZPL";
+            frmPrintSetting frmPrintSetting = new frmPrintSetting();
+            string printerName = frmPrintSetting.printName; //세아 라벨 프린트 원자재간판은 ZPL이고 그냥 간판은 EPL -> 무슨 기준??
+            //string printerName1 = "ZDesigner ZD230-203dpi ZPL";
             string zplCommand = string.Empty;
 
             zplCommand = $@"^XA
@@ -356,17 +357,17 @@ namespace CoFAS.NEW.MES.POP
             {
                 PrintServer printServer = new PrintServer();
 
-                if (printServer.Name.ToString() == "\\\\YOUNG")
-                {
-                    PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
-                    RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
-                }
-                else
-                {
+                //if (printServer.Name.ToString() == "\\\\YOUNG")
+                //{
+                //    PrintQueue printQueue1 = new PrintQueue(printServer, printerName1, PrintSystemDesiredAccess.AdministratePrinter);
+                //    RawPrinterHelper.SendStringToPrinter(printerName1, zplCommand);
+                //}
+                //else
+                //{
                     PrintQueue printQueue = new PrintQueue(printServer, printerName, PrintSystemDesiredAccess.AdministratePrinter);
                     RawPrinterHelper.SendStringToPrinter(printerName, zplCommand);
                     //printQueue.Purge();
-                }
+                //}
 
                 //CustomMsg.ShowMessage("라벨출력이 완료되었습니다.");
                 // _lblMessage.Text = "라벨 출력이 완료되었습니다.";
@@ -377,7 +378,11 @@ namespace CoFAS.NEW.MES.POP
             }
         }
 
-      
+        private void btn_prtSetting_Click(object sender, EventArgs e)
+        {
+            Core.frmPrintSetting frm = new Core.frmPrintSetting();
+            frm.ShowDialog(this);
+        }
     }
 
     public class 공정이동표

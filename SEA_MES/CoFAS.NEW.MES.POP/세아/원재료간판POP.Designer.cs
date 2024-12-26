@@ -60,6 +60,7 @@ namespace CoFAS.NEW.MES.POP
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.fpMain = new CoFAS.NEW.MES.Core.xFpSpread();
             this.fpMain_Sheet1 = new FarPoint.Win.Spread.SheetView();
+            this.btn_prtSetting = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -161,6 +162,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 107F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(1272, 985);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
@@ -177,6 +179,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.306336F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.306336F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.306336F));
+            this.tableLayoutPanel4.Controls.Add(this.btn_prtSetting, 6, 0);
             this.tableLayoutPanel4.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.btn_생성, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.btn_조회, 1, 0);
@@ -251,14 +254,14 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.base_FromtoDateTime1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(116)))), ((int)(((byte)(142)))), ((int)(((byte)(172)))));
             this.base_FromtoDateTime1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.base_FromtoDateTime1.EndValue = new System.DateTime(2024, 11, 30, 23, 59, 0, 0);
+            this.base_FromtoDateTime1.EndValue = new System.DateTime(2024, 12, 31, 23, 59, 0, 0);
             this.base_FromtoDateTime1.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.base_FromtoDateTime1.Location = new System.Drawing.Point(553, 0);
             this.base_FromtoDateTime1.Margin = new System.Windows.Forms.Padding(0);
             this.base_FromtoDateTime1.Name = "base_FromtoDateTime1";
             this.base_FromtoDateTime1.SearchName = "날짜";
             this.base_FromtoDateTime1.Size = new System.Drawing.Size(333, 66);
-            this.base_FromtoDateTime1.StartValue = new System.DateTime(2024, 11, 1, 0, 0, 0, 0);
+            this.base_FromtoDateTime1.StartValue = new System.DateTime(2024, 12, 1, 0, 0, 0, 0);
             this.base_FromtoDateTime1.TabIndex = 9;
             // 
             // tableLayoutPanel5
@@ -531,6 +534,17 @@ namespace CoFAS.NEW.MES.POP
             this.fpMain_Sheet1.Reset();
             fpMain_Sheet1.SheetName = "Sheet1";
             // 
+            // btn_prtSetting
+            // 
+            this.btn_prtSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_prtSetting.Location = new System.Drawing.Point(922, 3);
+            this.btn_prtSetting.Name = "btn_prtSetting";
+            this.btn_prtSetting.Size = new System.Drawing.Size(109, 60);
+            this.btn_prtSetting.TabIndex = 10;
+            this.btn_prtSetting.Text = "프린트 설정";
+            this.btn_prtSetting.UseVisualStyleBackColor = true;
+            this.btn_prtSetting.Click += new System.EventHandler(this.btn_prtSetting_Click);
+            // 
             // 원재료간판POP
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -594,5 +608,6 @@ namespace CoFAS.NEW.MES.POP
         private Core.Base_FromtoDateTime base_FromtoDateTime1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button btn_prtSetting;
     }
 }
