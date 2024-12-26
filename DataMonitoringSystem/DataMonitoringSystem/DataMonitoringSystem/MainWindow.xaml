@@ -53,7 +53,17 @@
                Visibility="Collapsed"
                MouseDown="BackButton_MouseDown"/>
 
-
+        <Image x:Name="NextButton" 
+            Source="/back.png"
+            Width="70"             
+            Height="70"               
+            Stretch="Fill"       
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" 
+            Margin="20,22,0,0"
+            Visibility="Collapsed"
+            />
+        
         <Frame x:Name="MainView" 
                NavigationUIVisibility="Hidden" 
                Grid.ColumnSpan="3" 

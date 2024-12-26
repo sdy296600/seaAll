@@ -26,30 +26,29 @@ namespace DataMonitoringSystem
         {
             this.Title = $"{machine_no}호기 설비 계측치";
             InitializeComponent();
-            //MachineListView.ItemsSource = models;
-            //MachineListView.PreviewMouseLeftButtonDown += MachineListView_PreviewMouseLeftButtonDown;
+            this.DataContext = model;
         }
 
    
-        private void MachineListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // 클릭된 항목 가져오기
-            if (e.OriginalSource is DependencyObject source)
-            {
-                var listViewItem = FindAncestor<ListViewItem>(source);
+        //private void MachineListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    // 클릭된 항목 가져오기
+        //    if (e.OriginalSource is DependencyObject source)
+        //    {
+        //        var listViewItem = FindAncestor<ListViewItem>(source);
 
-                if (listViewItem != null)
-                {
-                    if (listViewItem.DataContext is MainModel selectedModel)
-                    {
-                        MessageBox.Show($"클릭된 행 정보:\n호기: {selectedModel.MachineNo}호기\n품명: {selectedModel.ItemNo}");
+        //        if (listViewItem != null)
+        //        {
+        //            if (listViewItem.DataContext is MainModel selectedModel)
+        //            {
+        //                MessageBox.Show($"클릭된 행 정보:\n호기: {selectedModel.MachineNo}호기\n품명: {selectedModel.ItemNo}");
 
-                        // 이벤트가 다른 곳에 전달되지 않도록 처리
-                        e.Handled = true;
-                    }
-                }
-            }
-        }
+        //                // 이벤트가 다른 곳에 전달되지 않도록 처리
+        //                e.Handled = true;
+        //            }
+        //        }
+        //    }
+        //}
 
         // 부모 요소를 찾는 유틸리티 메서드
         private T FindAncestor<T>(DependencyObject current) where T : DependencyObject

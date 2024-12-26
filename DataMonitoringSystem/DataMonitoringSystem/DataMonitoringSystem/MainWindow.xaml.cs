@@ -86,5 +86,9 @@ namespace DataMonitoringSystem
             }
         }
 
+        private void NextButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
