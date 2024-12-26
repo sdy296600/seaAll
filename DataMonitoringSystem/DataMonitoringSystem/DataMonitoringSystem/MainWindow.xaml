@@ -15,55 +15,63 @@
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
 
-        <!-- 타이틀 Label -->
-        <Border Grid.ColumnSpan="3"
+        <Grid Grid.Row="0">
+            <!-- 타이틀 Label -->
+            <Border Grid.ColumnSpan="3"
                 Background="#FF131212"
-                Grid.Row="0"
                 BorderBrush="#FFFF8330" 
                 BorderThickness="0,0,0,5" 
-                Grid.RowSpan="1">
-
+                >
+            </Border>
             <Label x:Name="TitleContent" 
-                   Content="주조 설비 가동 현황"
-                   Foreground="WhiteSmoke"
-                   FontSize="35"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" 
-                   FontFamily="pack://application:,,,/Rejsources/#PretendardVariable" 
-                   Height="49" />
-        </Border>
+               Content="주조 설비 가동 현황"
+               Foreground="WhiteSmoke"
+               FontSize="35"
+               FontWeight="Bold"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" 
+               FontFamily="pack://application:,,,/Rejsources/#PretendardVariable" 
+               Height="49" />
+            <Image Source="/sea_logo2.png"
+           Width="105"             
+           Height="103"            
+           Stretch="UniformToFill"       
+           HorizontalAlignment="Right"  OverridesDefaultStyle="True" VerticalAlignment="Bottom" Margin="0,0,20,-7"/>    
 
-        <Image Source="/sea_logo2.png"
-               Width="105"             
-               Height="103"            
-               Stretch="UniformToFill"       
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top" Margin="1767,10,0,0" Grid.RowSpan="2" OverridesDefaultStyle="True"/>
+            <!-- Footer Note -->
+            <Image x:Name="BackButton" 
+           Source="/back.png"
+           Width="70"             
+           Height="70"               
+           Stretch="Fill"       
+           HorizontalAlignment="Left"
+           VerticalAlignment="Top" 
+           Margin="20,22,0,0"
+           Visibility="Visible"
+           MouseDown="BackButton_MouseDown"/>
 
-        <!-- Footer Note -->
-        <Image x:Name="BackButton" 
-               Source="/back.png"
-               Width="70"             
-               Height="70"               
-               Stretch="Fill"       
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top" 
-               Margin="20,22,0,0"
-               Visibility="Collapsed"
-               MouseDown="BackButton_MouseDown"/>
-
-        <Image x:Name="NextButton" 
-            Source="/back.png"
-            Width="70"             
-            Height="70"               
-            Stretch="Fill"       
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top" 
-            Margin="20,22,0,0"
-            Visibility="Collapsed" MouseDown="NextButton_MouseDown"
-            />
+            <Image x:Name="NextButton" 
+                Source="/back.png"
+                Width="70"             
+                Height="70"               
+                Stretch="Fill"       
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top" 
+                Margin="0,22,150,0"
+                Visibility="Visible" MouseDown="NextButton_MouseDown" RenderTransformOrigin="0.5,0.5"
+                >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </Grid>
         
+
         <Frame x:Name="MainView" 
                NavigationUIVisibility="Hidden" 
                Grid.ColumnSpan="3" 
