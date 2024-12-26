@@ -21,10 +21,13 @@ namespace DataMonitoringSystem
     /// <summary>
     /// Page1.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class All_Machine_View : Page
+    public partial class All_Machine_View : Page,iButtonProperty
     {
+        public Visibility BackVisibilty { get; set; } = Visibility.Collapsed;
+        public Visibility NextVisibilty { get; set; } = Visibility.Collapsed;
         public All_Machine_View(List<MainModel> models)
         {
+
             InitializeComponent(); 
             MachineListView.ItemsSource = models;
             MachineListView.PreviewMouseLeftButtonDown += MachineListView_PreviewMouseLeftButtonDown;

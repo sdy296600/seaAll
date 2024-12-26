@@ -61,7 +61,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top" 
             Margin="20,22,0,0"
-            Visibility="Collapsed"
+            Visibility="Collapsed" MouseDown="NextButton_MouseDown"
             />
         
         <Frame x:Name="MainView" 

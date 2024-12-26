@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="DetailView2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="DetailView1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -61,6 +64,12 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="DetailView2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>
