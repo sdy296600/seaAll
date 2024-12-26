@@ -478,6 +478,12 @@ namespace CoFAS.NEW.MES.POP
                 }
             }
         }
+
+        private void btn_prtSetting_Click(object sender, EventArgs e)
+        {
+            frmPrintSetting frmPrintSetting = new frmPrintSetting();
+            frmPrintSetting.ShowDialog();
+        }
     }
 
     public class 출탕_CLASS

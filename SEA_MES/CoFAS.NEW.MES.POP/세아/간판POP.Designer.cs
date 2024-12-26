@@ -37,6 +37,7 @@ namespace CoFAS.NEW.MES.POP
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.btn_prtSetting = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@ namespace CoFAS.NEW.MES.POP
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.fpMain = new CoFAS.NEW.MES.Core.xFpSpread();
             this.fpMain_Sheet1 = new FarPoint.Win.Spread.SheetView();
-            this.btn_prtSetting = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -180,7 +180,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.34433F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.34433F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.34433F));
-            this.tableLayoutPanel4.Controls.Add(this.btn_prtSetting, 3, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btn_prtSetting, 6, 0);
             this.tableLayoutPanel4.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.button4, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.button5, 1, 0);
@@ -194,6 +194,17 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(1262, 68);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // btn_prtSetting
+            // 
+            this.btn_prtSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_prtSetting.Location = new System.Drawing.Point(964, 3);
+            this.btn_prtSetting.Name = "btn_prtSetting";
+            this.btn_prtSetting.Size = new System.Drawing.Size(93, 62);
+            this.btn_prtSetting.TabIndex = 8;
+            this.btn_prtSetting.Text = "프린터설정";
+            this.btn_prtSetting.UseVisualStyleBackColor = true;
+            this.btn_prtSetting.Click += new System.EventHandler(this.btn_prtSetting_Click);
             // 
             // label1
             // 
@@ -506,17 +517,6 @@ namespace CoFAS.NEW.MES.POP
             // 
             this.fpMain_Sheet1.Reset();
             fpMain_Sheet1.SheetName = "Sheet1";
-            // 
-            // btn_prtSetting
-            // 
-            this.btn_prtSetting.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_prtSetting.Location = new System.Drawing.Point(474, 3);
-            this.btn_prtSetting.Name = "btn_prtSetting";
-            this.btn_prtSetting.Size = new System.Drawing.Size(93, 62);
-            this.btn_prtSetting.TabIndex = 8;
-            this.btn_prtSetting.Text = "프린터설정";
-            this.btn_prtSetting.UseVisualStyleBackColor = true;
-            this.btn_prtSetting.Click += new System.EventHandler(this.btn_prtSetting_Click);
             // 
             // 간판POP
             // 
