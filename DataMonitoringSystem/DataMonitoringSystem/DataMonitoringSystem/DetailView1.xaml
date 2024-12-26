@@ -2,7 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="DataMonitoringSystem.DetailView1"
-      Background="#FF1C1C1E"
+      Background="#FF080707" av:DesignHeight="1070" av:DesignWidth="1700"
       >
     <!-- 스타일 정의 -->
     <Page.Resources>
@@ -51,50 +51,80 @@
         </Style>
     </Page.Resources>
 
-    <Grid Margin="20" Background="#FF1C1C1E">
+    <Grid Margin="20" Background="#FF080707">
 
-
-        <Border Background="#FF2D2D2D"
+        <!-- 계측치 바탕 -->
+        <Border Background="#FF1C1C1E"
          CornerRadius="20"
-         Padding="10" HorizontalAlignment="Left" Width="1266"/>
+         Padding="10" HorizontalAlignment="Left" Width="1285" Margin="385,0,0,0"/>
 
 
-        <!-- ListView를 둥글게 감싸는 Border -->
-        <Border Background="#FF2D2D2D"
+        <!-- 설비 생산현황 바탕 -->
+        <Border Background="#FF1C1C1E"
                 CornerRadius="20"
-                Padding="10" HorizontalAlignment="Left" Width="240" Margin="0,68,0,302">
-            <ListView x:Name="MachineListView"
-                      Background="Transparent"
-                      BorderThickness="0"
-                      Foreground="White"
-                      FontSize="24"
-                      av:ItemsSource="{av:SampleData ItemCount=5}" Margin="440,165,0,0"
-                      >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Machine No" Width="100">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0}호기">
-                                                <Binding Path="MachineNo"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="품명" Width="100" DisplayMemberBinding="{Binding ItemNo}"/>
-                        <GridViewColumn Header="가동현황" Width="100" DisplayMemberBinding="{Binding IsRunning}"/>
-                        <GridViewColumn Header="사이클 타임" Width="100" DisplayMemberBinding="{Binding CycleTime}"/>
-                        <GridViewColumn Header="예열타" Width="100" DisplayMemberBinding="{Binding WarmUpCnt}"/>
-                        <GridViewColumn Header="양품수" Width="100" DisplayMemberBinding="{Binding OkCnt}"/>
-                        <GridViewColumn Header="불량수" Width="100" DisplayMemberBinding="{Binding ErrCnt}"/>
-                        <GridViewColumn Header="총 생산수" Width="100" DisplayMemberBinding="{Binding AllCnt}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Border>
+                Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,4,0,838"/>
+        <Border Background="#FF1C1C1E"
+    CornerRadius="20"
+    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,212,0,630"/>
+
+        <Border Background="#FF1C1C1E"
+    CornerRadius="20"
+    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,422,0,419"/>
+        <Border Background="#FF1C1C1E"
+    CornerRadius="20"
+    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,632,0,210"/>
+        <Border Background="#FF1C1C1E"
+    CornerRadius="20"
+    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,840,0,2"/>
+
+        <TextBlock Text="가동 상태"
+           Foreground="#FF12BCA1" 
+           FontFamily="Noto Sans KR SemiBold" 
+           FontSize="30" 
+           HorizontalAlignment="Right" 
+           VerticalAlignment="Bottom" 
+           Margin="0,0,1519,957" FontWeight="Bold" />
+        <TextBlock Text="예열 SHOT 수"
+   Foreground="#FF12BCA1" 
+   FontFamily="Noto Sans KR SemiBold" 
+           FontSize="30" 
+   FontStyle="Italic" 
+   HorizontalAlignment="Right" 
+   VerticalAlignment="Bottom" 
+   Margin="0,0,1452,744" FontWeight="Bold"  />
+        <TextBlock Text="양품수"
+   Foreground="#FF12BCA1" 
+   FontFamily="Noto Sans KR SemiBold" 
+           FontSize="30" 
+   FontStyle="Italic" 
+   HorizontalAlignment="Right" 
+   VerticalAlignment="Bottom" 
+   Margin="0,0,1544,534" FontWeight="Bold"  />
+
+        <TextBlock Text="불량수"
+   Foreground="#FF12BCA1" 
+   FontFamily="Noto Sans KR SemiBold" 
+           FontSize="30" 
+   HorizontalAlignment="Right" 
+   VerticalAlignment="Bottom" 
+   Margin="0,0,1544,323" RenderTransformOrigin="0.533,-0.2" FontWeight="Bold" FontStyle="Italic"  />
+        <TextBlock Text="총 생산 개수"
+   Foreground="#FF12BCA1" 
+   FontFamily="Noto Sans KR SemiBold" 
+           FontSize="30" 
+   FontStyle="Italic" 
+   HorizontalAlignment="Right" 
+   VerticalAlignment="Bottom" 
+   Margin="0,0,1483,116" FontWeight="Bold"  />
+        <TextBlock Text="EA"
+            Foreground="#FFF7F7F7" 
+            FontFamily="Pretendard SemiBold" 
+            FontSize="45" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" 
+            Margin="0,0,1335,442" FontWeight="Bold" 
+ />
+
+
     </Grid>
 </Page>

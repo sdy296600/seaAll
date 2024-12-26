@@ -21,7 +21,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="GridViewColumnHeader" >
                         <Grid HorizontalAlignment="Right"
-                              Width="230"
+                              Width="235"
                               Background="#eeeeee">
                             <ContentPresenter
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
