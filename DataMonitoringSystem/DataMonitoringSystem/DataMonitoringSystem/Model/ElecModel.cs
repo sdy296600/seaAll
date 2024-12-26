@@ -13,9 +13,6 @@ namespace DataMonitoringSystem.Model
 {
     public class ElecModel
     {
-
-      
-
         private string? date;
         public string? Date
         {

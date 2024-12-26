@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,6 @@ namespace DataMonitoringSystem.Model
 {
     public class ElecModel2
     {
-
-      
-
         private string? date;
         public string? Date
         {
@@ -34,245 +32,151 @@ namespace DataMonitoringSystem.Model
             }
         }
 
-        private string? v1;
-        public string? V1
+        /// <summary>
+        /// 월간전력사용량
+        /// </summary>
+        private string? _monthElec;
+        public string? MonthElec
         {
-            get { return v1; }
-            set { v1 = value;
+            get { return _monthElec; }
+            set { _monthElec = value;
                 OnPropertyChanged();
             }
         }
 
-        private string? v2;
-        public string? V2
+        /// <summary>
+        /// 일간 전력 사용량
+        /// </summary>
+        private string? _dayElec;
+        public string? DayElec
         {
-            get { return v2; }
-            set { v2 = value;
+            get { return _dayElec; }
+            set { _dayElec = value;
                 OnPropertyChanged();
             }
         }
 
-        private string? v3;
-        public string? V3
+        /// <summary>
+        /// 단위 전력 사용량
+        /// </summary>
+        private string? _unitElec;
+        public string? UnitElec
         {
-            get { return v3; }
-            set { v3 = value;
+            get { return _unitElec; }
+            set { _unitElec = value;
                 OnPropertyChanged();
             }
         }
 
-        private string? v4;
-        public string? V4
+        /// <summary>
+        /// 월간 전기료
+        /// </summary>
+        private string? _monthAmount;
+        public string? MonthAmount
         {
-            get { return v4; }
-            set { v4 = value;
+            get { return _monthAmount; }
+            set { _monthAmount = value;
                 OnPropertyChanged();
             }
         }
 
-        // 가속위치
-        private string? accelerationPos;
-        public string? AccelerationPos
+        /// <summary>
+        /// 일간 전기료
+        /// </summary>
+        private string? _dayAmount;
+        public string? DayAmount
         {
-            get { return accelerationPos; }
-            set { accelerationPos = value;
+            get { return _dayAmount; }
+            set { _dayAmount = value;
                 OnPropertyChanged();
             }
         }
 
-        // 감속위치
-        private string? decelerationPos;
-        public string? DecelerationPos
+        /// <summary>
+        /// 단위 전기료
+        /// </summary>
+        private string? _unitAmount;
+        public string? UnitAmount
         {
-            get { return decelerationPos; }
-            set { decelerationPos = value;
+            get { return _unitAmount; }
+            set { _unitAmount = value;
                 OnPropertyChanged();
             }
         }
 
-        // 메탈압력
-        private string? metalPressure;
-        public string? MetalPressure
+        /// <summary>
+        /// 사용 전력
+        /// </summary>
+        private string? _usingElec;
+        public string? UsingElec
         {
-            get { return metalPressure; }
-            set { metalPressure = value;
+            get { return _usingElec; }
+            set { _usingElec = value;
                 OnPropertyChanged();
             }
         }
 
-        // 승압시간
-        private string? swapTime;
-        public string? SwapTime
+        /// <summary>
+        /// R 전류
+        /// </summary>
+        private string? _rElecCurrent;
+        public string? RElecCurrent
         {
-            get { return swapTime; }
-            set { swapTime = value;
+            get { return _rElecCurrent; }
+            set { _rElecCurrent = value;
                 OnPropertyChanged();
             }
         }
 
-        // 비스킷 타임
-        private string? biskitThickness;
-        public string? BiskitThickness
+        /// <summary>
+        /// S 전류
+        /// </summary>
+        private string? _sElecCurrent;
+        public string? SElecCurrent
         {
-            get { return biskitThickness; }
-            set { biskitThickness = value;
+            get { return _sElecCurrent; }
+            set { _sElecCurrent = value;
                 OnPropertyChanged();
             }
         }
 
-        // 형체력 [%]
-        private string? physicalStrengthPer;
-        public string? PhysicalStrengthPer
+        /// <summary>
+        /// T 전류
+        /// </summary>
+        private string? _tElecCurrent;
+        public string? TElecCurrent
         {
-            get { return physicalStrengthPer; }
-            set { physicalStrengthPer = value;
+            get { return _tElecCurrent; }
+            set { _tElecCurrent = value;
                 OnPropertyChanged();
             }
         }
 
-        // 형체력 MN
-        private string? physicalStrengthMn;
-        public string? PhysicalStrengthMn
+        /// <summary>
+        /// 누적전력량 
+        /// </summary>
+        private string? _cumulativePower;
+        public string? CumulativePower
         {
-            get { return physicalStrengthMn; }
-            set { physicalStrengthMn = value;
+            get { return _cumulativePower; }
+            set {
+                _cumulativePower = value;
                 OnPropertyChanged();
             }
         }
 
-        // 사이클타임
-        private string? cycleTime;
-        public string? CycleTime
+        /// <summary>
+        /// 역률
+        /// </summary>
+        private string? _factor;
+        public string? Factor
         {
-            get { return cycleTime; }
-            set { cycleTime = value;
+            get { return _factor; }
+            set {
+                _factor = value;
                 OnPropertyChanged();
             }
         }
-
-        // 형체중자입시간
-        private string? typeWeightEnrtyTime;
-        public string? TypeWeightEnrtyTime
-        {
-            get { return typeWeightEnrtyTime; }
-            set { typeWeightEnrtyTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 주탕시간
-        private string? bathTime;
-        public string? BathTime
-        {
-            get { return bathTime; }
-            set { bathTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 사출전진시간
-        private string? forwardTime;
-        public string? ForwardTime
-        {
-            get { return forwardTime; }
-            set { forwardTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 제품냉각시간
-        private string? freezingTime;
-        public string? FreezingTime
-        {
-            get { return freezingTime; }
-            set { freezingTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 형개중자후퇴시간
-        private string? typeWeightBackTime;
-        public string? TypeWeightBackTime
-        {
-            get { return typeWeightBackTime; }
-            set { typeWeightBackTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 압출시간
-        private string? extrusionTime;
-        public string? ExtrusionTime
-        {
-            get { return extrusionTime; }
-            set { extrusionTime = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        // 취출시간
-        private string? extractionTime;
-        public string? ExtractionTime
-        {
-            get { return extractionTime; }
-            set { extractionTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 스프레이시간
-        private string? sprayTime;
-        public string? SprayTime
-        {
-            get { return sprayTime; }
-            set { sprayTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 금형내부
-        private string? cavityCore;
-        public string? CavityCore
-        {
-            get { return cavityCore; }
-            set { cavityCore = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 오염도 A
-        private string? a_PollutionDegree;
-        public string? A_PollutionDegree
-        {
-            get { return a_PollutionDegree; }
-            set { a_PollutionDegree = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 오염도 B
-        private string? b_PollutionDegree;
-        public string? B_PollutionDegree
-        {
-            get { return b_PollutionDegree; }
-            set { b_PollutionDegree = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // 탱크진공
-        private string? vacuum;
-        public string? Vacuum
-        {
-            get { return vacuum; }
-            set { vacuum = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-
 
         /// <summary>
         /// 
@@ -280,26 +184,39 @@ namespace DataMonitoringSystem.Model
         /// <param name="i"> 몇 호기 인지 넣을것</param>
         public ElecModel2(int i)
         {
-            
             MqttClient mqttClient = new MqttClient("10.10.10.216", 1883, false, null, null, 0);
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6900_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6902_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6904_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6906_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6908" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6910" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6912_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6914" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6916" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6918" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6938_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6940_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6942_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6944_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6948_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6950_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{i}_TAG_D6952_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            if (i == 13)
+            {
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Power_Consumption_Today_Conversion" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Daily_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Unit_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Month_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Daily_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Unit_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Active_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_R_Phase_Voltage" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_S_Phase_Voltage" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_T_Phase_Voltage" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Power_Consumption_Conversion" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Total_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            }
+            else 
+            {
+                int castingNo = i + 140;
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Load_Power_Consumption_Today_Conversion" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Daily_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Unit_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Month_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Daily_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Unit_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_All_Active_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_IL1_Current_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_IL2_Current_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_IL3_Current_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Cumulative_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_P_Factor" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            }
+            
             mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived; ;
             mqttClient.Connect(Guid.NewGuid().ToString() + "_Message_Process");
 
@@ -311,79 +228,44 @@ namespace DataMonitoringSystem.Model
         {
             try
             {
-
                 string topic = e.Topic.Split('/')[4];
                 string message = Encoding.UTF8.GetString(e.Message);
 
-                if (topic.Contains("_TAG_D6900_Ruled"))
-                    V1 = message;
+                if (topic.Contains("_Load_Power_Consumption_Today_Conversion"))
+                    MonthElec = message;
 
-                if (topic.Contains("_TAG_D6902_Ruled"))
-                    V2 = message;
+                if (topic.Contains("_Daily_Power_Consumption"))
+                    DayElec = message;
 
-                if (topic.Contains("_TAG_D6904_Ruled"))
-                    V3 = message;
+                if (topic.Contains("_Unit_Power_Consumption"))
+                    UnitElec = message;
 
-                if (topic.Contains("_TAG_D6906_Ruled"))
-                    V4 = message;
+                if (topic.Contains("_Month_Power_Amount"))
+                    MonthAmount = message;
 
-                if (topic.Contains("_TAG_D6908"))
-                    AccelerationPos = message;
+                if (topic.Contains("_Daily_Power_Amount"))
+                    DayAmount = message;
 
-                if (topic.Contains("_TAG_D6910"))
-                    DecelerationPos = message;
+                if (topic.Contains("_Unit_Power_Amount"))
+                    UnitAmount = message;
 
-                if (topic.Contains("_TAG_D6912_Ruled"))
-                    MetalPressure = message;
+                if (topic.Contains("_All_Active_Power") || topic.Contains("_Load_Active_Power"))
+                    UsingElec = message;
 
-                if (topic.Contains("_TAG_D6914"))
-                    SwapTime = message;
+                if (topic.Contains("_R_Phase_Voltage") || topic.Contains("_IL1_Current_Ruled"))
+                    RElecCurrent = message;
+                
+                if (topic.Contains("_S_Phase_Voltage") || topic.Contains("_IL2_Current_Ruled"))
+                    SElecCurrent = message;
+                
+                if (topic.Contains("_T_Phase_Voltage") || topic.Contains("_IL3_Current_Ruled"))
+                    TElecCurrent = message;
+                
+                if (topic.Contains("_Load_Power_Consumption_Conversion") || topic.Contains("_Cumulative_Power"))
+                    _cumulativePower = message;
 
-                if (topic.Contains("_TAG_D6916"))
-                    BiskitThickness = message;
-
-                if (topic.Contains("_TAG_D6918"))
-                    PhysicalStrengthPer = message;
-
-                if (topic.Contains("_TAG_D6920_Ruled"))
-                    PhysicalStrengthMn = message;
-
-                if (topic.Contains("_TAG_D6936_Ruled"))
-                    CycleTime = message;
-
-                if (topic.Contains("_TAG_D6938_Ruled"))
-                    TypeWeightEnrtyTime = message;
-
-                if (topic.Contains("_TAG_D6940_Ruled"))
-                    BathTime = message;
-
-                if (topic.Contains("_TAG_D6942_Ruled"))
-                    ForwardTime = message;
-
-                if (topic.Contains("_TAG_D6944_Ruled"))
-                    FreezingTime = message;
-
-                if (topic.Contains("_TAG_D6946_Ruled"))
-                    TypeWeightBackTime = message;
-
-                if (topic.Contains("_TAG_D6948_Ruled"))
-                    ExtrusionTime = message;
-
-                if (topic.Contains("_TAG_D6950_Ruled"))
-                    ExtractionTime = message;
-
-                if (topic.Contains("_TAG_D6952_Ruled"))
-                    SprayTime = message;
-
-                //if (topic.Contains("_TAG_D3704"))
-                //    getDtOkCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
-
-                //if (topic.Contains("_TAG_D3705"))
-                //    getDtErrCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
-
-                //if (topic.Contains("_TAG_D3706"))
-                //    getDtWarmCnt = Convert.ToDouble(Encoding.UTF8.GetString(message));
-
+                if (topic.Contains("_P_Factor") || topic.Contains("_Load_Total_Power_Consumption"))
+                    Factor = message;
             }
             catch (Exception ex)
             {
@@ -391,17 +273,10 @@ namespace DataMonitoringSystem.Model
             }
         }
 
-
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-       
-
-
-
     }
 }
