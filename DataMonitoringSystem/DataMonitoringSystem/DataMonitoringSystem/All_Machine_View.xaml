@@ -3,28 +3,29 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="DataMonitoringSystem.All_Machine_View"
       Background="#FF1C1C1E"
+      x:Name="AllMachineView"
       Title="주조 설비 가동 현황" av:DesignHeight="720" av:DesignWidth="1280">
     <!-- 스타일 정의 -->
     <Page.Resources>
-        
+
         <!-- ListView 스타일 -->
-        <Style TargetType="GridViewColumnHeader" x:Key="CustomListViewStyle">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Width" Value="180"/>
+        <Style  x:Key="CustomListViewStyle" TargetType="GridViewColumnHeader">
             <Setter Property="Height" Value="80"/>
-            <Setter Property="HorizontalContentAlignment" Value="Right"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="#eeeeee"/>
+            <Setter Property="Foreground" Value="#FF1C1C1E"/>
             <Setter Property="FontFamily" Value="/Resource/#NotoSansKR-Medium"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
             <Setter Property="FontSize" Value="30"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="GridViewColumnHeader">
-                        <Grid Background="{TemplateBinding Background}" >
+                    <ControlTemplate TargetType="GridViewColumnHeader" >
+                        <Grid HorizontalAlignment="Right"
+                              Width="230"
+                              Background="#eeeeee">
                             <ContentPresenter
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="Center"
-                                />
+                                VerticalAlignment="Center" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -34,60 +35,47 @@
         <!-- ListViewItem 스타일 (데이터 로우 디자인) -->
         <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
             <Setter Property="Background" Value="#FF1C1C1E"/>
-            <Setter Property="Foreground" Value="WhiteSmoke"/>
-            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Foreground" Value="#eeeeee"/>
             <Setter Property="FontSize" Value="25"/>
             <Setter Property="FontFamily" Value="Noto Sans KR"/>
             <Setter Property="Height" Value="145"/>
-            <!-- 테두리 제거 -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
             <!-- 선택 시 색상 변경 -->
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#FF3A3A3C"/>
+                    <Setter Property="Background" Value="#FF1C1C1E"/>
                     <!-- 선택된 배경 -->
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Foreground" Value="#eeeeee"/>
                     <!-- 선택된 텍스트 색 -->
                 </Trigger>
             </Style.Triggers>
         </Style>
     </Page.Resources>
 
-    <Grid Background="#FF3A3A3C">
+    <Grid Background="#FF1C1C1E">
 
         <!-- 3개의 열 정의 -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="41*"/>
-            <ColumnDefinition Width="271*"/>
-            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="1"
                 Grid.Row="0"
-                Grid.ColumnSpan="2" 
+                Grid.ColumnSpan="4" 
                 >
 
             <!-- ListView 정의 -->
             <ListView x:Name="MachineListView"
                       ItemsSource="{Binding}"
+                      HorizontalContentAlignment="Right"
+                      Background="#FF1C1C1E"
                       ItemContainerStyle="{StaticResource ListViewItemStyle}"
-                      Margin="0,0,0,-120" FontFamily="Noto Sans KR Medium">
+                      FontFamily="Noto Sans KR Medium" av:ItemsSource="{av:SampleData ItemCount=5}" Foreground="#FFE0E0E0">
 
                 <ListView.View>
                     <GridView>
                         <!-- 헤더에 스타일 적용 -->
-                        <GridViewColumn Header="호기 정보" HeaderContainerStyle="{StaticResource CustomListViewStyle}">
+                        <GridViewColumn Header="호기 정보 "  HeaderContainerStyle="{StaticResource CustomListViewStyle}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock>
@@ -100,9 +88,8 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-
                         <!-- 나머지 열 정의 -->
-                        <GridViewColumn Header="품명"  DisplayMemberBinding="{Binding ItemNo}" HeaderContainerStyle="{StaticResource CustomListViewStyle}"/>
+                        <GridViewColumn Header="품명" DisplayMemberBinding="{Binding ItemNo}" HeaderContainerStyle="{StaticResource CustomListViewStyle}"/>
                         <GridViewColumn Header="가동현황" DisplayMemberBinding="{Binding IsRunning}" HeaderContainerStyle="{StaticResource CustomListViewStyle}"/>
                         <GridViewColumn Header="사이클 타임" DisplayMemberBinding="{Binding CycleTime}" HeaderContainerStyle="{StaticResource CustomListViewStyle}"/>
                         <GridViewColumn Header="예열타" DisplayMemberBinding="{Binding WarmUpCnt}" HeaderContainerStyle="{StaticResource CustomListViewStyle}"/>
@@ -111,7 +98,40 @@
                         <GridViewColumn Header="총 생산수" DisplayMemberBinding="{Binding AllCnt}" HeaderContainerStyle="{StaticResource CustomListViewStyle}"/>
                     </GridView>
                 </ListView.View>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <!-- 호기 정보 바인딩 -->
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0}호기">
+                                        <Binding Path="MachineNo"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Text="{Binding ItemNo}" />
+                            <TextBlock Text="{Binding IsRunning}"/>
+                            <TextBlock Text="{Binding CycleTime}"/>
+                            <TextBlock Text="{Binding WarmUpCnt}"/>
+                            <TextBlock Text="{Binding OkCnt}" />
+                            <TextBlock Text="{Binding ErrCnt}"/>
+                            <TextBlock Text="{Binding AllCnt}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
         </Border>
+
+        <TextBlock Text="* 주 / 야 현재 작업실적 기준 모니터링 현황입니다"
+                   Foreground="#FFFF8330" 
+                   FontFamily="pack://application:,,/Rejsources/#PretendardVariable" 
+                   FontSize="14" 
+                   FontWeight="Bold" 
+                   FontStyle="Italic" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Bottom" 
+                   Margin="0,20,76,65" Grid.Column="1" Grid.Row="1" Height="17" Width="309" Grid.ColumnSpan="2" />
     </Grid>
+    
 </Page>

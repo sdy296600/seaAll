@@ -30,6 +30,10 @@ namespace DataMonitoringSystem
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+
+            // 다른 화면일 경우 Back 버튼 보이기
+            BackButton.Visibility = Visibility.Collapsed;
+
             mainModels = new List<MainModel>()
             {
                 new MainModel(13),
@@ -45,6 +49,7 @@ namespace DataMonitoringSystem
             {
                 elecModels.Add(model.MachineNo,new ElecModel(model.MachineNo));
             }
+
             MainView.ContentRendered += MainView_ContentRendered;
             All_Machine_View machine_View = new All_Machine_View(mainModels);
             MainView.Content = machine_View;
@@ -57,7 +62,29 @@ namespace DataMonitoringSystem
             {
                 this.TitleContent.Content = page.Title;
                 
+                if (MainView.Content is All_Machine_View)
+                {
+                    // 다른 화면일 경우 Back 버튼 보이기
+                    BackButton.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    // 다른 화면일 경우 Back 버튼 보이기
+                    BackButton.Visibility = Visibility.Visible;
+                }
+            }
+
+        }
+
+      
+        private void BackButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // 뒤로 가기 동작
+            if (MainView.CanGoBack)
+            {
+                MainView.GoBack();
             }
         }
+
     }
 }

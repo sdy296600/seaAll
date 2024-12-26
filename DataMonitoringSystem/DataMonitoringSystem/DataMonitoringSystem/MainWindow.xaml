@@ -9,11 +9,6 @@
         Title="MainWindow" Height="1080" Width="1920" Loaded="Window_Loaded">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -23,15 +18,14 @@
         <!-- 타이틀 Label -->
         <Border Grid.ColumnSpan="3"
                 Background="#FF131212"
-                Padding="10"
                 Grid.Row="0"
-                Margin="0,0,0,0"
                 BorderBrush="#FFFF8330" 
                 BorderThickness="0,0,0,5" 
                 Grid.RowSpan="1">
 
-            <Label x:Name="TitleContent" Content="주조 설비 가동 현황"
-                   Foreground="White"
+            <Label x:Name="TitleContent" 
+                   Content="주조 설비 가동 현황"
+                   Foreground="WhiteSmoke"
                    FontSize="35"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
@@ -40,37 +34,35 @@
                    Height="49" />
         </Border>
 
-        <Image  Source="/back.png"
-                Width="70"             
-                Height="70"               
-                Stretch="Fill"       
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top" Margin="20,22,0,0"/>
-
         <Image Source="/sea_logo2.png"
-                Width="105"             
-                Height="105"            
-                Stretch="Fill"       
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top" Margin="680,18,0,0" Grid.Column="2" Grid.RowSpan="2"/>
-
-        <Frame x:Name="MainView" Content="" 
-               NavigationUIVisibility="Hidden" 
-               Grid.ColumnSpan="3" 
-               Margin="0,7,0,0" Background="#FF1C1C1E" Grid.Row="1"/>
-
-
+               Width="105"             
+               Height="103"            
+               Stretch="UniformToFill"       
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top" Margin="1767,10,0,0" Grid.RowSpan="2" OverridesDefaultStyle="True"/>
 
         <!-- Footer Note -->
-        <TextBlock Text="* 주 / 야 현재 작업실적 기준 모니터링 현황입니다"
-                   Foreground="#FFFF8330" 
-                   FontFamily="pack://application:,,/Rejsources/#PretendardVariable" 
-                   FontSize="14" 
-                   FontWeight="Bold" 
-                   FontStyle="Italic" 
-                   HorizontalAlignment="Right" 
-                   VerticalAlignment="Bottom" 
-                   Margin="0,0,76,65" Grid.Column="2" Grid.Row="1" Height="17" Width="309" />
+        <Image x:Name="BackButton" 
+               Source="/back.png"
+               Width="70"             
+               Height="70"               
+               Stretch="Fill"       
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top" 
+               Margin="20,22,0,0"
+               Visibility="Collapsed"
+               MouseDown="BackButton_MouseDown"/>
+
+
+        <Frame x:Name="MainView" 
+               NavigationUIVisibility="Hidden" 
+               Grid.ColumnSpan="3" 
+               Margin="0,7,0,0" 
+               Background="#FF1C1C1E" 
+               Grid.Row="1"/>
+
+
+
 
     </Grid>
 </Window>

@@ -25,9 +25,8 @@ namespace DataMonitoringSystem
     {
         public All_Machine_View(List<MainModel> models)
         {
-            InitializeComponent();
-            MachineListView.DataContext = models;
-            //MachineListView.ItemsSource = models;
+            InitializeComponent(); 
+            MachineListView.ItemsSource = models;
             MachineListView.PreviewMouseLeftButtonDown += MachineListView_PreviewMouseLeftButtonDown;
         }
 
@@ -43,7 +42,6 @@ namespace DataMonitoringSystem
                 {
                     if (listViewItem.DataContext is MainModel selectedModel)
                     {
-
                         NavigationService?.Navigate(new DetailView1(MainWindow.elecModels[selectedModel.MachineNo], selectedModel.MachineNo));
                         // 이벤트가 다른 곳에 전달되지 않도록 처리
                         e.Handled = true;
