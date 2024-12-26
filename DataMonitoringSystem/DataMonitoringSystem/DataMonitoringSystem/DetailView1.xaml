@@ -51,80 +51,229 @@
         </Style>
     </Page.Resources>
 
+    <!--===============================================================-->
+
     <Grid Margin="20" Background="#FF080707">
+
+        <!-- 3개의 열 정의 -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="61*"/>
+            <ColumnDefinition Width="14*"/>
+            <ColumnDefinition Width="251*"/>
+        </Grid.ColumnDefinitions>
+
+
+
+        <!--#region [설비 생산 현황 Gird ] ================================================== -->
+        <Grid  Grid.Column="2" Width="280">
+
+
+            <!-- 3개의 열 정의 -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 가동상태-->
+            <TextBlock Grid.Column="1" Text="가동 상태"
+Foreground="#FF12BCA1" 
+FontFamily="Noto Sans KR SemiBold" 
+FontSize="30" 
+VerticalAlignment="Bottom" 
+FontWeight="Bold" Margin="0,0,180,931" />
+
+
+
+            <TextBlock Text="예열 SHOT 수"
+Foreground="#FF12BCA1" 
+FontFamily="Noto Sans KR SemiBold" 
+FontSize="30"  
+VerticalAlignment="Bottom" 
+FontWeight="Bold"  Margin="0,0,113,721"  />
+
+            <TextBlock Text="SHOT"
+Foreground="#FFF7F7F7" 
+FontFamily="Malgun Gothic" 
+FontSize="35" 
+VerticalAlignment="Top" 
+FontWeight="Bold" Margin="0,305,1,0"  />
+
+
+            <TextBlock Text="양품수"
+        Foreground="#FF12BCA1" 
+        FontFamily="Noto Sans KR SemiBold" 
+        FontSize="30" 
+        VerticalAlignment="Bottom" 
+        FontWeight="Bold"  Margin="0,0,205,508"  />
+
+            <TextBlock Text="EA"
+        Foreground="#FFF7F7F7" 
+        FontFamily="Malgun Gothic" 
+        FontSize="45" 
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Top" 
+        FontWeight="Bold" Margin="241,914,0,0"  />
+
+            <TextBlock Text="불량수"
+        Foreground="#FF12BCA1" 
+        FontFamily="Noto Sans KR SemiBold" 
+        FontSize="30" 
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Bottom" 
+        RenderTransformOrigin="0.533,-0.2" FontWeight="Bold" FontStyle="Italic"  Margin="0,0,205,297"  />
+
+
+            <TextBlock Text="EA"
+        Foreground="#FFF7F7F7" 
+        FontFamily="Malgun Gothic" 
+        FontSize="45" 
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Top" 
+        FontWeight="Bold" Margin="235,500,0,0" />
+
+
+            <TextBlock Text="총 생산 개수"
+        Foreground="#FF12BCA1" 
+        FontFamily="Noto Sans KR SemiBold" 
+        FontSize="30" 
+        FontStyle="Italic" 
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Bottom" 
+        FontWeight="Bold"  Margin="0,0,144,90"  />
+
+            <TextBlock Text="EA"
+        Foreground="#FFF7F7F7" 
+        FontFamily="Malgun Gothic" 
+        FontSize="45" 
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Top" 
+        FontWeight="Bold" Margin="236,710,0,0" />
+
+            
+
+
+            <Border Background="#FF1C1C1E"
+CornerRadius="20"
+Padding="10" HorizontalAlignment="Center" Width="363" Margin="0,208,0,628"/>
+
+
+            <Border Background="#FF1C1C1E"
+CornerRadius="20"
+Padding="10" HorizontalAlignment="Center" Width="363" Margin="0,418,0,417"  >
+
+
+
+
+
+            </Border>
+
+            <Border Background="#FF1C1C1E"
+CornerRadius="20"
+Padding="10" HorizontalAlignment="Center" Width="363" Margin="0,628,0,208">
+
+            </Border>
+
+
+
+            <Border Background="#FF1C1C1E"
+CornerRadius="20"
+Padding="10" HorizontalAlignment="Center" Width="363" Margin="0,836,0,0">
+
+
+            </Border>
+
+
+
+            <!-- 가동상태 => 총 샷수로 변경 또는 추가-->
+
+            <!-- 예열샷수-->
+            <!-- 양품수-->
+
+            <!-- 불량수-->
+
+            <!-- 총 생산 수-->
+
+
+
+
+        </Grid>
+
+        <!--#endregion-->
+
+
+
+
+
+        <!--#region NewRegion [바탕 Grid 4번째 계측 정보]=================================================-->
+        <Grid Grid.Column="4">
+            
+            <!-- 6개 열 정의 -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+
+            <Border Background="#FFD9D9D9"
+      CornerRadius="20"
+      Padding="10" 
+      HorizontalAlignment="Right" 
+      Width="230" Margin="0,28,1020,772" Height="230"/>
+
+            <Border Background="#FFD9D9D9"
+      CornerRadius="20"
+      Padding="10" 
+      HorizontalAlignment="Right" 
+      Width="230" Margin="0,28,1020,772" Height="230"/>
+
+            <Border Background="#FFD9D9D9"
+      CornerRadius="20"
+      Padding="10" 
+      HorizontalAlignment="Right" 
+      Width="230" Margin="0,28,1020,772" Height="230"/>
+
+            <Border Background="#FFD9D9D9"
+      CornerRadius="20"
+      Padding="10" 
+      HorizontalAlignment="Right" 
+      Width="230" Margin="0,28,760,772" Height="230"/>
+
+            <Border Background="#FFD9D9D9"
+      CornerRadius="20"
+      Padding="10" 
+      HorizontalAlignment="Right" 
+      Width="230" Margin="0,30,500,770" Height="230"/>
+
+
+
+        </Grid>
+        <!--#endregion-->
 
         <!-- 계측치 바탕 -->
         <Border Background="#FF1C1C1E"
-         CornerRadius="20"
-         Padding="10" HorizontalAlignment="Left" Width="1285" Margin="385,0,0,0"/>
-
-
-        <!-- 설비 생산현황 바탕 -->
-        <Border Background="#FF1C1C1E"
                 CornerRadius="20"
-                Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,4,0,838"/>
-        <Border Background="#FF1C1C1E"
-    CornerRadius="20"
-    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,212,0,630"/>
-
-        <Border Background="#FF1C1C1E"
-    CornerRadius="20"
-    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,422,0,419"/>
-        <Border Background="#FF1C1C1E"
-    CornerRadius="20"
-    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,632,0,210"/>
-        <Border Background="#FF1C1C1E"
-    CornerRadius="20"
-    Padding="10" HorizontalAlignment="Left" Width="363" Margin="-3,840,0,2"/>
-
-        <TextBlock Text="가동 상태"
-           Foreground="#FF12BCA1" 
-           FontFamily="Noto Sans KR SemiBold" 
-           FontSize="30" 
-           HorizontalAlignment="Right" 
-           VerticalAlignment="Bottom" 
-           Margin="0,0,1519,957" FontWeight="Bold" />
-        <TextBlock Text="예열 SHOT 수"
-   Foreground="#FF12BCA1" 
-   FontFamily="Noto Sans KR SemiBold" 
-           FontSize="30" 
-   FontStyle="Italic" 
-   HorizontalAlignment="Right" 
-   VerticalAlignment="Bottom" 
-   Margin="0,0,1452,744" FontWeight="Bold"  />
-        <TextBlock Text="양품수"
-   Foreground="#FF12BCA1" 
-   FontFamily="Noto Sans KR SemiBold" 
-           FontSize="30" 
-   FontStyle="Italic" 
-   HorizontalAlignment="Right" 
-   VerticalAlignment="Bottom" 
-   Margin="0,0,1544,534" FontWeight="Bold"  />
-
-        <TextBlock Text="불량수"
-   Foreground="#FF12BCA1" 
-   FontFamily="Noto Sans KR SemiBold" 
-           FontSize="30" 
-   HorizontalAlignment="Right" 
-   VerticalAlignment="Bottom" 
-   Margin="0,0,1544,323" RenderTransformOrigin="0.533,-0.2" FontWeight="Bold" FontStyle="Italic"  />
-        <TextBlock Text="총 생산 개수"
-   Foreground="#FF12BCA1" 
-   FontFamily="Noto Sans KR SemiBold" 
-           FontSize="30" 
-   FontStyle="Italic" 
-   HorizontalAlignment="Right" 
-   VerticalAlignment="Bottom" 
-   Margin="0,0,1483,116" FontWeight="Bold"  />
-        <TextBlock Text="EA"
-            Foreground="#FFF7F7F7" 
-            FontFamily="Pretendard SemiBold" 
-            FontSize="45" 
-            HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom" 
-            Margin="0,0,1335,442" FontWeight="Bold" 
- />
-
+                Padding="10" HorizontalAlignment="Right" Width="1285"/>
 
     </Grid>
+    
 </Page>
