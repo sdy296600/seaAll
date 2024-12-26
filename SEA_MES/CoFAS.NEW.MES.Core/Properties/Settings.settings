@@ -8,5 +8,8 @@
     <Setting Name="language" Type="System.String" Scope="User">
       <Value Profile="(Default)">KO</Value>
     </Setting>
+    <Setting Name="printName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ZDesigner GT800 (ZPL)</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

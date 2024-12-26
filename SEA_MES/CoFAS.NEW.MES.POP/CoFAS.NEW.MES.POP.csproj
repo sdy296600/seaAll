@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings.cs" />
     <Compile Include="세아\from_불량입력.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -416,6 +417,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="이튼\frmPOPLogin.resx">
       <DependentUpon>frmPOPLogin.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

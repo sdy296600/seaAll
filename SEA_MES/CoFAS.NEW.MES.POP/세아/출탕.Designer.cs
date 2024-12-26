@@ -86,6 +86,7 @@ namespace CoFAS.NEW.MES.POP
             this.lbl_로드셀_품목명 = new System.Windows.Forms.Label();
             this.fpMain = new CoFAS.NEW.MES.Core.xFpSpread();
             this.fpMain_Sheet1 = new FarPoint.Win.Spread.SheetView();
+            this.btn_prtSetting = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -209,6 +210,7 @@ namespace CoFAS.NEW.MES.POP
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.306336F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.306336F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.306336F));
+            this.tableLayoutPanel4.Controls.Add(this.btn_prtSetting, 6, 0);
             this.tableLayoutPanel4.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.btn_생성, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.btn_조회, 1, 0);
@@ -907,6 +909,17 @@ namespace CoFAS.NEW.MES.POP
             this.fpMain_Sheet1.Reset();
             fpMain_Sheet1.SheetName = "Sheet1";
             // 
+            // btn_prtSetting
+            // 
+            this.btn_prtSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_prtSetting.Location = new System.Drawing.Point(917, 3);
+            this.btn_prtSetting.Name = "btn_prtSetting";
+            this.btn_prtSetting.Size = new System.Drawing.Size(109, 88);
+            this.btn_prtSetting.TabIndex = 7;
+            this.btn_prtSetting.Text = "프린터 설정";
+            this.btn_prtSetting.UseVisualStyleBackColor = true;
+            this.btn_prtSetting.Click += new System.EventHandler(this.btn_prtSetting_Click);
+            // 
             // 출탕
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1006,5 +1019,6 @@ namespace CoFAS.NEW.MES.POP
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label lbl_로드셀_품목코드;
         private System.Windows.Forms.Label lbl_로드셀_품목명;
+        private System.Windows.Forms.Button btn_prtSetting;
     }
 }
