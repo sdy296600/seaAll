@@ -39,7 +39,7 @@
 
            <!-- 사실은 홈버튼임 -->
             <Image x:Name="BackButton" 
-                   Source="/free-icon-home-4211162.png"
+                   Source="/free-icon-font-home.png"
                    Width="70"             
                    Height="70"               
                    Stretch="Fill"       
@@ -52,7 +52,7 @@
             
            <!-- 사실은 계측/전력 전환버튼임 -->
             <Image x:Name="NextButton" 
-                   Source="/revert-arrows.png"
+                   Source="/free-icon-font-angle-double-right (1).png"
                 Width="70"             
                 Height="70"               
                 Stretch="Fill"       
