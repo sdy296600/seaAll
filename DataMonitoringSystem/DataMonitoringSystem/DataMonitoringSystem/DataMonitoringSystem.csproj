@@ -16,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="back.png" />
-    <None Remove="sea_logo2.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
   </ItemGroup>
 
@@ -34,10 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="DetailView2.xaml.cs">
+    <Compile Update="View\ElecView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="DetailView1.xaml.cs">
+    <Compile Update="View\DetailView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -67,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="DetailView2.xaml">
+    <Page Update="View\ElecView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

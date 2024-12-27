@@ -1,0 +1,1362 @@
+﻿<Page
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:model="clr-namespace:DataMonitoringSystem.Model" av:DataContext="{av:DesignInstance Type=model:MainModel}" mc:Ignorable="av" x:Class="DataMonitoringSystem.DetailView1"
+Background="#FF080707" av:DesignHeight="1070" av:DesignWidth="1700"
+>
+    <!-- #region [스타일 정의] -->
+    <Page.Resources>
+
+        <!-- ListView 스타일 -->
+        <Style  x:Key="CustomListViewStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Background" Value="#eeeeee"/>
+            <Setter Property="Foreground" Value="#FF1C1C1E"/>
+            <Setter Property="FontFamily" Value="/Resource/#NotoSansKR-Medium"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader" >
+                        <Grid HorizontalAlignment="Right"
+                    Width="230"
+                    Background="#eeeeee">
+                            <ContentPresenter
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ListViewItem 스타일 (데이터 로우 디자인) -->
+        <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="#FF1C1C1E"/>
+            <Setter Property="Foreground" Value="#eeeeee"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="FontFamily" Value="Noto Sans KR"/>
+            <Setter Property="Height" Value="145"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <!-- 선택 시 색상 변경 -->
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FF1C1C1E"/>
+                    <!-- 선택된 배경 -->
+                    <Setter Property="Foreground" Value="#eeeeee"/>
+                    <!-- 선택된 텍스트 색 -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <!-- #endregion [스타일 정의] -->
+
+    <!-- #region [base Grid]===================================================================-->
+    <Grid Margin="15" Background="#FF080707">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+
+
+
+        <!--#region [설비 생산 현황 Gird ] ================================================== -->
+        <Grid Grid.Column="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="0.2*"/>
+            </Grid.RowDefinitions>
+
+
+            <!--#region [총 SHOT 수] ==================================================-->
+            <Grid Grid.Row="0">
+                <Border Background="#FF1C1C1E"
+                    CornerRadius="20">
+
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="6*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>
+
+
+
+                        <TextBlock Grid.Column="1"  
+                                   Grid.ColumnSpan="2" 
+                                    Grid.Row="1"
+                                    Text="총 SHOT 수"
+                                    Foreground="#FF12BCA1" 
+                                    FontFamily="Noto Sans KR SemiBold" 
+                                    FontSize="30" 
+                                    VerticalAlignment="Top" 
+                                    HorizontalAlignment="Left" 
+                                    FontWeight="Bold"/>
+
+                        <TextBlock  Grid.Column="2" 
+                                    Grid.ColumnSpan="1" 
+                                    Grid.Row="2"
+                                    Text="SHOT"
+                                    FontFamily="Malgun Gothic" 
+                                    Foreground="#FFF7F7F7" 
+                                    FontSize="35" 
+                                    FontWeight="Bold" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Bottom"  
+                                    />
+
+                        <TextBlock  Grid.Column="1" Grid.Row="2" 
+                                    Text="{Binding TotalCnt}" 
+                                    Foreground="#FFF7F7F7" 
+                                    FontSize="40" 
+                                    FontWeight="Bold" 
+                                    FontFamily="Malgun Gothic" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Bottom"   />
+                  
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--#endregion-->
+
+
+            <!--#region [예열 SHOT 수] ==================================================-->
+            <Grid Grid.Row="2">
+        <Border Background="#FF1C1C1E"
+            CornerRadius="20">
+
+            <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="6*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>   
+
+
+                        <TextBlock Grid.Column="1" 
+                                    Grid.Row="1"
+                                    Text="예열 SHOT 수"
+                                        Foreground="#FF12BCA1" 
+                                        FontFamily="Noto Sans KR SemiBold" 
+                                        FontSize="30" 
+                                        VerticalAlignment="Top" 
+                                        HorizontalAlignment="Left" 
+                                        FontWeight="Bold" Grid.ColumnSpan="2" />
+
+                        <TextBlock  Grid.Column="2" 
+                                    Grid.ColumnSpan="1" 
+                                    Grid.Row="2"
+                                    Text="SHOT"
+                                    FontFamily="Malgun Gothic" 
+                                    Foreground="#FFF7F7F7" 
+                                    FontSize="35" 
+                                    FontWeight="Bold" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Bottom"  
+                                    />
+
+                         <TextBlock  Grid.Column="1" Grid.Row="2" 
+                                    Text="{Binding WarmCnt}" 
+                                    Foreground="#FFF7F7F7" 
+                                    FontSize="40" 
+                                    FontWeight="Bold" 
+                                    FontFamily="Malgun Gothic" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Bottom"   />     
+
+
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--#endregion-->
+
+
+            <!--#region [양품수] ==================================================-->
+            <Grid Grid.Row="4">
+
+                <Border Background="#FF1C1C1E"
+                CornerRadius="20">
+                    
+            <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>   
+
+
+                        <TextBlock Grid.Column="1"  
+                                   Grid.ColumnSpan="2" 
+                        Grid.Row="1"
+                        Text="양품수"
+                        Foreground="#FF12BCA1" 
+                        FontFamily="Noto Sans KR SemiBold" 
+                        FontSize="30" 
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" 
+                        FontWeight="Bold"/>
+
+                        <TextBlock  Grid.Column="2" 
+                                    Grid.ColumnSpan="1" 
+                                    Grid.Row="2"
+                                    Text="EA"
+                                    FontFamily="Malgun Gothic" 
+                                    Foreground="#FFF7F7F7" 
+                                    FontSize="35" 
+                                    FontWeight="Bold" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Bottom"  
+                                    />
+
+                         <TextBlock  Grid.Column="1" Grid.Row="2" 
+                                    Text="{Binding OkQty}" 
+                                    Foreground="#FFF7F7F7" 
+                                    FontSize="40" 
+                                    FontWeight="Bold" 
+                                    FontFamily="Malgun Gothic" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Bottom"   />  
+
+
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--#endregion-->
+
+
+            <!--#region [불량수] ==================================================-->
+            <Grid Grid.Row="6">
+
+                <Border Background="#FF1C1C1E"
+                CornerRadius="20">
+            <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>
+
+
+
+                        <TextBlock Grid.Column="1"  
+                                   Grid.ColumnSpan="2" 
+                                   Grid.Row="1"
+                                   Text="불량수"
+                                   Foreground="#FF12BCA1" 
+                                   FontFamily="Noto Sans KR SemiBold" 
+                                   FontSize="30" 
+                                   VerticalAlignment="Top" 
+                                   HorizontalAlignment="Left" 
+                                   FontWeight="Bold"/>     
+
+
+                         <TextBlock  Grid.Column="2" 
+            Grid.ColumnSpan="1" 
+            Grid.Row="2"
+            Text="EA"
+            FontFamily="Malgun Gothic" 
+            Foreground="#FFF7F7F7" 
+            FontSize="35" 
+            FontWeight="Bold" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom"  
+            />
+
+ <TextBlock  Grid.Column="1" Grid.Row="2" 
+            Text="{Binding BadQty}" 
+            Foreground="#FFF7F7F7" 
+            FontSize="40" 
+            FontWeight="Bold" 
+            FontFamily="Malgun Gothic" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom"   />  
+
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--#endregion-->
+
+
+            <!--#region [총 생산 개수] ==================================================-->
+            <Grid Grid.Row="8">
+
+                <Border Background="#FF1C1C1E"
+                    CornerRadius="20">
+            <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>
+
+
+
+
+                        <TextBlock Grid.Column="1"  
+                                   Grid.ColumnSpan="2" 
+                                    Grid.Row="1"
+                                    Text="총 생산 개수"
+                                   Foreground="#FF12BCA1" 
+                                   FontFamily="Noto Sans KR SemiBold" 
+                                   FontSize="30" 
+                                   VerticalAlignment="Top" 
+                                   HorizontalAlignment="Left" 
+                                   FontWeight="Bold"/>     
+
+                        <TextBlock  Grid.Column="2" 
+           Grid.ColumnSpan="1" 
+           Grid.Row="2"
+           Text="EA"
+           FontFamily="Malgun Gothic" 
+           Foreground="#FFF7F7F7" 
+           FontSize="35" 
+           FontWeight="Bold" 
+           HorizontalAlignment="Right" 
+           VerticalAlignment="Bottom"  
+           />
+
+<TextBlock  Grid.Column="1" Grid.Row="2" 
+           Text="{Binding ProdQty}" 
+           Foreground="#FFF7F7F7" 
+           FontSize="40" 
+           FontWeight="Bold" 
+           FontFamily="Malgun Gothic" 
+           HorizontalAlignment="Right" 
+           VerticalAlignment="Bottom"   />   
+
+
+                    </Grid>
+
+
+
+                </Border>
+
+            </Grid>
+            <!--#endregion-->
+
+
+        </Grid>
+        <!--#endregion-->
+
+
+
+
+        <!--#region =================================================-->
+        <Grid  Grid.Column="3">
+            <!-- 사출조건 배경 -->
+            <Border Grid.ColumnSpan="6"
+                Grid.RowSpan="4"
+                Background="#FF1C1C1E"
+                CornerRadius="20"
+                Padding="10">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
+
+                    <!--#region [V1]-->
+                    <Border Grid.Column="0"
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="V1"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding V1}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [V1]-->
+
+                    <!--#region [V2]-->
+                    <Border Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="V2"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding V2}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [V2]-->
+
+                    <!--#region [V3]-->
+                    <Border Grid.Column="2"
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="V3"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding V3}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [V3]-->
+
+                    <!--#region [V4]-->
+                    <Border Grid.Column="3"
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="V4"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding V4}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [V4]-->
+
+                    <!--#region [가속위치]-->
+                    <Border Grid.Column="4"
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="가속위치"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding AccelerationPos}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [가속위치]-->
+
+                    <!--#region [감속위치]-->
+                    <Border Grid.Column="5"
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="감속위치"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding DecelerationPos}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [감속위치]-->
+
+                    <!--#region [메탈압력]-->
+                    <Border Grid.Column="0"
+                        Grid.Row="1"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="메탈압력"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding MetalPressure}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [메탈압력]-->
+
+                    <!--#region [비스킷 두께]-->
+                    <Border Grid.Column="1"
+                        Grid.Row="1"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="비스킷 두께"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding BiskitThickness}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [비스킷 두께]-->
+
+                    <!--#region [형체력 [%]]-->
+                    <Border Grid.Column="2"
+                        Grid.Row="1"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="형체력 [%]"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                                Grid.Row="1"
+                                Foreground="#FFE87528" 
+                                FontFamily="Malgun Gothic" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Bottom" 
+                                FontWeight="Bold" >
+                                <Run Text="{Binding PhysicalStrengthPer}" FontSize="60"  />
+                                <Run Text="%" FontSize="32" FontFamily="Malgun Gothic" />
+                            </TextBlock>
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [형체력 [%]]-->
+
+                    <!--#region [형체력 [MN]]-->
+                    <Border Grid.Column="3"
+                        Grid.Row="1"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="형체력 [MN]"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                                Grid.Row="1"
+                                Foreground="#FFE87528" 
+                                FontFamily="Malgun Gothic" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Bottom" 
+                                FontWeight="Bold" >
+                                <Run Text="{Binding PhysicalStrengthMn}" FontSize="60"  />
+                                <Run Text="MN" FontSize="32" FontFamily="Malgun Gothic" />
+                            </TextBlock>
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [형체력 [MN]]-->
+
+                            <!--#region [승압 타임]-->
+        <Border Grid.Column="4"
+            Grid.Row="1"
+            Margin="10"
+            Padding="10"
+            CornerRadius="20"
+            Background="#FFD9D9D9">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock 
+                Grid.Row="0"
+                Text="승압시간"
+                Foreground="Black" 
+                FontFamily="Noto Sans KR SemiBold" 
+                FontSize="30" 
+                VerticalAlignment="Top" 
+                HorizontalAlignment="Left" 
+                FontWeight="Bold"/>
+
+                <TextBlock 
+                Grid.Row="1"
+Text="{Binding SwapTime}" 
+                Foreground="#FFE87528" 
+                FontFamily="Malgun Gothic" 
+                FontSize="60" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom" 
+                FontWeight="Bold" />
+
+            </Grid>
+        </Border>
+        <!--#endregion [승압 타임]-->
+                    
+                    
+                    <!--#region [사이클 타임]-->
+                    <Border Grid.Column="5"
+                        Grid.Row="1"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="사이클 타임"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding CycleTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [사이클 타임]-->
+
+                    <!--#region [ row1 ]===========-->
+                    <!--#region [형체중자 전진 시간]-->
+                    <Border Grid.Column="0"
+                        Grid.Row="2"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="형체중자전진시간"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="29.5" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold" />
+
+                            <TextBlock 
+                            Grid.Row="2"
+            Text="{Binding TypeWeightEnrtyTime }" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [형체중자 전진 시간]-->
+
+
+                    <!--#region [ row2 ]===========-->
+                    <!--#region [주탕 시간]-->
+                    <Border Grid.Column="1"
+                        Grid.Row="2"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="주탕 시간"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding BathTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [주탕 시간]-->
+
+                    <!--#region [사출전진시간]-->
+                    <Border Grid.Column="2"
+                        Grid.Row="2"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="사출전진시간"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding ForwardTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [사출전진시간]-->
+
+                    <!--#region [제품냉각시간]-->
+                    <Border Grid.Column="3"
+                        Grid.Row="2"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="제품냉각시간"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding FreezingTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [제품냉각시간]-->
+
+                    <!--#region [형체중자후퇴시간]-->
+                    <Border Grid.Column="4"
+                        Grid.Row="2"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="형체중자후퇴시간"
+                            FontSize="29" 
+                            TextWrapping="Wrap"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding TypeWeightBackTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [형체중자후퇴시간]-->
+
+                    <!--#region [압출시간]-->
+                    <Border Grid.Column="5"
+                        Grid.Row="2"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="압출시간"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold"/>
+
+                            <TextBlock 
+                            Grid.Row="1"
+            Text="{Binding ExtrusionTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [압출시간]-->
+
+                    <!--#region [취출시간]-->
+                    <Border Grid.Column="0"
+                        Grid.Row="3"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="20"
+                        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+                            Grid.Row="0"
+                            Text="취출시간"
+                            Foreground="Black" 
+                            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            FontWeight="Bold" Height="92" Width="135"/>
+
+                            <TextBlock 
+                            Grid.Row="2"
+            Text="{Binding ExtractionTime}" 
+                            Foreground="#FFE87528" 
+                            FontFamily="Malgun Gothic" 
+                            FontSize="60" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [취출시간]-->
+                    <!--#endregion [ row2 ]===========-->
+
+
+                    <!--#region [ row3 ]===========-->
+                    <!--#region [스프레이시간]-->
+                    <Border Grid.Column="1"
+        Grid.Row="3"
+        Margin="10"
+        Padding="10"
+        CornerRadius="20"
+        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+            Grid.Row="0"
+            Text="스프레이시간"
+            Foreground="Black" 
+            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            FontWeight="Bold"/>
+
+                            <TextBlock 
+            Grid.Row="1"
+            Text="{Binding SprayTime}" 
+            Foreground="#FFE87528" 
+            FontFamily="Malgun Gothic" 
+            FontSize="60" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" 
+            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [ 스프레이시간]-->
+
+                    <!--#region [금형내부]-->
+                    <Border Grid.Column="2"
+        Grid.Row="3"
+        Margin="10"
+        Padding="10"
+        CornerRadius="20"
+        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+            Grid.Row="0"
+            Text="금형내부"
+            Foreground="Black" 
+            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            FontWeight="Bold"/>
+
+                            <TextBlock 
+            Grid.Row="1"
+            Text="{Binding CavityCore}" 
+            Foreground="#FFE87528" 
+            FontFamily="Malgun Gothic" 
+            FontSize="60" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" 
+            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [금형내부]-->
+
+                    <!--#region [오염도A]-->
+                    <Border Grid.Column="3"
+        Grid.Row="3"
+        Margin="10"
+        Padding="10"
+        CornerRadius="20"
+        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+            Grid.Row="0"
+            Text="오염도A"
+            Foreground="Black" 
+            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            FontWeight="Bold"/>
+
+                            <TextBlock 
+            Grid.Row="1"
+            Text="{Binding A_PollutionDegree}" 
+            Foreground="#FFE87528" 
+            FontFamily="Malgun Gothic" 
+            FontSize="60" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" 
+            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [오염도A]-->
+
+                    <!--#region [오염도B]-->
+                    <Border Grid.Column="4"
+        Grid.Row="3"
+        Margin="10"
+        Padding="10"
+        CornerRadius="20"
+        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+            Grid.Row="0"
+            Text="오염도B"
+            Foreground="Black" 
+            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            FontWeight="Bold"/>
+
+                            <TextBlock 
+            Grid.Row="1"
+            Text="{Binding B_PollutionDegree}" 
+            Foreground="#FFE87528" 
+            FontFamily="Malgun Gothic" 
+            FontSize="60" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" 
+            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [오염도B]-->
+
+                    <!--#region [탱크진공]-->
+                    <Border Grid.Column="5"
+        Grid.Row="3"
+        Margin="10"
+        Padding="10"
+        CornerRadius="20"
+        Background="#FFD9D9D9">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock 
+            Grid.Row="0"
+            Text="탱크진공"
+            Foreground="Black" 
+            FontFamily="Noto Sans KR SemiBold" 
+                            FontSize="30" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            FontWeight="Bold"/>
+
+                            <TextBlock 
+            Grid.Row="1"
+            Text="{Binding Vacuum}" 
+            Foreground="#FFE87528" 
+            FontFamily="Malgun Gothic" 
+            FontSize="60" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" 
+            FontWeight="Bold" />
+
+                        </Grid>
+                    </Border>
+                    <!--#endregion [탱크진공]-->
+
+                   
+
+                    <!--#endregion [ row3 ]===========-->
+
+
+                </Grid>
+
+
+            </Border>
+
+
+
+
+        </Grid>
+        <!--#endregion-->
+
+
+    </Grid>
+
+    <!--#endregion [base Grid]-->
+</Page>

@@ -363,6 +363,11 @@ namespace CalculateForSea
                     dm_alram_status_update(datas[2], $"LS_{machine_id}_DW817");
                     dm_alram_status_update(datas[3], $"LS_{machine_id}_DW818");
                     dm_alram_status_update(datas[4], $"LS_{machine_id}_DW819");
+                    
+                    _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW816", Encoding.UTF8.GetBytes(datas[1].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                    _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW817", Encoding.UTF8.GetBytes(datas[2].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                    _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW818", Encoding.UTF8.GetBytes(datas[3].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
+                    _mqttClient.Publish($"/event/c/data_collection_digit/LS_{machines[i]}_DW819", Encoding.UTF8.GetBytes(datas[4].ToString()), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, false);
                 }
             }
             catch (TimeoutException ex)
@@ -1708,7 +1713,7 @@ namespace CalculateForSea
         }
 
 
-        #region SEND_MQTT
+            #region SEND_MQTT
 
         private void SendMQTT(DataSet ds, int i, int machine_no)
         {

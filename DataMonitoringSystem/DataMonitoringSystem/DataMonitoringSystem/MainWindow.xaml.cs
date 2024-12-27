@@ -18,8 +18,8 @@ namespace DataMonitoringSystem
     public partial class MainWindow : Window
     {
         public static List<MainModel> mainModels;
-        public static Dictionary<int,ElecModel> elecModels;
-        public static Dictionary<int, ElecModel2> elecModels2;
+        public static Dictionary<int,MachineModel> machineModels;
+        public static Dictionary<int, ElecModel> elecModels;
 
 
         public MainWindow()
@@ -46,13 +46,13 @@ namespace DataMonitoringSystem
                 new MainModel(25)
             ];
 
+            machineModels = new Dictionary<int, MachineModel>();
             elecModels = new Dictionary<int, ElecModel>();
-            elecModels2 = new Dictionary<int, ElecModel2>();
 
             foreach (MainModel model in mainModels) 
             {
-                elecModels.Add(model.MachineNo,new ElecModel(model.MachineNo));
-                elecModels2.Add(model.MachineNo, new ElecModel2(model.MachineNo));
+                machineModels.Add(model.MachineNo,new MachineModel(model.MachineNo));
+                elecModels.Add(model.MachineNo, new ElecModel(model.MachineNo));
             }
        
 
@@ -96,13 +96,13 @@ namespace DataMonitoringSystem
             if (MainView.Content is DetailView1 model)
             {
                 int machine_no = model.machine_no;
-                MainView.Navigate(new DetailView2(elecModels2[machine_no], machine_no));
+                MainView.Navigate(new DetailView2(elecModels[machine_no], machine_no));
             }
             else if(MainView.Content is DetailView2 model2) 
             {
 
                 int machine_no = model2.machine_no;
-                MainView.Navigate(new DetailView1(elecModels[machine_no], machine_no));
+                MainView.Navigate(new DetailView1(machineModels[machine_no], machine_no));
             }
         }
     }
