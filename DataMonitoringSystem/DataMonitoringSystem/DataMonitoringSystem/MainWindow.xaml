@@ -36,12 +36,13 @@
            Height="103"            
            Stretch="UniformToFill"       
            HorizontalAlignment="Right"  OverridesDefaultStyle="True" VerticalAlignment="Bottom" Margin="0,0,20,-7"/>    
-
+                
+ <!-- d아이콘 속성에서 안바꾸고 소스에서 바꾸면 적용 안됨...... -->
            <!-- 사실은 홈버튼임 -->
             <Image x:Name="BackButton" 
                    Source="/free-icon-font-home.png"
-                   Width="70"             
-                   Height="70"               
+                   Width="50"             
+                   Height="50"               
                    Stretch="Fill"       
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top" 
@@ -50,23 +51,23 @@
                    MouseDown="BackButton_MouseDown"/>
 
             
-           <!-- 사실은 계측/전력 전환버튼임 -->
+           <!-- 사실은 전환버튼임 -->
             <Image x:Name="NextButton" 
                    Source="/free-icon-font-angle-double-right (1).png"
-                Width="70"             
-                Height="70"               
-                Stretch="Fill"       
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top" 
-                Margin="0,22,150,0"
-                Visibility="Visible" MouseDown="NextButton_MouseDown" RenderTransformOrigin="0.5,0.5"
+                    Width="50"             
+                    Height="50"               
+                    Stretch="Fill"       
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top" 
+                    Margin="0,22,150,0"
+                    Visibility="Visible" MouseDown="NextButton_MouseDown" RenderTransformOrigin="0.5,0.5"
                 >
-                
+
                 <Image.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform/>
+                        <ScaleTransform ScaleX="-1"/>
                         <SkewTransform/>
-                        <RotateTransform Angle="180"/>
+                        <RotateTransform Angle="-180"/>
                         <TranslateTransform/>
                     </TransformGroup>
                 </Image.RenderTransform>

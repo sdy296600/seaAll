@@ -20,15 +20,15 @@ namespace DataMonitoringSystem
     /// <summary>
     /// Page1.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class DetailView2 : Page, iButtonProperty
+    public partial class ElecView : Page, iButtonProperty
     {
         public int machine_no { get; set; }
         public Visibility BackVisibilty { get; set; } = Visibility.Visible;
         public Visibility NextVisibilty { get;  set; } = Visibility.Visible;
-        public DetailView2(ElecModel model, int machine_no)
+        public ElecView(ElecModel model, int machine_no)
         {
             this.machine_no = machine_no; 
-            this.Title = $"{machine_no}호기 전력 계측치";
+            this.Title = $"{machine_no}호기 전력 현황";
             InitializeComponent();
             this.DataContext = model;
         }

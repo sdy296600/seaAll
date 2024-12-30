@@ -1,8 +1,11 @@
 ﻿<Page
-xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:model="clr-namespace:DataMonitoringSystem.Model" av:DataContext="{av:DesignInstance Type=model:MainModel}" mc:Ignorable="av" x:Class="DataMonitoringSystem.DetailView1"
-Background="#FF080707" av:DesignHeight="1070" av:DesignWidth="1700"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:model="clr-namespace:DataMonitoringSystem.Model" 
+    av:DataContext="{av:DesignInstance Type=model:MachineModel}" 
+    mc:Ignorable="av" x:Class="DataMonitoringSystem.DetailView"
+    Background="#FF080707" av:DesignHeight="1070" av:DesignWidth="1700"
 >
     <!-- #region [스타일 정의] -->
     <Page.Resources>
@@ -443,7 +446,7 @@ Background="#FF080707" av:DesignHeight="1070" av:DesignWidth="1700"
 
                             <TextBlock 
                             Grid.Row="1"
-            Text="{Binding V1}" 
+                        Text="{Binding V1}" 
                             Foreground="#FFE87528" 
                             FontFamily="Malgun Gothic" 
                             FontSize="60" 
@@ -775,14 +778,14 @@ Background="#FF080707" av:DesignHeight="1070" av:DesignWidth="1700"
                             </Grid.RowDefinitions>
 
                             <TextBlock 
-                            Grid.Row="0"
-                            Text="형체력 [MN]"
-                            Foreground="Black" 
-                            FontFamily="Noto Sans KR SemiBold" 
-                            FontSize="30" 
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Left" 
-                            FontWeight="Bold"/>
+                                Grid.Row="0"
+                                Text="형체력 [MN]"
+                                Foreground="Black" 
+                                FontFamily="Noto Sans KR SemiBold" 
+                                FontSize="30" 
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Left" 
+                                FontWeight="Bold"/>
 
                             <TextBlock 
                                 Grid.Row="1"

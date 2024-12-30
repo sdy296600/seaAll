@@ -16,6 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="free-icon-font-angle-double-right %281%29.png" />
+    <None Remove="free-icon-font-home.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
   </ItemGroup>
 
@@ -23,6 +29,8 @@
     <Resource Include="back.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="free-icon-font-angle-double-right (1).png" />
+    <Resource Include="free-icon-font-home.png" />
     <Resource Include="sea_logo2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

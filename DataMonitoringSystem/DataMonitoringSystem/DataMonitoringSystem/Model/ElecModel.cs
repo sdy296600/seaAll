@@ -199,22 +199,24 @@ namespace DataMonitoringSystem.Model
                 mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_T_Phase_Voltage" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Power_Consumption_Conversion" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Total_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/RTU_13_01_Load_Power_Factor" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             }
             else 
             {
                 int castingNo = i + 140;
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Load_Power_Consumption_Today_Conversion" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Daily_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Unit_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Month_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Daily_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Unit_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_All_Active_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_All_Active_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE }); //현재 설비 사용 전력량 ( 융해로 + 주조기 + 트리밍)
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Cumulative_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE }); //누적 사용량
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_P_Factor" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_IL1_Current_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_IL2_Current_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_IL3_Current_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Cumulative_Power" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_P_Factor" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Load_Power_Consumption_Today_Conversion" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE }); //월 사용량
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Month_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Daily_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Daily_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Unit_Power_Consumption" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/Casting_{castingNo}_Unit_Power_Amount" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             }
             
             mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived; ;
@@ -262,7 +264,7 @@ namespace DataMonitoringSystem.Model
                     TElecCurrent = message;
                 
                 if (topic.Contains("_Load_Power_Consumption_Conversion") || topic.Contains("_Cumulative_Power"))
-                    _cumulativePower = message;
+                    CumulativePower = message;
 
                 if (topic.Contains("_P_Factor") || topic.Contains("_Load_Total_Power_Consumption"))
                     Factor = message;

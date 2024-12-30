@@ -93,16 +93,16 @@ namespace DataMonitoringSystem
 
         private void NextButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (MainView.Content is DetailView1 model)
+            if (MainView.Content is DetailView model)
             {
                 int machine_no = model.machine_no;
-                MainView.Navigate(new DetailView2(elecModels[machine_no], machine_no));
+                MainView.Navigate(new ElecView(elecModels[machine_no], machine_no));
             }
-            else if(MainView.Content is DetailView2 model2) 
+            else if(MainView.Content is ElecView model2) 
             {
 
                 int machine_no = model2.machine_no;
-                MainView.Navigate(new DetailView1(machineModels[machine_no], machine_no));
+                MainView.Navigate(new DetailView(machineModels[machine_no], machine_no));
             }
         }
     }

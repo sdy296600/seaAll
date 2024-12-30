@@ -20,13 +20,13 @@ namespace DataMonitoringSystem
     /// <summary>
     /// Page1.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class DetailView1 : Page, iButtonProperty
+    public partial class DetailView : Page, iButtonProperty
     {
         public int machine_no { get; set; }
         public Visibility BackVisibilty { get; set; } = Visibility.Visible;
         public Visibility NextVisibilty { get; set; } = Visibility.Visible;
 
-        public DetailView1(MachineModel model, int machine_no)
+        public DetailView(MachineModel model, int machine_no)
         {
             this.machine_no = machine_no;
 

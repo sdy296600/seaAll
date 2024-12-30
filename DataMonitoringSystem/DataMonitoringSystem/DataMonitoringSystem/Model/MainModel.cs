@@ -91,6 +91,7 @@ namespace DataMonitoringSystem.Model
             mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_ERRCOUNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/WORK_WARMUPCNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/PROD_CNT_{MachineNo}" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+            mqttClient.Subscribe(new string[] { $"/event/c/data_collection_digit/DCM_{MachineNo}_TAG_D6936_Ruled" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
             mqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived; ;
             mqttClient.Connect(Guid.NewGuid().ToString() + "_Message_Process");
         }
@@ -110,7 +111,7 @@ namespace DataMonitoringSystem.Model
                 {
                     IsRunning = message;
                 }
-                if (topic.Contains("CYCLE_TIME_"))
+                if (topic.Contains("_TAG_D6936_Ruled"))
                 {
                     CycleTime = message;
                 }
