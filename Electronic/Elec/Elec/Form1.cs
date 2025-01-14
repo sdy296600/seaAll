@@ -1,6 +1,7 @@
 using Code4Bugs.Utils.Intercomm.Sockets;
 using EasyModbus;
 using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Web;
 
 namespace Elec
@@ -61,37 +62,60 @@ namespace Elec
         {
             try
             {
-                string sql = $@"
-                   INSERT INTO [dbo].[ELEC_DATA_LOG]
-                    (
-                        [DATETIME],
-                        [VALUE],
-                        [IP]
-                    )
-                    VALUES
-                    (
-                        GETDATE(),
-                        '{data}', 
-                        '{ip}'    
-                    );" ;
-                using (SqlConnection sqlconn = new SqlConnection("Server=10.10.10.180; Database=HS_MES; User Id=hansol_mes; Password=Hansol123!@#;TrustServerCertificate=true;"))
+                // 테이블 생성 SQL (필요한 경우 한 번만 실행)
+                string createTableSql = @"
+                CREATE TABLE IF NOT EXISTS ELEC_DATA_LOG (
+                    ID INT AUTO_INCREMENT PRIMARY KEY,
+                    DATETIME DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    VALUE VARCHAR(100),
+                    IP VARCHAR(100)
+                );";
+
+                        string insertSql = @"
+                INSERT INTO ELEC_DATA_LOG
+                (
+                    DATETIME,
+                    VALUE,
+                    IP
+                )
+                VALUES
+                (
+                    NOW(),
+                    @Value, 
+                    @IP    
+                );";
+
+                using (MySql.Data.MySqlClient.MySqlConnection sqlconn =
+                       new MySql.Data.MySqlClient.MySqlConnection("Server=10.10.10.216;Database=hansoldms;Uid=coever;Pwd=coever119!;"))
                 {
                     sqlconn.Open();
-                    using (SqlCommand sqlcmd = new SqlCommand(sql, sqlconn))
+
+                    // 테이블 생성 (필요 시)
+                    using (MySqlCommand createCmd = new MySqlCommand(createTableSql, sqlconn))
                     {
-                        using (SqlDataReader reader = sqlcmd.ExecuteReader())
+                        createCmd.ExecuteNonQuery();
+                    }
+
+                    // 데이터 삽입
+                    using (MySqlCommand sqlcmd = new MySqlCommand(insertSql, sqlconn))
+                    {
+                        // 매개변수 바인딩
+                        sqlcmd.Parameters.AddWithValue("@Value", data);
+                        sqlcmd.Parameters.AddWithValue("@IP", ip);
+
+                        int rowsAffected = sqlcmd.ExecuteNonQuery();
+                        if (rowsAffected > 0)
                         {
-                            string log = $"{ip} {data.ToString()}";
+                            string log = $"{ip} {data}";
                             WriteLog(log);
                         }
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            
         }
         private void WriteLog(string log)
         {
